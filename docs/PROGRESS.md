@@ -6,7 +6,7 @@ Read this at the start of every session. Update it at the end of every phase.
 
 | Phase | Status | Merged | Notes |
 | --- | --- | --- | --- |
-| 0 Bootstrap | not started | | |
+| 0 Bootstrap | merged | 2026-11-16 | Built directly on `main` as the phase prompt says; no merge commit. Three commits. |
 | 1.1a Skeleton | not started | | |
 | 1.1b Ingest | not started | | |
 | 1.2 Requirements | not started | | |
