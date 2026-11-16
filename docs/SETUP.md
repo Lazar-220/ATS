@@ -82,6 +82,7 @@ to another value; do not stop the other service.
 | `API_PROXY_TARGET` | `http://localhost:8000` | where the Vite dev server forwards `/api/*` (read by `web/vite.config.ts`) | 1.1a |
 | `QUEUE_VISIBILITY_TIMEOUT_S` | `300` | a job in `running` longer than this goes back to the queue (its worker died) | 1.1a |
 | `WORKER_POLL_INTERVAL_S` | `1.0` | seconds the worker sleeps when the queue is empty | 1.1a |
+| `MIN_CHARS_PER_PAGE` | `100` | a PDF with fewer non-space characters per page on average is rejected as a scan | 1.1b |
 | `UPLOAD_DIR` | `data/uploads` | stored PDFs | 1.1b |
 | `LLM_MODEL` | `gemini-3.8-flash` | model for every LLM role | 1.2 |
 | `LLM_API_KEY` | none | Gemini API key; never committed | 1.2 |
@@ -101,7 +102,7 @@ Planned from §6.3 of the plan. The actual pinned versions are in `pyproject.tom
 | --- | --- | --- |
 | 0 | dev group: `ruff`, `pyright`, `pytest`, `pytest-asyncio`, `httpx` | |
 | 1.1a | `fastapi`, `uvicorn[standard]`, `pydantic`, `pydantic-settings`, `psycopg[binary,pool]`, `alembic` | Docker image `pgvector/pgvector:pg17`; npm: `react`, `react-dom`, `@tanstack/react-query`; dev: `typescript`, `vite`, `@vitejs/plugin-react`, `@types/react`, `@types/react-dom`, `@types/node`, `eslint`, `@eslint/js`, `typescript-eslint`, `eslint-plugin-react-hooks`, `globals` |
-| 1.1b | `pymupdf`, `python-multipart`, `cyrtranslit`, `lingua-language-detector` | |
+| 1.1b | `pymupdf` (`>=1.28,<2`, see below), `python-multipart`, `cyrtranslit`, `lingua-language-detector` | |
 | 1.2 | `google-genai` | npm: `@tanstack/react-table` |
 | 1.3 | eval group: `scikit-learn`, `scipy`, `statsmodels` | |
 | 1.4b | `rapidfuzz` | |
@@ -122,6 +123,10 @@ the production dependencies are clean.
 
 Alembic brings in SQLAlchemy as its own dependency. It is used for migrations only; application
 queries are raw SQL through psycopg 3.
+
+`pymupdf` is capped below 2: version 2.x is a meta-package that also installs `pymupdf-layout`,
+`pymupdf4llm`, `onnxruntime`, `numpy` and `networkx`, none of which 1.1b needs. Lift the cap
+only if a later phase wants them.
 
 PyMuPDF is AGPL-licensed. A closed commercial product needs a replacement or a commercial license (§6.3).
 

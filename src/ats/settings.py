@@ -11,6 +11,8 @@ class Settings(BaseSettings):
     # A job in `running` longer than this is assumed to belong to a dead worker.
     queue_visibility_timeout_s: float = 300
     worker_poll_interval_s: float = 1.0
+    # Below this average of non-space characters per page a PDF is treated as a scan (§4.2).
+    min_chars_per_page: int = 100
 
 
 @lru_cache
