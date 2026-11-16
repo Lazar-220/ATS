@@ -81,12 +81,53 @@ an unreadable or password-protected PDF; re-uploading it gives the same result) 
 (unexpected error; uploading the same file again retries it). Errors: 422 for a file that is not a
 PDF or is already stored as the other kind, 413 above `MAX_UPLOAD_MB`, 404 for an unknown request.
 
+### Review the requirements (from phase 1.2)
+
+When a new posting has been extracted, the worker makes one LLM call and writes the position's
+requirements with status `unconfirmed`. Needs `LLM_API_KEY` in `.env`. The same posting uploaded
+again is recognised by its `sha256` and costs nothing.
+
+```bash
+curl http://localhost:8000/positions
+# [{"id":"7208...","filename":"posting.pdf","rubric_status":"unconfirmed","rubric_version":1,
+#   "created_at":"...","requirement_count":5,"setup_status":"done","setup_message":null}]
+curl http://localhost:8000/positions/7208d077-a80a-4c0e-af0e-1f2fcf06ff62
+# the same fields plus "requirements":[{"id":"...","parent_id":null,"text":"Java","kind":"mandatory",
+#   "weight":1,"min_months":null}, ...]  (the current rubric version only)
+```
+
+`setup_status` is `pending` (posting text not extracted yet), `running`, `done`, or `failed`
+(`setup_message` says why: a rejected posting, or the extraction job ran out of attempts).
+
+Endpoint 3 takes two kinds of answer. `rubric_version` is the version HR was looking at; a
+different current version gives 409. `dedup_key` is chosen by the client per intent; a repeat with
+the same key and body returns the first result with `"duplicate": true` and does nothing again,
+while the same key with a different body gives 409.
+
+```bash
+# Confirm: sets rubric_status to "confirmed"
+curl -X POST http://localhost:8000/hr/answers -H 'Content-Type: application/json' -d '{
+  "type": "confirm", "position_id": "7208...", "dedup_key": "any-unique-string", "rubric_version": 1}'
+# Edit: replaces the whole list, bumps rubric_version by one, enqueues one "rejudge" job per
+# assessment of the position (handled from phase 1.4b). Does not change rubric_status.
+# "id" and "parent" are labels inside this list; "parent" refers to another item's "id".
+curl -X POST http://localhost:8000/hr/answers -H 'Content-Type: application/json' -d '{
+  "type": "edit", "position_id": "7208...", "dedup_key": "another-unique-string", "rubric_version": 1,
+  "requirements": {"requirements": [
+    {"id": 1, "text": "Java", "kind": "mandatory", "weight": 3, "min_months": null, "parent": null},
+    {"id": 2, "text": "3 years of Java", "kind": "mandatory", "weight": 3, "min_months": 36, "parent": 1}]}}'
+# {"position_id":"7208...","rubric_version":2,"rubric_status":"unconfirmed","rejudge_jobs":0,"duplicate":false}
+```
+
+Weights are integers from 1 to 5; `kind` is `mandatory` or `nice_to_have`; the list must not be empty
+and its parent links must not form a cycle (422 otherwise).
+
 ## 3. Commands
 
 | Command | Does | From phase |
 | --- | --- | --- |
 | `make up` / `make down` | start / stop Postgres | 1.1a |
-| `make migrate` | apply Alembic migrations (creates the nine v1 tables) | 1.1a |
+| `make migrate` | apply Alembic migrations (the nine v1 tables, plus `hr_answer` from 1.2) | 1.1a |
 | `make up-all` | whole stack in Docker (postgres, api, worker, web) | 1.1a |
 | `make api` | FastAPI with reload on :8000 | 1.1a |
 | `make worker` | job worker | 1.1a |
