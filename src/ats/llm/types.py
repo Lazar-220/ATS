@@ -65,6 +65,14 @@ class RateLimitError(LLMError):
         self.retry_after_s = retry_after_s
 
 
+class TransientServerError(LLMError):
+    """The provider answered 500, 503 or 504: its side failed, and asking again may work."""
+
+    def __init__(self, message: str, status_code: int) -> None:
+        super().__init__(message)
+        self.status_code = status_code
+
+
 class LLMOutputInvalid(LLMError):
     """The answer did not parse into the schema, even after one retry call."""
 

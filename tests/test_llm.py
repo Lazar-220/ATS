@@ -1,16 +1,25 @@
 """LLM client behavior with a fake transport and a simulated clock: no sleeping, no network."""
 
 from pathlib import Path
+from types import SimpleNamespace
+from typing import Any
 
 import pytest
+from google.genai import errors
 from pydantic import BaseModel
 
 from ats.llm.cache import ResponseCache
 from ats.llm.fake import FakeLLMClient
-from ats.llm.gemini import _retry_after_s  # pyright: ignore[reportPrivateUsage]
+from ats.llm.gemini import GeminiTransport, _retry_after_s  # pyright: ignore[reportPrivateUsage]
 from ats.llm.managed import ManagedLLMClient
 from ats.llm.ratelimit import RateLimiter
-from ats.llm.types import LLMOutputInvalid, LLMRequest, RateLimitError, RawCompletion
+from ats.llm.types import (
+    LLMOutputInvalid,
+    LLMRequest,
+    RateLimitError,
+    RawCompletion,
+    TransientServerError,
+)
 
 REQUEST = LLMRequest(system="rules", user="data", thinking_level="low", prompt_version="test_v1")
 
@@ -63,6 +72,7 @@ def make_client(
         cache=ResponseCache(tmp_path),
         clock=time.clock,
         sleep=time.sleep,
+        jitter=lambda: 0.5,  # fixed, so the backoff is predictable: base * 2**n * 1.5
     )
 
 
@@ -203,3 +213,102 @@ def test_the_retry_delay_is_read_from_the_provider_error() -> None:
     assert _retry_after_s(details) == 34.0
     assert _retry_after_s({"error": {"code": 429}}) is None
     assert _retry_after_s(None) is None
+
+
+def test_a_503_is_retried_twice_with_jittered_exponential_backoff(tmp_path: Path) -> None:
+    time = SimulatedTime()
+    transport = ScriptedTransport(
+        TransientServerError("overloaded", 503), TransientServerError("overloaded", 503), good(4)
+    )
+    client = make_client(transport, tmp_path, time)
+
+    result = client.generate(REQUEST, Answer)
+
+    assert result.output == Answer(value=4)
+    assert transport.calls == 3
+    assert time.slept == [3.0, 6.0]  # 2 * 1 * 1.5, then 2 * 2 * 1.5
+
+
+def test_a_server_error_that_persists_is_raised_after_two_retries(tmp_path: Path) -> None:
+    time = SimulatedTime()
+    transport = ScriptedTransport(*[TransientServerError("down", 500) for _ in range(4)])
+    client = make_client(transport, tmp_path, time)
+
+    with pytest.raises(TransientServerError):
+        client.generate(REQUEST, Answer)
+    assert transport.calls == 3  # the first try and two retries, not more
+
+
+def test_the_jitter_spreads_the_delay_between_one_and_two_times_the_base(tmp_path: Path) -> None:
+    for jitter, expected in ((0.0, 2.0), (0.999, 3.998)):
+        time = SimulatedTime()
+        client = ManagedLLMClient(
+            ScriptedTransport(TransientServerError("x", 504), good()),
+            model="m",
+            limiter=RateLimiter(5, clock=time.clock, sleep=time.sleep),
+            cache=ResponseCache(tmp_path / str(jitter)),
+            clock=time.clock,
+            sleep=time.sleep,
+            jitter=lambda jitter=jitter: jitter,
+        )
+        client.generate(REQUEST, Answer)
+        assert time.slept == [pytest.approx(expected)]
+
+
+def test_server_error_retries_go_through_the_rate_limiter(tmp_path: Path) -> None:
+    """Five requests per minute: a 503 retry is a request and must wait like any other."""
+    time = SimulatedTime()
+    transport = ScriptedTransport(*[TransientServerError("busy", 503) for _ in range(2)], good())
+    client = make_client(transport, tmp_path, time, rpm=2)
+
+    client.generate(REQUEST, Answer)
+
+    # try 1 at t=0, retry 1 after 3 s (slot 2), retry 2 needs a free slot: waits for the first
+    # request to leave the window at t=60, which is longer than its own 6 s backoff.
+    assert transport.calls == 3
+    assert time.now - 1000.0 >= 60.0
+
+
+def test_429_and_server_error_retries_have_separate_budgets(tmp_path: Path) -> None:
+    time = SimulatedTime()
+    transport = ScriptedTransport(
+        RateLimitError("429"),
+        TransientServerError("503", 503),
+        RateLimitError("429"),
+        TransientServerError("503", 503),
+        good(),
+    )
+    client = make_client(transport, tmp_path, time, rpm=10)
+
+    assert client.generate(REQUEST, Answer).output == Answer(value=1)
+    assert transport.calls == 5
+
+
+@pytest.mark.parametrize(
+    ("code", "expected"),
+    [
+        (429, RateLimitError),
+        (500, TransientServerError),
+        (503, TransientServerError),
+        (504, TransientServerError),
+        (400, errors.ClientError),  # a bad request is not retried
+        (502, errors.ServerError),  # only 500, 503 and 504 are
+    ],
+)
+def test_the_gemini_adapter_maps_the_sdk_errors_by_status_code(
+    code: int, expected: type[Exception], monkeypatch: pytest.MonkeyPatch
+) -> None:
+    sdk_error: Any = (errors.ClientError if code < 500 else errors.ServerError)(
+        code, {"error": {"code": code, "message": "x", "status": "X"}}
+    )
+
+    def failing(**_kwargs: object) -> None:
+        raise sdk_error
+
+    transport = GeminiTransport("not-a-real-key")
+    monkeypatch.setattr(
+        transport, "_client", SimpleNamespace(models=SimpleNamespace(generate_content=failing))
+    )
+
+    with pytest.raises(expected):
+        transport.complete("m", REQUEST, Answer)

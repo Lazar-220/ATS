@@ -11,7 +11,9 @@ from google import genai
 from google.genai import errors, types
 from pydantic import BaseModel
 
-from ats.llm.types import LLMRequest, RateLimitError, RawCompletion
+from ats.llm.types import LLMRequest, RateLimitError, RawCompletion, TransientServerError
+
+RETRYABLE_SERVER_CODES = frozenset({500, 503, 504})
 
 HTTP_TIMEOUT_MS = 120_000
 
@@ -39,6 +41,8 @@ class GeminiTransport:
         except errors.APIError as exc:
             if exc.code == 429:
                 raise RateLimitError(str(exc), _retry_after_s(exc.details)) from exc  # pyright: ignore[reportUnknownMemberType, reportUnknownArgumentType]
+            if exc.code in RETRYABLE_SERVER_CODES:
+                raise TransientServerError(str(exc), exc.code) from exc
             raise
         usage = response.usage_metadata
         # Thinking tokens are billed as output, so they count as output here.
