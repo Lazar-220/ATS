@@ -16,13 +16,13 @@ class FakeLLMClient:
 
     def __init__(self, *outputs: BaseModel, responder: Responder | None = None) -> None:
         self._outputs = list(outputs)
-        self._responder = responder
+        self.responder = responder
         self.calls: list[LLMRequest] = []
 
     def generate[T: BaseModel](self, request: LLMRequest, schema: type[T]) -> LLMResult[T]:
         self.calls.append(request)
-        if self._responder is not None:
-            output = self._responder(request, schema)
+        if self.responder is not None:
+            output = self.responder(request, schema)
         elif self._outputs:
             output = self._outputs.pop(0)
         else:

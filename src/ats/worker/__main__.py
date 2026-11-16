@@ -9,7 +9,7 @@ from ats.worker.loop import install_signal_handlers, run
 
 def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
-    for module in ("ats.worker.handlers", "ats.worker.ingest"):
+    for module in ("ats.worker.handlers", "ats.worker.ingest", "ats.worker.position_setup"):
         importlib.import_module(module)  # importing registers the handlers
     settings = get_settings()
     stop = threading.Event()

@@ -3,8 +3,6 @@
 Nothing calls the handler directly: the point is that results appear without a further call.
 """
 
-from collections.abc import Iterator
-from pathlib import Path
 from typing import Any
 
 import psycopg
@@ -14,12 +12,9 @@ from pdfs import make_pdf, make_scan_pdf
 from psycopg.rows import DictRow
 from psycopg_pool import ConnectionPool
 
-from ats.api.main import app
 from ats.db import task_queue
-from ats.db.pool import create_pool
-from ats.settings import get_settings
-from ats.worker import ingest as ingest_module  # registers the ingest handler  # noqa: F401
-from integration.test_worker import start_loop, wait_for
+from ats.worker import ingest as ingest_module
+from integration.test_worker import wait_for
 
 pytestmark = pytest.mark.integration
 
@@ -28,28 +23,6 @@ CV_LATIN = make_pdf("Vođenje tima od osam ljudi u banci, 2019-2023.\n" * 6)
 CV_CYRILLIC = make_pdf("Вођење тима од осам људи у банци, 2019-2023.\n" * 6)
 CV_ENGLISH = make_pdf("Led a team of eight people at a bank, 2019-2023.\n" * 6)
 CV_SCAN = make_scan_pdf()
-
-
-@pytest.fixture
-def client(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, conn: psycopg.Connection[DictRow]
-) -> Iterator[TestClient]:
-    monkeypatch.setenv("UPLOAD_DIR", str(tmp_path))
-    get_settings.cache_clear()
-    with TestClient(app) as test_client:
-        yield test_client
-    get_settings.cache_clear()
-
-
-@pytest.fixture
-def worker(test_db_url: str, client: TestClient) -> Iterator[ConnectionPool]:
-    pool = create_pool(test_db_url, 4)
-    pool.open(wait=True, timeout=10)
-    stop, thread = start_loop(pool)
-    yield pool
-    stop.set()
-    thread.join(timeout=10)
-    pool.close()
 
 
 def upload(client: TestClient, posting: bytes, cvs: list[bytes]) -> Any:
