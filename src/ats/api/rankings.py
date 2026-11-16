@@ -1,4 +1,4 @@
-from typing import Annotated, cast
+from typing import Annotated, Literal, cast
 from uuid import UUID
 
 from fastapi import APIRouter, File, HTTPException, Request, UploadFile
@@ -18,6 +18,22 @@ _HEADER_WINDOW = 1024
 class RankingAccepted(BaseModel):
     request_id: UUID
     position_id: UUID
+
+
+class DocumentStatus(BaseModel):
+    document_id: UUID
+    kind: Literal["cv", "posting"]
+    filename: str | None
+    status: str
+    # Why a document was rejected or failed, written for HR; null otherwise.
+    message: str | None
+
+
+class RankingStatus(BaseModel):
+    request_id: UUID
+    position_id: UUID
+    status: Literal["queued", "running", "done", "failed"]
+    documents: list[DocumentStatus]
 
 
 def _read_pdf(file: UploadFile, max_bytes: int) -> PdfUpload:
@@ -54,3 +70,27 @@ def create_ranking(
     except DocumentKindConflict as exc:
         raise HTTPException(422, str(exc)) from exc
     return RankingAccepted(request_id=created.request_id, position_id=created.position_id)
+
+
+@router.get("/rankings/{request_id}")
+def get_ranking(request_id: UUID, request: Request) -> RankingStatus:
+    pool = cast(ConnectionPool, request.app.state.pool)
+    with pool.connection() as conn:
+        state = rankings.get_ranking_state(conn, request_id)
+    if state is None:
+        raise HTTPException(404, "No such ranking request")
+    return RankingStatus(
+        request_id=state.request_id,
+        position_id=state.position_id,
+        status=state.status,
+        documents=[
+            DocumentStatus(
+                document_id=doc.document_id,
+                kind=doc.kind,
+                filename=doc.filename,
+                status=doc.status,
+                message=doc.message,
+            )
+            for doc in state.documents
+        ],
+    )

@@ -52,6 +52,35 @@ Or run everything in Docker with `make up-all` (api on :8000, web on :5173, work
 If port 5432 is taken on the host, set `POSTGRES_PORT` and the port in `DATABASE_URL` in `.env`
 to another value; do not stop the other service.
 
+### Try the API (from phase 1.1b)
+
+With `make api` and `make worker` running. Upload one posting and one or more CVs; the call
+returns at once and the worker does the rest:
+
+```bash
+curl -i -F posting=@posting.pdf -F cvs=@cv_ana.pdf -F cvs=@cv_bojan.pdf http://localhost:8000/rankings
+# HTTP/1.1 202 Accepted
+# {"request_id":"103e1486-7484-4063-9049-f1699717e194","position_id":"7208d077-a80a-4c0e-af0e-1f2fcf06ff62"}
+```
+
+Read the status as often as you like; it changes nothing:
+
+```bash
+curl http://localhost:8000/rankings/103e1486-7484-4063-9049-f1699717e194
+# {"request_id":"103e...","position_id":"7208...","status":"done","documents":[
+#   {"document_id":"5102...","kind":"posting","filename":"posting.pdf","status":"extracted","message":null},
+#   {"document_id":"c763...","kind":"cv","filename":"cv_ana.pdf","status":"extracted","message":null},
+#   {"document_id":"288c...","kind":"cv","filename":"cv_scan.pdf","status":"rejected",
+#    "message":"The PDF contains little or no selectable text and looks like a scan. ..."}]}
+```
+
+Request `status` is `queued` (no document picked up yet), `running`, `done` (every document is
+extracted or rejected), or `failed` (the posting itself was rejected or failed). It is computed
+from the documents at read time. A document is `uploaded`, `extracted`, `rejected` (a scan,
+an unreadable or password-protected PDF; re-uploading it gives the same result) or `failed`
+(unexpected error; uploading the same file again retries it). Errors: 422 for a file that is not a
+PDF or is already stored as the other kind, 413 above `MAX_UPLOAD_MB`, 404 for an unknown request.
+
 ## 3. Commands
 
 | Command | Does | From phase |

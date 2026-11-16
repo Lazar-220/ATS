@@ -152,3 +152,63 @@ def create_ranking(
             (request_id, document_ids[cv.sha256]),
         )
     return CreatedRanking(request_id=request_id, position_id=position_id)
+
+
+@dataclass(frozen=True)
+class DocumentState:
+    document_id: UUID
+    kind: DocumentKind
+    filename: str | None
+    status: str
+    message: str | None
+
+
+@dataclass(frozen=True)
+class RankingState:
+    request_id: UUID
+    position_id: UUID
+    status: Literal["queued", "running", "done", "failed"]
+    documents: list[DocumentState]
+
+
+def _derive_status(
+    documents: list[DocumentState],
+) -> Literal["queued", "running", "done", "failed"]:
+    """Request status from its documents.
+
+    It is computed at read time on purpose: until the scoring phases exist there is no stage
+    after ingest, and a stored value would need coordination between the ingest jobs.
+    """
+    posting = next(doc for doc in documents if doc.kind == "posting")
+    if posting.status in ("rejected", "failed"):
+        return "failed"  # without the posting there is nothing to score against
+    pending = [doc for doc in documents if doc.status == "uploaded"]
+    if len(pending) == len(documents):
+        return "queued"
+    return "running" if pending else "done"
+
+
+def get_ranking_state(conn: psycopg.Connection[Any], request_id: UUID) -> RankingState | None:
+    request = conn.execute(
+        "SELECT position_id FROM ranking_request WHERE id = %s", (request_id,)
+    ).fetchone()
+    if request is None:
+        return None
+    rows = conn.execute(
+        "SELECT d.id, d.kind, d.filename, d.status, d.status_message "
+        "FROM document d JOIN job_position p ON p.source_sha256 = d.sha256 "
+        "WHERE p.id = %(position)s "
+        "UNION ALL "
+        "SELECT d.id, d.kind, d.filename, d.status, d.status_message "
+        "FROM request_candidate rc JOIN document d ON d.id = rc.document_id "
+        "WHERE rc.request_id = %(request)s "
+        "ORDER BY 2 DESC, 3",  # 'posting' sorts after 'cv', so DESC lists the posting first
+        {"position": request[0], "request": request_id},
+    ).fetchall()
+    documents = [DocumentState(*row) for row in rows]
+    return RankingState(
+        request_id=request_id,
+        position_id=request[0],
+        status=_derive_status(documents),
+        documents=documents,
+    )

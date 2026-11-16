@@ -195,3 +195,53 @@ def test_a_cv_already_stored_as_a_posting_is_rejected(
 def test_missing_cvs_is_a_validation_error(client: TestClient) -> None:
     response = client.post("/rankings", files=[("posting", ("p.pdf", POSTING, "application/pdf"))])
     assert response.status_code == 422
+
+
+def test_status_of_a_new_request_is_queued_with_the_posting_first(client: TestClient) -> None:
+    accepted = post(client, POSTING, [CV_B, CV_A], names=["b.pdf", "a.pdf"]).json()
+
+    response = client.get(f"/rankings/{accepted['request_id']}")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["status"] == "queued"
+    assert body["position_id"] == accepted["position_id"]
+    assert [(d["kind"], d["filename"], d["status"]) for d in body["documents"]] == [
+        ("posting", "posting.pdf", "uploaded"),
+        ("cv", "a.pdf", "uploaded"),
+        ("cv", "b.pdf", "uploaded"),
+    ]
+    assert all(d["message"] is None for d in body["documents"])
+
+
+def test_status_of_an_unknown_request_is_404(client: TestClient) -> None:
+    response = client.get("/rankings/00000000-0000-0000-0000-000000000000")
+    assert response.status_code == 404
+
+
+def test_status_with_a_malformed_id_is_a_validation_error(client: TestClient) -> None:
+    assert client.get("/rankings/not-a-uuid").status_code == 422
+
+
+def test_status_is_running_while_some_documents_are_still_waiting(
+    client: TestClient, conn: psycopg.Connection[DictRow]
+) -> None:
+    accepted = post(client, POSTING, [CV_A, CV_B]).json()
+    conn.execute("UPDATE document SET status = 'extracted' WHERE kind = 'posting'")
+
+    status = client.get(f"/rankings/{accepted['request_id']}").json()["status"]
+    assert status == "running"
+
+
+def test_status_is_failed_when_the_posting_is_rejected(
+    client: TestClient, conn: psycopg.Connection[DictRow]
+) -> None:
+    accepted = post(client, POSTING, [CV_A]).json()
+    conn.execute("UPDATE document SET status = 'extracted' WHERE kind = 'cv'")
+    conn.execute(
+        "UPDATE document SET status = 'rejected', status_message = 'scan' WHERE kind = 'posting'"
+    )
+
+    body = client.get(f"/rankings/{accepted['request_id']}").json()
+    assert body["status"] == "failed"
+    assert body["documents"][0]["message"] == "scan"

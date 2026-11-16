@@ -61,11 +61,15 @@ def upload(client: TestClient, posting: bytes, cvs: list[bytes]) -> Any:
 
 
 def wait_until_settled(conn: psycopg.Connection[DictRow]) -> None:
+    """Every document is out of `uploaded` and the queue is idle (a job is marked done just
+    after its document is written, so the document alone is not enough)."""
+
     def settled() -> bool:
         row = conn.execute(
-            "SELECT count(*) AS n FROM document WHERE status = 'uploaded'"
+            "SELECT (SELECT count(*) FROM document WHERE status = 'uploaded') AS waiting, "
+            "(SELECT count(*) FROM task_queue WHERE status IN ('queued', 'running')) AS busy"
         ).fetchone()
-        return row is not None and row["n"] == 0
+        return row is not None and row["waiting"] == 0 and row["busy"] == 0
 
     wait_for(settled)
 
@@ -194,3 +198,19 @@ def test_unexpected_errors_fail_the_document_and_a_reupload_recovers(
     assert recovered is not None
     assert recovered["status"] == "extracted"
     assert "Led a team" in recovered["raw_text"]
+
+
+def test_status_endpoint_shows_done_and_the_scan_message(
+    client: TestClient, worker: ConnectionPool, conn: psycopg.Connection[DictRow]
+) -> None:
+    accepted = upload(client, POSTING, [CV_SCAN, CV_ENGLISH])
+    wait_until_settled(conn)
+
+    body = client.get(f"/rankings/{accepted['request_id']}").json()
+
+    assert body["status"] == "done"
+    by_name = {d["filename"]: d for d in body["documents"]}
+    assert by_name["cv0.pdf"]["status"] == "rejected"
+    assert "looks like a scan" in by_name["cv0.pdf"]["message"]
+    assert by_name["cv1.pdf"]["status"] == "extracted"
+    assert by_name["cv1.pdf"]["message"] is None
