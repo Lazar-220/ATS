@@ -2,9 +2,12 @@ import importlib
 import logging
 import threading
 
+from ats.buildinfo import code_version
 from ats.db.pool import create_pool
 from ats.settings import get_settings
 from ats.worker.loop import install_signal_handlers, run
+from ats.worker.registry import HANDLERS
+from ats.worker.startup import read_schema_version, startup_summary
 
 
 def main() -> None:
@@ -17,6 +20,16 @@ def main() -> None:
 
     pool = create_pool(settings.database_url, settings.db_pool_max_size)
     pool.open(wait=True, timeout=30)
+    logging.getLogger(__name__).info(
+        startup_summary(
+            version=code_version(),
+            schema_version=read_schema_version(pool),
+            handlers=HANDLERS,
+            llm_model=settings.llm_model,
+            llm_rpm=settings.llm_rpm,
+            llm_key_set=bool(settings.llm_api_key and settings.llm_api_key.get_secret_value()),
+        )
+    )
     try:
         run(
             pool,

@@ -129,6 +129,19 @@ One real call to the model (synthetic posting, one request of the free quota), n
 uv run pytest -m llm -s tests/test_llm_smoke.py
 ```
 
+### Is the worker running current code?
+
+A process keeps the code it started with, so a worker left over from before a branch switch or a
+`git pull` looks healthy and quietly lacks newer job types. Its first log line says what it is:
+
+```
+worker starting: code=phase/1.2-requirements@7837fa7 schema=0002 handlers=ingest,noop,position_setup llm_model=gemini-3.8-flash llm_rpm=5 llm_key=set
+```
+
+Compare `code=` with `git log -1`, `schema=` with `uv run alembic heads`, and `handlers=` with the
+job types you expect (`position_setup` from phase 1.2). `-dirty` means tracked files had uncommitted
+changes when it started. Restart the worker after changing worker code; `make worker` does not reload.
+
 ## 3. Commands
 
 | Command | Does | From phase |
@@ -166,6 +179,7 @@ uv run pytest -m llm -s tests/test_llm_smoke.py
 | `LLM_API_KEY` | none | Gemini API key; never committed | 1.2 |
 | `LLM_RPM` | `5` | requests per minute (free tier). The limiter is in-process: valid for one worker only | 1.2 |
 | `LLM_CACHE_DIR` | `data/llm_cache` | LLM response cache, one JSON file per hash of model, prompts, thinking level and schema; in Docker the `llm_cache` volume | 1.2 |
+| `GIT_COMMIT` | derived from `git` | overrides the code version in the worker's startup line; set it where there is no `.git` (a Docker image shows `unknown` otherwise) | 1.2 |
 | `LANGFUSE_ENABLED` | `false` | tracing on or off | 1.6 |
 | `EMBEDDING_MODEL` | `BAAI/bge-m3` | local embedding model | 2.1 |
 | `RERANKER_MODEL` | empty (off) | local reranker | 2.2 |
