@@ -1,0 +1,47 @@
+[project]
+name = "ats"
+version = "0.1.0"
+description = "CV-ranking service: scores CVs against the requirements of a job posting."
+requires-python = ">=3.12"
+dependencies = []
+
+[build-system]
+requires = ["uv_build>=0.13.8,<0.14.0"]
+build-backend = "uv_build"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+# Python only: ruff 0.17 would otherwise format the Markdown docs as well.
+include = ["*.py", "*.pyi", "**/pyproject.toml"]
+# The hook scripts under .claude/ are tooling, not project code.
+extend-exclude = [".claude"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.pyright]
+include = ["src", "tests"]
+exclude = ["**/__pycache__", ".claude", ".venv"]
+strict = ["src"]
+pythonVersion = "3.12"
+venvPath = "."
+venv = ".venv"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = [
+    "integration: needs Postgres running (make up); run with make test-int",
+    "llm: calls the real LLM; never run automatically",
+]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pyright>=1.1.414",
+    "pytest>=9.2.0",
+    "pytest-asyncio>=1.5.0",
+    "ruff>=0.17.5",
+]
