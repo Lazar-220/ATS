@@ -1,8 +1,11 @@
 from collections.abc import Callable
 
+from psycopg_pool import ConnectionPool
+
 from ats.db.task_queue import Job
 
-Handler = Callable[[Job], None]
+# The pool is passed in so a handler can open its own short transactions.
+Handler = Callable[[Job, ConnectionPool], None]
 
 HANDLERS: dict[str, Handler] = {}
 

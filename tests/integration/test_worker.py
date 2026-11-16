@@ -85,7 +85,7 @@ def test_shutdown_lets_the_running_job_finish(pool: ConnectionPool, queue_conn: 
 def test_a_failing_handler_is_retried_then_failed_with_the_error_stored(
     pool: ConnectionPool, queue_conn: Conn, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    def boom(_job: task_queue.Job) -> None:
+    def boom(_job: task_queue.Job, _pool: ConnectionPool) -> None:
         raise RuntimeError("kaput")
 
     monkeypatch.setitem(HANDLERS, "boom", boom)

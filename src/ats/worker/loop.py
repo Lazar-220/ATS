@@ -31,7 +31,7 @@ def run_job(pool: ConnectionPool, job: Job) -> None:
     try:
         if handler is None:
             raise LookupError(f"no handler registered for job type {job.job_type!r}")
-        handler(job)
+        handler(job, pool)
     except Exception as exc:
         log.exception("job %s (%s) failed on attempt %s", job.id, job.job_type, job.attempts)
         with pool.connection() as conn:
