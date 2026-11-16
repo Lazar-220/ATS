@@ -52,6 +52,35 @@ Or run everything in Docker with `make up-all` (api on :8000, web on :5173, work
 If port 5432 is taken on the host, set `POSTGRES_PORT` and the port in `DATABASE_URL` in `.env`
 to another value; do not stop the other service.
 
+### Try the API (from phase 1.1b)
+
+With `make api` and `make worker` running. Upload one posting and one or more CVs; the call
+returns at once and the worker does the rest:
+
+```bash
+curl -i -F posting=@posting.pdf -F cvs=@cv_ana.pdf -F cvs=@cv_bojan.pdf http://localhost:8000/rankings
+# HTTP/1.1 202 Accepted
+# {"request_id":"103e1486-7484-4063-9049-f1699717e194","position_id":"7208d077-a80a-4c0e-af0e-1f2fcf06ff62"}
+```
+
+Read the status as often as you like; it changes nothing:
+
+```bash
+curl http://localhost:8000/rankings/103e1486-7484-4063-9049-f1699717e194
+# {"request_id":"103e...","position_id":"7208...","status":"done","documents":[
+#   {"document_id":"5102...","kind":"posting","filename":"posting.pdf","status":"extracted","message":null},
+#   {"document_id":"c763...","kind":"cv","filename":"cv_ana.pdf","status":"extracted","message":null},
+#   {"document_id":"288c...","kind":"cv","filename":"cv_scan.pdf","status":"rejected",
+#    "message":"The PDF contains little or no selectable text and looks like a scan. ..."}]}
+```
+
+Request `status` is `queued` (no document picked up yet), `running`, `done` (every document is
+extracted or rejected), or `failed` (the posting itself was rejected or failed). It is computed
+from the documents at read time. A document is `uploaded`, `extracted`, `rejected` (a scan,
+an unreadable or password-protected PDF; re-uploading it gives the same result) or `failed`
+(unexpected error; uploading the same file again retries it). Errors: 422 for a file that is not a
+PDF or is already stored as the other kind, 413 above `MAX_UPLOAD_MB`, 404 for an unknown request.
+
 ## 3. Commands
 
 | Command | Does | From phase |
@@ -82,7 +111,9 @@ to another value; do not stop the other service.
 | `API_PROXY_TARGET` | `http://localhost:8000` | where the Vite dev server forwards `/api/*` (read by `web/vite.config.ts`) | 1.1a |
 | `QUEUE_VISIBILITY_TIMEOUT_S` | `300` | a job in `running` longer than this goes back to the queue (its worker died) | 1.1a |
 | `WORKER_POLL_INTERVAL_S` | `1.0` | seconds the worker sleeps when the queue is empty | 1.1a |
-| `UPLOAD_DIR` | `data/uploads` | stored PDFs | 1.1b |
+| `MIN_CHARS_PER_PAGE` | `100` | a PDF with fewer non-space characters per page on average is rejected as a scan | 1.1b |
+| `UPLOAD_DIR` | `data/uploads` | stored PDFs, one file per `sha256`; in Docker the `uploads` volume at `/app/data/uploads` | 1.1b |
+| `MAX_UPLOAD_MB` | `10` | largest accepted PDF; a bigger one gets HTTP 413 | 1.1b |
 | `LLM_MODEL` | `gemini-3.8-flash` | model for every LLM role | 1.2 |
 | `LLM_API_KEY` | none | Gemini API key; never committed | 1.2 |
 | `LLM_RPM` | `5` | requests per minute (free tier) | 1.2 |
@@ -101,7 +132,7 @@ Planned from §6.3 of the plan. The actual pinned versions are in `pyproject.tom
 | --- | --- | --- |
 | 0 | dev group: `ruff`, `pyright`, `pytest`, `pytest-asyncio`, `httpx` | |
 | 1.1a | `fastapi`, `uvicorn[standard]`, `pydantic`, `pydantic-settings`, `psycopg[binary,pool]`, `alembic` | Docker image `pgvector/pgvector:pg17`; npm: `react`, `react-dom`, `@tanstack/react-query`; dev: `typescript`, `vite`, `@vitejs/plugin-react`, `@types/react`, `@types/react-dom`, `@types/node`, `eslint`, `@eslint/js`, `typescript-eslint`, `eslint-plugin-react-hooks`, `globals` |
-| 1.1b | `pymupdf`, `python-multipart`, `cyrtranslit`, `lingua-language-detector` | |
+| 1.1b | `pymupdf` (`>=1.28,<2`, see below), `python-multipart`, `cyrtranslit`, `lingua-language-detector` | |
 | 1.2 | `google-genai` | npm: `@tanstack/react-table` |
 | 1.3 | eval group: `scikit-learn`, `scipy`, `statsmodels` | |
 | 1.4b | `rapidfuzz` | |
@@ -123,6 +154,10 @@ the production dependencies are clean.
 Alembic brings in SQLAlchemy as its own dependency. It is used for migrations only; application
 queries are raw SQL through psycopg 3.
 
+`pymupdf` is capped below 2: version 2.x is a meta-package that also installs `pymupdf-layout`,
+`pymupdf4llm`, `onnxruntime`, `numpy` and `networkx`, none of which 1.1b needs. Lift the cap
+only if a later phase wants them.
+
 PyMuPDF is AGPL-licensed. A closed commercial product needs a replacement or a commercial license (§6.3).
 
 ## 6. Machine state (changes outside the repository)
@@ -132,4 +167,5 @@ Claude Code logs here everything it creates or changes outside the repository, w
 | Date | Change | Why | Undo |
 | --- | --- | --- | --- |
 | 2026-11-16 | Docker image `pgvector/pgvector:pg17`, network `ats_default`, volume `ats_pgdata` (compose project `ats`) | Postgres for phase 1.1a | `docker compose down -v` (deletes the data), then `docker rmi pgvector/pgvector:pg17` |
+| 2026-11-16 | Docker volume `ats_uploads` (compose project `ats`) | uploaded PDFs shared by api and worker (phase 1.1b) | `docker compose --profile full down -v` (deletes the PDFs and the database) or `docker volume rm ats_uploads` |
 | 2026-11-16 | Docker images `ats-api`, `ats-worker`, `ats-web`, plus base images `python:3.12-slim`, `node:24-alpine` and `ghcr.io/astral-sh/uv:0.13.8` | `make up-all` (phase 1.1a) | `docker compose --profile full down --rmi local`, then `docker rmi python:3.12-slim node:24-alpine ghcr.io/astral-sh/uv:0.13.8` |

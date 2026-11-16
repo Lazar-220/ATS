@@ -11,7 +11,7 @@ COPY src ./src
 RUN uv sync --frozen --no-dev
 
 ENV PATH="/app/.venv/bin:$PATH"
-RUN useradd --system --no-create-home app
+RUN useradd --system --no-create-home app && mkdir -p /app/data/uploads && chown app /app/data/uploads
 USER app
 
 EXPOSE 8000

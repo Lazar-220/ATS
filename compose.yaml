@@ -30,9 +30,12 @@ services:
     restart: unless-stopped
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-ats}:${POSTGRES_PASSWORD:-ats}@postgres:5432/${POSTGRES_DB:-ats}
+      UPLOAD_DIR: /app/data/uploads
     depends_on:
       postgres:
         condition: service_healthy
+    volumes:
+      - uploads:/app/data/uploads
     ports:
       - "8000:8000"
     healthcheck:
@@ -49,9 +52,12 @@ services:
     restart: unless-stopped
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-ats}:${POSTGRES_PASSWORD:-ats}@postgres:5432/${POSTGRES_DB:-ats}
+      UPLOAD_DIR: /app/data/uploads
     depends_on:
       postgres:
         condition: service_healthy
+    volumes:
+      - uploads:/app/data/uploads
     # Time to finish the job in progress after SIGTERM before Docker kills the container.
     stop_grace_period: 30s
 
@@ -71,3 +77,5 @@ services:
 
 volumes:
   pgdata:
+  # Shared by api (writes) and worker (reads): the PDFs, named by sha256.
+  uploads:
