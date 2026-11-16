@@ -9,7 +9,7 @@ Read this at the start of every session. Update it at the end of every phase.
 | 0 Bootstrap | merged | 2026-11-16 | Built directly on `main` as the phase prompt says; no merge commit. Three commits. |
 | 1.1a Skeleton | merged | 2026-11-16 | `--no-ff` merge of `phase/1.1a-skeleton`. Commit 606dd06 alone fails pyright; fixed by 65f5d37, left unsquashed on the owner's decision. |
 | 1.1b Ingest | merged | 2026-11-16 | `--no-ff` merge of `phase/1.1b-ingest`, five feature commits and one docs commit. |
-| 1.2 Requirements | built, not merged | | All units done. Smoke run: passed on `gemini-3.6-flash` as prompt evidence only (see Measured numbers); the `gemini-3.8-flash` criterion stays open, three attempts got HTTP 503 (model overloaded). Retry with `uv run pytest -m llm -s tests/test_llm_smoke.py`. |
+| 1.2 Requirements | merged | 2026-11-17 | `--no-ff` merge of `phase/1.2-requirements`: five feature commits, one fix, one test, docs. Merged with the `gemini-3.8-flash` smoke criterion OPEN (owner-approved deviation, see Carried over); the same prompt passed on `gemini-3.6-flash`. |
 | 1.3 Golden set and harness | not started | | |
 | 1.4a CV parsing | not started | | |
 | 1.4b Judge and score | not started | | |
