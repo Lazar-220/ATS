@@ -83,7 +83,8 @@ to another value; do not stop the other service.
 | `QUEUE_VISIBILITY_TIMEOUT_S` | `300` | a job in `running` longer than this goes back to the queue (its worker died) | 1.1a |
 | `WORKER_POLL_INTERVAL_S` | `1.0` | seconds the worker sleeps when the queue is empty | 1.1a |
 | `MIN_CHARS_PER_PAGE` | `100` | a PDF with fewer non-space characters per page on average is rejected as a scan | 1.1b |
-| `UPLOAD_DIR` | `data/uploads` | stored PDFs | 1.1b |
+| `UPLOAD_DIR` | `data/uploads` | stored PDFs, one file per `sha256`; in Docker the `uploads` volume at `/app/data/uploads` | 1.1b |
+| `MAX_UPLOAD_MB` | `10` | largest accepted PDF; a bigger one gets HTTP 413 | 1.1b |
 | `LLM_MODEL` | `gemini-3.8-flash` | model for every LLM role | 1.2 |
 | `LLM_API_KEY` | none | Gemini API key; never committed | 1.2 |
 | `LLM_RPM` | `5` | requests per minute (free tier) | 1.2 |
@@ -137,4 +138,5 @@ Claude Code logs here everything it creates or changes outside the repository, w
 | Date | Change | Why | Undo |
 | --- | --- | --- | --- |
 | 2026-11-16 | Docker image `pgvector/pgvector:pg17`, network `ats_default`, volume `ats_pgdata` (compose project `ats`) | Postgres for phase 1.1a | `docker compose down -v` (deletes the data), then `docker rmi pgvector/pgvector:pg17` |
+| 2026-11-16 | Docker volume `ats_uploads` (compose project `ats`) | uploaded PDFs shared by api and worker (phase 1.1b) | `docker compose --profile full down -v` (deletes the PDFs and the database) or `docker volume rm ats_uploads` |
 | 2026-11-16 | Docker images `ats-api`, `ats-worker`, `ats-web`, plus base images `python:3.12-slim`, `node:24-alpine` and `ghcr.io/astral-sh/uv:0.13.8` | `make up-all` (phase 1.1a) | `docker compose --profile full down --rmi local`, then `docker rmi python:3.12-slim node:24-alpine ghcr.io/astral-sh/uv:0.13.8` |

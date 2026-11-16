@@ -1,4 +1,5 @@
 from functools import lru_cache
+from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -13,6 +14,8 @@ class Settings(BaseSettings):
     worker_poll_interval_s: float = 1.0
     # Below this average of non-space characters per page a PDF is treated as a scan (§4.2).
     min_chars_per_page: int = 100
+    upload_dir: Path = Path("data/uploads")
+    max_upload_mb: int = 10
 
 
 @lru_cache
