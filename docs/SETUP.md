@@ -122,6 +122,13 @@ curl -X POST http://localhost:8000/hr/answers -H 'Content-Type: application/json
 Weights are integers from 1 to 5; `kind` is `mandatory` or `nice_to_have`; the list must not be empty
 and its parent links must not form a cycle (422 otherwise).
 
+One real call to the model (synthetic posting, one request of the free quota), never run by
+`make test` or `make check`:
+
+```bash
+uv run pytest -m llm -s tests/test_llm_smoke.py
+```
+
 ## 3. Commands
 
 | Command | Does | From phase |
