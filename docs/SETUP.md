@@ -150,7 +150,7 @@ A process keeps the code it started with, so a worker left over from before a br
 `git pull` looks healthy and quietly lacks newer job types. Its first log line says what it is:
 
 ```
-worker starting: code=phase/1.2-requirements@7837fa7 schema=0002 handlers=ingest,noop,position_setup llm_model=gemini-3.8-flash llm_rpm=5 llm_key=set
+worker starting: code=phase/1.2-requirements@7837fa7 schema=0002 handlers=ingest,noop,position_setup llm_model=gemini-3.6-flash llm_rpm=5 llm_key=set
 ```
 
 Compare `code=` with `git log -1`, `schema=` with `uv run alembic heads`, and `handlers=` with the
@@ -191,7 +191,7 @@ changes when it started. Restart the worker after changing worker code; `make wo
 | `MIN_CHARS_PER_PAGE` | `100` | a PDF with fewer non-space characters per page on average is rejected as a scan | 1.1b |
 | `UPLOAD_DIR` | `data/uploads` | stored PDFs, one file per `sha256`; in Docker the `uploads` volume at `/app/data/uploads` | 1.1b |
 | `MAX_UPLOAD_MB` | `10` | largest accepted PDF; a bigger one gets HTTP 413 | 1.1b |
-| `LLM_MODEL` | `gemini-3.8-flash` | model for every LLM role | 1.2 |
+| `LLM_MODEL` | `gemini-3.6-flash` | model for every LLM role. The plan (§6.1) names `gemini-3.8-flash`, which returned 503 persistently; set it back when it is reachable. Eval results must name the model | 1.2 |
 | `LLM_API_KEY` | none | Gemini API key; never committed | 1.2 |
 | `LLM_RPM` | `5` | requests per minute (free tier). The limiter is in-process: valid for one worker only | 1.2 |
 | `LLM_CACHE_DIR` | `data/llm_cache` | LLM response cache, one JSON file per hash of model, prompts, thinking level and schema; in Docker the `llm_cache` volume | 1.2 |
@@ -231,7 +231,8 @@ the production dependencies are clean.
 
 `google-genai` (phase 1.2) is imported only in `src/ats/llm/gemini.py`, behind the `LLMClient`
 interface. `gemini-3.8-flash` does not accept `thinking_level` `minimal` (it takes `low`, `medium`
-and `high`; default `medium`), so every call there uses `low` or higher.
+and `high`; default `medium`), so every call uses `low` or higher, which also works on the
+current default `gemini-3.6-flash`.
 
 Alembic brings in SQLAlchemy as its own dependency. It is used for migrations only; application
 queries are raw SQL through psycopg 3.
