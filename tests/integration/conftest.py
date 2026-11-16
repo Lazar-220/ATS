@@ -1,5 +1,6 @@
 from collections.abc import Iterator
 from pathlib import Path
+from typing import Any
 from urllib.parse import urlsplit, urlunsplit
 
 import psycopg
@@ -56,4 +57,12 @@ def conn(test_db_url: str) -> Iterator[psycopg.Connection[DictRow]]:
             "TRUNCATE task_queue, verdict, assessment, request_candidate, ranking_request, "
             "document, candidate, requirement, job_position RESTART IDENTITY CASCADE"
         )
+        yield connection
+
+
+@pytest.fixture
+def queue_conn(test_db_url: str) -> Iterator[psycopg.Connection[Any]]:
+    """Tuple-row autocommit connection (what the pool hands the queue) with an empty queue."""
+    with psycopg.connect(test_db_url, autocommit=True) as connection:
+        connection.execute("TRUNCATE task_queue RESTART IDENTITY")
         yield connection
