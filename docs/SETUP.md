@@ -51,8 +51,8 @@ Stop with `Ctrl+C` in each terminal, then `make down`.
 | Command | Does | From phase |
 | --- | --- | --- |
 | `make up` / `make down` | start / stop Postgres | 1.1a |
+| `make migrate` | apply Alembic migrations (creates the nine v1 tables) | 1.1a |
 | `make up-all` | whole stack in Docker (postgres, api, worker, web) | 1.1a |
-| `make migrate` | apply Alembic migrations | 1.1a |
 | `make api` | FastAPI with reload on :8000 | 1.1a |
 | `make worker` | job worker | 1.1a |
 | `make web` | Vite dev server on :5173 | 1.1a |

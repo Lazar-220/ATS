@@ -15,8 +15,14 @@ up:
 down:
 	docker compose down
 
+migrate:
+	uv run alembic upgrade head
+
 api:
 	uv run uvicorn ats.api.main:app --reload --port 8000
+
+test-int:
+	uv run pytest -q -m integration
 
 check:
 	uv run ruff check .
@@ -30,7 +36,7 @@ test:
 	uv run pytest -q -m "$(UNIT_TESTS)"
 
 # Targets that belong to a later phase fail loudly instead of doing nothing.
-up-all migrate worker web test-int: ; @echo "make $@ is added in phase 1.1a"; exit 1
+up-all worker web: ; @echo "make $@ is added in phase 1.1a"; exit 1
 eval: ; @echo "make $@ is added in phase 1.3"; exit 1
 langfuse-up langfuse-down: ; @echo "make $@ is added in phase 1.6"; exit 1
 eval-redteam: ; @echo "make $@ is added in phase 1.7"; exit 1

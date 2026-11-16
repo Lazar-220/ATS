@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "CV-ranking service: scores CVs against the requirements of a job posting."
 requires-python = ">=3.12"
 dependencies = [
+    "alembic>=1.20.1",
     "fastapi>=0.163.1",
     "psycopg[binary,pool]>=3.3.9",
     "pydantic-settings>=2.16.3",
