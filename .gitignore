@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+.pyright/
+*.egg-info/
+build/
+dist/
+
+# Node
+node_modules/
+web/dist/
+
+# Secrets and local state
+.env
+.env.*
+!.env.example
+.claude/settings.local.json
+
+# Data, model caches and eval output
+data/
+eval/results/
+.cache/
+models/
+*.safetensors
+*.gguf
+*.onnx
