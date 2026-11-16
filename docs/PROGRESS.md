@@ -9,7 +9,7 @@ Read this at the start of every session. Update it at the end of every phase.
 | 0 Bootstrap | merged | 2026-11-16 | Built directly on `main` as the phase prompt says; no merge commit. Three commits. |
 | 1.1a Skeleton | merged | 2026-11-16 | `--no-ff` merge of `phase/1.1a-skeleton`. Commit 606dd06 alone fails pyright; fixed by 65f5d37, left unsquashed on the owner's decision. |
 | 1.1b Ingest | merged | 2026-11-16 | `--no-ff` merge of `phase/1.1b-ingest`, five feature commits and one docs commit. |
-| 1.2 Requirements | built, not merged | | All units done. The manual smoke run against Gemini is NOT done: three attempts on 2026-11-16 got HTTP 503 (model overloaded). Run `uv run pytest -m llm -s tests/test_llm_smoke.py` and record the output here. |
+| 1.2 Requirements | built, not merged | | All units done. Smoke run: passed on `gemini-3.6-flash` as prompt evidence only (see Measured numbers); the `gemini-3.8-flash` criterion stays open, three attempts got HTTP 503 (model overloaded). Retry with `uv run pytest -m llm -s tests/test_llm_smoke.py`. |
 | 1.3 Golden set and harness | not started | | |
 | 1.4a CV parsing | not started | | |
 | 1.4b Judge and score | not started | | |
@@ -44,6 +44,7 @@ One row per measurement. Never overwrite a row; add a new one.
 | 2026-11-16 | 1.1a | docker stats memory, `web` (Vite dev server, idle) | n/a | 253 MiB | about 0.5 GB (§6.3) | n/a |
 | 2026-11-16 | 1.1b | docker stats memory, `worker` after ingesting a PDF (PyMuPDF and lingua loaded, sr/hr/bs/en models) | n/a | 71 MiB | about 2.5 GB with bge-m3 (§6.3) | n/a |
 | 2026-11-16 | 1.1b | docker stats memory, `api` after serving uploads (no PyMuPDF, no lingua) | n/a | 55 MiB | about 0.3 GB (§6.3) | n/a |
+| 2026-11-16 | 1.2 | requirement extraction, one real call, `gemini-3.6-flash` via the `LLM_MODEL` override (default unchanged), `thinking_level` low, synthetic posting. Run by the owner, not by Claude. Result: "Java" and "3 years of experience in Java" came back as two requirements with `parent`=1; "a degree and 3 years" came back as two separate requirements. Latency, 795 input and 354 output tokens | n/a | 58.7 s | none set | requirements_v1 |
 
 ## Decisions
 
@@ -85,7 +86,7 @@ Work a phase deferred, with the phase that must pick it up.
 | 1.1a | A real SIGINT/SIGTERM test of the worker on native Windows is not automated (kill and restart is; SIGTERM was verified in the Linux container). | 1.7 (CI on Linux) |
 | 1.2 | Extraction F1 of at least 0.85 on the golden postings. | 1.3 (golden set) |
 | 1.2 | "Editing requirements re-scores that position's CVs": the edit enqueues one `rejudge` job per assessment, but no handler exists, and no assessment exists before 1.4b. | 1.4b (judge) |
-| 1.2 | Manual smoke run against Gemini: not done, three HTTP 503 responses (model overloaded). | 1.2, before merge |
+| 1.2 | Smoke run on `gemini-3.8-flash`, the configured model: three HTTP 503 responses (model overloaded). It passed on `gemini-3.6-flash` as prompt evidence only, so the criterion is still open. 58.7 s for one call is slow against the 120 s HTTP timeout. | 1.2, before merge |
 | 1.2 | The rate limiter is in-process: correct with one worker. A second worker needs a shared limiter (a Postgres row or advisory lock). | when a second worker is added |
 | 1.2 | Positions created before 1.2 have no setup job, so they stay `pending`. Only the development database has any; re-upload does not help because their documents are already extracted. | none (development data) |
 | 1.2 | Whether the client should retry 5xx (503 overloaded) itself, or leave it to the queue. | owner decision |
