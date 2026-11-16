@@ -3,7 +3,13 @@ name = "ats"
 version = "0.1.0"
 description = "CV-ranking service: scores CVs against the requirements of a job posting."
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "alembic>=1.20.1",
+    "fastapi>=0.163.1",
+    "psycopg[binary,pool]>=3.3.9",
+    "pydantic-settings>=2.16.3",
+    "uvicorn[standard]>=0.54.0",
+]
 
 [build-system]
 requires = ["uv_build>=0.13.8,<0.14.0"]

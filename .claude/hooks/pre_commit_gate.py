@@ -1,6 +1,7 @@
 """PreToolUse hook: block `git commit` while lint or unit tests fail.
 
-Runs ruff and the unit tests (no Postgres, no real LLM). Exits 2 with the failure on
+Runs ruff, pyright and the unit tests (no Postgres, no real LLM; the web checks are left
+to `make check`). Exits 2 with the failure on
 stderr, which blocks the commit and tells Claude Code what to fix. Does nothing until
 the project has a pyproject.toml with ruff installed.
 
@@ -59,6 +60,8 @@ def main() -> int:
             ("ruff check", ("ruff", "check", "--output-format", "concise", ".")),
             ("ruff format --check", ("ruff", "format", "--check", ".")),
         ]
+        if run(root, "pyright", "--version", timeout=60).returncode == 0:
+            steps.append(("pyright", ("pyright",)))
         if run(root, "pytest", "--version", timeout=30).returncode == 0:
             steps.append(("pytest (unit)", ("pytest", "-q", "-x", "-m", UNIT_TESTS)))
 
