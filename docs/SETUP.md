@@ -73,6 +73,7 @@ Stop with `Ctrl+C` in each terminal, then `make down`.
 | `POSTGRES_PORT` | `5432` | host port of the Postgres container; change it if 5432 is taken | 1.1a |
 | `POSTGRES_USER` / `POSTGRES_PASSWORD` / `POSTGRES_DB` | `ats` | credentials of the Postgres container | 1.1a |
 | `DB_POOL_MAX_SIZE` | `5` | connection pool size per process | 1.1a |
+| `API_PROXY_TARGET` | `http://localhost:8000` | where the Vite dev server forwards `/api/*` (read by `web/vite.config.ts`) | 1.1a |
 | `QUEUE_VISIBILITY_TIMEOUT_S` | `300` | a job in `running` longer than this goes back to the queue (its worker died) | 1.1a |
 | `WORKER_POLL_INTERVAL_S` | `1.0` | seconds the worker sleeps when the queue is empty | 1.1a |
 | `UPLOAD_DIR` | `data/uploads` | stored PDFs | 1.1b |
@@ -93,7 +94,7 @@ Planned from §6.3 of the plan. The actual pinned versions are in `pyproject.tom
 | Phase | Python (`uv add`) | Other |
 | --- | --- | --- |
 | 0 | dev group: `ruff`, `pyright`, `pytest`, `pytest-asyncio`, `httpx` | |
-| 1.1a | `fastapi`, `uvicorn[standard]`, `pydantic`, `pydantic-settings`, `psycopg[binary,pool]`, `alembic` | Docker image `pgvector/pgvector:pg17`; npm: `react`, `react-dom`, `typescript`, `vite`, `@tanstack/react-query` |
+| 1.1a | `fastapi`, `uvicorn[standard]`, `pydantic`, `pydantic-settings`, `psycopg[binary,pool]`, `alembic` | Docker image `pgvector/pgvector:pg17`; npm: `react`, `react-dom`, `@tanstack/react-query`; dev: `typescript`, `vite`, `@vitejs/plugin-react`, `@types/react`, `@types/react-dom`, `@types/node`, `eslint`, `@eslint/js`, `typescript-eslint`, `eslint-plugin-react-hooks`, `globals` |
 | 1.1b | `pymupdf`, `python-multipart`, `cyrtranslit`, `lingua-language-detector` | |
 | 1.2 | `google-genai` | npm: `@tanstack/react-table` |
 | 1.3 | eval group: `scikit-learn`, `scipy`, `statsmodels` | |
@@ -104,6 +105,11 @@ Planned from §6.3 of the plan. The actual pinned versions are in `pyproject.tom
 | 2.2 | none | model `BAAI/bge-reranker-v2-m3`, about 2.3 GB |
 | 3.6 | `langgraph`, `langgraph-checkpoint-postgres`, `langchain`, `langchain-google-genai` | |
 | 3.7 | `mcp` (version 2) | n8n in Docker (optional) |
+
+`typescript-eslint` is locked at 8.72.0: the registry lists 8.73.0 but serves no tarball for
+`@typescript-eslint/types@8.73.0` (404), so a fresh install of the latest fails. Move to a newer
+release once it installs. `npm audit` reports advisories in the lint toolchain only (`minimatch`);
+the production dependencies are clean.
 
 Alembic brings in SQLAlchemy as its own dependency. It is used for migrations only; application
 queries are raw SQL through psycopg 3.
