@@ -2,7 +2,7 @@
 UNIT_TESTS := not integration and not llm
 
 .PHONY: check test \
-	up down up-all migrate api worker web test-int \
+	up down up-all migrate api worker web test-int setup-missing \
 	eval \
 	langfuse-up langfuse-down \
 	eval-redteam \
@@ -29,6 +29,11 @@ web:
 
 api:
 	uv run uvicorn ats.api.main:app --reload --port 8000
+
+# Enqueue position setup for positions that never got a job. Lists only, unless YES=1.
+# Optional POSITION=<id or its first characters>. The worker makes the LLM calls.
+setup-missing:
+	uv run python -m ats.worker.setup_missing $(if $(POSITION),--position $(POSITION)) $(if $(YES),--yes)
 
 test-int:
 	uv run pytest -q -m integration

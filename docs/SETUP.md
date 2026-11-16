@@ -129,6 +129,21 @@ One real call to the model (synthetic posting, one request of the free quota), n
 uv run pytest -m llm -s tests/test_llm_smoke.py
 ```
 
+### Positions that never got a setup job
+
+A position whose posting was ingested before phase 1.2 (or by a worker without the setup handler)
+stays `pending` in the screen. `make setup-missing` finds such positions, meaning posting text, no
+requirements and no `position_setup` job, and by default only lists them and the number of LLM
+calls the worker would make. Nothing is enqueued until `YES=1`; the worker then makes one call per
+position, so check its `llm_model` in the startup line first.
+
+```bash
+make setup-missing                              # list
+make setup-missing POSITION=efc50a1d YES=1      # enqueue one position
+```
+
+A position whose setup job exists but `failed` is not listed: upload its posting again to retry it.
+
 ### Is the worker running current code?
 
 A process keeps the code it started with, so a worker left over from before a branch switch or a
@@ -155,6 +170,7 @@ changes when it started. Restart the worker after changing worker code; `make wo
 | `make check` | ruff, pyright, unit tests, web typecheck and lint | 0 |
 | `make test` | unit tests | 0 |
 | `make test-int` | integration tests (needs `make up`) | 1.1a |
+| `make setup-missing [POSITION=<id>] [YES=1]` | enqueue position setup for positions that have posting text but no requirements and no setup job; lists only unless `YES=1`; `POSITION` takes an id or its first characters | 1.2 |
 | `make eval VARIANT=A SPLIT=dev` | eval harness | 1.3 |
 | `make eval-redteam` | injection red-team set | 1.7 |
 | `make langfuse-up` / `make langfuse-down` | Langfuse self-host (about 4 GB of RAM) | 1.6 |
