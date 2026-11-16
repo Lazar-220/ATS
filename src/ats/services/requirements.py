@@ -43,3 +43,18 @@ def insert_requirements(
                 "UPDATE requirement SET parent_id = %s WHERE id = %s",
                 (row_ids[draft.parent], row_ids[draft.id]),
             )
+
+
+def retry_failed_setup(conn: psycopg.Connection[Any], position_id: UUID) -> bool:
+    """Put a setup job that ran out of attempts back in the queue; True if it did.
+
+    Called when the same posting is uploaded again, which is HR's way to say "try again". The
+    job row is reused (its dedup key is unique for all time) and one atomic UPDATE means that of
+    two concurrent re-uploads only one requeues it.
+    """
+    requeued = conn.execute(
+        "UPDATE task_queue SET status = 'queued', attempts = 0, error = NULL, locked_at = NULL, "
+        "updated_at = now() WHERE dedup_key = %s AND status = 'failed' RETURNING id",
+        (f"{POSITION_SETUP_JOB}:{position_id}",),
+    ).fetchone()
+    return requeued is not None

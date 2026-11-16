@@ -171,3 +171,36 @@ def test_a_failing_model_leaves_no_requirements_and_a_failed_job(
     assert job["attempts"] == 3
     assert "quota exhausted" in job["error"]
     assert conn.execute("SELECT count(*) AS n FROM requirement").fetchone() == {"n": 0}
+
+
+def test_uploading_the_posting_again_retries_a_failed_setup(
+    client: TestClient,
+    worker: ConnectionPool,
+    conn: psycopg.Connection[DictRow],
+    fake_llm: FakeLLMClient,
+) -> None:
+    def broken(*_args: object) -> RequirementList:
+        raise RuntimeError("model overloaded")
+
+    fake_llm.responder = broken
+    upload(client, POSTING, [CV_ENGLISH])
+    wait_for(
+        lambda: (
+            conn.execute(
+                "SELECT 1 FROM task_queue WHERE job_type = %s AND status = 'failed'",
+                (POSITION_SETUP_JOB,),
+            ).fetchone()
+            is not None
+        )
+    )
+    assert conn.execute("SELECT count(*) AS n FROM requirement").fetchone() == {"n": 0}
+
+    scripted(fake_llm)  # the model recovers
+    upload(client, POSTING, [CV_LATIN])
+    wait_until_settled(conn)
+
+    assert conn.execute("SELECT count(*) AS n FROM requirement").fetchone() == {"n": 5}
+    jobs = conn.execute(
+        "SELECT status FROM task_queue WHERE job_type = %s", (POSITION_SETUP_JOB,)
+    ).fetchall()
+    assert jobs == [{"status": "done"}]  # the same job row, not a second one
