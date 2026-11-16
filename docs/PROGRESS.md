@@ -8,7 +8,7 @@ Read this at the start of every session. Update it at the end of every phase.
 | --- | --- | --- | --- |
 | 0 Bootstrap | merged | 2026-11-16 | Built directly on `main` as the phase prompt says; no merge commit. Three commits. |
 | 1.1a Skeleton | merged | 2026-11-16 | `--no-ff` merge of `phase/1.1a-skeleton`. Commit 606dd06 alone fails pyright; fixed by 65f5d37, left unsquashed on the owner's decision. |
-| 1.1b Ingest | built, awaiting owner confirmation | | Branch `phase/1.1b-ingest`, five commits. |
+| 1.1b Ingest | merged | 2026-11-16 | `--no-ff` merge of `phase/1.1b-ingest`, five feature commits and one docs commit. |
 | 1.2 Requirements | not started | | |
 | 1.3 Golden set and harness | not started | | |
 | 1.4a CV parsing | not started | | |
