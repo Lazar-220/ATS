@@ -17,6 +17,8 @@ V1_TABLES = {
     "verdict",
     "task_queue",
 }
+# Migration 0002 (phase 1.2) adds one table.
+TABLES = V1_TABLES | {"hr_answer"}
 
 type Conn = psycopg.Connection[DictRow]
 
@@ -50,12 +52,12 @@ def seed_graph(conn: Conn) -> tuple[object, object]:
     return position, requirement["id"]
 
 
-def test_baseline_creates_the_nine_v1_tables(conn: Conn) -> None:
+def test_migrations_create_the_nine_v1_tables_and_hr_answer(conn: Conn) -> None:
     rows = conn.execute(
         "SELECT table_name FROM information_schema.tables "
         "WHERE table_schema = 'public' AND table_name <> 'alembic_version'"
     ).fetchall()
-    assert {row["table_name"] for row in rows} == V1_TABLES
+    assert {row["table_name"] for row in rows} == TABLES
 
 
 def test_required_day_one_columns_exist(conn: Conn) -> None:

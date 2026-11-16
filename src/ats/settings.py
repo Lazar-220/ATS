@@ -1,6 +1,7 @@
 from functools import lru_cache
 from pathlib import Path
 
+from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -16,6 +17,11 @@ class Settings(BaseSettings):
     min_chars_per_page: int = 100
     upload_dir: Path = Path("data/uploads")
     max_upload_mb: int = 10
+    llm_model: str = "gemini-3.8-flash"
+    llm_api_key: SecretStr | None = None
+    # The free tier allows 5 requests per minute (§6.1); raise it on the paid tier.
+    llm_rpm: int = 5
+    llm_cache_dir: Path = Path("data/llm_cache")
 
 
 @lru_cache

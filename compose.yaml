@@ -53,11 +53,17 @@ services:
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-ats}:${POSTGRES_PASSWORD:-ats}@postgres:5432/${POSTGRES_DB:-ats}
       UPLOAD_DIR: /app/data/uploads
+      # The worker is the only process that calls the LLM.
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      LLM_MODEL: ${LLM_MODEL:-gemini-3.8-flash}
+      LLM_RPM: ${LLM_RPM:-5}
+      LLM_CACHE_DIR: /app/data/llm_cache
     depends_on:
       postgres:
         condition: service_healthy
     volumes:
       - uploads:/app/data/uploads
+      - llm_cache:/app/data/llm_cache
     # Time to finish the job in progress after SIGTERM before Docker kills the container.
     stop_grace_period: 30s
 
@@ -79,3 +85,5 @@ volumes:
   pgdata:
   # Shared by api (writes) and worker (reads): the PDFs, named by sha256.
   uploads:
+  # LLM responses keyed by prompt hash: a restart does not pay for the same call twice.
+  llm_cache:

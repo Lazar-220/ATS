@@ -12,6 +12,7 @@ from ats.db.task_queue import Job
 from ats.pipeline.extract import PdfRejected, extract_text
 from ats.pipeline.language import detect_language, detect_script
 from ats.services.rankings import INGEST_JOB
+from ats.services.requirements import enqueue_setup
 from ats.settings import get_settings
 from ats.worker.registry import register
 
@@ -58,10 +59,15 @@ def _ingest(pool: ConnectionPool, document_id: UUID) -> None:
             (extracted.text, lang, script, document_id),
         )
         if kind == "posting":
-            conn.execute(
-                "UPDATE job_position SET posting_text = %s WHERE source_sha256 = %s",
+            position = conn.execute(
+                "UPDATE job_position SET posting_text = %s WHERE source_sha256 = %s RETURNING id",
                 (extracted.text, sha256),
-            )
+            ).fetchone()
+            if position is not None:
+                # In this transaction, so the text and the job exist together. A posting is
+                # ingested once per sha256, which is why an existing position never gets here
+                # again; the dedup key is the second guard against a re-run.
+                enqueue_setup(conn, position[0])
     log.info(
         "document %s extracted: %s pages, lang=%s, script=%s",
         document_id,

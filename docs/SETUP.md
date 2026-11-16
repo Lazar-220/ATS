@@ -81,12 +81,88 @@ an unreadable or password-protected PDF; re-uploading it gives the same result) 
 (unexpected error; uploading the same file again retries it). Errors: 422 for a file that is not a
 PDF or is already stored as the other kind, 413 above `MAX_UPLOAD_MB`, 404 for an unknown request.
 
+### Review the requirements (from phase 1.2)
+
+When a new posting has been extracted, the worker makes one LLM call and writes the position's
+requirements with status `unconfirmed`. Needs `LLM_API_KEY` in `.env`. The same posting uploaded
+again is recognised by its `sha256` and costs nothing.
+
+```bash
+curl http://localhost:8000/positions
+# [{"id":"7208...","filename":"posting.pdf","rubric_status":"unconfirmed","rubric_version":1,
+#   "created_at":"...","requirement_count":5,"setup_status":"done","setup_message":null}]
+curl http://localhost:8000/positions/7208d077-a80a-4c0e-af0e-1f2fcf06ff62
+# the same fields plus "requirements":[{"id":"...","parent_id":null,"text":"Java","kind":"mandatory",
+#   "weight":1,"min_months":null}, ...]  (the current rubric version only)
+```
+
+`setup_status` is `pending` (posting text not extracted yet), `running`, `done`, or `failed`
+(`setup_message` says why: a rejected posting, or the extraction job ran out of attempts).
+
+Endpoint 3 takes two kinds of answer. `rubric_version` is the version HR was looking at; a
+different current version gives 409. `dedup_key` is chosen by the client per intent; a repeat with
+the same key and body returns the first result with `"duplicate": true` and does nothing again,
+while the same key with a different body gives 409.
+
+```bash
+# Confirm: sets rubric_status to "confirmed"
+curl -X POST http://localhost:8000/hr/answers -H 'Content-Type: application/json' -d '{
+  "type": "confirm", "position_id": "7208...", "dedup_key": "any-unique-string", "rubric_version": 1}'
+# Edit: replaces the whole list, bumps rubric_version by one, enqueues one "rejudge" job per
+# assessment of the position (handled from phase 1.4b). Does not change rubric_status.
+# "id" and "parent" are labels inside this list; "parent" refers to another item's "id".
+curl -X POST http://localhost:8000/hr/answers -H 'Content-Type: application/json' -d '{
+  "type": "edit", "position_id": "7208...", "dedup_key": "another-unique-string", "rubric_version": 1,
+  "requirements": {"requirements": [
+    {"id": 1, "text": "Java", "kind": "mandatory", "weight": 3, "min_months": null, "parent": null},
+    {"id": 2, "text": "3 years of Java", "kind": "mandatory", "weight": 3, "min_months": 36, "parent": 1}]}}'
+# {"position_id":"7208...","rubric_version":2,"rubric_status":"unconfirmed","rejudge_jobs":0,"duplicate":false}
+```
+
+Weights are integers from 1 to 5; `kind` is `mandatory` or `nice_to_have`; the list must not be empty
+and its parent links must not form a cycle (422 otherwise).
+
+One real call to the model (synthetic posting, one request of the free quota), never run by
+`make test` or `make check`:
+
+```bash
+uv run pytest -m llm -s tests/test_llm_smoke.py
+```
+
+### Positions that never got a setup job
+
+A position whose posting was ingested before phase 1.2 (or by a worker without the setup handler)
+stays `pending` in the screen. `make setup-missing` finds such positions, meaning posting text, no
+requirements and no `position_setup` job, and by default only lists them and the number of LLM
+calls the worker would make. Nothing is enqueued until `YES=1`; the worker then makes one call per
+position, so check its `llm_model` in the startup line first.
+
+```bash
+make setup-missing                              # list
+make setup-missing POSITION=efc50a1d YES=1      # enqueue one position
+```
+
+A position whose setup job exists but `failed` is not listed: upload its posting again to retry it.
+
+### Is the worker running current code?
+
+A process keeps the code it started with, so a worker left over from before a branch switch or a
+`git pull` looks healthy and quietly lacks newer job types. Its first log line says what it is:
+
+```
+worker starting: code=phase/1.2-requirements@7837fa7 schema=0002 handlers=ingest,noop,position_setup llm_model=gemini-3.8-flash llm_rpm=5 llm_key=set
+```
+
+Compare `code=` with `git log -1`, `schema=` with `uv run alembic heads`, and `handlers=` with the
+job types you expect (`position_setup` from phase 1.2). `-dirty` means tracked files had uncommitted
+changes when it started. Restart the worker after changing worker code; `make worker` does not reload.
+
 ## 3. Commands
 
 | Command | Does | From phase |
 | --- | --- | --- |
 | `make up` / `make down` | start / stop Postgres | 1.1a |
-| `make migrate` | apply Alembic migrations (creates the nine v1 tables) | 1.1a |
+| `make migrate` | apply Alembic migrations (the nine v1 tables, plus `hr_answer` from 1.2) | 1.1a |
 | `make up-all` | whole stack in Docker (postgres, api, worker, web) | 1.1a |
 | `make api` | FastAPI with reload on :8000 | 1.1a |
 | `make worker` | job worker | 1.1a |
@@ -94,6 +170,7 @@ PDF or is already stored as the other kind, 413 above `MAX_UPLOAD_MB`, 404 for a
 | `make check` | ruff, pyright, unit tests, web typecheck and lint | 0 |
 | `make test` | unit tests | 0 |
 | `make test-int` | integration tests (needs `make up`) | 1.1a |
+| `make setup-missing [POSITION=<id>] [YES=1]` | enqueue position setup for positions that have posting text but no requirements and no setup job; lists only unless `YES=1`; `POSITION` takes an id or its first characters | 1.2 |
 | `make eval VARIANT=A SPLIT=dev` | eval harness | 1.3 |
 | `make eval-redteam` | injection red-team set | 1.7 |
 | `make langfuse-up` / `make langfuse-down` | Langfuse self-host (about 4 GB of RAM) | 1.6 |
@@ -116,8 +193,9 @@ PDF or is already stored as the other kind, 413 above `MAX_UPLOAD_MB`, 404 for a
 | `MAX_UPLOAD_MB` | `10` | largest accepted PDF; a bigger one gets HTTP 413 | 1.1b |
 | `LLM_MODEL` | `gemini-3.8-flash` | model for every LLM role | 1.2 |
 | `LLM_API_KEY` | none | Gemini API key; never committed | 1.2 |
-| `LLM_RPM` | `5` | requests per minute (free tier) | 1.2 |
-| `LLM_CACHE_DIR` | `data/llm_cache` | LLM response cache | 1.2 |
+| `LLM_RPM` | `5` | requests per minute (free tier). The limiter is in-process: valid for one worker only | 1.2 |
+| `LLM_CACHE_DIR` | `data/llm_cache` | LLM response cache, one JSON file per hash of model, prompts, thinking level and schema; in Docker the `llm_cache` volume | 1.2 |
+| `GIT_COMMIT` | derived from `git` | overrides the code version in the worker's startup line; set it where there is no `.git` (a Docker image shows `unknown` otherwise) | 1.2 |
 | `LANGFUSE_ENABLED` | `false` | tracing on or off | 1.6 |
 | `EMBEDDING_MODEL` | `BAAI/bge-m3` | local embedding model | 2.1 |
 | `RERANKER_MODEL` | empty (off) | local reranker | 2.2 |
@@ -151,6 +229,10 @@ leaves them out of a lockfile made on Windows, and `npm ci` in the Linux image t
 Remove them when `npm ci` passes in `docker/web.Dockerfile` without them. `npm audit` reports advisories in the lint toolchain only (`minimatch`);
 the production dependencies are clean.
 
+`google-genai` (phase 1.2) is imported only in `src/ats/llm/gemini.py`, behind the `LLMClient`
+interface. `gemini-3.8-flash` does not accept `thinking_level` `minimal` (it takes `low`, `medium`
+and `high`; default `medium`), so every call there uses `low` or higher.
+
 Alembic brings in SQLAlchemy as its own dependency. It is used for migrations only; application
 queries are raw SQL through psycopg 3.
 
@@ -169,3 +251,4 @@ Claude Code logs here everything it creates or changes outside the repository, w
 | 2026-11-16 | Docker image `pgvector/pgvector:pg17`, network `ats_default`, volume `ats_pgdata` (compose project `ats`) | Postgres for phase 1.1a | `docker compose down -v` (deletes the data), then `docker rmi pgvector/pgvector:pg17` |
 | 2026-11-16 | Docker volume `ats_uploads` (compose project `ats`) | uploaded PDFs shared by api and worker (phase 1.1b) | `docker compose --profile full down -v` (deletes the PDFs and the database) or `docker volume rm ats_uploads` |
 | 2026-11-16 | Docker images `ats-api`, `ats-worker`, `ats-web`, plus base images `python:3.12-slim`, `node:24-alpine` and `ghcr.io/astral-sh/uv:0.13.8` | `make up-all` (phase 1.1a) | `docker compose --profile full down --rmi local`, then `docker rmi python:3.12-slim node:24-alpine ghcr.io/astral-sh/uv:0.13.8` |
+| 2026-11-16 | Docker volume `ats_llm_cache` (compose project `ats`) | LLM response cache of the worker (phase 1.2) | `docker compose --profile full down -v` or `docker volume rm ats_llm_cache` |

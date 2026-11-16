@@ -15,6 +15,7 @@ from ats.db.pool import create_pool
 from ats.worker import handlers  # noqa: F401  (registers noop)
 from ats.worker.loop import run
 from ats.worker.registry import HANDLERS
+from ats.worker.startup import read_schema_version
 
 pytestmark = pytest.mark.integration
 
@@ -144,3 +145,7 @@ def test_killing_the_worker_mid_job_loses_nothing(test_db_url: str, queue_conn: 
 
     status, attempts, _ = status_of(queue_conn, job_id)
     assert (status, attempts) == ("done", 2)
+
+
+def test_the_schema_version_is_read_from_the_database(pool: ConnectionPool) -> None:
+    assert read_schema_version(pool) == "0002"

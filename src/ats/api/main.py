@@ -6,6 +6,8 @@ from fastapi import FastAPI, Response
 from psycopg_pool import ConnectionPool
 from pydantic import BaseModel
 
+from ats.api.hr import router as hr_router
+from ats.api.positions import router as positions_router
 from ats.api.rankings import router as rankings_router
 from ats.db.pool import create_pool
 from ats.settings import get_settings
@@ -30,6 +32,8 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
 
 app = FastAPI(title="ATS", lifespan=lifespan)
 app.include_router(rankings_router)
+app.include_router(positions_router)
+app.include_router(hr_router)
 
 
 def database_reachable(pool: ConnectionPool) -> bool:
