@@ -116,8 +116,8 @@ PDF or is already stored as the other kind, 413 above `MAX_UPLOAD_MB`, 404 for a
 | `MAX_UPLOAD_MB` | `10` | largest accepted PDF; a bigger one gets HTTP 413 | 1.1b |
 | `LLM_MODEL` | `gemini-3.8-flash` | model for every LLM role | 1.2 |
 | `LLM_API_KEY` | none | Gemini API key; never committed | 1.2 |
-| `LLM_RPM` | `5` | requests per minute (free tier) | 1.2 |
-| `LLM_CACHE_DIR` | `data/llm_cache` | LLM response cache | 1.2 |
+| `LLM_RPM` | `5` | requests per minute (free tier). The limiter is in-process: valid for one worker only | 1.2 |
+| `LLM_CACHE_DIR` | `data/llm_cache` | LLM response cache, one JSON file per hash of model, prompts, thinking level and schema; in Docker the `llm_cache` volume | 1.2 |
 | `LANGFUSE_ENABLED` | `false` | tracing on or off | 1.6 |
 | `EMBEDDING_MODEL` | `BAAI/bge-m3` | local embedding model | 2.1 |
 | `RERANKER_MODEL` | empty (off) | local reranker | 2.2 |
@@ -151,6 +151,10 @@ leaves them out of a lockfile made on Windows, and `npm ci` in the Linux image t
 Remove them when `npm ci` passes in `docker/web.Dockerfile` without them. `npm audit` reports advisories in the lint toolchain only (`minimatch`);
 the production dependencies are clean.
 
+`google-genai` (phase 1.2) is imported only in `src/ats/llm/gemini.py`, behind the `LLMClient`
+interface. `gemini-3.8-flash` does not accept `thinking_level` `minimal` (it takes `low`, `medium`
+and `high`; default `medium`), so every call there uses `low` or higher.
+
 Alembic brings in SQLAlchemy as its own dependency. It is used for migrations only; application
 queries are raw SQL through psycopg 3.
 
@@ -169,3 +173,4 @@ Claude Code logs here everything it creates or changes outside the repository, w
 | 2026-11-16 | Docker image `pgvector/pgvector:pg17`, network `ats_default`, volume `ats_pgdata` (compose project `ats`) | Postgres for phase 1.1a | `docker compose down -v` (deletes the data), then `docker rmi pgvector/pgvector:pg17` |
 | 2026-11-16 | Docker volume `ats_uploads` (compose project `ats`) | uploaded PDFs shared by api and worker (phase 1.1b) | `docker compose --profile full down -v` (deletes the PDFs and the database) or `docker volume rm ats_uploads` |
 | 2026-11-16 | Docker images `ats-api`, `ats-worker`, `ats-web`, plus base images `python:3.12-slim`, `node:24-alpine` and `ghcr.io/astral-sh/uv:0.13.8` | `make up-all` (phase 1.1a) | `docker compose --profile full down --rmi local`, then `docker rmi python:3.12-slim node:24-alpine ghcr.io/astral-sh/uv:0.13.8` |
+| 2026-11-16 | Docker volume `ats_llm_cache` (compose project `ats`) | LLM response cache of the worker (phase 1.2) | `docker compose --profile full down -v` or `docker volume rm ats_llm_cache` |
