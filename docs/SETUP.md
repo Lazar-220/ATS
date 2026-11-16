@@ -69,7 +69,10 @@ Stop with `Ctrl+C` in each terminal, then `make down`.
 
 | Variable | Default | Meaning | From phase |
 | --- | --- | --- | --- |
-| `DATABASE_URL` | `postgresql://ats:ats@localhost:5432/ats` | Postgres connection | 1.1a |
+| `DATABASE_URL` | `postgresql://ats:ats@localhost:5432/ats` | Postgres connection; keep the port in step with `POSTGRES_PORT` | 1.1a |
+| `POSTGRES_PORT` | `5432` | host port of the Postgres container; change it if 5432 is taken | 1.1a |
+| `POSTGRES_USER` / `POSTGRES_PASSWORD` / `POSTGRES_DB` | `ats` | credentials of the Postgres container | 1.1a |
+| `DB_POOL_MAX_SIZE` | `5` | connection pool size per process | 1.1a |
 | `UPLOAD_DIR` | `data/uploads` | stored PDFs | 1.1b |
 | `LLM_MODEL` | `gemini-3.8-flash` | model for every LLM role | 1.2 |
 | `LLM_API_KEY` | none | Gemini API key; never committed | 1.2 |
@@ -111,4 +114,4 @@ Claude Code logs here everything it creates or changes outside the repository, w
 
 | Date | Change | Why | Undo |
 | --- | --- | --- | --- |
-| | | | |
+| 2026-11-16 | Docker image `pgvector/pgvector:pg17`, network `ats_default`, volume `ats_pgdata` (compose project `ats`) | Postgres for phase 1.1a | `docker compose down -v` (deletes the data), then `docker rmi pgvector/pgvector:pg17` |

@@ -9,6 +9,15 @@ UNIT_TESTS := not integration and not llm
 	reindex \
 	mcp
 
+up:
+	docker compose up -d --wait postgres
+
+down:
+	docker compose down
+
+api:
+	uv run uvicorn ats.api.main:app --reload --port 8000
+
 check:
 	uv run ruff check .
 	uv run ruff format --check .
@@ -21,7 +30,7 @@ test:
 	uv run pytest -q -m "$(UNIT_TESTS)"
 
 # Targets that belong to a later phase fail loudly instead of doing nothing.
-up down up-all migrate api worker web test-int: ; @echo "make $@ is added in phase 1.1a"; exit 1
+up-all migrate worker web test-int: ; @echo "make $@ is added in phase 1.1a"; exit 1
 eval: ; @echo "make $@ is added in phase 1.3"; exit 1
 langfuse-up langfuse-down: ; @echo "make $@ is added in phase 1.6"; exit 1
 eval-redteam: ; @echo "make $@ is added in phase 1.7"; exit 1
