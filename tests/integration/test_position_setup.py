@@ -9,10 +9,13 @@ from pdfs import make_pdf, make_scan_pdf
 from psycopg.rows import DictRow
 from psycopg_pool import ConnectionPool
 
+from ats.db import task_queue
+from ats.db.pool import create_pool
 from ats.db.task_queue import Job
 from ats.llm.fake import FakeLLMClient
 from ats.pipeline.requirements import RequirementList
 from ats.services.requirements import POSITION_SETUP_JOB
+from ats.worker.ingest import ingest
 from ats.worker.position_setup import position_setup
 from integration.test_ingest import CV_ENGLISH, CV_LATIN, upload, wait_until_settled
 from integration.test_worker import wait_for
@@ -204,3 +207,36 @@ def test_uploading_the_posting_again_retries_a_failed_setup(
         "SELECT status FROM task_queue WHERE job_type = %s", (POSITION_SETUP_JOB,)
     ).fetchall()
     assert jobs == [{"status": "done"}]  # the same job row, not a second one
+
+
+def test_ingesting_a_new_posting_enqueues_exactly_one_setup_job_with_the_text_stored(
+    client: TestClient, test_db_url: str, conn: psycopg.Connection[DictRow]
+) -> None:
+    """Only the real ingest handler runs: no worker loop, no model.
+
+    The job must exist by the time the posting text does, because both are written in one
+    transaction. This is what a stale worker (one started before the enqueue existed) lacks.
+    """
+    upload(client, POSTING, [CV_ENGLISH])
+    setup_jobs = "SELECT payload, dedup_key FROM task_queue WHERE job_type = %s"
+    assert conn.execute(setup_jobs, (POSITION_SETUP_JOB,)).fetchall() == []  # nothing before ingest
+
+    pool = create_pool(test_db_url, 2)
+    pool.open(wait=True, timeout=10)
+    try:
+        with pool.connection() as queue:
+            while (job := task_queue.claim(queue)) is not None:
+                if job.job_type == "ingest":
+                    ingest(job, pool)
+    finally:
+        pool.close()
+
+    position = conn.execute("SELECT id, posting_text FROM job_position").fetchone()
+    assert position is not None and "Senior Java developer" in position["posting_text"]
+    jobs = conn.execute(setup_jobs, (POSITION_SETUP_JOB,)).fetchall()
+    assert jobs == [
+        {
+            "payload": {"position_id": str(position["id"])},
+            "dedup_key": f"{POSITION_SETUP_JOB}:{position['id']}",
+        }
+    ]
