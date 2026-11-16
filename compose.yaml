@@ -20,5 +20,54 @@ services:
       timeout: 3s
       retries: 10
 
+  # The services below sit behind the `full` profile: `make up` starts Postgres alone,
+  # `make up-all` starts everything.
+  api:
+    profiles: [full]
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-ats}:${POSTGRES_PASSWORD:-ats}@postgres:5432/${POSTGRES_DB:-ats}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  worker:
+    profiles: [full]
+    build:
+      context: .
+      dockerfile: docker/worker.Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-ats}:${POSTGRES_PASSWORD:-ats}@postgres:5432/${POSTGRES_DB:-ats}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    # Time to finish the job in progress after SIGTERM before Docker kills the container.
+    stop_grace_period: 30s
+
+  web:
+    profiles: [full]
+    build:
+      context: .
+      dockerfile: docker/web.Dockerfile
+    restart: unless-stopped
+    environment:
+      API_PROXY_TARGET: http://api:8000
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "5173:5173"
+
 volumes:
   pgdata:

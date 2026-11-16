@@ -12,8 +12,11 @@ UNIT_TESTS := not integration and not llm
 up:
 	docker compose up -d --wait postgres
 
+up-all:
+	docker compose --profile full up -d --build --wait
+
 down:
-	docker compose down
+	docker compose --profile full down
 
 migrate:
 	uv run alembic upgrade head
@@ -42,7 +45,6 @@ test:
 	uv run pytest -q -m "$(UNIT_TESTS)"
 
 # Targets that belong to a later phase fail loudly instead of doing nothing.
-up-all: ; @echo "make $@ is added in phase 1.1a"; exit 1
 eval: ; @echo "make $@ is added in phase 1.3"; exit 1
 langfuse-up langfuse-down: ; @echo "make $@ is added in phase 1.6"; exit 1
 eval-redteam: ; @echo "make $@ is added in phase 1.7"; exit 1

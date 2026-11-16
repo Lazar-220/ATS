@@ -46,6 +46,12 @@ make web        # http://localhost:5173
 
 Stop with `Ctrl+C` in each terminal, then `make down`.
 
+Or run everything in Docker with `make up-all` (api on :8000, web on :5173, worker, Postgres);
+`make down` stops all of it. `make migrate` still runs from the host against the published port.
+
+If port 5432 is taken on the host, set `POSTGRES_PORT` and the port in `DATABASE_URL` in `.env`
+to another value; do not stop the other service.
+
 ## 3. Commands
 
 | Command | Does | From phase |
@@ -106,9 +112,12 @@ Planned from §6.3 of the plan. The actual pinned versions are in `pyproject.tom
 | 3.6 | `langgraph`, `langgraph-checkpoint-postgres`, `langchain`, `langchain-google-genai` | |
 | 3.7 | `mcp` (version 2) | n8n in Docker (optional) |
 
-`typescript-eslint` is locked at 8.72.0: the registry lists 8.73.0 but serves no tarball for
+`typescript-eslint` is pinned to exactly 8.72.0: the registry lists 8.73.0 but serves no tarball for
 `@typescript-eslint/types@8.73.0` (404), so a fresh install of the latest fails. Move to a newer
-release once it installs. `npm audit` reports advisories in the lint toolchain only (`minimatch`);
+release once it installs. `@emnapi/core` and `@emnapi/runtime` are pinned dev dependencies only to
+work around an npm bug: the optional WASM fallback of rolldown (inside Vite) lists them, but npm
+leaves them out of a lockfile made on Windows, and `npm ci` in the Linux image then fails.
+Remove them when `npm ci` passes in `docker/web.Dockerfile` without them. `npm audit` reports advisories in the lint toolchain only (`minimatch`);
 the production dependencies are clean.
 
 Alembic brings in SQLAlchemy as its own dependency. It is used for migrations only; application
@@ -123,3 +132,4 @@ Claude Code logs here everything it creates or changes outside the repository, w
 | Date | Change | Why | Undo |
 | --- | --- | --- | --- |
 | 2026-11-16 | Docker image `pgvector/pgvector:pg17`, network `ats_default`, volume `ats_pgdata` (compose project `ats`) | Postgres for phase 1.1a | `docker compose down -v` (deletes the data), then `docker rmi pgvector/pgvector:pg17` |
+| 2026-11-16 | Docker images `ats-api`, `ats-worker`, `ats-web`, plus base images `python:3.12-slim`, `node:24-alpine` and `ghcr.io/astral-sh/uv:0.13.8` | `make up-all` (phase 1.1a) | `docker compose --profile full down --rmi local`, then `docker rmi python:3.12-slim node:24-alpine ghcr.io/astral-sh/uv:0.13.8` |
