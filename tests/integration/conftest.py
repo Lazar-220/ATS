@@ -6,7 +6,7 @@ import psycopg
 import pytest
 from alembic import command
 from alembic.config import Config
-from psycopg.rows import dict_row
+from psycopg.rows import DictRow, dict_row
 
 from ats.settings import get_settings
 
@@ -47,9 +47,11 @@ def monkeypatch_session() -> Iterator[pytest.MonkeyPatch]:
 
 
 @pytest.fixture
-def conn(test_db_url: str) -> Iterator[psycopg.Connection[dict[str, object]]]:
+def conn(test_db_url: str) -> Iterator[psycopg.Connection[DictRow]]:
     """An autocommit connection to a database emptied of rows before each test."""
-    with psycopg.connect(test_db_url, autocommit=True, row_factory=dict_row) as connection:
+    with psycopg.Connection[DictRow].connect(
+        test_db_url, autocommit=True, row_factory=dict_row
+    ) as connection:
         connection.execute(
             "TRUNCATE task_queue, verdict, assessment, request_candidate, ranking_request, "
             "document, candidate, requirement, job_position RESTART IDENTITY CASCADE"

@@ -1,5 +1,8 @@
+from typing import LiteralString
+
 import psycopg
 import pytest
+from psycopg.rows import DictRow
 
 pytestmark = pytest.mark.integration
 
@@ -15,11 +18,11 @@ V1_TABLES = {
     "task_queue",
 }
 
-type Conn = psycopg.Connection[dict[str, object]]
+type Conn = psycopg.Connection[DictRow]
 
 
-def scalar(conn: Conn, sql: str) -> object:
-    row = conn.execute(sql).fetchone()
+def scalar(conn: Conn, sql: LiteralString, params: tuple[object, ...] = ()) -> object:
+    row = conn.execute(sql, params).fetchone()
     assert row is not None
     return next(iter(row.values()))
 
@@ -36,8 +39,9 @@ def seed_graph(conn: Conn) -> tuple[object, object]:
     candidate = scalar(conn, "INSERT INTO candidate (full_name) VALUES ('x') RETURNING id")
     assessment = scalar(
         conn,
-        f"INSERT INTO assessment (position_id, candidate_id, rubric_version) "
-        f"VALUES ('{position}', '{candidate}', 1) RETURNING id",
+        "INSERT INTO assessment (position_id, candidate_id, rubric_version) "
+        "VALUES (%s, %s, 1) RETURNING id",
+        (position, candidate),
     )
     conn.execute(
         "INSERT INTO verdict (assessment_id, requirement_id, verdict) VALUES (%s, %s, 'not_met')",
@@ -71,8 +75,9 @@ def test_required_day_one_columns_exist(conn: Conn) -> None:
 def test_deleting_a_position_removes_its_whole_graph(conn: Conn) -> None:
     position, _ = seed_graph(conn)
     conn.execute("DELETE FROM job_position WHERE id = %s", (position,))
-    for table in ("requirement", "assessment", "verdict"):
-        assert scalar(conn, f"SELECT count(*) FROM {table}") == 0
+    assert scalar(conn, "SELECT count(*) FROM requirement") == 0
+    assert scalar(conn, "SELECT count(*) FROM assessment") == 0
+    assert scalar(conn, "SELECT count(*) FROM verdict") == 0
 
 
 def test_a_requirement_with_verdicts_cannot_be_deleted(conn: Conn) -> None:
