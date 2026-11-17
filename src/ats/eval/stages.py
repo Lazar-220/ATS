@@ -25,6 +25,9 @@ from ats.pipeline.masking import mask_text
 from ats.pipeline.normalize import normalize_for_lexical
 from ats.pipeline.parsing import parse_cv
 
+# Tokens in, tokens out, latency, cache hit, the model that answered.
+type UsageRow = tuple[int, int, float, bool, str]
+
 CONTACTS_FILE = "contacts.json"
 MIN_NAME_TOKEN = 3
 
@@ -122,6 +125,7 @@ class ParsedRecord(BaseModel):
     coverage: float
     unlocated_items: int
     total_months: int
+    model: str  # the model that answered, which differs from the primary after a fallback
     # What the pipeline stores: masked text, and parsed JSON with positions and months.
     masked_text: str
     parsed_json: dict[str, object]
@@ -147,9 +151,9 @@ def run_parsing(
     cv_ids: Sequence[str],
     min_chars_per_page: int,
     as_of: date,
-) -> tuple[ParsingReport, list[tuple[int, int, float, bool]]]:
+) -> tuple[ParsingReport, list[UsageRow]]:
     records: list[ParsedRecord] = []
-    usage: list[tuple[int, int, float, bool]] = []
+    usage: list[UsageRow] = []
     stopped: str | None = None
     for cv_id in cv_ids:
         cv = golden.cvs[cv_id]
@@ -167,6 +171,7 @@ def run_parsing(
                 result.usage.output_tokens,
                 result.usage.latency_s,
                 result.usage.cache_hit,
+                result.usage.model,
             )
         )
         facts = build_facts(result.output, masked.masked_text, masked.spans, as_of)
@@ -179,6 +184,7 @@ def run_parsing(
                 coverage=facts.parsed_json["coverage"],
                 unlocated_items=facts.parsed_json["unlocated_items"],
                 total_months=facts.parsed_json["tenure"]["total_months"],
+                model=result.usage.model,
                 masked_text=masked.masked_text,
                 parsed_json=facts.parsed_json,
             )

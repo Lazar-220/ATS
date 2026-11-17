@@ -20,6 +20,7 @@ from typing import Literal
 from pydantic import BaseModel
 
 from ats.buildinfo import code_version
+from ats.eval.fallback import DEV_SMOKE_LABEL
 from ats.eval.golden import GOLDEN_AS_OF, GoldSet
 from ats.eval.matching import match_requirements
 from ats.eval.metrics import (
@@ -40,6 +41,7 @@ from ats.eval.stages import (
     MaskingReport,
     ParsingReport,
     Subset,
+    UsageRow,
     run_masking,
     run_parsing,
     select_subset,
@@ -88,6 +90,7 @@ class RunPlan:
     est_input_tokens: int
     est_output_tokens: int
     subset: Subset | None = None
+    fallback_model: str | None = None
 
     @property
     def uncached_calls(self) -> int:
@@ -111,6 +114,13 @@ class RunPlan:
             lines.append("The masking stage is code only: no calls, no cost.")
         if self.subset is not None:
             lines += _describe_subset(self.subset)
+        if self.fallback_model:
+            lines.append(
+                f"Fallback enabled (opt-in): after a daily quota on {self.model} the run "
+                f"continues on OpenRouter {self.fallback_model}, at most 50 calls a day and "
+                f"20 per minute; the result is labelled '{DEV_SMOKE_LABEL}'. "
+                f"The cost estimate above is for {self.model}."
+            )
         lines.append(
             f"Estimate for the {self.uncached_calls} uncached calls: about "
             f"{self.est_input_tokens} input and {self.est_output_tokens} output tokens "
@@ -155,6 +165,7 @@ def plan_run(
     model: str,
     cache: ResponseCache,
     min_chars_per_page: int,
+    fallback_model: str | None = None,
 ) -> RunPlan:
     calls = cached = in_tokens = out_tokens = 0
     subset: Subset | None = None
@@ -180,7 +191,9 @@ def plan_run(
                 continue
             in_tokens += int((len(request.system) + len(request.user)) / CHARS_PER_TOKEN)
             out_tokens += PARSING_OUTPUT_TOKENS
-    return RunPlan(tuple(stages), model, calls, cached, in_tokens, out_tokens, subset)
+    return RunPlan(
+        tuple(stages), model, calls, cached, in_tokens, out_tokens, subset, fallback_model
+    )
 
 
 # --- The result ----------------------------------------------------------------------------
@@ -265,6 +278,9 @@ GOLD_LABEL_STATUS = "gold labels not manually verified"
 
 class RunResult(BaseModel):
     gold_labels: str = GOLD_LABEL_STATUS
+    # Set when a fallback model answered any call: such a run is a smoke test, not a baseline.
+    label: str | None = None
+    models: dict[str, str | None] = {}
     variant: str
     split: str
     limit: int | None
@@ -285,9 +301,9 @@ class RunResult(BaseModel):
 
 def _run_extraction(
     golden: GoldSet, client: LLMClient, min_chars_per_page: int
-) -> tuple[ExtractionReport, list[tuple[int, int, float, bool]]]:
+) -> tuple[ExtractionReport, list[UsageRow]]:
     items: list[ExtractionItem] = []
-    usage: list[tuple[int, int, float, bool]] = []
+    usage: list[UsageRow] = []
     for position_id in sorted(golden.positions):
         meta = golden.positions[position_id].meta
         result = extract_requirements(
@@ -299,6 +315,7 @@ def _run_extraction(
                 result.usage.output_tokens,
                 result.usage.latency_s,
                 result.usage.cache_hit,
+                result.usage.model,
             )
         )
         drafts = result.output.requirements
@@ -402,6 +419,7 @@ def run_eval(
     model: str,
     min_chars_per_page: int,
     contacts: dict[str, ContactTruth] | None = None,
+    fallback_model: str | None = None,
     as_of: date = GOLDEN_AS_OF,
     price_date: date | None = None,
 ) -> RunResult:
@@ -409,7 +427,7 @@ def run_eval(
         raise EvalError(f"variant {variant} does not exist yet; B, C and D arrive in phase 3")
     extraction: ExtractionReport | None = None
     verdicts: VerdictReport | None = None
-    usage_rows: list[tuple[int, int, float, bool]] = []
+    usage_rows: list[UsageRow] = []
     if "extraction" in stages:
         if client is None:
             raise EvalError("the extraction stage needs an LLM client")
@@ -441,8 +459,14 @@ def run_eval(
     input_tokens = sum(row[0] for row in usage_rows)
     output_tokens = sum(row[1] for row in usage_rows)
     now = datetime.now(UTC)
-    rate = rate_on(model, price_date or now.date()) if usage_rows else None
+    # Only calls the primary model answered are priced; the fallback models are free.
+    primary_rows = [row for row in usage_rows if row[4] in ("", model)]
+    rate = rate_on(model, price_date or now.date()) if primary_rows else None
+    answered_by = {row[4] for row in usage_rows if row[4]}
+    label = DEV_SMOKE_LABEL if answered_by - {model} else None
     return RunResult(
+        label=label,
+        models={"primary": model, "fallback": fallback_model},
         variant=variant,
         split=split,
         limit=limit,
@@ -466,7 +490,11 @@ def run_eval(
             input_tokens=input_tokens,
             output_tokens=output_tokens,
             latency_s=sum(row[2] for row in usage_rows),
-            cost_usd=cost_usd(rate, input_tokens, output_tokens) if rate else None,
+            cost_usd=(
+                cost_usd(rate, sum(r[0] for r in primary_rows), sum(r[1] for r in primary_rows))
+                if rate
+                else None
+            ),
             rate=rate.label if rate else None,
         ),
     )
@@ -499,6 +527,11 @@ def format_report(result: RunResult) -> str:
         f"pipeline_version: {version.label}",
         f"gold labels: {result.gold_labels.removeprefix('gold labels ')}",
     ]
+    if result.label:
+        lines.append(
+            f"LABEL: {result.label}. Primary {result.models.get('primary')}, fallback "
+            f"{result.models.get('fallback')}: some calls were answered by the fallback model."
+        )
     if result.split == "test":
         lines.append("NOTE: the test split is for published numbers; tune on dev only.")
     if result.extraction:

@@ -2,6 +2,7 @@ import argparse
 import sys
 from pathlib import Path
 
+from ats.eval.fallback import create_eval_llm_client
 from ats.eval.golden import DEFAULT_ROOT, GoldSetError, build_labels, load_golden
 from ats.eval.harness import (
     MAX_CALLS_WITHOUT_CONFIRMATION,
@@ -17,7 +18,6 @@ from ats.eval.split import DEFAULT_SEED
 from ats.eval.stages import StageError, SubsetError, load_contacts
 from ats.eval.stub import StubJudge
 from ats.llm.cache import ResponseCache
-from ats.llm.factory import create_llm_client
 from ats.llm.types import LLMError
 from ats.settings import get_settings
 
@@ -56,6 +56,10 @@ def _run(args: argparse.Namespace) -> int:
             raise EvalError(f"unknown stage {name!r}; choose from {', '.join(STAGES_BY_NAME)}")
         stages.append(stage)
     settings = get_settings()
+    fallback = str(args.fallback or settings.llm_fallback)
+    if fallback not in ("", "openrouter"):
+        raise EvalError(f"unknown fallback {fallback!r}; only openrouter exists")
+    fallback_model = settings.openrouter_model if fallback else None
     golden = load_golden(Path(args.golden))
     plan = plan_run(
         golden,
@@ -63,6 +67,7 @@ def _run(args: argparse.Namespace) -> int:
         model=settings.llm_model,
         cache=ResponseCache(settings.llm_cache_dir),
         min_chars_per_page=settings.min_chars_per_page,
+        fallback_model=fallback_model,
     )
     if args.dry_run:
         print(plan.describe())
@@ -76,7 +81,7 @@ def _run(args: argparse.Namespace) -> int:
         )
         return 2
     needs_model = "extraction" in stages or "parsing" in stages
-    client = create_llm_client(settings) if needs_model else None
+    client = create_eval_llm_client(settings, fallback) if needs_model else None
     result = run_eval(
         golden,
         variant=args.variant,
@@ -88,6 +93,7 @@ def _run(args: argparse.Namespace) -> int:
         model=settings.llm_model,
         min_chars_per_page=settings.min_chars_per_page,
         contacts=load_contacts(Path(args.golden)) if "masking" in stages else None,
+        fallback_model=fallback_model,
     )
     print(format_report(result))
     print()
@@ -116,6 +122,13 @@ def main(argv: list[str] | None = None) -> int:
         "1.4b) and masking do not. parsing runs a seeded subset of the dev split only",
     )
     run.add_argument("--dry-run", action="store_true", help="print calls and cost, call nothing")
+    run.add_argument(
+        "--fallback",
+        choices=["openrouter"],
+        default=None,
+        help="opt in: after a Gemini daily quota continue on an OpenRouter free model "
+        "(needs OPENROUTER_API_KEY; the result is labelled dev-smoke, non-baseline)",
+    )
     run.add_argument("--yes", action="store_true", help="confirm a run of more than 5 model calls")
     run.set_defaults(run=_run)
 

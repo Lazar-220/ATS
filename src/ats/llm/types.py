@@ -29,6 +29,8 @@ class LLMUsage:
     output_tokens: int
     latency_s: float
     cache_hit: bool
+    # The model that answered; empty for the fake client.
+    model: str = ""
 
 
 @dataclass(frozen=True)

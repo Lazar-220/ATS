@@ -363,7 +363,7 @@ def test_a_run_of_more_than_five_uncached_calls_is_refused_without_yes(
     def must_not_be_called(_settings: object) -> None:
         raise AssertionError("the model client must not be created before confirmation")
 
-    monkeypatch.setattr(eval_cli, "create_llm_client", must_not_be_called)
+    monkeypatch.setattr(eval_cli, "create_eval_llm_client", must_not_be_called)
     try:
         assert eval_cli.main(["run", "--stages", "extraction"]) == 2
     finally:

@@ -125,6 +125,7 @@ class ManagedLLMClient:
             output_tokens=output_tokens,
             latency_s=self._clock() - started,
             cache_hit=cache_hit,
+            model=self._model,
         )
         log.info(
             "llm call model=%s prompt=%s thinking=%s in=%s out=%s latency=%.2fs cache_hit=%s",

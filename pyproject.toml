@@ -8,6 +8,7 @@ dependencies = [
     "cyrtranslit>=1.2.0",
     "fastapi>=0.163.1",
     "google-genai>=3.3.0",
+    "httpx>=0.28.1",
     "lingua-language-detector>=2.2.0",
     "psycopg[binary,pool]>=3.3.9",
     "pydantic-settings>=2.16.3",
@@ -51,7 +52,6 @@ markers = [
 
 [dependency-groups]
 dev = [
-    "httpx>=0.28.1",
     "pyright>=1.1.414",
     "pytest>=9.2.0",
     "pytest-asyncio>=1.5.0",
