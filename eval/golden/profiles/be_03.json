@@ -1,0 +1,21 @@
+{
+  "cv_id": "be_03",
+  "position_id": "backend_developer",
+  "style": "sr_ascii",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "Django services in Python since 2021", "quote": "• Razvoj servisa u Pythonu ( Django ) za sistem narudzbina"},
+    {"requirement_id": 2, "verdict": "met", "fact": "Python from 03/2021, about 5.5 years", "quote": "Backend programer, Morava Labs, Kragujevac 09/2022 - danas"},
+    {"requirement_id": 3, "verdict": "met", "fact": "REST API with more than 60 endpoints", "quote": "• REST API sa preko 60 endpointa"},
+    {"requirement_id": 4, "verdict": "met", "fact": "optimises SQL queries in PostgreSQL", "quote": "• Optimizacija SQL upita u PostgreSQL bazi"},
+    {"requirement_id": 5, "verdict": "met", "fact": "pytest unit tests for new services", "quote": "• Unit testovi u pytest-u za sve nove servise"},
+    {"requirement_id": 6, "verdict": "met", "fact": "Git with code review in GitLab", "quote": "• Rad u Gitu, pregled koda u GitLab-u"},
+    {"requirement_id": 7, "verdict": "met", "fact": "containerises services with Docker", "quote": "• Kontejnerizacija servisa u Dockeru, deploy na Azure App Service"},
+    {"requirement_id": 8, "verdict": "partial", "fact": "fourth year, thesis in progress, not yet a graduate", "quote": "Osnovne studije, cetvrta godina, diplomski rad u izradi"},
+    {"requirement_id": 9, "verdict": "met", "fact": "fluent English", "quote": "Maternji jezik: srpski Strani jezici: engleski - tecno"},
+    {"requirement_id": 10, "verdict": "not_met", "fact": "no message queues", "quote": null},
+    {"requirement_id": 11, "verdict": "met", "fact": "deploys to Azure App Service", "quote": "• Kontejnerizacija servisa u Dockeru, deploy na Azure App Service"}
+  ],
+  "relevance": {"backend_developer": 3, "data_analyst": 1, "business_analyst": 0, "project_manager": 0, "financial_controller": 0, "sales_manager": 0}
+}

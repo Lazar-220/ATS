@@ -1,0 +1,21 @@
+{
+  "cv_id": "ba_02",
+  "position_id": "business_analyst",
+  "style": "sr_latin",
+  "template": "single",
+  "hard_case": {"tag": "overlapping_periods", "note": "Two analyst jobs overlap (01/2020-12/2021 is 24 months, 07/2021-08/2023 is 26). Added up that is 50 months, over the 48 required. The union is 01/2020-08/2023, 44 months, so requirement 2 is partial. Jira (requirement 5) runs through both jobs, 44 months, so it is met."},
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "gathers requirements, writes specifications, runs client workshops", "quote": "• Prikupljanje zahteva od poslovnih korisnika i izrada specifikacija"},
+    {"requirement_id": 2, "verdict": "partial", "fact": "union of two overlapping periods is 44 months of 48, not the 50 that adding them gives", "quote": "01/2020 - 12/2021 Poslovni analitičar, Fenix Osiguranje, Novi Sad"},
+    {"requirement_id": 3, "verdict": "met", "fact": "user stories with acceptance criteria", "quote": "• User stories sa kriterijumima prihvatanja"},
+    {"requirement_id": 4, "verdict": "met", "fact": "daily Jira", "quote": "• Rad u Jira-i svakog dana"},
+    {"requirement_id": 5, "verdict": "met", "fact": "Jira in both jobs, 44 months", "quote": "• Podrška timu u Jira-i i Confluence-u"},
+    {"requirement_id": 6, "verdict": "met", "fact": "BPMN process diagrams", "quote": "• Dijagrami procesa u BPMN-u"},
+    {"requirement_id": 7, "verdict": "partial", "fact": "SQL limited to basic queries", "quote": "Poznavanje rada na računaru MS Office, Jira, Confluence, SQL ( osnovni upiti )"},
+    {"requirement_id": 8, "verdict": "met", "fact": "economics faculty, business informatics", "quote": "2008 - 2012 Ekonomski fakultet u Subotici"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English B2", "quote": "Engleski jezik B2 ( govor i pisanje )"},
+    {"requirement_id": 10, "verdict": "met", "fact": "insurance company", "quote": "01/2020 - 12/2021 Poslovni analitičar, Fenix Osiguranje, Novi Sad"},
+    {"requirement_id": 11, "verdict": "not_met", "fact": "a three-day course is not a certification", "quote": null}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 0, "business_analyst": 2, "project_manager": 1, "financial_controller": 0, "sales_manager": 0}
+}

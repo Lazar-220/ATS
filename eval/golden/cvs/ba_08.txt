@@ -1,0 +1,28 @@
+Lični podaci
+Prezime i ime Todorović Mina
+Adresa Srbija, Novi Sad
+Telefon 064 5550808
+E-pošta mina.todorovic@example.com
+Datum rođenja 03.02.1990.
+
+Radno iskustvo
+05/2018 - danas Viši poslovni analitičar, Panonija Osiguranje, Novi Sad
+ • Radionice sa aktuarima i službom likvidacije, prikupljanje i dokumentovanje zahteva
+ • User stories i kriterijumi prihvatanja za portal klijenata
+ • Jira: svakodnevno vođenje backloga i sprintova
+ • BPMN modeli procesa obrade štete
+ • SQL upiti za proveru migriranih polisa
+09/2014 - 04/2018 Poslovni analitičar, Vojvođanska Kreditna Banka, Novi Sad
+ • Zahtevi za aplikaciju za odobravanje kredita
+ • UML dijagrami slučajeva korišćenja
+ • Jira i Confluence
+
+Obrazovanje
+2008 - 2012 Fakultet tehničkih nauka, Novi Sad
+Diplomirani inženjer informacionih sistema
+
+Sertifikati
+ECBA, IIBA, 2015
+
+Strani jezici
+Engleski jezik C1 ( slušanje, čitanje, govor, pisanje )

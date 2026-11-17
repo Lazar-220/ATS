@@ -1,0 +1,21 @@
+{
+  "cv_id": "be_02",
+  "position_id": "backend_developer",
+  "style": "sr_latin",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "daily Python on a Flask service, plus a Python course", "quote": "Poznavanje rada na računaru Python, Flask, MySQL, Git, MS Office (Word, Excel)"},
+    {"requirement_id": 2, "verdict": "partial", "fact": "Python 12/2024 to present is 23 months plus a 4 month internship: 27 of 36 months", "quote": "12/2024 - danas Programer, Kodlab doo, Niš"},
+    {"requirement_id": 3, "verdict": "met", "fact": "builds REST APIs in Flask", "quote": "Razvoj REST API-ja u Flasku ( aplikacija za zakazivanje termina )"},
+    {"requirement_id": 4, "verdict": "met", "fact": "writes SQL on MySQL", "quote": "Pisanje SQL upita, održavanje MySQL baze ( 30 tabela )"},
+    {"requirement_id": 5, "verdict": "not_met", "fact": "no mention of automated tests", "quote": null},
+    {"requirement_id": 6, "verdict": "met", "fact": "Git workflow with pull requests", "quote": "Rad u Gitu ( grane, pull request, pregled koda sa kolegama )"},
+    {"requirement_id": 7, "verdict": "partial", "fact": "basic knowledge of Docker, local compose only", "quote": "Osnovno poznavanje Dockera ( lokalno okruženje, docker-compose )"},
+    {"requirement_id": 8, "verdict": "met", "fact": "bachelor in computing, 2024", "quote": "2020 - 2024 Elektronski fakultet, Univerzitet u Nišu"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English B2", "quote": "Engleski jezik B2 (pisanje i govor)"},
+    {"requirement_id": 10, "verdict": "not_met", "fact": "no message queues", "quote": null},
+    {"requirement_id": 11, "verdict": "not_met", "fact": "no cloud", "quote": null}
+  ],
+  "relevance": {"backend_developer": 2, "data_analyst": 1, "business_analyst": 0, "project_manager": 0, "financial_controller": 0, "sales_manager": 0}
+}

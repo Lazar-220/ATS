@@ -1,0 +1,77 @@
+{
+  "cv_id": "pm_11",
+  "position_id": "project_manager",
+  "style": "sr_ascii",
+  "template": "two_column",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "economics faculty",
+      "quote": "Ekonomski fakultet u Kragujevcu"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "not_met",
+      "fact": "event coordination for 7 months of 48; retail job is not project work",
+      "quote": null
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "not_met",
+      "fact": "no Scrum",
+      "quote": null
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "not_met",
+      "fact": "no Scrum",
+      "quote": null
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "not_met",
+      "fact": "no Jira",
+      "quote": null
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "not_met",
+      "fact": "only a cost list, no project budget",
+      "quote": null
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "not_met",
+      "fact": "works with 3 outside contractors, no team led",
+      "quote": null
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "partial",
+      "fact": "English A2, basic level",
+      "quote": "• Engleski - A2 ( osnovno )"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "not_met",
+      "fact": "none",
+      "quote": null
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "not_met",
+      "fact": "events and retail",
+      "quote": null
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 1,
+    "financial_controller": 0,
+    "sales_manager": 1
+  }
+}

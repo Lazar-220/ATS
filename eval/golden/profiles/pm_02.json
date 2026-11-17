@@ -1,0 +1,20 @@
+{
+  "cv_id": "pm_02",
+  "position_id": "project_manager",
+  "style": "sr_cyrillic",
+  "template": "single",
+  "hard_case": {"tag": "overlapping_periods", "note": "Two project-manager jobs overlap (03/2018-02/2020 is 24 months, 01/2019-04/2021 is 28). Added up that is 52 months, over the 48 required. The union is 03/2018-04/2021, 38 months, so the verdict is partial."},
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "faculty of technical sciences", "quote": "2013 - 2017 Факултет техничких наука, Универзитет у Новом Саду"},
+    {"requirement_id": 2, "verdict": "partial", "fact": "union of two overlapping periods is 38 months of 48, not the 52 that adding them gives", "quote": "03/2018 - 02/2020 Руководилац пројеката, Тамиш Софтвер, Панчево"},
+    {"requirement_id": 3, "verdict": "met", "fact": "introduced Scrum, sprints, backlog and product owner", "quote": "• Увођење Scrum-а у тим од 5 људи, двонедељни спринтови"},
+    {"requirement_id": 4, "verdict": "met", "fact": "Scrum at Banat Digital 01/2019-04/2021, 28 months", "quote": "01/2019 - 04/2021 Руководилац пројеката ( хонорарно ), Банат Дигитал, Зрењанин"},
+    {"requirement_id": 5, "verdict": "met", "fact": "plans deadlines in Jira", "quote": "• Планирање рокова у алату Jira, недељни извештаји за клијента"},
+    {"requirement_id": 6, "verdict": "met", "fact": "builds and tracks budgets up to 80,000 EUR", "quote": "• Израда и праћење буџета пројеката ( до 80.000 евра )"},
+    {"requirement_id": 7, "verdict": "met", "fact": "team of six", "quote": "• Тим од 6 програмера и тестера"},
+    {"requirement_id": 8, "verdict": "met", "fact": "English B2 speaking and writing", "quote": "Енглески језик Б2 ( говор и писање )"},
+    {"requirement_id": 9, "verdict": "not_met", "fact": "no certificate", "quote": null},
+    {"requirement_id": 10, "verdict": "met", "fact": "software projects for a bank and municipalities", "quote": "• Вођење пројеката развоја веб апликација за локалне самоуправе"}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 0, "business_analyst": 1, "project_manager": 2, "financial_controller": 0, "sales_manager": 0}
+}

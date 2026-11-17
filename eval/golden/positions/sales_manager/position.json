@@ -1,0 +1,29 @@
+{
+  "id": "sales_manager",
+  "title": "Menadžer prodaje",
+  "lang": "sr",
+  "requirements": [
+    {"id": 1, "text": "Završen fakultet ekonomskog ili tehničkog smera", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Fakultet ekonomskog ili tehničkog smera", "Završen ekonomski ili tehnički fakultet", "Visoko obrazovanje ekonomskog ili tehničkog smera"]},
+    {"id": 2, "text": "Najmanje 5 godina iskustva u B2B prodaji", "kind": "mandatory", "weight": 1, "min_months": 60, "parent": null,
+     "aliases": ["5 godina iskustva u B2B prodaji", "Najmanje 5 godina iskustva u prodaji B2B", "Najmanje 5 godina iskustva u prodaji prema pravnim licima"]},
+    {"id": 3, "text": "Iskustvo u vođenju prodajnog tima od najmanje 4 člana", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Vođenje prodajnog tima od najmanje 4 člana", "Iskustvo u vođenju prodajnog tima od 4 ili više članova", "Iskustvo u rukovođenju prodajnim timom od najmanje 4 člana"]},
+    {"id": 4, "text": "Dokazani rezultati u ostvarivanju prodajnih ciljeva", "kind": "mandatory", "weight": 3, "min_months": null, "parent": null,
+     "aliases": ["Dokazani rezultati u ostvarenju prodajnih ciljeva", "Ostvarivanje prodajnih ciljeva", "Dokazani prodajni rezultati", "Dokazano ostvarivanje prodajnih ciljeva"]},
+    {"id": 5, "text": "Iskustvo u radu sa CRM sistemom (Salesforce, HubSpot ili sličan)", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["CRM", "Iskustvo u radu sa CRM-om", "Iskustvo u radu u CRM sistemu", "Rad u CRM sistemu (Salesforce, HubSpot)", "Poznavanje CRM sistema"]},
+    {"id": 6, "text": "Iskustvo u pregovaranju i zaključivanju ugovora sa velikim kupcima", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Pregovaranje i zaključivanje ugovora sa velikim kupcima", "Iskustvo u pregovaranju sa velikim kupcima", "Iskustvo u zaključivanju ugovora sa velikim klijentima", "Pregovaranje o ugovorima sa velikim kupcima"]},
+    {"id": 7, "text": "Poznavanje engleskog jezika u govoru i pisanju", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Engleski jezik u govoru i pisanju", "Poznavanje engleskog jezika", "Znanje engleskog jezika u govoru i pismu"]},
+    {"id": 8, "text": "Vozačka dozvola B kategorije", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Vozačka dozvola", "Vozačka dozvola B kategorije", "Posedovanje vozačke dozvole B kategorije", "Vozač B kategorije"]},
+    {"id": 9, "text": "Spremnost na putovanja", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Spremnost na službena putovanja", "Spremnost za putovanja", "Spremnost na putovanja po regionu"]},
+    {"id": 10, "text": "Poznavanje nemačkog jezika", "kind": "nice_to_have", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Nemački jezik", "Znanje nemačkog jezika", "Poznavanje nemačkog jezika u govoru i pisanju"]},
+    {"id": 11, "text": "Prethodno iskustvo u prodaji u FMCG industriji ili industriji ambalaže", "kind": "nice_to_have", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Iskustvo u prodaji u FMCG industriji", "Iskustvo u prodaji u industriji ambalaže", "Iskustvo u FMCG industriji ili industriji ambalaže", "Prodaja u FMCG industriji ili ambalaži"]}
+  ]
+}

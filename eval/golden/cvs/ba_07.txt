@@ -1,0 +1,31 @@
+VLADIMIR STOJANOVIC
+Poslovni analiticar
+Kragujevac | vladimir.stojanovic@example.com | +381 64 5550707
+Datum rodjenja: 15.07.1986.
+
+PROFESIONALNI PROFIL
+Raniji racunovodja, od 2023. radi kao poslovni analiticar u IT kompaniji.
+
+ISKUSTVO
+Poslovni analiticar | Sumadija Soft d.o.o. | 11/2023 - danas
+- Prikupljanje zahteva od klijenata, dokumenti sa zahtevima u Confluence-u
+- User stories sa kriterijumima prihvatanja za ERP modul
+- Svakodnevni rad u Jira-i: backlog, sprintovi
+- SQL upiti za proveru podataka pre isporuke
+- BPMN ( osnove ), dijagrami procesa narudzbina
+
+Racunovodja | Agro Plus d.o.o. | 03/2016 - 10/2023
+- Knjizenje faktura i izvoda
+- Obracun PDV-a i mesecni izvestaji
+- Saradnja sa revizorima
+
+OBRAZOVANJE
+Ekonomski fakultet, Kragujevac | 2005 - 2010
+Smer Racunovodstvo i revizija
+
+KURSEVI
+Poslovna analiza za pocetnike | 2023
+Jira za timove | 2023
+
+JEZICI
+Engleski: B2

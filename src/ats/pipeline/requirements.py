@@ -66,12 +66,15 @@ def _fence(posting_text: str) -> str:
     return f"<posting>\n{posting_text.replace('</posting>', '</ posting>')}\n</posting>"
 
 
-def extract_requirements(client: LLMClient, posting_text: str) -> LLMResult[RequirementList]:
+def build_request(posting_text: str) -> LLMRequest:
     # Instructions first and the posting last, so the stable prefix can be cached (§4.5).
-    request = LLMRequest(
+    return LLMRequest(
         system=load_prompt(PROMPT_VERSION),
         user=_fence(posting_text),
         thinking_level=THINKING_LEVEL,
         prompt_version=PROMPT_VERSION,
     )
-    return client.generate(request, RequirementList)
+
+
+def extract_requirements(client: LLMClient, posting_text: str) -> LLMResult[RequirementList]:
+    return client.generate(build_request(posting_text), RequirementList)

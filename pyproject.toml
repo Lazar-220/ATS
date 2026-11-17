@@ -57,3 +57,11 @@ dev = [
     "pytest-asyncio>=1.5.0",
     "ruff>=0.17.5",
 ]
+eval = [
+    "scikit-learn>=1.9.1",
+]
+
+[tool.uv]
+# The metrics code in ats.eval imports scikit-learn, so make check needs the group. The Docker
+# images pass --no-group eval: neither the API nor the worker runs an evaluation.
+default-groups = ["dev", "eval"]

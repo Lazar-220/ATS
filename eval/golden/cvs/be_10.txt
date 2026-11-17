@@ -1,0 +1,29 @@
+DAVID KOVACS
+Backend Developer
+Novi Sad | david.kovacs@example.com | +381 60 5551010
+Date of birth: 11/06/1994
+
+EXPERIENCE
+
+Backend Developer, Pannon Cloud Services, 09/2022 - present
+- Python (Flask, FastAPI) microservices for order processing
+- REST APIs consumed by the mobile and web clients
+- PostgreSQL schemas, queries and migrations
+- RabbitMQ consumers for email and invoice jobs
+- Git and code review in daily work
+- Docker images for local development and CI
+
+Software Developer, Bega Systems, 07/2019 - 08/2022
+- PHP and Python scripts for customer reports
+- MySQL queries
+- Git
+
+EDUCATION
+BSc Computer Science, Faculty of Technical Sciences, Novi Sad, 2013 - 2017
+
+SKILLS
+Python / FastAPI / Flask / PostgreSQL / RabbitMQ / Docker / Git /
+
+LANGUAGES
+English - B2
+Hungarian - C1

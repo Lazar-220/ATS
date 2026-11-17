@@ -1,0 +1,34 @@
+Sofija Ilic
+Business Analyst
+Beograd | sofija.ilic@example.com | +381 63 5551111
+Datum rođenja: 08.09.1999.
+
+SUMMARY
+Analitičar sa 5 godina iskustva u bankarstvu, studira uporedo sa radom.
+
+WORK EXPERIENCE
+Business Analyst | Adriatic Banka | 10/2021 - danas
+• Prikupljanje i dokumentovanje zahteva sa poslovnim jedinicama
+• User stories i acceptance criteria za internet bankarstvo
+• Jira, svakodnevno, backlog i release planiranje
+• Modeliranje procesa u BPMN-u
+• SQL upiti za proveru podataka ( osnovni nivo )
+
+Junior Analyst | Adriatic Banka | 02/2020 - 09/2021
+• Izveštaji i kontrola kvaliteta podataka
+• Podrška testiranju
+
+EDUCATION
+Fakultet organizacionih nauka, Beograd | 2020 - trenutno
+• Smer Informacioni sistemi, 4. godina, diplomski rad u izradi
+
+COURSES
+CBAP Exam Prep | 2026 ( u toku )
+BPMN 2.0 Workshop | 2022
+
+SKILLS
+Jira / Confluence / BPMN / SQL / Miro /
+Teamwork / Flexibility / Time management /
+
+LANGUAGES
+English - B2

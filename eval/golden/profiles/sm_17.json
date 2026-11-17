@@ -1,0 +1,83 @@
+{
+  "cv_id": "sm_17",
+  "position_id": "sales_manager",
+  "style": "mixed",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "economics degree",
+      "quote": "Ekonomski fakultet, Univerzitet u Beogradu | 1998 - 2003 | Master ekonomista (smer Marketing)"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "met",
+      "fact": "17 years B2B",
+      "quote": "Prodajni lider sa 17 godina u B2B prodaji u FMCG i industriji ambalaze. Fokus na key accounts,"
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "met",
+      "fact": "team of 12",
+      "quote": "- tim od 12 ljudi ( 8 prodavaca, 4 key account menadzera )"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "plan 109-118%",
+      "quote": "- realizacija plana: 2022 118%, 2023 112%, 2024 115%, 2025 109%"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "met",
+      "fact": "introduced Salesforce, team uses it",
+      "quote": "- uveo Salesforce, danas ga koristi ceo tim"
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "met",
+      "fact": "contracts with top customers, 55% of turnover",
+      "quote": "- pregovori i potpisivanje ugovora sa velikim kupcima: top 5 kupaca = 55% prometa"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "met",
+      "fact": "English C1",
+      "quote": "English: fluent ( C1 ), Deutsch: B2"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "licence B",
+      "quote": "Datum rodjenja: 02.07.1979. | Vozacka dozvola B | Oca troje dece"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "met",
+      "fact": "travel 30%",
+      "quote": "Putovanja: spreman, oko 30% radnog vremena"
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "met",
+      "fact": "German B2",
+      "quote": "English: fluent ( C1 ), Deutsch: B2"
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "met",
+      "fact": "FMCG and packaging",
+      "quote": "Prodajni lider sa 17 godina u B2B prodaji u FMCG i industriji ambalaze. Fokus na key accounts,"
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 0,
+    "sales_manager": 3
+  }
+}

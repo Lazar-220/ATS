@@ -1,0 +1,27 @@
+{
+  "id": "project_manager",
+  "title": "Rukovodilac projekata",
+  "lang": "sr",
+  "requirements": [
+    {"id": 1, "text": "Završen fakultet tehničkog ili ekonomskog smera", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Fakultet tehničkog ili ekonomskog smera", "Visoko obrazovanje tehničkog ili ekonomskog smera"]},
+    {"id": 2, "text": "Najmanje 4 godine iskustva u vođenju projekata", "kind": "mandatory", "weight": 1, "min_months": 48, "parent": null,
+     "aliases": ["4 godine iskustva u vođenju projekata", "Najmanje 4 godine iskustva u upravljanju projektima"]},
+    {"id": 3, "text": "Odlično poznavanje Scrum metodologije", "kind": "mandatory", "weight": 3, "min_months": null, "parent": null,
+     "aliases": ["Poznavanje Scrum metodologije", "Scrum metodologija", "Odlično poznavanje Scruma"]},
+    {"id": 4, "text": "Najmanje 2 godine iskustva u radu po Scrum-u", "kind": "mandatory", "weight": 1, "min_months": 24, "parent": 3,
+     "aliases": ["2 godine iskustva u radu po Scrumu", "Najmanje 2 godine iskustva sa Scrum-om"]},
+    {"id": 5, "text": "Iskustvo u radu sa alatom Jira", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Jira", "Poznavanje alata Jira"]},
+    {"id": 6, "text": "Iskustvo u izradi i praćenju budžeta projekta", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Izrada i praćenje budžeta projekta", "Iskustvo sa budžetom projekta"]},
+    {"id": 7, "text": "Iskustvo u vođenju tima od najmanje 5 članova", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Vođenje tima od najmanje 5 članova", "Iskustvo u vođenju tima od 5 ili više članova"]},
+    {"id": 8, "text": "Poznavanje engleskog jezika u govoru i pisanju", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Engleski jezik u govoru i pisanju", "Poznavanje engleskog jezika"]},
+    {"id": 9, "text": "PMP ili PRINCE2 sertifikat", "kind": "nice_to_have", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["PMP sertifikat", "PRINCE2 sertifikat", "PMP ili PRINCE2"]},
+    {"id": 10, "text": "Prethodno iskustvo u softverskoj industriji", "kind": "nice_to_have", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Iskustvo u softverskoj industriji", "Iskustvo u IT industriji"]}
+  ]
+}

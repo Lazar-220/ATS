@@ -1,0 +1,86 @@
+{
+  "cv_id": "sm_06",
+  "position_id": "sales_manager",
+  "style": "sr_cyrillic",
+  "template": "single",
+  "hard_case": {
+    "tag": "overlapping_periods",
+    "note": "Req 2 (B2B 60 months): two B2B jobs overlap (01/2023-данас and 03/2023-02/2025). Summed they give about 71 months and look like met; the union is 01/2023-11/2026, 47 months, which is partial."
+  },
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "mechanical engineering degree",
+      "quote": "Дипломирани инжењер машинства"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "partial",
+      "fact": "overlapping B2B periods; union 01/2023-present is 47 months of 60",
+      "quote": "01/2023 - данас    Менаџер продаје, Нишка Трговина доо"
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "met",
+      "fact": "leads 6 salespeople",
+      "quote": "• Вођење тима од 6 продаваца у два магацина"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "plan 104% and 101%",
+      "quote": "• Остварење плана: 104% у 2024, 101% у 2025"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "met",
+      "fact": "Pipedrive CRM",
+      "quote": "• Рад у Pipedrive CRM-у"
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "partial",
+      "fact": "price agreements with two larger customers, not large ones",
+      "quote": "• Договори о цени са два већа купца"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "met",
+      "fact": "English B2",
+      "quote": "Енглески језик     Б2 (говор и писање)"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "licence B",
+      "quote": "Возачка дозвола Б категорије"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "not_met",
+      "fact": "no travel statement",
+      "quote": null
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "partial",
+      "fact": "German basic level",
+      "quote": "Немачки језик      основни ниво"
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "not_met",
+      "fact": "building materials and tools, not FMCG or packaging",
+      "quote": null
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 0,
+    "sales_manager": 2
+  }
+}

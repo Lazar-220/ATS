@@ -1,0 +1,17 @@
+{
+  "cv_id": "fc_03", "position_id": "financial_controller", "style": "sr_latin", "template": "single", "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "economics faculty, finance", "quote": "Ekonomski fakultet, Univerzitet u Beogradu | smer Finansije, bankarstvo i osiguranje | 2010 - 2014"},
+    {"requirement_id": 2, "verdict": "met", "fact": "accounting and control since 10/2016, over 10 years", "quote": "Računovođa | Boksit Trade, Beograd | 10/2016 - 04/2019"},
+    {"requirement_id": 3, "verdict": "met", "fact": "IFRS reports for management", "quote": "• Mesečni i godišnji finansijski izveštaji po MSFI za upravu"},
+    {"requirement_id": 4, "verdict": "met", "fact": "annual budget and monthly plan", "quote": "• Godišnji budžet i mesečni finansijski plan za 40 prodavnica"},
+    {"requirement_id": 5, "verdict": "met", "fact": "monthly and annual reports", "quote": "• Mesečni i godišnji finansijski izveštaji po MSFI za upravu"},
+    {"requirement_id": 6, "verdict": "met", "fact": "advanced Excel with macros", "quote": "• Excel modeli sa makroima za praćenje marži po kategorijama"},
+    {"requirement_id": 7, "verdict": "met", "fact": "SAP FI/CO daily", "quote": "• Rad u SAP-u ( FI/CO ) svakodnevno, od 2019. godine"},
+    {"requirement_id": 8, "verdict": "met", "fact": "SAP since 2019, about 7 years", "quote": "• Rad u SAP-u ( FI/CO ) svakodnevno, od 2019. godine"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English B2", "quote": "Engleski jezik - B2"},
+    {"requirement_id": 10, "verdict": "not_met", "fact": "no licence or ACCA/CFA", "quote": null},
+    {"requirement_id": 11, "verdict": "not_met", "fact": "no Power BI", "quote": null}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 1, "business_analyst": 0, "project_manager": 0, "financial_controller": 3, "sales_manager": 0}
+}

@@ -1,0 +1,21 @@
+{
+  "cv_id": "da_04",
+  "position_id": "data_analyst",
+  "style": "en",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "SQL on a 400M-row table in BigQuery", "quote": "• SQL on a 400M-row orders table in BigQuery"},
+    {"requirement_id": 2, "verdict": "met", "fact": "SQL since 09/2018, over 8 years", "quote": "09/2018 - 02/2021"},
+    {"requirement_id": 3, "verdict": "met", "fact": "Excel models and pivot tables", "quote": "• Excel models and pivot tables for store managers"},
+    {"requirement_id": 4, "verdict": "met", "fact": "pandas scripts for cleaning", "quote": "• Python (pandas) scripts for cleaning partner feeds"},
+    {"requirement_id": 5, "verdict": "met", "fact": "Tableau dashboards", "quote": "• Revenue and churn dashboards in Tableau"},
+    {"requirement_id": 6, "verdict": "met", "fact": "hypothesis tests and regression model", "quote": "• Hypothesis tests on promotion results"},
+    {"requirement_id": 7, "verdict": "met", "fact": "monthly deck for the commercial team", "quote": "• Monthly findings deck for the commercial team"},
+    {"requirement_id": 8, "verdict": "met", "fact": "BSc Mathematics", "quote": "BSc Mathematics | University of Belgrade | 2012 - 2016"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English C1", "quote": "English - C1"},
+    {"requirement_id": 10, "verdict": "met", "fact": "BigQuery", "quote": "• SQL on a 400M-row orders table in BigQuery"},
+    {"requirement_id": 11, "verdict": "not_met", "fact": "no A/B testing", "quote": null}
+  ],
+  "relevance": {"backend_developer": 1, "data_analyst": 3, "business_analyst": 0, "project_manager": 0, "financial_controller": 1, "sales_manager": 0}
+}

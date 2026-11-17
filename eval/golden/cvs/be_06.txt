@@ -1,0 +1,58 @@
+CONTACT
+Email
+marija.lazic@example.com
+Phone
++381 64 5550377
+Location
+Beograd, Serbia
+Born
+21/03/1996
+
+SKILLS
+Python
+Flask / Django
+PostgreSQL
+Git
+Docker
+Linux
+HTML / CSS /
+
+LANGUAGES
+English - B2
+Serbian - native
+
+HOBBIES
+Running, board games
+=== RIGHT COLUMN ===
+MARIJA LAZIC
+Python Developer
+
+ABOUT
+Developer with 4 years on web
+backends, mostly Django.
+
+EXPERIENCE
+Python Developer
+Studio Nimbus, Beograd
+05/2022 - Present
+• Django apps for small business
+  clients ( booking, invoicing )
+• REST API for a mobile app
+  ( Django REST framework,
+  8 endpoints )
+• SQL reports and views in
+  PostgreSQL
+• Git, code review in pull
+  requests
+
+Junior Web Developer
+Pixel Hub, Beograd
+10/2020 - 04/2022
+• PHP and some Python scripts
+• MySQL queries for reports
+
+EDUCATION
+BSc Computer Science
+Faculty of Mathematics,
+University of Belgrade
+2015 - 2019

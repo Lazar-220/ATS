@@ -1,0 +1,80 @@
+{
+  "cv_id": "pm_09",
+  "position_id": "project_manager",
+  "style": "en",
+  "template": "single",
+  "hard_case": {
+    "tag": "list_only",
+    "note": "Requirement 5 (Jira): Jira appears only in the skills list. No job bullet mentions it or any tracker, so it is partial."
+  },
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "economics faculty",
+      "quote": "BSc Economics, Faculty of Economics, University of Belgrade, 2006-2010"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "met",
+      "fact": "project manager 04/2020-present, about 79 months plus assistant job",
+      "quote": "Project Manager | ShopNet doo, Belgrade | 04/2020 - present"
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "met",
+      "fact": "Scrum Master for 2 teams, PSM I",
+      "quote": "• Scrum Master for 2 teams since 2020"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "Scrum since 2020, over 6 years",
+      "quote": "• Scrum Master for 2 teams since 2020"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "partial",
+      "fact": "Jira only in the skills list, no sign of use",
+      "quote": "Scrum / MS Project / Jira / Confluence /"
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "met",
+      "fact": "project budgets and cost reports",
+      "quote": "• Project budgets, monthly cost reports to the director"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "not_met",
+      "fact": "team of 4 against at least 5",
+      "quote": null
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "English C1",
+      "quote": "English - fluent ( C1 )"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "not_met",
+      "fact": "PSM I is not PMP or PRINCE2",
+      "quote": null
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "met",
+      "fact": "web and software delivery",
+      "quote": "• Delivery of web shop and logistics integrations for retail clients"
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 1,
+    "project_manager": 2,
+    "financial_controller": 0,
+    "sales_manager": 0
+  }
+}

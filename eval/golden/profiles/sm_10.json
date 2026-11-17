@@ -1,0 +1,83 @@
+{
+  "cv_id": "sm_10",
+  "position_id": "sales_manager",
+  "style": "sr_cyrillic",
+  "template": "two_column",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "not_met",
+      "fact": "finished philology faculty, unrelated",
+      "quote": null
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "met",
+      "fact": "B2B 2010 to present",
+      "quote": "Искусан у B2B продаји технике"
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "met",
+      "fact": "team of 4",
+      "quote": "• Тим од 4 продавца на терену"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "plan 109% and 112%",
+      "quote": "• Остварење плана: 109% у 2024,"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "not_met",
+      "fact": "customer records in Excel only",
+      "quote": null
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "met",
+      "fact": "contracts with large customers, 6 contracts over 200k EUR",
+      "quote": "• Уговори са великим купцима"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "met",
+      "fact": "English B2",
+      "quote": "• Енглески - Б2"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "licence B",
+      "quote": "• Возачка дозвола Б"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "met",
+      "fact": "travel",
+      "quote": "• Спреман на путовања"
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "not_met",
+      "fact": "only Russian, no German",
+      "quote": null
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "not_met",
+      "fact": "agricultural machinery",
+      "quote": null
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 0,
+    "sales_manager": 2
+  }
+}

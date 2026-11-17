@@ -1,0 +1,40 @@
+CONTACT
+Phone
++381 65 5550512
+Email
+ivan.petrovic@example.com
+Location
+Novi Sad, Serbia
+
+SKILLS
+SQL
+Excel
+Power BI
+Python (basic)
+Data cleaning
+Reporting
+
+LANGUAGES
+English - B2
+Serbian - native
+=== RIGHT COLUMN ===
+IVAN PETROVIC
+Junior Data Analyst
+
+EXPERIENCE
+Data Analyst
+Fresh Market Group | 08/2024 - present
+SQL queries on sales and stock tables
+Monthly Excel reports with pivot tables
+Power BI dashboard for store sales
+Presented results to the sales director
+
+Reporting Assistant
+Alfa Print | 10/2022 - 07/2024
+Excel reports, data entry and checks
+Invoice lists cleaned before export
+
+EDUCATION
+BSc Economics
+Faculty of Economics, Novi Sad
+2018 - 2022

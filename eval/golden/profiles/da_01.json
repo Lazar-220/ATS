@@ -1,0 +1,21 @@
+{
+  "cv_id": "da_01",
+  "position_id": "data_analyst",
+  "style": "en",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "daily SQL on a large BigQuery warehouse, window functions, tuning", "quote": "• Daily SQL on a 400 GB BigQuery sales warehouse: joins, window functions, tuning"},
+    {"requirement_id": 2, "verdict": "met", "fact": "SQL since 06/2019, about 7 years", "quote": "Senior Data Analyst | Retailia Group | 02/2020 - present"},
+    {"requirement_id": 3, "verdict": "met", "fact": "Excel models for marketing", "quote": "• SQL reports and Excel models for the marketing team"},
+    {"requirement_id": 4, "verdict": "met", "fact": "Python with pandas and statsmodels", "quote": "• Python ( pandas, statsmodels ) for cleaning and regression models of demand"},
+    {"requirement_id": 5, "verdict": "met", "fact": "weekly Power BI dashboards", "quote": "• Weekly dashboards in Power BI for 30 store managers"},
+    {"requirement_id": 6, "verdict": "met", "fact": "MSc in statistics and regression models", "quote": "MSc in Statistics, Faculty of Mathematics, University of Belgrade | 2011 - 2017"},
+    {"requirement_id": 7, "verdict": "met", "fact": "monthly presentations to directors", "quote": "• Monthly presentations of results to the commercial director and category managers"},
+    {"requirement_id": 8, "verdict": "met", "fact": "MSc in statistics", "quote": "MSc in Statistics, Faculty of Mathematics, University of Belgrade | 2011 - 2017"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English C1", "quote": "Mother tongue(s): Serbian Other language(s): English - C1"},
+    {"requirement_id": 10, "verdict": "met", "fact": "BigQuery warehouse", "quote": "• Daily SQL on a 400 GB BigQuery sales warehouse: joins, window functions, tuning"},
+    {"requirement_id": 11, "verdict": "met", "fact": "designs and analyses A/B tests", "quote": "• Design and analysis of A/B tests for promotions ( 25 tests in 2025 )"}
+  ],
+  "relevance": {"backend_developer": 1, "data_analyst": 3, "business_analyst": 1, "project_manager": 0, "financial_controller": 0, "sales_manager": 0}
+}

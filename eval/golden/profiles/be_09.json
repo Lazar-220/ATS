@@ -1,0 +1,21 @@
+{
+  "cv_id": "be_09",
+  "position_id": "backend_developer",
+  "style": "sr_cyrillic",
+  "template": "single",
+  "hard_case": {"tag": "course_in_progress", "note": "Requirement 8 (bachelor's degree in computer science): the degree is still in progress (4th year, thesis in preparation), so partial."},
+  "claims": [
+    {"requirement_id": 1, "verdict": "partial", "fact": "Python in an internship and student projects only", "quote": "• Исправке грешака у постојећем Python коду"},
+    {"requirement_id": 2, "verdict": "not_met", "fact": "about 4 months of Python work, under 50% of 36", "quote": null},
+    {"requirement_id": 3, "verdict": "not_met", "fact": "no REST API", "quote": null},
+    {"requirement_id": 4, "verdict": "partial", "fact": "basic SQL knowledge", "quote": "• Основно знање SQL-а, упити над тест базом"},
+    {"requirement_id": 5, "verdict": "not_met", "fact": "no tests", "quote": null},
+    {"requirement_id": 6, "verdict": "met", "fact": "Git daily on a team repository", "quote": "• Git у свакодневном раду на тимском репозиторијуму"},
+    {"requirement_id": 7, "verdict": "not_met", "fact": "no Docker", "quote": null},
+    {"requirement_id": 8, "verdict": "partial", "fact": "computer science degree in progress, 4th year", "quote": "• Смер Рачунарство и информатика, 4. година, дипломски рад у изради"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English B2", "quote": "Енглески језик Б2"},
+    {"requirement_id": 10, "verdict": "not_met", "fact": "none", "quote": null},
+    {"requirement_id": 11, "verdict": "not_met", "fact": "none", "quote": null}
+  ],
+  "relevance": {"backend_developer": 1, "data_analyst": 1, "business_analyst": 0, "project_manager": 0, "financial_controller": 0, "sales_manager": 0}
+}

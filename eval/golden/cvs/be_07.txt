@@ -1,0 +1,28 @@
+Stefan Ristic
+Backend programer
+Kontakt: stefan.ristic@example.com, 060 5550494, Novi Beograd
+Datum rodjenja: 28.01.1993. | Pol: M | Vozacka B
+
+O MENI
+Backend programer sa 7 godina iskustva, vecinom PHP (Laravel). Od proleca 2026 radim i u Pythonu.
+
+ISKUSTVO
+Backend programer | Kupi Lako doo | 06/2019 - danas
+* REST API za mobilnu aplikaciju prodavnice, 40+ ruta, JWT autentifikacija
+* Laravel, MySQL, optimizacija upita i indeksa
+* Docker za lokalno okruzenje i produkciju, docker-compose
+* Git (feature grane, merge zahtevi)
+* Od 05/2026 mali servis za obradu slika u Pythonu ( FastAPI )
+
+PHP programer | Web Fabrika | 2018 - 05/2019
+* Sajtovi na WordPress-u i custom moduli
+* MySQL
+
+OBRAZOVANJE
+Fakultet organizacionih nauka, Beograd, smer Informacioni sistemi | 2011 - 2016
+
+JEZICI
+Engleski - B2 ( tehnicka dokumentacija, sastanci )
+
+VESTINE
+PHP / Laravel / Python (osnove) / MySQL / Docker / Git / Linux /

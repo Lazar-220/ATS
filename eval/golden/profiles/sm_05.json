@@ -1,0 +1,83 @@
+{
+  "cv_id": "sm_05",
+  "position_id": "sales_manager",
+  "style": "en",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "BSc Economics",
+      "quote": "Faculty of Economics, University of Kragujevac, 2000 - 2005, BSc Economics"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "met",
+      "fact": "15 years B2B",
+      "quote": "Sales manager with 15 years in B2B sales, last 9 as team lead. Packaging and consumer goods."
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "met",
+      "fact": "team of 9",
+      "quote": "* Team of 9 reps in Serbia and Bosnia; hiring, coaching, monthly targets"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "targets met every year",
+      "quote": "* Targets met every year since 2018: 2023 = 119%, 2024 = 111%, 2025 = 107%"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "met",
+      "fact": "Salesforce daily",
+      "quote": "* Daily work in Salesforce ( forecast, opportunities, reports )"
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "met",
+      "fact": "multi-year contracts with national chains",
+      "quote": "* Negotiated multi-year supply contracts with 4 national retail chains"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "met",
+      "fact": "English C1",
+      "quote": "English - fluent (C1), German - B2, Serbian - native"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "licence B",
+      "quote": "Born 1981  |  Driving licence: B  |  Married, 2 children"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "met",
+      "fact": "travel",
+      "quote": "Willing to travel up to 3 days a week."
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "met",
+      "fact": "German B2",
+      "quote": "English - fluent (C1), German - B2, Serbian - native"
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "met",
+      "fact": "packaging for FMCG",
+      "quote": "* Main segment: packaging for FMCG producers"
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 0,
+    "sales_manager": 3
+  }
+}

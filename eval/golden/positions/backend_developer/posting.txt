@@ -1,0 +1,34 @@
+BACKEND DEVELOPER
+Brightway Systems, Belgrade (hybrid)
+
+About us
+Brightway Systems builds route-planning software for regional logistics companies.
+Our platform processes about two million deliveries a month, and the backend team of
+eight engineers keeps it fast and reliable.
+
+What you will do
+- Design, build and maintain the services behind our web and mobile apps
+- Improve the performance of database queries and background jobs
+- Review code, write tests and join the on-call rotation once every two months
+
+What we require
+- Strong knowledge of Python
+- At least 3 years of professional experience with Python
+- Extensive experience designing and building REST APIs
+- Working knowledge of SQL, ideally with PostgreSQL
+- Experience writing automated tests with pytest or a similar framework
+- Git and Docker in daily work
+- Bachelor's degree in computer science or a related field
+- English, written and spoken, at B2 level or higher
+
+Nice to have
+- Experience with message queues such as RabbitMQ or Kafka
+- Experience with a cloud provider (AWS, GCP or Azure)
+
+We offer
+- A salary of 3,000 to 4,500 EUR net, depending on experience
+- 25 days of annual leave and a flexible start to the working day
+- A yearly budget for courses and conferences
+
+How to apply
+Send your CV to jobs@brightway.example. We reply within two weeks.

@@ -1,0 +1,83 @@
+{
+  "cv_id": "fc_12",
+  "position_id": "financial_controller",
+  "style": "sr_ascii",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "not_met",
+      "fact": "only secondary school",
+      "quote": null
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "not_met",
+      "fact": "bookkeeping only since 05/2025, 18 months of 60",
+      "quote": null
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "not_met",
+      "fact": "no IFRS",
+      "quote": null
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "not_met",
+      "fact": "no budgets",
+      "quote": null
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "not_met",
+      "fact": "only VAT returns and bookkeeping, no financial reports",
+      "quote": null
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "partial",
+      "fact": "Excel at basic level only",
+      "quote": "Excel - osnovni nivo"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "not_met",
+      "fact": "works in Pantheon, no SAP",
+      "quote": null
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "not_met",
+      "fact": "no SAP",
+      "quote": null
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "partial",
+      "fact": "basic English, speaks poorly",
+      "quote": "Engleski - A2, razumem struku, slabije govorim"
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "not_met",
+      "fact": "only a bookkeeping course",
+      "quote": null
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "not_met",
+      "fact": "no Power BI",
+      "quote": null
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 1,
+    "sales_manager": 0
+  }
+}

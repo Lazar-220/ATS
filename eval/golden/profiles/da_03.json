@@ -1,0 +1,21 @@
+{
+  "cv_id": "da_03",
+  "position_id": "data_analyst",
+  "style": "sr_ascii",
+  "template": "two_column",
+  "hard_case": {"tag": "basic_knowledge", "note": "SQL is 'Osnovno znanje SQL-a' against a requirement of strong knowledge (partial); Power BI is a course in progress (partial); the degree is in its third year (partial)."},
+  "claims": [
+    {"requirement_id": 1, "verdict": "partial", "fact": "basic knowledge of SQL only", "quote": "• Osnovno znanje SQL-a"},
+    {"requirement_id": 2, "verdict": "not_met", "fact": "no SQL work experience", "quote": null},
+    {"requirement_id": 3, "verdict": "met", "fact": "advanced Excel, pivot tables, monthly reports", "quote": "• Excel ( napredni nivo )"},
+    {"requirement_id": 4, "verdict": "not_met", "fact": "no Python", "quote": null},
+    {"requirement_id": 5, "verdict": "partial", "fact": "Power BI course in progress, no dashboards built", "quote": "• Power BI ( kurs u toku )"},
+    {"requirement_id": 6, "verdict": "not_met", "fact": "no statistics mentioned", "quote": null},
+    {"requirement_id": 7, "verdict": "met", "fact": "presents results to the head of department", "quote": "• Prezentacije rezultata sefu odeljenja"},
+    {"requirement_id": 8, "verdict": "partial", "fact": "economics, third year, in progress", "quote": "• Treca godina studija"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English B2", "quote": "• Engleski jezik - B2"},
+    {"requirement_id": 10, "verdict": "not_met", "fact": "no cloud warehouse", "quote": null},
+    {"requirement_id": 11, "verdict": "not_met", "fact": "no A/B testing", "quote": null}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 1, "business_analyst": 0, "project_manager": 0, "financial_controller": 1, "sales_manager": 0}
+}

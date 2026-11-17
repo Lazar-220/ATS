@@ -1,0 +1,28 @@
+Lični podaci
+Prezime i ime          Đorđević Luka
+Adresa                 Niš, Srbija
+Telefon                +381 66 5550703
+E-pošta                luka.djordjevic@example.com
+Datum rođenja          15.08.1994.
+GitHub                 github.com/ldjordjevic
+
+Radno iskustvo
+09/2019 - danas        Backend inženjer, Orbita Soft, Niš
+                       • Python servisi ( FastAPI, Flask ), REST API za 9 proizvoda
+                       • Dizajn API-ja: verzionisanje, paginacija, OpenAPI dokumentacija
+                       • PostgreSQL, složeni upiti i migracije
+                       • Testovi u pytest-u, CI provera pre svakog merge-a
+                       • Docker i Kubernetes ( GCP ), Git svakodnevno
+                       • RabbitMQ za asinhrone obrade
+07/2017 - 08/2019      Junior programer, Net Servis, Niš
+                       • Python skripte i Flask aplikacije
+
+Obrazovanje i osposobljavanje
+2013 - 2017            Elektronski fakultet u Nišu, Računarstvo i informatika
+
+Jezici
+Maternji jezik         srpski
+Strani jezik           engleski - C1 (razumevanje, govor, pisanje)
+
+Dodatno
+Vozačka dozvola B, hobi: gitara

@@ -1,0 +1,21 @@
+{
+  "cv_id": "da_08",
+  "position_id": "data_analyst",
+  "style": "sr_ascii",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "SQL on 300M-row tables", "quote": "• SQL upiti nad tabelama racuna, preko 300 miliona redova"},
+    {"requirement_id": 2, "verdict": "met", "fact": "SQL since 10/2017, over 9 years", "quote": "10/2017 - 01/2020"},
+    {"requirement_id": 3, "verdict": "met", "fact": "Excel models, pivots, macros", "quote": "• Excel modeli, pivot tabele, makroi"},
+    {"requirement_id": 4, "verdict": "met", "fact": "pandas cleaning", "quote": "• Python ( pandas ) za ciscenje i spajanje izvora"},
+    {"requirement_id": 5, "verdict": "met", "fact": "Power BI dashboards", "quote": "• Dashboardi u Power BI-u za nabavku i prodaju"},
+    {"requirement_id": 6, "verdict": "met", "fact": "t-test and regression", "quote": "• t-test i regresija u analizi kreditnog rizika"},
+    {"requirement_id": 7, "verdict": "met", "fact": "monthly presentation to directors", "quote": "• Mesecna prezentacija nalaza direktorima"},
+    {"requirement_id": 8, "verdict": "met", "fact": "economics degree, statistics track", "quote": "Diplomirani ekonomista, smer Statistika i informatika"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English C1", "quote": "Engleski - C1"},
+    {"requirement_id": 10, "verdict": "met", "fact": "Snowflake", "quote": "• Rad u Snowflake skladistu podataka"},
+    {"requirement_id": 11, "verdict": "met", "fact": "A/B tests of discounts", "quote": "• A/B testovi popusta u prodavnicama"}
+  ],
+  "relevance": {"backend_developer": 1, "data_analyst": 3, "business_analyst": 0, "project_manager": 0, "financial_controller": 1, "sales_manager": 0}
+}

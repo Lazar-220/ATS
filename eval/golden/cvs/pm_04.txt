@@ -1,0 +1,58 @@
+OSNOVNI PODACI
+
+dusan.savic@example.com
++381 69 5550204
+Beograd, Srbija
+Datum rođenja: 30.01.1989.
+
+VEŠTINE
+• Jira
+• Confluence
+• Scrum
+• Kanban
+• Python
+• Java
+• Git
+• Docker
+• Timski rad
+• Organizovanost
+
+JEZICI
+• Engleski jezik - C1
+• Nemački jezik - osnovni nivo A2
+=== RIGHT COLUMN ===
+DUŠAN SAVIĆ
+
+Tehnički lider koji je prerastao u
+vođu projekata. Volim da spojim
+tehniku i rad sa ljudima.
+
+Obrazovanje
+
+Univerzitet u Beogradu | 2008-2012
+• Elektrotehnički fakultet
+  Smer Softversko inženjerstvo
+
+Iskustvo i projekti
+
+Sava Systems | Beograd | 01/2023-trenutno
+Tehnički lider
+• Vođenje razvojnog tima od 7 ljudi
+• Tehničke odluke i rokovi isporuke
+
+Sava Systems | Beograd | 01/2020-12/2022
+Vođa projekata
+• Vođenje tri projekta za klijente
+  iz bankarskog sektora
+• Tim od 7 programera i 2 testera
+• Backlog i sprintovi u Jira-i
+
+Scrum Master tima | 04/2021-12/2024
+• Sprint planiranje, retrospektive
+
+Programer | Niš Digital | 08/2012-12/2019
+• Razvoj servisa u Javi i Pythonu
+
+SERTIFIKATI
+
+Scrum Fundamentals - kurs (2021)

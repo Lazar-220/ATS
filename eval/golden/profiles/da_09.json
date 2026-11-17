@@ -1,0 +1,21 @@
+{
+  "cv_id": "da_09",
+  "position_id": "data_analyst",
+  "style": "mixed",
+  "template": "two_column",
+  "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "SQL queries on delivery tables", "quote": "- SQL upiti nad tabelama isporuka"},
+    {"requirement_id": 2, "verdict": "partial", "fact": "SQL only since 08/2024, about 27 months", "quote": "Subotica | 08/2024 - present"},
+    {"requirement_id": 3, "verdict": "met", "fact": "weekly Excel report", "quote": "- Weekly report u Excelu za vozni park"},
+    {"requirement_id": 4, "verdict": "partial", "fact": "Python (osnove) in skills list only", "quote": "Python ( osnove ) /"},
+    {"requirement_id": 5, "verdict": "met", "fact": "Tableau dashboard", "quote": "- Tableau dashboard za praćenje kašnjenja"},
+    {"requirement_id": 6, "verdict": "not_met", "fact": "no statistics", "quote": null},
+    {"requirement_id": 7, "verdict": "met", "fact": "presented results to dispatchers", "quote": "- Prezentacija rezultata dispečerima"},
+    {"requirement_id": 8, "verdict": "met", "fact": "Bachelor in economics", "quote": "Bachelor, Ekonomija | Ekonomski fakultet"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English B2", "quote": "Engleski - B2"},
+    {"requirement_id": 10, "verdict": "not_met", "fact": "none", "quote": null},
+    {"requirement_id": 11, "verdict": "not_met", "fact": "none", "quote": null}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 2, "business_analyst": 0, "project_manager": 0, "financial_controller": 1, "sales_manager": 0}
+}

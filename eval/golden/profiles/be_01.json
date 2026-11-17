@@ -1,0 +1,21 @@
+{
+  "cv_id": "be_01",
+  "position_id": "backend_developer",
+  "style": "en",
+  "template": "two_column",
+  "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "Python is the main language, eight years of professional work", "quote": "professional experience in Python,"},
+    {"requirement_id": 2, "verdict": "met", "fact": "Python jobs from 09/2018 to present, about 8 years", "quote": "09/2018 – 02/2021"},
+    {"requirement_id": 3, "verdict": "met", "fact": "designed and built a REST API for card payments", "quote": "Designed and built the REST API for"},
+    {"requirement_id": 4, "verdict": "met", "fact": "writes SQL reports and tunes PostgreSQL queries", "quote": "SQL reports for the finance team"},
+    {"requirement_id": 5, "verdict": "met", "fact": "pytest unit and integration tests, coverage 85%", "quote": "Unit and integration tests with pytest,"},
+    {"requirement_id": 6, "verdict": "met", "fact": "Git with pull-request reviews", "quote": "Git with pull-request reviews"},
+    {"requirement_id": 7, "verdict": "met", "fact": "Docker images for all services", "quote": "Docker images for all services,"},
+    {"requirement_id": 8, "verdict": "met", "fact": "BSc in Computer Science", "quote": "BSc in Computer Science"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English C1 certificate", "quote": "English: C1 (Cambridge Advanced)"},
+    {"requirement_id": 10, "verdict": "met", "fact": "RabbitMQ for order events", "quote": "RabbitMQ for order events, instead of"},
+    {"requirement_id": 11, "verdict": "met", "fact": "deployed services to AWS ECS", "quote": "deployment to AWS ECS"}
+  ],
+  "relevance": {"backend_developer": 3, "data_analyst": 1, "business_analyst": 0, "project_manager": 0, "financial_controller": 0, "sales_manager": 0}
+}

@@ -1,0 +1,86 @@
+{
+  "cv_id": "be_06",
+  "position_id": "backend_developer",
+  "style": "en",
+  "template": "two_column",
+  "hard_case": {
+    "tag": "list_only",
+    "note": "Req 7 (Docker in daily work): Docker appears only in the skills list in the sidebar and in no job description, so it is partial."
+  },
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "Django developer, 4 years",
+      "quote": "Developer with 4 years on web"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "met",
+      "fact": "Python since 05/2022, 54 months",
+      "quote": "05/2022 - Present"
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "partial",
+      "fact": "one REST API with 8 endpoints, not extensive",
+      "quote": "• REST API for a mobile app"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "PostgreSQL reports and views",
+      "quote": "• SQL reports and views in"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "not_met",
+      "fact": "no tests mentioned",
+      "quote": null
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "met",
+      "fact": "Git in pull requests",
+      "quote": "• Git, code review in pull"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "partial",
+      "fact": "Docker only in skills list",
+      "quote": "Docker"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "BSc Computer Science",
+      "quote": "BSc Computer Science"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "met",
+      "fact": "English B2",
+      "quote": "English - B2"
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "not_met",
+      "fact": "no queues",
+      "quote": null
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "not_met",
+      "fact": "no cloud",
+      "quote": null
+    }
+  ],
+  "relevance": {
+    "backend_developer": 2,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 0,
+    "sales_manager": 0
+  }
+}

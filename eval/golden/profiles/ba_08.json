@@ -1,0 +1,21 @@
+{
+  "cv_id": "ba_08",
+  "position_id": "business_analyst",
+  "style": "sr_latin",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "workshops, gathering and documenting requirements", "quote": "• Radionice sa aktuarima i službom likvidacije, prikupljanje i dokumentovanje zahteva"},
+    {"requirement_id": 2, "verdict": "met", "fact": "business analyst since 09/2014, 12 years", "quote": "09/2014 - 04/2018"},
+    {"requirement_id": 3, "verdict": "met", "fact": "user stories and acceptance criteria", "quote": "• User stories i kriterijumi prihvatanja za portal klijenata"},
+    {"requirement_id": 4, "verdict": "met", "fact": "Jira daily", "quote": "• Jira: svakodnevno vođenje backloga i sprintova"},
+    {"requirement_id": 5, "verdict": "met", "fact": "daily Jira since 2018 and earlier", "quote": "• Jira: svakodnevno vođenje backloga i sprintova"},
+    {"requirement_id": 6, "verdict": "met", "fact": "BPMN and UML", "quote": "• BPMN modeli procesa obrade štete"},
+    {"requirement_id": 7, "verdict": "met", "fact": "SQL checks", "quote": "• SQL upiti za proveru migriranih polisa"},
+    {"requirement_id": 8, "verdict": "met", "fact": "degree in information systems", "quote": "Diplomirani inženjer informacionih sistema"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English C1", "quote": "Engleski jezik C1 ( slušanje, čitanje, govor, pisanje )"},
+    {"requirement_id": 10, "verdict": "met", "fact": "insurer and bank", "quote": "05/2018 - danas Viši poslovni analitičar, Panonija Osiguranje, Novi Sad"},
+    {"requirement_id": 11, "verdict": "met", "fact": "ECBA, an IIBA business analysis certification, similar to CBAP", "quote": "ECBA, IIBA, 2015"}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 1, "business_analyst": 3, "project_manager": 2, "financial_controller": 0, "sales_manager": 0}
+}

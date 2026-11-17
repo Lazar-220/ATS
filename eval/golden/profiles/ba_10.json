@@ -1,0 +1,21 @@
+{
+  "cv_id": "ba_10",
+  "position_id": "business_analyst",
+  "style": "en",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "gathering requirements, specifications", "quote": "- Requirements gathering with claims and sales departments"},
+    {"requirement_id": 2, "verdict": "met", "fact": "business analyst since 04/2021, over 5 years", "quote": "Business Analyst, Delta Commerce, 04/2021 - 04/2025"},
+    {"requirement_id": 3, "verdict": "not_met", "fact": "functional specifications and test scenarios, no user stories", "quote": null},
+    {"requirement_id": 4, "verdict": "met", "fact": "daily work in Jira", "quote": "- Daily work in Jira (since 05/2025)"},
+    {"requirement_id": 5, "verdict": "partial", "fact": "Jira only since 05/2025, about 18 months of 24; earlier Redmine", "quote": "- Daily work in Jira (since 05/2025)"},
+    {"requirement_id": 6, "verdict": "met", "fact": "UML diagrams", "quote": "- UML activity and class diagrams"},
+    {"requirement_id": 7, "verdict": "met", "fact": "SQL data checks", "quote": "- SQL queries for data checks"},
+    {"requirement_id": 8, "verdict": "met", "fact": "BSc Information Systems", "quote": "BSc Information Systems, University of Novi Sad, 2016 - 2020"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English B2", "quote": "English - B2"},
+    {"requirement_id": 10, "verdict": "met", "fact": "insurance", "quote": "Business Analyst, Tisza Insurance, 05/2025 - present"},
+    {"requirement_id": 11, "verdict": "not_met", "fact": "none", "quote": null}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 1, "business_analyst": 2, "project_manager": 1, "financial_controller": 0, "sales_manager": 0}
+}

@@ -6,9 +6,9 @@ WORKDIR /app
 
 # Dependencies first, so editing code does not reinstall them.
 COPY pyproject.toml uv.lock ./
-RUN uv sync --frozen --no-dev --no-install-project
+RUN uv sync --frozen --no-dev --no-group eval --no-install-project
 COPY src ./src
-RUN uv sync --frozen --no-dev
+RUN uv sync --frozen --no-dev --no-group eval
 
 ENV PATH="/app/.venv/bin:$PATH"
 RUN useradd --system --no-create-home app && mkdir -p /app/data/uploads && chown app /app/data/uploads

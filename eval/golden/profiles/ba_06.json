@@ -1,0 +1,21 @@
+{
+  "cv_id": "ba_06",
+  "position_id": "business_analyst",
+  "style": "en",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "partial", "fact": "only lists of requests for one small internal tool", "quote": "- Meeting notes and lists of requests for a small internal tool"},
+    {"requirement_id": 2, "verdict": "not_met", "fact": "about 14 months as an assistant, not as a business analyst", "quote": null},
+    {"requirement_id": 3, "verdict": "not_met", "fact": "no user stories", "quote": null},
+    {"requirement_id": 4, "verdict": "partial", "fact": "Jira (basic) for tickets", "quote": "- Jira (basic) for tracking tickets"},
+    {"requirement_id": 5, "verdict": "partial", "fact": "Jira since 09/2025 is 14 months of 24 (58%), and described as basic", "quote": "Project Assistant | Brzi Servis d.o.o. | 09/2025 - present"},
+    {"requirement_id": 6, "verdict": "not_met", "fact": "no BPMN or UML", "quote": null},
+    {"requirement_id": 7, "verdict": "not_met", "fact": "no SQL", "quote": null},
+    {"requirement_id": 8, "verdict": "met", "fact": "BSc Economics", "quote": "BSc Economics, Faculty of Economics, Nis, 2021 - 2025"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English B2", "quote": "English: B2"},
+    {"requirement_id": 10, "verdict": "not_met", "fact": "no insurance or banking", "quote": null},
+    {"requirement_id": 11, "verdict": "not_met", "fact": "none", "quote": null}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 0, "business_analyst": 1, "project_manager": 1, "financial_controller": 0, "sales_manager": 0}
+}

@@ -1,0 +1,86 @@
+{
+  "cv_id": "fc_10",
+  "position_id": "financial_controller",
+  "style": "sr_cyrillic",
+  "template": "single",
+  "hard_case": {
+    "tag": "course_in_progress",
+    "note": "Requirement 10 (licence or ACCA/CFA): ACCA is in progress, 6 of 13 exams passed, so partial, not met."
+  },
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "economics faculty, accounting",
+      "quote": "2011 - 2016 Економски факултет у Крагујевцу, смер Рачуноводство"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "partial",
+      "fact": "accounting/controlling only since 01/2023, 46 months of 60; the bank teller job is not accounting",
+      "quote": "01/2023 - данас Рачуновођа за контролинг, Шумадија Метал доо, Крагујевац"
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "partial",
+      "fact": "basic knowledge of IFRS only",
+      "quote": "• Основно знање МСФИ, радим по упутству централе"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "budgets and plans",
+      "quote": "• Припрема буџета и финансијских планова за производњу"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "met",
+      "fact": "monthly and annual reports",
+      "quote": "• Месечни извештаји за управу, годишњи финансијски извештаји"
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "met",
+      "fact": "pivot, VLOOKUP, macros",
+      "quote": "• Excel ( пивот табеле, VLOOKUP, макрои )"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "met",
+      "fact": "SAP FI daily",
+      "quote": "• Рад у SAP-у ( модул FI ), свакодневно"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "SAP in the controlling job since 01/2023, 46 months",
+      "quote": "01/2023 - данас Рачуновођа за контролинг, Шумадија Метал доо, Крагујевац"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "met",
+      "fact": "English B2",
+      "quote": "Енглески језик Б2 ( говор и писање )"
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "partial",
+      "fact": "ACCA in progress, 6 of 13 exams",
+      "quote": "ACCA ( у току, положено 6 од 13 испита )"
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "not_met",
+      "fact": "no Power BI",
+      "quote": null
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 2,
+    "sales_manager": 0
+  }
+}

@@ -1,0 +1,32 @@
+Ognjen Markovic
+Analiticar podataka
+
+Kontakt: ognjen.markovic@example.com | +381 63 5550808 | Beograd
+Datum rodjenja: 30.01.1989.
+
+PROFIL
+Analiticar sa 9 godina iskustva u maloprodaji i bankarstvu.
+
+ISKUSTVO
+Analiticar podataka | Merkur Retail | 02/2020 - danas
+• SQL upiti nad tabelama racuna, preko 300 miliona redova
+• Dashboardi u Power BI-u za nabavku i prodaju
+• Python ( pandas ) za ciscenje i spajanje izvora
+• A/B testovi popusta u prodavnicama
+• Rad u Snowflake skladistu podataka
+• Mesecna prezentacija nalaza direktorima
+
+Mladi analiticar | Banka Zapad | 10/2017 - 01/2020
+• SQL izvestaji i kontrola kvaliteta podataka
+• Excel modeli, pivot tabele, makroi
+• t-test i regresija u analizi kreditnog rizika
+
+OBRAZOVANJE
+Ekonomski fakultet, Beograd | 2007 - 2011
+Diplomirani ekonomista, smer Statistika i informatika
+
+VESTINE
+SQL / Python / Power BI / Excel / Snowflake /
+
+JEZICI
+Engleski - C1

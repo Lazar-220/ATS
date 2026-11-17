@@ -1,0 +1,83 @@
+{
+  "cv_id": "sm_13",
+  "position_id": "sales_manager",
+  "style": "sr_latin",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "not_met",
+      "fact": "law degree, unrelated",
+      "quote": null
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "not_met",
+      "fact": "retail sales, only a few months of wholesale",
+      "quote": null
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "not_met",
+      "fact": "shop with 2 salespeople, below 4",
+      "quote": null
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "monthly plan 102%",
+      "quote": "• Prosečno ostvarenje mesečnog plana prodavnice 102%"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "not_met",
+      "fact": "no CRM",
+      "quote": null
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "not_met",
+      "fact": "no negotiation with large customers",
+      "quote": null
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "partial",
+      "fact": "English A2 basic",
+      "quote": "engleski - A2 ( osnovni )"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "not_met",
+      "fact": "no driving licence mentioned",
+      "quote": null
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "not_met",
+      "fact": "no travel statement",
+      "quote": null
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "met",
+      "fact": "German B1",
+      "quote": "nemački - B1"
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "not_met",
+      "fact": "retail cosmetics shop, not FMCG sales to businesses",
+      "quote": null
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 0,
+    "sales_manager": 1
+  }
+}

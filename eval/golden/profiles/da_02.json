@@ -1,0 +1,21 @@
+{
+  "cv_id": "da_02",
+  "position_id": "data_analyst",
+  "style": "sr_cyrillic",
+  "template": "single",
+  "hard_case": {"tag": "list_only", "note": "Python appears only in the skills list, with no sign of use in any job or project, so requirement 4 is partial (plan 4.4)."},
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "writes SQL queries and reports in PostgreSQL", "quote": "• Писање SQL упита и извештаја из базе продаје ( PostgreSQL )"},
+    {"requirement_id": 2, "verdict": "partial", "fact": "SQL job 09/2024 to present is 26 months of 36; the earlier job has no SQL", "quote": "09/2024 - данас Јуниор аналитичар, Кристал Трејд, Крагујевац"},
+    {"requirement_id": 3, "verdict": "met", "fact": "Excel models and pivot tables", "quote": "• Припрема Excel модела и пивот табела за комерцијални сектор"},
+    {"requirement_id": 4, "verdict": "partial", "fact": "Python only named in a skills list", "quote": "Рад на рачунару Excel, SQL, Power BI, Python"},
+    {"requirement_id": 5, "verdict": "met", "fact": "Power BI dashboards for the sales director", "quote": "• Дашборди у алату Power BI за директора продаје"},
+    {"requirement_id": 6, "verdict": "met", "fact": "statistics and econometrics, regression thesis", "quote": "• Статистика, економетрија ( регресиона анализа ), вероватноћа"},
+    {"requirement_id": 7, "verdict": "met", "fact": "weekly presentations to managers", "quote": "• Недељне презентације резултата менаџерима"},
+    {"requirement_id": 8, "verdict": "met", "fact": "economics faculty, statistics track", "quote": "2018 - 2022 Економски факултет, Универзитет у Крагујевцу"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English B2", "quote": "Енглески језик Б2 ( говор и писање )"},
+    {"requirement_id": 10, "verdict": "not_met", "fact": "no cloud warehouse", "quote": null},
+    {"requirement_id": 11, "verdict": "not_met", "fact": "no A/B testing", "quote": null}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 2, "business_analyst": 0, "project_manager": 0, "financial_controller": 1, "sales_manager": 0}
+}

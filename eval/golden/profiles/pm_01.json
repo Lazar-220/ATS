@@ -1,0 +1,20 @@
+{
+  "cv_id": "pm_01",
+  "position_id": "project_manager",
+  "style": "sr_latin",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "master at the Faculty of Organizational Sciences", "quote": "Fakultet organizacionih nauka, Univerzitet u Beogradu | master studije | 2011 - 2016"},
+    {"requirement_id": 2, "verdict": "met", "fact": "project manager since 06/2016, over 10 years", "quote": "Rukovodilac projekata sa 10 godina iskustva u isporuci softvera za finansijski sektor,"},
+    {"requirement_id": 3, "verdict": "met", "fact": "Scrum Master, certified, introduced Scrum in two teams", "quote": "• Uvođenje Scrum-a u dva tima, Scrum Master od 2019. godine"},
+    {"requirement_id": 4, "verdict": "met", "fact": "Scrum Master since 2019, about 7 years", "quote": "• Uvođenje Scrum-a u dva tima, Scrum Master od 2019. godine"},
+    {"requirement_id": 5, "verdict": "met", "fact": "runs sprints and backlog in Jira", "quote": "• Sprint planiranje, retrospektive i backlog u alatu Jira"},
+    {"requirement_id": 6, "verdict": "met", "fact": "builds and tracks project budgets", "quote": "• Izrada i praćenje budžeta svakog projekta, mesečno izveštavanje upravnog odbora"},
+    {"requirement_id": 7, "verdict": "met", "fact": "leads a team of nine", "quote": "• Vođenje tima od 9 ljudi ( programeri, testeri, analitičar )"},
+    {"requirement_id": 8, "verdict": "met", "fact": "English C1, works with clients in English", "quote": "Engleski jezik - C1 / Nemački jezik - A2"},
+    {"requirement_id": 9, "verdict": "met", "fact": "PMP certificate 2020", "quote": "PMP - Project Management Institute (2020)"},
+    {"requirement_id": 10, "verdict": "met", "fact": "delivers software projects", "quote": "• Vođenje projekata razvoja softvera za osiguravajuće kompanije"}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 0, "business_analyst": 2, "project_manager": 3, "financial_controller": 0, "sales_manager": 0}
+}

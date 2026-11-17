@@ -1,0 +1,32 @@
+Milica Tomašević
+12/09/1996
+(+381) 65 5550104
+Srbija, Beograd
+https://github.com/milica-t
+milica.tomasevic@example.com
+
+ABOUT ME
+Softver inženjer sa šest godina iskustva, najviše u backend razvoju na Python-u.
+Volim servise koji moraju da rade stabilno pod opterećenjem.
+
+EXPERIENCE
+Software Engineer, Vega Logistics, Beograd 04/2021 - present
+• Designed the public HTTP/JSON interface for our mobile apps: versioned resources,
+  OpenAPI documentation and contract tests for every consumer
+• Tuning of slow PostgreSQL queries ( EXPLAIN ANALYZE, partial indexes )
+• Pisanje testova u pytest-u za sve nove module, svaki PR prolazi code review
+• Order service packaged in Docker and deployed on GCP Cloud Run
+• Mentor za dva junior developera
+Python Developer, Pixel Forge, Beograd 08/2020 - 03/2021
+• Internal data tools in Python and Flask
+• Radio sam u Git-u u timu od pet ljudi
+
+EDUCATION
+Matematički fakultet, Univerzitet u Beogradu 2015 - 2020
+Osnovne studije, smer Informatika
+
+SKILLS
+Python 3 / Flask / SQLAlchemy / PostgreSQL / Docker / GCP / Git / pytest /
+
+LANGUAGE SKILLS
+Mother tongue(s): Srpski Other language(s): English - C1

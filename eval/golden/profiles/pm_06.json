@@ -1,0 +1,80 @@
+{
+  "cv_id": "pm_06",
+  "position_id": "project_manager",
+  "style": "en",
+  "template": "single",
+  "hard_case": {
+    "tag": "career_change",
+    "note": "Requirements 2, 4 and 7: nine years as a vocational school teacher, then a switch to project coordination in 09/2026. Only 2 months of project work and no team, so duration and team-size requirements are not_met; Scrum is a short course only (req 3 partial)."
+  },
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "electrical engineering faculty",
+      "quote": "2009 - 2014 Faculty of Electrical Engineering, University of Belgrade"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "not_met",
+      "fact": "only 2 months of project coordination; teaching is not project management",
+      "quote": null
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "partial",
+      "fact": "basic knowledge from a 2-day course",
+      "quote": "Scrum Master course ( 2 days ), 09/2026 - basic knowledge of Scrum"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "not_met",
+      "fact": "no Scrum work beyond sprint planning in the last 2 months",
+      "quote": null
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "met",
+      "fact": "tracks tasks in Jira",
+      "quote": "- Tracking tasks and deadlines for web projects in Jira"
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "not_met",
+      "fact": "no budget work",
+      "quote": null
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "not_met",
+      "fact": "no team led",
+      "quote": null
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "English B2",
+      "quote": "English - B2 ( spoken and written )"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "not_met",
+      "fact": "no certificate",
+      "quote": null
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "met",
+      "fact": "works for a web development company",
+      "quote": "09/2026 - present | Junior Project Coordinator | Pixel Forge doo, Belgrade"
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 1,
+    "financial_controller": 0,
+    "sales_manager": 0
+  }
+}

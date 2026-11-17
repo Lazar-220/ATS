@@ -1,0 +1,83 @@
+{
+  "cv_id": "fc_16",
+  "position_id": "financial_controller",
+  "style": "sr_ascii",
+  "template": "two_column",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "economics faculty, finance and accounting",
+      "quote": "• Smer Finansije i racunovodstvo"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "partial",
+      "fact": "controller since 02/2023, 45 months of 60; earlier admin job is not accounting",
+      "quote": "Kontroler | Panonija Mleko doo"
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "partial",
+      "fact": "basic knowledge of IFRS only",
+      "quote": "• Osnovno znanje MSFI"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "budgets and plans",
+      "quote": "• Izrada budzeta i planova"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "met",
+      "fact": "monthly and annual reports",
+      "quote": "• Mesecni i godisnji izvestaji"
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "met",
+      "fact": "Excel models for variances",
+      "quote": "• Excel modeli za pracenje odstupanja"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "met",
+      "fact": "SAP FI, CO",
+      "quote": "• Rad u SAP-u ( FI, CO ), od 2023"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "SAP since 2023, 45 months",
+      "quote": "• Rad u SAP-u ( FI, CO ), od 2023"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "met",
+      "fact": "English B2",
+      "quote": "• Engleski - B2"
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "not_met",
+      "fact": "no licence",
+      "quote": null
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "not_met",
+      "fact": "no Power BI",
+      "quote": null
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 2,
+    "sales_manager": 0
+  }
+}

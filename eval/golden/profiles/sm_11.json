@@ -1,0 +1,86 @@
+{
+  "cv_id": "sm_11",
+  "position_id": "sales_manager",
+  "style": "en",
+  "template": "single",
+  "hard_case": {
+    "tag": "career_change",
+    "note": "Req 2 (B2B 60 months): the candidate has 12 years as a civil engineer and moved to B2B sales only in 09/2025, so 14 months of sales. The long CV looks senior but B2B experience is under 50% of the minimum."
+  },
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "civil engineering degree",
+      "quote": "Civil engineering (dipl. ing.)"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "not_met",
+      "fact": "sales only 14 months, rest is construction engineering",
+      "quote": null
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "not_met",
+      "fact": "no direct reports",
+      "quote": null
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "partial",
+      "fact": "one quarter above target",
+      "quote": "- Q2 2026 target exceeded (106%), 3 new accounts"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "met",
+      "fact": "Zoho CRM daily",
+      "quote": "- Using Zoho CRM daily to log calls and offers"
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "not_met",
+      "fact": "no negotiation with large customers",
+      "quote": null
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "met",
+      "fact": "English B2",
+      "quote": "English - B2 ( reading, writing and meetings )"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "licence B",
+      "quote": "DOB 21/08/1986 | Licence B"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "met",
+      "fact": "travel around Vojvodina",
+      "quote": "Can travel to sites and customers around Vojvodina"
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "not_met",
+      "fact": "no German",
+      "quote": null
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "not_met",
+      "fact": "insulation systems, not FMCG or packaging",
+      "quote": null
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 1,
+    "financial_controller": 0,
+    "sales_manager": 1
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "cv_id": "pm_03",
+  "position_id": "project_manager",
+  "style": "en",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "economics faculty, an economic field", "quote": "BSc in Business Administration, Faculty of Economics, University of Belgrade 2015 - 2019"},
+    {"requirement_id": 2, "verdict": "not_met", "fact": "project manager 09/2024-02/2026 is 18 months of 48, under half; marketing coordination before that is not project management of software", "quote": null},
+    {"requirement_id": 3, "verdict": "partial", "fact": "basic knowledge from a two-day workshop", "quote": "• Two-day Scrum workshop, basic knowledge of Scrum roles and events"},
+    {"requirement_id": 4, "verdict": "not_met", "fact": "no Scrum practice, only a workshop", "quote": null},
+    {"requirement_id": 5, "verdict": "met", "fact": "backlog and sprint boards in Jira", "quote": "• Backlog and sprint boards in Jira, weekly status call with the client"},
+    {"requirement_id": 6, "verdict": "not_met", "fact": "no budget work mentioned", "quote": null},
+    {"requirement_id": 7, "verdict": "not_met", "fact": "team of 4, below the minimum of 5", "quote": null},
+    {"requirement_id": 8, "verdict": "met", "fact": "native-level English", "quote": "Mother tongue(s): Serbian Other language(s): English - native-level ( grew up between"},
+    {"requirement_id": 9, "verdict": "not_met", "fact": "no certificate", "quote": null},
+    {"requirement_id": 10, "verdict": "met", "fact": "delivered mobile apps at a software company", "quote": "• Delivery of two mobile apps for retail clients"}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 0, "business_analyst": 1, "project_manager": 1, "financial_controller": 0, "sales_manager": 0}
+}

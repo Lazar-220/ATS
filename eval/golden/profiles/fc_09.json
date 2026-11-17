@@ -1,0 +1,83 @@
+{
+  "cv_id": "fc_09",
+  "position_id": "financial_controller",
+  "style": "en",
+  "template": "two_column",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "economics, finance and accounting",
+      "quote": "• Finance and Accounting"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "met",
+      "fact": "05/2018-present plus 03/2012-04/2018, over 14 years",
+      "quote": "Financial Controller | Pannon Foods"
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "met",
+      "fact": "statements under IFRS",
+      "quote": "under IFRS"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "annual budget and 3-year plan",
+      "quote": "• Annual budget and 3-year plan"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "met",
+      "fact": "monthly and annual statements",
+      "quote": "• Monthly and annual statements"
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "met",
+      "fact": "advanced Excel in skills, models in job",
+      "quote": "• Excel models for margin analysis"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "met",
+      "fact": "SAP FI/CO daily",
+      "quote": "• SAP FI/CO, daily use since 2012"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "SAP since 2012, over 14 years",
+      "quote": "• SAP FI/CO, daily use since 2012"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "met",
+      "fact": "English C1",
+      "quote": "• English - C1"
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "met",
+      "fact": "ACCA qualification",
+      "quote": "ACCA qualification - 2016"
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "not_met",
+      "fact": "no Power BI",
+      "quote": null
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 1,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 3,
+    "sales_manager": 0
+  }
+}

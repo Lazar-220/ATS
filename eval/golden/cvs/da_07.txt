@@ -1,0 +1,34 @@
+DRAGANA NIKOLIĆ
+Analitičar podataka
+Čačak | dragana.nikolic@example.com | +381 64 5550714
+Datum rođenja: 09.05.1988.
+
+O MENI
+Profesorka matematike koja se 2024. okrenula analizi podataka.
+
+RADNO ISKUSTVO
+Analitičar podataka | Moravski Distribucija d.o.o. | 07/2024 - danas
+• SQL upiti nad bazom porudžbina ( PostgreSQL )
+• Izveštaji i dashboardi u Power BI-u
+• Python ( pandas ) za pripremu podataka
+• Testiranje hipoteza i regresija nad podacima o prodaji
+• Prezentacije rezultata upravi kompanije
+• Excel za čišćenje izvoza iz ERP-a
+
+Profesor matematike | Gimnazija u Čačku | 09/2012 - 06/2024
+• Predavanje matematike i statistike u srednjoj školi
+• Vođenje odeljenja
+• Evidencija ocena u Excelu
+
+OBRAZOVANJE
+Master matematike, Prirodno-matematički fakultet, Kragujevac | 2006 - 2011
+
+KURSEVI
+Python za analizu podataka | 2024
+SQL za analitičare | 2023
+
+VEŠTINE
+SQL / Python / Power BI / Excel /
+
+JEZICI
+Engleski jezik: B2

@@ -1,0 +1,64 @@
+Contact
+Phone
+(+381) 60 5550101
+Email
+andrej.stankovic@example.com
+Github
+github.com/andrej-stankovic
+Location
+Serbia, Novi Sad
+
+Digital skills
+Python / Django / FastAPI /
+PostgreSQL / Redis / RabbitMQ /
+Docker / AWS / pytest / Git /
+Linux / Bash /
+
+Languages
+English: C1 (Cambridge Advanced)
+Serbian: native
+German: A2
+
+Other
+Driving license:
+Category B
+=== RIGHT COLUMN ===
+Andrej Stankovic
+Backend developer
+Date of birth: 14/03/1995
+
+About me
+Backend developer with eight years of
+professional experience in Python,
+mostly in e-commerce and payments.
+
+Experience
+Senior Backend Developer
+Paylane Digital, Novi Sad
+03/2021 – ongoing
+Designed and built the REST API for
+card payments used by 40 merchants
+Tuning of PostgreSQL queries: p95 of the
+checkout endpoint from 900 to 220 ms
+RabbitMQ for order events, instead of
+cron-based polling
+Unit and integration tests with pytest,
+coverage from 40% to 85%
+Docker images for all services,
+deployment to AWS ECS
+
+Backend Developer
+Shopstream, Novi Sad
+09/2018 – 02/2021
+Django services for an online shop
+SQL reports for the finance team
+Git with pull-request reviews
+
+Education
+BSc in Computer Science
+Faculty of Sciences, Novi Sad
+10/2014 – 07/2018
+
+Awards
+Winner of the faculty programming
+competition, 2017

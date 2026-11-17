@@ -1,0 +1,29 @@
+{
+  "id": "financial_controller",
+  "title": "Finansijski kontroler",
+  "lang": "sr",
+  "requirements": [
+    {"id": 1, "text": "Završen ekonomski fakultet, smer finansije ili računovodstvo", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Ekonomski fakultet, smer finansije ili računovodstvo", "Završen ekonomski fakultet", "Diploma ekonomskog fakulteta, smer finansije ili računovodstvo"]},
+    {"id": 2, "text": "Najmanje 5 godina iskustva u finansijskom kontrolingu ili računovodstvu", "kind": "mandatory", "weight": 1, "min_months": 60, "parent": null,
+     "aliases": ["5 godina iskustva u finansijskom kontrolingu ili računovodstvu", "Najmanje 5 godina iskustva u kontrolingu ili računovodstvu", "Najmanje 5 godina radnog iskustva u finansijskom kontrolingu"]},
+    {"id": 3, "text": "Odlično poznavanje MSFI (međunarodnih standarda finansijskog izveštavanja)", "kind": "mandatory", "weight": 3, "min_months": null, "parent": null,
+     "aliases": ["Poznavanje MSFI", "Odlično poznavanje MSFI", "Poznavanje međunarodnih standarda finansijskog izveštavanja", "Odlično poznavanje međunarodnih standarda finansijskog izveštavanja (MSFI)"]},
+    {"id": 4, "text": "Iskustvo u izradi budžeta i finansijskih planova", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Izrada budžeta i finansijskih planova", "Iskustvo u izradi budžeta", "Iskustvo u izradi finansijskih planova"]},
+    {"id": 5, "text": "Iskustvo u izradi mesečnih i godišnjih finansijskih izveštaja", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Izrada mesečnih i godišnjih finansijskih izveštaja", "Iskustvo u izradi finansijskih izveštaja", "Iskustvo u pripremi mesečnih i godišnjih finansijskih izveštaja"]},
+    {"id": 6, "text": "Napredno poznavanje programa Excel", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Excel", "Napredno poznavanje Excela", "Napredno znanje Excel-a", "Napredno poznavanje programa Excel (MS Excel)"]},
+    {"id": 7, "text": "Iskustvo u radu sa SAP-om", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["SAP", "Iskustvo u radu u SAP-u", "Iskustvo sa SAP sistemom", "Rad u SAP-u", "Poznavanje SAP-a"]},
+    {"id": 8, "text": "Najmanje 2 godine iskustva u radu sa SAP-om", "kind": "mandatory", "weight": 1, "min_months": 24, "parent": 7,
+     "aliases": ["2 godine iskustva u radu sa SAP-om", "Najmanje 2 godine iskustva u radu u SAP-u", "Najmanje 2 godine rada u SAP-u", "Najmanje dve godine iskustva u radu sa SAP-om"]},
+    {"id": 9, "text": "Poznavanje engleskog jezika u govoru i pisanju", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Engleski jezik u govoru i pisanju", "Poznavanje engleskog jezika", "Znanje engleskog jezika u govoru i pismu"]},
+    {"id": 10, "text": "Licenca ovlašćenog računovođe ili sertifikat ACCA ili CFA", "kind": "nice_to_have", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Licenca ovlašćenog računovođe", "Sertifikat ACCA ili CFA", "ACCA ili CFA sertifikat", "Licenca ovlašćenog računovođe ili ACCA/CFA sertifikat"]},
+    {"id": 11, "text": "Iskustvo u izradi izveštaja u alatu Power BI", "kind": "nice_to_have", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Power BI", "Iskustvo u radu sa alatom Power BI", "Iskustvo u radu u Power BI-ju", "Izrada izveštaja u Power BI-ju"]}
+  ]
+}

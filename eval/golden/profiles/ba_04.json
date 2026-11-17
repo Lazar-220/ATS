@@ -1,0 +1,21 @@
+{
+  "cv_id": "ba_04",
+  "position_id": "business_analyst",
+  "style": "en",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "workshops and requirements documents", "quote": "• Business requirements documents and process descriptions"},
+    {"requirement_id": 2, "verdict": "met", "fact": "business analyst since 10/2016, 10 years", "quote": "Business Analyst | PayLine Fintech | 10/2016 - 03/2019"},
+    {"requirement_id": 3, "verdict": "met", "fact": "user stories with acceptance criteria", "quote": "• User stories with acceptance criteria for the mobile app"},
+    {"requirement_id": 4, "verdict": "met", "fact": "Jira backlog and sprints", "quote": "• Daily work in Jira: backlog grooming, sprint planning"},
+    {"requirement_id": 5, "verdict": "met", "fact": "daily Jira since 2016", "quote": "• Jira boards and Confluence pages"},
+    {"requirement_id": 6, "verdict": "met", "fact": "BPMN and UML", "quote": "• BPMN models of the card issuing process"},
+    {"requirement_id": 7, "verdict": "met", "fact": "SQL checks", "quote": "• SQL checks of transaction data before releases"},
+    {"requirement_id": 8, "verdict": "met", "fact": "BSc Economics", "quote": "BSc Economics, Faculty of Economics, Belgrade, 2006 - 2010"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English C1", "quote": "English - C1"},
+    {"requirement_id": 10, "verdict": "met", "fact": "bank and fintech payments", "quote": "Senior Business Analyst | Sava Bank | 04/2019 - present"},
+    {"requirement_id": 11, "verdict": "not_met", "fact": "no certification", "quote": null}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 1, "business_analyst": 3, "project_manager": 2, "financial_controller": 0, "sales_manager": 0}
+}

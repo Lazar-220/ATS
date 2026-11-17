@@ -1,0 +1,36 @@
+Nenad Radovic
+21/07/1998
+(+381) 63 5550103
+Srbija, Kragujevac
+https://github.com/nenad-radovic
+nenad.radovic@example.com
+www.linkedin.com/in/nenad-radovic-
+5b2c91
+
+O MENI
+Backend programer, u Pythonu radim od 2021. godine. Volim da ucim i da resavam probleme
+u timu.
+
+RADNO ISKUSTVO
+Backend programer, Morava Labs, Kragujevac 09/2022 - danas
+ • Razvoj servisa u Pythonu ( Django ) za sistem narudzbina
+ • REST API sa preko 60 endpointa
+ • Optimizacija SQL upita u PostgreSQL bazi
+ • Unit testovi u pytest-u za sve nove servise
+ • Kontejnerizacija servisa u Dockeru, deploy na Azure App Service
+ • Rad u Gitu, pregled koda u GitLab-u
+Programer pripravnik, Kolubara Digital, Valjevo 03/2021 - 08/2022
+ • Python skripte za izvestavanje, odrzavanje MySQL baze
+
+OBRAZOVANJE
+Fakultet inzenjerskih nauka, Univerzitet u Kragujevcu 10/2020 - danas
+Osnovne studije, cetvrta godina, diplomski rad u izradi
+
+VESTINE
+Django / FastAPI / PostgreSQL / SQL / Docker / Git / GitLab CI / Azure /
+
+JEZICKE VESTINE
+Maternji jezik: srpski Strani jezici: engleski - tecno
+
+OSTALO
+Vozacka dozvola B kategorije

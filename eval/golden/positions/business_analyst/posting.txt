@@ -1,0 +1,35 @@
+BUSINESS ANALYST
+Harbor Insurance Tech, Belgrade (hybrid)
+
+About us
+Harbor Insurance Tech builds the policy and claims systems used by insurers in the
+Western Balkans. Our product teams pair business analysts with developers from the
+first workshop to the release.
+
+What you will do
+- Run workshops with insurance experts and turn what you learn into clear specifications
+- Write user stories and keep the backlog ready for each sprint
+- Check that what the developers build matches what the business asked for
+
+What we require
+- Extensive experience gathering and documenting business requirements
+- At least 4 years of experience as a business analyst
+- Experience writing user stories and acceptance criteria
+- Knowledge of Jira
+- At least 2 years of daily work with Jira
+- Experience modelling processes in BPMN or UML
+- Working knowledge of SQL for ad-hoc data checks
+- Bachelor's degree in economics, information systems or a related field
+- English, written and spoken, at B2 level or higher
+
+Nice to have
+- Experience in insurance or banking
+- CBAP or a similar business analysis certification
+
+We offer
+- A salary of 2,800 to 4,000 EUR net, depending on experience
+- 25 days of annual leave and a flexible working day
+- Paid certification exams and a yearly learning budget
+
+How to apply
+Send your CV to hiring@harborit.example. We reply within two weeks.

@@ -1,0 +1,21 @@
+{
+  "cv_id": "da_05",
+  "position_id": "data_analyst",
+  "style": "en",
+  "template": "two_column",
+  "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "SQL queries on sales and stock tables", "quote": "SQL queries on sales and stock tables"},
+    {"requirement_id": 2, "verdict": "partial", "fact": "SQL only since 08/2024, about 27 months of 36", "quote": "Fresh Market Group | 08/2024 - present"},
+    {"requirement_id": 3, "verdict": "met", "fact": "Excel reports with pivot tables", "quote": "Monthly Excel reports with pivot tables"},
+    {"requirement_id": 4, "verdict": "partial", "fact": "Python (basic) in skills list only", "quote": "Python (basic)"},
+    {"requirement_id": 5, "verdict": "met", "fact": "Power BI dashboard", "quote": "Power BI dashboard for store sales"},
+    {"requirement_id": 6, "verdict": "not_met", "fact": "no statistics", "quote": null},
+    {"requirement_id": 7, "verdict": "met", "fact": "presented to the sales director", "quote": "Presented results to the sales director"},
+    {"requirement_id": 8, "verdict": "met", "fact": "BSc Economics", "quote": "BSc Economics"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English B2", "quote": "English - B2"},
+    {"requirement_id": 10, "verdict": "not_met", "fact": "no cloud warehouse", "quote": null},
+    {"requirement_id": 11, "verdict": "not_met", "fact": "no A/B tests", "quote": null}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 2, "business_analyst": 0, "project_manager": 0, "financial_controller": 1, "sales_manager": 0}
+}

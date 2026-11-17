@@ -1,0 +1,83 @@
+{
+  "cv_id": "sm_03",
+  "position_id": "sales_manager",
+  "style": "sr_ascii",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "economics degree",
+      "quote": "Ekonomski fakultet, Univerzitet u Beogradu | 2003-2008 | diplomirani ekonomista"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "met",
+      "fact": "14+ years B2B",
+      "quote": "Preko 14 godina u B2B prodaji, poslednjih 7 na rukovodecim pozicijama."
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "met",
+      "fact": "leads 7 salespeople + 2 KAM",
+      "quote": "- Vodim tim od 7 prodavaca i 2 key account menadzera"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "plan 117% and 109%",
+      "quote": "- Plan prodaje 2024: 117%, 2025: 109% (godisnji promet oko 4,2 mil EUR)"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "met",
+      "fact": "Salesforce",
+      "quote": "- CRM: Salesforce, nedeljni pipeline izvestaji"
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "met",
+      "fact": "annual contracts with big chains over 500k EUR",
+      "quote": "- Pregovori o godisnjim ugovorima sa velikim kupcima ( trgovinski lanci, preko 500.000 EUR )"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "met",
+      "fact": "English C1",
+      "quote": "Engleski - C1 (govor i pisanje) / Nemacki - B1"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "licence B",
+      "quote": "Datum rodjenja: 23.05.1984. | Pol: M | Vozacka dozvola: B kat."
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "met",
+      "fact": "ready for frequent travel",
+      "quote": "Spreman na cesta sluzbena putovanja u zemlji i regionu"
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "met",
+      "fact": "German B1",
+      "quote": "Engleski - C1 (govor i pisanje) / Nemacki - B1"
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "met",
+      "fact": "carton packaging for FMCG",
+      "quote": "- Prodaja kartonske ambalaze za FMCG i prehrambenu industriju"
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 0,
+    "sales_manager": 3
+  }
+}
