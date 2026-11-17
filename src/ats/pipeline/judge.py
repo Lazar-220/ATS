@@ -74,13 +74,19 @@ def _facts(pack: ContextPack) -> str:
     return "\n".join(lines)
 
 
-def build_request(pack: ContextPack) -> LLMRequest:
+def build_request(pack: ContextPack, retry_note: str | None = None) -> LLMRequest:
     requirements = "\n".join(_requirement_line(r) for r in pack.requirements)
     parts = [_fence(requirements, "requirements")]
     if pack.rules:
         parts.append(_fence("\n".join(pack.rules), "rules"))
     # The facts differ per CV, so they come after the rubric and before the CV.
-    parts += [_fence(_facts(pack), "facts"), _fence(pack.masked_cv, "cv")]
+    parts.append(_fence(_facts(pack), "facts"))
+    if retry_note is not None:
+        # From the program, before the CV so the CV stays last. It also makes the retry a
+        # different request, which the response cache would otherwise answer with the same
+        # incomplete answer again.
+        parts.append(retry_note)
+    parts.append(_fence(pack.masked_cv, "cv"))
     return LLMRequest(
         system=load_prompt(PROMPT_VERSION),
         user="\n".join(parts),
@@ -107,17 +113,42 @@ def _add(a: LLMUsage, b: LLMUsage) -> LLMUsage:
     )
 
 
-def judge(client: LLMClient, pack: ContextPack) -> JudgeResult:
+def _retry_note(output: JudgeOutput, pack: ContextPack, attempt: int) -> str:
+    wanted = {r.label for r in pack.requirements}
+    got = [v.requirement_id for v in output.verdicts]
+    missing = sorted(wanted - set(got))
+    twice = sorted({i for i in got if got.count(i) > 1})
+    unknown = sorted(set(got) - wanted)
+    problems = [
+        f"{what}: {', '.join(map(str, ids))}"
+        for what, ids in (
+            ("no verdict for id", missing),
+            ("more than one verdict for id", twice),
+            ("unknown id", unknown),
+        )
+        if ids
+    ]
+    # The queue attempt is part of the text: each queue retry is a new request with its own cache
+    # key, so a cached incomplete answer cannot make every later attempt fail the same way.
+    return (
+        f"Note from the program (retry {attempt}): your previous answer was incomplete "
+        f"({'; '.join(problems)}). Answer again with exactly one verdict for every requirement id."
+    )
+
+
+def judge(client: LLMClient, pack: ContextPack, *, attempt: int = 1) -> JudgeResult:
     """Every requirement must come back with exactly one verdict. If not, call once more, then fail.
 
-    This is separate from the client's own retry for output that does not parse (§4.5).
+    The second call names the missing or repeated ids and is a different request from the first,
+    so the response cache cannot hand back the same incomplete answer. This is separate from the
+    client's own retry for output that does not parse (§4.5). `attempt` is the queue attempt.
     """
-    request = build_request(pack)
-    first = client.generate(request, JudgeOutput)
+    first = client.generate(build_request(pack), JudgeOutput)
     found = _complete(first.output, pack)
     if found is not None:
         return JudgeResult(found, 1, first.usage)
-    second = client.generate(request, JudgeOutput)
+    retry = build_request(pack, _retry_note(first.output, pack, attempt))
+    second = client.generate(retry, JudgeOutput)
     found = _complete(second.output, pack)
     if found is None:
         raise JudgeIncomplete("a requirement has no verdict or two, after a second judge call")

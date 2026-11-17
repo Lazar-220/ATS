@@ -76,7 +76,13 @@ def _load(pool: ConnectionPool, candidate_id: UUID, position_id: UUID) -> dict[s
     }
 
 
-def assess(pool: ConnectionPool, client: LLMClient, candidate_id: UUID, position_id: UUID) -> bool:
+def assess(
+    pool: ConnectionPool,
+    client: LLMClient,
+    candidate_id: UUID,
+    position_id: UUID,
+    attempt: int = 1,
+) -> bool:
     """Judge one pair and store the result. False when a current assessment already existed."""
     settings = get_settings()
     loaded = _load(pool, candidate_id, position_id)
@@ -106,7 +112,7 @@ def assess(pool: ConnectionPool, client: LLMClient, candidate_id: UUID, position
     )
 
     # The slow call runs outside any transaction (the CV text is already read).
-    judged = judge(client, pack)
+    judged = judge(client, pack, attempt=attempt)
 
     checks = {
         label: check_quote(
@@ -223,7 +229,7 @@ def _mark_failed(pool: ConnectionPool, candidate_id: UUID, position_id: UUID, er
 
 def _run(job: Job, pool: ConnectionPool, candidate_id: UUID, position_id: UUID) -> None:
     try:
-        assess(pool, get_llm_client(), candidate_id, position_id)
+        assess(pool, get_llm_client(), candidate_id, position_id, job.attempts)
     except Exception as exc:
         if job.attempts >= job.max_attempts:
             _mark_failed(pool, candidate_id, position_id, f"{type(exc).__name__}: {exc}")
