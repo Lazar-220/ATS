@@ -1,3 +1,5 @@
+from datetime import date
+
 from pdfs import make_two_column_pdf
 
 from ats.pipeline.extract import extract_text
@@ -5,6 +7,8 @@ from ats.pipeline.facts import LOW_COVERAGE, NOT_A_CV, SUSPECTED_INJECTION, buil
 from ats.pipeline.locate import locate_snippet
 from ats.pipeline.masking import mask_text
 from ats.pipeline.parsing import ExperienceItem, ParsedCV, SkillItem
+
+AS_OF = date(2026, 11, 17)
 
 
 def _cv(
@@ -54,7 +58,7 @@ def test_items_that_cover_the_text_leave_no_flag_and_carry_raw_positions() -> No
     raw = "Nina Stojkovic\nnina.stojkovic@example.com\nProject Manager at Acme 2019 - 2023\n"
     result = mask_text(raw)
     snippet = "Project Manager at Acme 2019 - 2023"
-    facts = build_facts(_cv([_job(snippet)]), result.masked_text, result.spans)
+    facts = build_facts(_cv([_job(snippet)]), result.masked_text, result.spans, AS_OF)
     item = facts.parsed_json["experience"][0]
     assert raw[item["char_start"] : item["char_end"]] == snippet
     assert facts.parsed_json["coverage"] == 1.0
@@ -77,6 +81,7 @@ def test_a_snippet_around_a_placeholder_maps_to_raw_text_with_the_original_insid
         ),
         result.masked_text,
         result.spans,
+        AS_OF,
     )
     item = facts.parsed_json["skills"][0]
     assert raw[item["char_start"] : item["char_end"]] == (
@@ -86,13 +91,13 @@ def test_a_snippet_around_a_placeholder_maps_to_raw_text_with_the_original_insid
 
 def test_items_covering_under_85_percent_flag_the_document() -> None:
     masked = "aaaa bbbb cccc dddd eeee ffff gggg hhhh\n"
-    facts = build_facts(_cv([_job("aaaa bbbb")]), masked, [])
+    facts = build_facts(_cv([_job("aaaa bbbb")]), masked, [], AS_OF)
     assert [f["code"] for f in facts.flags] == [LOW_COVERAGE]
     assert facts.parsed_json["coverage"] < 0.85
 
 
 def test_unlocated_snippets_are_counted_and_cover_nothing() -> None:
-    facts = build_facts(_cv([_job("not in the text")]), "some text here", [])
+    facts = build_facts(_cv([_job("not in the text")]), "some text here", [], AS_OF)
     assert facts.parsed_json["unlocated_items"] == 1
     assert facts.parsed_json["experience"][0]["char_start"] is None
     assert facts.parsed_json["coverage"] == 0.0
@@ -102,13 +107,13 @@ def test_coverage_ignores_whitespace_and_masked_personal_data() -> None:
     raw = "a@example.com\n\nWork   history of the candidate\n"
     result = mask_text(raw)
     facts = build_facts(
-        _cv([_job("Work history of the candidate")]), result.masked_text, result.spans
+        _cv([_job("Work history of the candidate")]), result.masked_text, result.spans, AS_OF
     )
     assert facts.parsed_json["coverage"] == 1.0
 
 
 def test_a_non_cv_is_flagged_and_an_injection_is_flagged() -> None:
-    facts = build_facts(_cv(is_cv=False, injection=True), "an invoice", [])
+    facts = build_facts(_cv(is_cv=False, injection=True), "an invoice", [], AS_OF)
     assert {f["code"] for f in facts.flags} == {NOT_A_CV, SUSPECTED_INJECTION}
 
 

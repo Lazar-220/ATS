@@ -1,15 +1,18 @@
 """The stored result of parsing: the model's JSON plus what code worked out about it.
 
 `document.parsed_json` holds the parsed items, each with the position of its snippet in
-`raw_text`, and the text coverage. `document.flags` holds what HR should see.
+`raw_text` and its months, the text coverage, and the total tenure. `document.flags` holds
+what HR should see.
 """
 
 from dataclasses import dataclass
+from datetime import date
 from typing import Any
 
 from ats.pipeline.locate import MIN_COVERAGE, Located, coverage, locate_snippet, placeholder_ranges
 from ats.pipeline.masking import Span, masked_range_to_raw
 from ats.pipeline.parsing import SECTIONS, ParsedCV
+from ats.pipeline.tenure import item_tenure, merged_months
 
 NOT_A_CV = "not_a_cv"
 SUSPECTED_INJECTION = "suspected_injection"
@@ -22,12 +25,23 @@ class ParsedFacts:
     flags: list[dict[str, str]]
 
 
-def build_facts(parsed: ParsedCV, masked_text: str, spans: list[Span]) -> ParsedFacts:
+def build_facts(parsed: ParsedCV, masked_text: str, spans: list[Span], as_of: date) -> ParsedFacts:
     document: dict[str, Any] = parsed.model_dump()
     located_all: list[Located] = []
     unlocated = 0
+    periods: list[tuple[int, int]] = []
+    skipped = 0
     for section in SECTIONS:
         for item in document[section]:
+            tenure = item_tenure(item["date_start"], item["date_end"], as_of)
+            item["months"] = tenure.months
+            item["months_note"] = tenure.note
+            item["months_approximate"] = tenure.approximate
+            if section == "experience":
+                if tenure.start is not None and tenure.end is not None:
+                    periods.append((tenure.start, tenure.end))
+                else:
+                    skipped += 1
             found = locate_snippet(item["snippet"], masked_text)
             if found is None:
                 unlocated += 1
@@ -41,6 +55,13 @@ def build_facts(parsed: ParsedCV, masked_text: str, spans: list[Span]) -> Parsed
     share = coverage(masked_text, placeholder_ranges(spans), located_all)
     document["coverage"] = round(share, 4)
     document["unlocated_items"] = unlocated
+    # Ready-made facts for the judge. `as_of` is recorded so a result says what "present" meant.
+    document["tenure"] = {
+        "total_months": merged_months(periods),
+        "as_of": as_of.isoformat(),
+        "counted_items": len(periods),
+        "skipped_items": skipped,
+    }
 
     flags: list[dict[str, str]] = []
     if not parsed.is_cv:
