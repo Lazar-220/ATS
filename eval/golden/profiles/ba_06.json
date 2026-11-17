@@ -9,7 +9,7 @@
     {"requirement_id": 2, "verdict": "not_met", "fact": "about 14 months as an assistant, not as a business analyst", "quote": null},
     {"requirement_id": 3, "verdict": "not_met", "fact": "no user stories", "quote": null},
     {"requirement_id": 4, "verdict": "partial", "fact": "Jira (basic) for tickets", "quote": "- Jira (basic) for tracking tickets"},
-    {"requirement_id": 5, "verdict": "not_met", "fact": "about 14 months, basic use", "quote": null},
+    {"requirement_id": 5, "verdict": "partial", "fact": "Jira since 09/2025 is 14 months of 24 (58%), and described as basic", "quote": "Project Assistant | Brzi Servis d.o.o. | 09/2025 - present"},
     {"requirement_id": 6, "verdict": "not_met", "fact": "no BPMN or UML", "quote": null},
     {"requirement_id": 7, "verdict": "not_met", "fact": "no SQL", "quote": null},
     {"requirement_id": 8, "verdict": "met", "fact": "BSc Economics", "quote": "BSc Economics, Faculty of Economics, Nis, 2021 - 2025"},
