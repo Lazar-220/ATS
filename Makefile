@@ -35,6 +35,14 @@ api:
 setup-missing:
 	uv run python -m ats.worker.setup_missing $(if $(POSITION),--position $(POSITION)) $(if $(YES),--yes)
 
+# Evaluation harness. make eval VARIANT=A SPLIT=dev LIMIT=5. STAGES=extraction,verdicts adds the
+# requirement extraction, which calls the model; DRY_RUN=1 prints calls and cost and calls nothing;
+# YES=1 confirms a run of more than 5 model calls.
+VARIANT ?= A
+SPLIT ?= dev
+eval:
+	uv run python -m ats.eval run --variant $(VARIANT) --split $(SPLIT) 		$(if $(LIMIT),--limit $(LIMIT)) $(if $(STAGES),--stages $(STAGES)) 		$(if $(DRY_RUN),--dry-run) $(if $(YES),--yes)
+
 test-int:
 	uv run pytest -q -m integration
 
@@ -50,7 +58,6 @@ test:
 	uv run pytest -q -m "$(UNIT_TESTS)"
 
 # Targets that belong to a later phase fail loudly instead of doing nothing.
-eval: ; @echo "make $@ is added in phase 1.3"; exit 1
 langfuse-up langfuse-down: ; @echo "make $@ is added in phase 1.6"; exit 1
 eval-redteam: ; @echo "make $@ is added in phase 1.7"; exit 1
 reindex: ; @echo "make $@ is added in phase 2.1"; exit 1
