@@ -212,7 +212,7 @@ Planned from §6.3 of the plan. The actual pinned versions are in `pyproject.tom
 | 1.1a | `fastapi`, `uvicorn[standard]`, `pydantic`, `pydantic-settings`, `psycopg[binary,pool]`, `alembic` | Docker image `pgvector/pgvector:pg17`; npm: `react`, `react-dom`, `@tanstack/react-query`; dev: `typescript`, `vite`, `@vitejs/plugin-react`, `@types/react`, `@types/react-dom`, `@types/node`, `eslint`, `@eslint/js`, `typescript-eslint`, `eslint-plugin-react-hooks`, `globals` |
 | 1.1b | `pymupdf` (`>=1.28,<2`, see below), `python-multipart`, `cyrtranslit`, `lingua-language-detector` | |
 | 1.2 | `google-genai` | npm: `@tanstack/react-table` |
-| 1.3 | eval group: `scikit-learn`, `scipy`, `statsmodels` | |
+| 1.3 | eval group: `scikit-learn` (brings `numpy`, `scipy`, `joblib`, `threadpoolctl`); `statsmodels` is deferred to 1.8 | |
 | 1.4b | `rapidfuzz` | |
 | 1.6 | `langfuse` | Langfuse self-host: web, worker, Postgres, ClickHouse, Redis, MinIO |
 | 1.7 | none | GitHub Actions |
@@ -233,6 +233,10 @@ the production dependencies are clean.
 interface. `gemini-3.8-flash` does not accept `thinking_level` `minimal` (it takes `low`, `medium`
 and `high`; default `medium`), so every call uses `low` or higher, which also works on the
 current default `gemini-3.6-flash`.
+
+The `eval` group is a default group (`[tool.uv] default-groups` in `pyproject.toml`), so `uv run`
+and `make check` see scikit-learn. The API and worker Dockerfiles sync with `--no-dev --no-group eval`:
+neither runs an evaluation, and numpy and scipy would add weight to both images.
 
 Alembic brings in SQLAlchemy as its own dependency. It is used for migrations only; application
 queries are raw SQL through psycopg 3.
