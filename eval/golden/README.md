@@ -22,7 +22,8 @@ A verdict is about what the CV shows, not about what the candidate might know.
   - a duration requirement where the union of the candidate's periods reaches at least 50% of
     `min_months` but not all of it;
   - "basic knowledge" or similar self-limiting wording against a requirement of working knowledge;
-  - a skill that is only named in a list, with no sign of use;
+  - a skill that is only named in a list, with no sign of use (plan §4.4: "a skill that exists
+    only in a list, without confirmation in experience, gives at most `partial`");
   - a degree or course that is in progress.
 - `not_met`: no evidence, a duration under 50% of `min_months`, an explicit number below the
   minimum (a team of 4 against "at least 5"), or a finished-but-unrelated qualification.
