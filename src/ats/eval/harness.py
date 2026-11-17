@@ -206,7 +206,12 @@ class UsageReport(BaseModel):
     rate: str | None
 
 
+# Until the owner's manual 20% check is done, every result says so (docs/PROGRESS.md).
+GOLD_LABEL_STATUS = "gold labels not manually verified"
+
+
 class RunResult(BaseModel):
+    gold_labels: str = GOLD_LABEL_STATUS
     variant: str
     split: str
     limit: int | None
@@ -411,6 +416,7 @@ def format_report(result: RunResult) -> str:
         f"Eval  variant {result.variant}  split {result.split}"
         + (f"  limit {result.limit}" if result.limit is not None else ""),
         f"pipeline_version: {version.label}",
+        f"gold labels: {result.gold_labels.removeprefix('gold labels ')}",
     ]
     if result.split == "test":
         lines.append("NOTE: the test split is for published numbers; tune on dev only.")

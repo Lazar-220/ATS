@@ -317,6 +317,8 @@ def test_the_result_file_names_the_pipeline_version_and_the_model(
     assert data["limit"] == 2
     assert len(data["verdicts"]["items"]) > 0
     assert "judge=stub" in format_report(result)
+    assert data["gold_labels"] == "gold labels not manually verified"
+    assert "not manually verified" in format_report(result)
 
 
 def test_the_command_runs_end_to_end_and_writes_a_result(

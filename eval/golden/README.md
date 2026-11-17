@@ -41,6 +41,18 @@ Relevance (CV against a position, for endpoint 2): 3 = would be shortlisted; 2 =
 gaps in the mandatory requirements; 1 = weak, related field; 0 = irrelevant. It is a design
 judgement made with the profile, not a formula.
 
+## Formats
+
+PDF only, single-column and two-column. DOCX golden CVs are out of scope: endpoint 1 rejects
+anything that is not a PDF, so a DOCX CV could not enter the pipeline the eval measures. Revisit
+only if DOCX becomes a product feature.
+
+## Status of the labels
+
+**The gold labels have not been manually verified.** The manual 20% check is deferred by the
+owner (see `docs/PROGRESS.md`, Decisions and Carried over). Every result file says so, and so must
+any baseline built on this set.
+
 ## Style
 
 `style` says language and script of a CV: `sr_latin` (Serbian with diacritics), `sr_ascii`
