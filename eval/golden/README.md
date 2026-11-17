@@ -28,7 +28,11 @@ A verdict is about what the CV shows, not about what the candidate might know.
   minimum (a team of 4 against "at least 5"), or a finished-but-unrelated qualification.
 - Tenure counts the union of periods: overlapping jobs are not added up. Dates written
   "present" or "danas" are read as of the reference date **2026-11-17**. Profiles avoid cases
-  where the verdict flips within a year of that date.
+  where the verdict flips within a year of that date. The date is an `as_of` argument, never
+  `today()`: the eval passes `GOLDEN_AS_OF` (`src/ats/eval/golden.py`), the tenure code of 1.4a
+  takes the same parameter, and production passes the real date. Result files record it.
+- Plan §3 defines no verdict semantics beyond the score weights (§2.4) and "a skill only in a
+  list gives at most `partial`" (§4.4), which this agrees with. No conflict found.
 - A `met` or `partial` verdict carries a quote: verbatim, inside one line of the CV source (for a
   two-column CV, one cell). `not_met` has none.
 

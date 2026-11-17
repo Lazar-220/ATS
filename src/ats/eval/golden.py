@@ -15,6 +15,7 @@ drift apart.
 import json
 from collections.abc import Sequence
 from dataclasses import dataclass
+from datetime import date
 from pathlib import Path
 
 from pydantic import BaseModel, ValidationError
@@ -29,6 +30,10 @@ from ats.eval.schemas import (
     VerdictLabel,
 )
 from ats.eval.split import DEFAULT_SEED, TEST_FRACTION, assign_split, strata_of
+
+# The date "present" means in every golden CV. Tenure code takes it as an `as_of` argument; the
+# eval passes this, production passes today's date. Nothing may read the clock for it.
+GOLDEN_AS_OF = date(2026, 11, 17)
 
 DEFAULT_ROOT = Path(__file__).resolve().parents[3] / "eval" / "golden"
 

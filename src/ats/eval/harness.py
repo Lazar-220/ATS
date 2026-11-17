@@ -20,7 +20,7 @@ from typing import Literal
 from pydantic import BaseModel
 
 from ats.buildinfo import code_version
-from ats.eval.golden import GoldSet
+from ats.eval.golden import GOLDEN_AS_OF, GoldSet
 from ats.eval.matching import match_requirements
 from ats.eval.metrics import (
     ExtractionMetrics,
@@ -162,6 +162,7 @@ class ExtractionItem(BaseModel):
     metrics: ExtractionMetrics
     matches: list[MatchRecord]
     missed_gold_ids: list[int]
+    missed_gold: list[str]  # "id: text", for reading the report
     extra_extracted: list[str]  # texts of extracted requirements that matched nothing
 
 
@@ -211,6 +212,8 @@ class RunResult(BaseModel):
     limit: int | None
     stages: list[str]
     started_at: str
+    # The date "present" means in the golden CVs; tenure is computed as of this day.
+    as_of: str
     pipeline_version: PipelineVersion
     extraction: ExtractionReport | None
     verdicts: VerdictReport | None
@@ -256,6 +259,9 @@ def _run_extraction(
                     for m in matched.matches
                 ],
                 missed_gold_ids=matched.unmatched_gold,
+                missed_gold=[
+                    f"{r.id}: {r.text}" for r in meta.requirements if r.id in matched.unmatched_gold
+                ],
                 extra_extracted=[by_id[i] for i in matched.unmatched_extracted],
             )
         )
@@ -332,7 +338,8 @@ def run_eval(
     client: LLMClient | None,
     model: str,
     min_chars_per_page: int,
-    today: date | None = None,
+    as_of: date = GOLDEN_AS_OF,
+    price_date: date | None = None,
 ) -> RunResult:
     if variant != "A":
         raise EvalError(f"variant {variant} does not exist yet; B, C and D arrive in phase 3")
@@ -351,13 +358,14 @@ def run_eval(
     input_tokens = sum(row[0] for row in usage_rows)
     output_tokens = sum(row[1] for row in usage_rows)
     now = datetime.now(UTC)
-    rate = rate_on(model, today or now.date()) if usage_rows else None
+    rate = rate_on(model, price_date or now.date()) if usage_rows else None
     return RunResult(
         variant=variant,
         split=split,
         limit=limit,
         stages=list(stages),
         started_at=now.isoformat(timespec="seconds"),
+        as_of=as_of.isoformat(),
         pipeline_version=PipelineVersion(
             code=code_version(),
             prompts={"requirements": REQUIREMENTS_PROMPT},
@@ -420,6 +428,20 @@ def format_report(result: RunResult) -> str:
                 + "".join(f"{_pct(r):>{w}}" for r, w in zip(ratios, (7, 8, 8), strict=True))
                 + f"{_pct(m.label_accuracy):>8}"
             )
+        # Every unmatched requirement is listed, on both sides, so a matcher error can be told
+        # from a model error by reading the two texts.
+        for item in result.extraction.positions:
+            loose = [m for m in item.matches if m.score < 1.0]
+            if not (item.extra_extracted or item.missed_gold or loose):
+                continue
+            lines += ["", f"  {item.position_id}"]
+            lines += [f"    extracted, matched nothing: {text!r}" for text in item.extra_extracted]
+            lines += [f"    gold, matched by nothing:   {text!r}" for text in item.missed_gold]
+            lines += [
+                f"    matched below 1.0: extracted {m.extracted_id} = gold {m.gold_id} "
+                f"({m.score:.2f}, via {m.via!r})"
+                for m in loose
+            ]
     if result.verdicts:
         v = result.verdicts
         lines += ["", f"VERDICTS ({v.cvs} CVs, {v.overall.n} pairs), judge: {v.judge}"]

@@ -240,7 +240,7 @@ def test_extraction_scores_one_when_the_model_returns_the_gold_requirements(
     result = run_eval(
         golden, variant="A", split="dev", limit=1, stages=["extraction"],
         judge=StubJudge(golden), client=client, model="gemini-3.6-flash",
-        min_chars_per_page=MIN_CHARS, today=date(2026, 11, 17),
+        min_chars_per_page=MIN_CHARS, price_date=date(2026, 11, 17),
     )  # fmt: skip
     assert result.extraction is not None
     assert result.extraction.overall.f1 == 1.0
@@ -362,3 +362,25 @@ def test_a_run_of_more_than_five_uncached_calls_is_refused_without_yes(
     assert "would call the model 2 times" in captured.err
     assert "Dry run" in captured.out  # the estimate is shown first
     assert list(tmp_path.glob("*.json")) == []
+
+
+def test_the_report_lists_every_unmatched_requirement_on_both_sides(golden: GoldSet) -> None:
+    def respond(_request: LLMRequest, _schema: type[BaseModel]) -> BaseModel:
+        # Every posting: drop the last gold requirement, add one that is not in any posting.
+        position = golden.positions["backend_developer"].meta
+        kept = [
+            RequirementDraft.model_validate(r.model_dump(exclude={"aliases"}))
+            for r in position.requirements[:-1]
+        ]
+        extra = _draft(99, "COBOL mainframe experience")
+        return RequirementList(requirements=[*kept, extra])
+
+    result = run_eval(
+        golden, variant="A", split="dev", limit=1, stages=["extraction"],
+        judge=StubJudge(golden), client=FakeLLMClient(responder=respond),
+        model="m", min_chars_per_page=MIN_CHARS,
+    )  # fmt: skip
+    report = format_report(result)
+    assert "extracted, matched nothing: 'COBOL mainframe experience'" in report
+    assert "gold, matched by nothing:   '11: Experience with a cloud provider" in report
+    assert result.as_of == "2026-11-17"
