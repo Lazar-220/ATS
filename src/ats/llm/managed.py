@@ -86,7 +86,8 @@ class ManagedLLMClient:
             try:
                 return self._transport.complete(self._model, request, schema)
             except RateLimitError as exc:
-                if rate_limited >= self._max_429_retries:
+                # A spent daily quota does not come back within any retry delay.
+                if exc.daily or rate_limited >= self._max_429_retries:
                     raise
                 delay = exc.retry_after_s
                 if delay is None:

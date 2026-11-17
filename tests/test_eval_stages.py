@@ -138,6 +138,23 @@ def test_a_rate_limit_that_survives_the_retries_stops_the_run_and_keeps_what_is_
     assert len(seen) == 3  # no CV after the failed one was tried
 
 
+def test_a_daily_quota_429_stops_the_run_at_once_and_reports_n_of_18(golden: GoldSet) -> None:
+    seen: list[str] = []
+
+    def respond(request: LLMRequest, _schema: type[BaseModel]) -> BaseModel:
+        seen.append(request.user)
+        if len(seen) == 5:
+            raise RateLimitError("per-day quota spent", daily=True)
+        return _empty()
+
+    ids = select_subset(golden).cv_ids
+    report, _ = run_parsing(golden, FakeLLMClient(responder=respond), ids, MIN_CHARS, AS_OF)
+
+    assert (report.requested, report.cvs) == (SUBSET_SIZE, 4)
+    assert report.stopped is not None and "4 of 18" in report.stopped
+    assert len(seen) == 5
+
+
 def test_a_full_eval_run_with_masking_and_parsing_reports_both(golden: GoldSet) -> None:
     result = run_eval(
         golden,
