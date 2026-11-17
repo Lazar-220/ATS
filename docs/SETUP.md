@@ -211,6 +211,7 @@ started before this phase does not know the step: restart it (`schema=0003` in i
 | `LLM_FALLBACK` | empty (off) | eval runs only: `openrouter` continues a run on an OpenRouter free model after a Gemini daily quota. The API and the worker never read it. Also `make eval FALLBACK=openrouter` | 1.4a |
 | `OPENROUTER_API_KEY` | none | key for the fallback; never committed; needed only with `LLM_FALLBACK` | 1.4a |
 | `OPENROUTER_MODEL` | `google/gemma-4-31b-it:free` | the free model the fallback uses (checked in OpenRouter's public model list on 2026-11-17) | 1.4a |
+| `QUOTE_FUZZY_THRESHOLD` | `90` | a judge quote passes the quote check when it is in the CV verbatim after normalization, or at this `rapidfuzz` score (0 to 100) or above; numbers in the quote must exist verbatim either way (§3.2) | 1.4b |
 | `GIT_COMMIT` | derived from `git` | overrides the code version in the worker's startup line; set it where there is no `.git` (a Docker image shows `unknown` otherwise) | 1.2 |
 | `LANGFUSE_ENABLED` | `false` | tracing on or off | 1.6 |
 | `EMBEDDING_MODEL` | `BAAI/bge-m3` | local embedding model | 2.1 |
@@ -230,7 +231,7 @@ Planned from §6.3 of the plan. The actual pinned versions are in `pyproject.tom
 | 1.2 | `google-genai` | npm: `@tanstack/react-table` |
 | 1.4a | `httpx` moved from the dev group to the main dependencies (the OpenRouter transport uses it). It was already in `uv.lock` through `google-genai`; the lock gained no package | |
 | 1.3 | eval group: `scikit-learn` (brings `numpy`, `scipy`, `joblib`, `threadpoolctl`); `statsmodels` is deferred to 1.8 | |
-| 1.4b | `rapidfuzz` | |
+| 1.4b | `rapidfuzz` (3.14.6; quote checking, §6.3; it was the only package `uv add` put in `uv.lock`) | |
 | 1.6 | `langfuse` | Langfuse self-host: web, worker, Postgres, ClickHouse, Redis, MinIO |
 | 1.7 | none | GitHub Actions |
 | 2.1 | `sentence-transformers` (with CPU-only `torch`), `pgvector` | model `BAAI/bge-m3`, about 2.3 GB in the Hugging Face cache |

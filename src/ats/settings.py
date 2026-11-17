@@ -24,6 +24,9 @@ class Settings(BaseSettings):
     # The free tier allows 5 requests per minute (§6.1); raise it on the paid tier.
     llm_rpm: int = 5
     llm_cache_dir: Path = Path("data/llm_cache")
+    # A judge quote passes the check at this rapidfuzz score or above (§3.2, §6.3); calibrate on
+    # the golden set.
+    quote_fuzzy_threshold: int = 90
     # Eval runs only (`ats.eval`): switch to OpenRouter after a Gemini daily quota. The API and
     # the worker never read these.
     llm_fallback: Literal["", "openrouter"] = ""
