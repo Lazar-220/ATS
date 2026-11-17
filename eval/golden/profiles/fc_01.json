@@ -1,0 +1,21 @@
+{
+  "cv_id": "fc_01",
+  "position_id": "financial_controller",
+  "style": "sr_latin",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "economics faculty, accounting and audit", "quote": "Ekonomski fakultet, Univerzitet u Beogradu | smer Računovodstvo i revizija | 2005 - 2010"},
+    {"requirement_id": 2, "verdict": "met", "fact": "accountant then controller since 2014, 12 years", "quote": "Finansijski kontroler sa 12 godina iskustva u proizvodnim kompanijama. Radim sa upravom na"},
+    {"requirement_id": 3, "verdict": "met", "fact": "reports under IFRS for the board", "quote": "• Mesečni i godišnji finansijski izveštaji po MSFI za upravu i vlasnike"},
+    {"requirement_id": 4, "verdict": "met", "fact": "annual budget and rolling forecast", "quote": "• Izrada godišnjeg budžeta i mesečnog rolling forecast-a za četiri fabrike"},
+    {"requirement_id": 5, "verdict": "met", "fact": "monthly and annual reports", "quote": "• Mesečni i godišnji finansijski izveštaji po MSFI za upravu i vlasnike"},
+    {"requirement_id": 6, "verdict": "met", "fact": "advanced Excel with macros", "quote": "Excel ( napredni nivo, makroi ) / SAP / Power BI / MSFI /"},
+    {"requirement_id": 7, "verdict": "met", "fact": "SAP FI/CO daily", "quote": "• Rad u SAP-u ( FI/CO ) svakodnevno, od 2018. godine"},
+    {"requirement_id": 8, "verdict": "met", "fact": "SAP since 2018, about 8 years", "quote": "• Rad u SAP-u ( FI/CO ) svakodnevno, od 2018. godine"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English C1", "quote": "Engleski jezik - C1"},
+    {"requirement_id": 10, "verdict": "met", "fact": "ACCA and authorised accountant licence", "quote": "Licenca ovlašćenog računovođe, 2019."},
+    {"requirement_id": 11, "verdict": "met", "fact": "Power BI reports for plant directors", "quote": "• Izveštaji u Power BI-ju za direktore fabrika"}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 1, "business_analyst": 0, "project_manager": 0, "financial_controller": 3, "sales_manager": 0}
+}

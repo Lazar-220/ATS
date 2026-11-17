@@ -1,0 +1,21 @@
+{
+  "cv_id": "sm_01",
+  "position_id": "sales_manager",
+  "style": "sr_ascii",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "economics faculty", "quote": "2004 - 2009 Ekonomski fakultet u Subotici, smer Marketing"},
+    {"requirement_id": 2, "verdict": "met", "fact": "B2B sales since 2011, over 15 years", "quote": "06/2011 - 02/2016 Komercijalista, Sladex doo, Beograd"},
+    {"requirement_id": 3, "verdict": "met", "fact": "leads a team of six", "quote": "• Vodim prodajni tim od 6 komercijalista za B2B kupce u regionu"},
+    {"requirement_id": 4, "verdict": "met", "fact": "plan achieved at 112% and 108%", "quote": "• Ostvarenje godisnjeg plana prodaje: 112% u 2025, 108% u 2024"},
+    {"requirement_id": 5, "verdict": "met", "fact": "Salesforce pipeline and forecasts", "quote": "• Rad u Salesforce-u: pipeline, prognoze i mesecni izvestaji"},
+    {"requirement_id": 6, "verdict": "met", "fact": "annual contracts with large customers", "quote": "• Pregovori i zakljucivanje godisnjih ugovora sa velikim kupcima ( 12 ugovora preko 300.000 EUR )"},
+    {"requirement_id": 7, "verdict": "met", "fact": "English excellent", "quote": "Jezici: engleski - odlicno, nemacki - B1"},
+    {"requirement_id": 8, "verdict": "met", "fact": "driving licence B", "quote": "Vozacka dozvola B kategorije, spreman na putovanja po regionu"},
+    {"requirement_id": 9, "verdict": "met", "fact": "ready to travel in the region", "quote": "Vozacka dozvola B kategorije, spreman na putovanja po regionu"},
+    {"requirement_id": 10, "verdict": "met", "fact": "German B1", "quote": "Jezici: engleski - odlicno, nemacki - B1"},
+    {"requirement_id": 11, "verdict": "met", "fact": "packaging sales and FMCG", "quote": "• Prodaja ambalaze za prehrambenu industriju"}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 0, "business_analyst": 0, "project_manager": 0, "financial_controller": 0, "sales_manager": 3}
+}

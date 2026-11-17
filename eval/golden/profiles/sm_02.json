@@ -1,0 +1,21 @@
+{
+  "cv_id": "sm_02",
+  "position_id": "sales_manager",
+  "style": "sr_cyrillic",
+  "template": "two_column",
+  "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "faculty of technical sciences", "quote": "• Индустријско инжењерство"},
+    {"requirement_id": 2, "verdict": "partial", "fact": "sales since 07/2019 is 88 months of 60 if all sales counted, but B2B only since 09/2023: 38 months, 63%; the earlier job sold to retail shops, not businesses", "quote": "Комерцијалиста | Дунав Пак | 09/2023-данас"},
+    {"requirement_id": 3, "verdict": "not_met", "fact": "team of 3, below the minimum of 4", "quote": null},
+    {"requirement_id": 4, "verdict": "met", "fact": "plan achieved at 108%", "quote": "• Остварење плана: 108% у 2025."},
+    {"requirement_id": 5, "verdict": "met", "fact": "customer records in HubSpot", "quote": "• Евиденција купаца у HubSpot-у"},
+    {"requirement_id": 6, "verdict": "partial", "fact": "negotiates with mid-sized customers, not large ones", "quote": "• Преговори са средњим купцима"},
+    {"requirement_id": 7, "verdict": "met", "fact": "English B2", "quote": "• Енглески језик - Б2"},
+    {"requirement_id": 8, "verdict": "met", "fact": "driving licence B", "quote": "• Возачка дозвола Б категорије"},
+    {"requirement_id": 9, "verdict": "met", "fact": "ready to travel", "quote": "• Спреман на путовања"},
+    {"requirement_id": 10, "verdict": "not_met", "fact": "no German", "quote": null},
+    {"requirement_id": 11, "verdict": "met", "fact": "PET packaging for the food industry and FMCG", "quote": "• Продаја ПЕТ амбалаже за"}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 0, "business_analyst": 0, "project_manager": 0, "financial_controller": 0, "sales_manager": 2}
+}

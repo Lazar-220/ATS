@@ -1,0 +1,21 @@
+{
+  "cv_id": "ba_03",
+  "position_id": "business_analyst",
+  "style": "mixed",
+  "template": "single",
+  "hard_case": {"tag": "implicit_evidence", "note": "BPMN and UML are never named. Requirement 6 is met only through 'Swimlane dijagrami procesa u Visiju', which is process modelling in the notation family the requirement means."},
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "workshops written up as specifications", "quote": "• Requirements workshops with product owners and compliance, written up as specifications"},
+    {"requirement_id": 2, "verdict": "met", "fact": "business analyst since 09/2021, 62 months", "quote": "Business Analyst | Payfox | 09/2021 - present"},
+    {"requirement_id": 3, "verdict": "met", "fact": "user stories with acceptance criteria", "quote": "• User stories with acceptance criteria for the payments backlog"},
+    {"requirement_id": 4, "verdict": "met", "fact": "daily Jira", "quote": "• Backlog u Jira-i, svakodnevno"},
+    {"requirement_id": 5, "verdict": "met", "fact": "daily Jira since 09/2021, 62 months", "quote": "• Backlog u Jira-i, svakodnevno"},
+    {"requirement_id": 6, "verdict": "met", "fact": "implicit: swimlane process diagrams in Visio", "quote": "• Swimlane dijagrami procesa u Visiju za svaki novi proizvod"},
+    {"requirement_id": 7, "verdict": "met", "fact": "SQL checks after migrations", "quote": "• SQL upiti za proveru podataka posle migracija"},
+    {"requirement_id": 8, "verdict": "met", "fact": "information systems faculty", "quote": "Fakultet organizacionih nauka, Univerzitet u Beogradu 2013 - 2018"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English C1", "quote": "Mother tongue(s): Srpski Other language(s): English - C1"},
+    {"requirement_id": 10, "verdict": "not_met", "fact": "fintech for merchants, not an insurer or a bank", "quote": null},
+    {"requirement_id": 11, "verdict": "not_met", "fact": "no certification", "quote": null}
+  ],
+  "relevance": {"backend_developer": 1, "data_analyst": 1, "business_analyst": 2, "project_manager": 0, "financial_controller": 0, "sales_manager": 0}
+}

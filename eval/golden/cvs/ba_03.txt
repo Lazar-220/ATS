@@ -1,0 +1,32 @@
+Ivan Petrović
+Business Analyst
+05/11/1994
+(+381) 63 5550306
+Srbija, Beograd
+https://www.linkedin.com/in/ivan-petrovic-
+ba-5c7d21
+ivan.petrovic@example.com
+
+ABOUT ME
+Business analyst sa pet godina iskustva u fintech projektima, ranije programer.
+Znam da razgovaram i sa programerima i sa ljudima iz poslovanja.
+
+EXPERIENCE
+Business Analyst | Payfox | 09/2021 - present
+• Requirements workshops with product owners and compliance, written up as specifications
+• User stories with acceptance criteria for the payments backlog
+• Swimlane dijagrami procesa u Visiju za svaki novi proizvod
+• Backlog u Jira-i, svakodnevno
+• SQL upiti za proveru podataka posle migracija
+Software Developer | Lexis Soft | 08/2018 - 08/2021
+• Backend razvoj u Javi, učešće u analizi zahteva
+
+EDUCATION
+Fakultet organizacionih nauka, Univerzitet u Beogradu 2013 - 2018
+Smer Informacioni sistemi
+
+SKILLS
+Jira / Confluence / Visio / SQL / Java / Postman /
+
+LANGUAGE SKILLS
+Mother tongue(s): Srpski Other language(s): English - C1

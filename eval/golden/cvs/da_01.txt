@@ -1,0 +1,28 @@
+Marta Kovacevic
+Data Analyst
+Date of birth: 22/05/1993
+(+381) 61 5550301 | marta.kovacevic@example.com | Belgrade, Serbia
+LinkedIn: linkedin.com/in/marta-kovacevic-data
+
+ABOUT ME
+Data analyst with seven years of experience in retail and e-commerce analytics. I like
+turning messy data into a clear recommendation for the people who have to act on it.
+
+EXPERIENCE
+Senior Data Analyst | Retailia Group | 02/2020 - present
+• Daily SQL on a 400 GB BigQuery sales warehouse: joins, window functions, tuning
+• Weekly dashboards in Power BI for 30 store managers
+• Design and analysis of A/B tests for promotions ( 25 tests in 2025 )
+• Python ( pandas, statsmodels ) for cleaning and regression models of demand
+• Monthly presentations of results to the commercial director and category managers
+Data Analyst | Shopwave | 06/2019 - 01/2020
+• SQL reports and Excel models for the marketing team
+
+EDUCATION
+MSc in Statistics, Faculty of Mathematics, University of Belgrade | 2011 - 2017
+
+SKILLS
+SQL / BigQuery / Python / pandas / Power BI / Excel / R /
+
+LANGUAGE SKILLS
+Mother tongue(s): Serbian Other language(s): English - C1

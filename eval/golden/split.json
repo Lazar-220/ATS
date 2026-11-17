@@ -2,13 +2,23 @@
   "seed": 20261117,
   "test_fraction": 0.3,
   "assignment": {
+    "ba_01": "dev",
+    "ba_02": "dev",
+    "ba_03": "dev",
     "be_01": "test",
-    "be_02": "dev",
-    "be_03": "dev",
-    "be_04": "dev",
+    "be_02": "test",
+    "be_03": "test",
+    "be_04": "test",
+    "da_01": "dev",
+    "da_02": "dev",
+    "da_03": "dev",
+    "fc_01": "dev",
+    "fc_02": "dev",
     "pm_01": "test",
     "pm_02": "dev",
     "pm_03": "dev",
-    "pm_04": "dev"
+    "pm_04": "dev",
+    "sm_01": "dev",
+    "sm_02": "dev"
   }
 }

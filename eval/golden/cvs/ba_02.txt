@@ -1,0 +1,29 @@
+Lični podaci
+Prezime i ime Lazić Dragana
+Lokacija Srbija, Novi Sad
+Telefonski broj 065 5550305
+E-mail dragana.lazic@example.com
+Datum rođenja 08.12.1989.
+
+Radno iskustvo
+01/2020 - 12/2021 Poslovni analitičar, Fenix Osiguranje, Novi Sad
+ • Prikupljanje zahteva od poslovnih korisnika i izrada specifikacija
+ • User stories sa kriterijumima prihvatanja
+ • Rad u Jira-i svakog dana
+07/2021 - 08/2023 Poslovni analitičar ( honorarno ), Agro Soft, Novi Sad
+ • Zahtevi za aplikaciju za praćenje isporuka, radionice sa klijentom
+ • Dijagrami procesa u BPMN-u
+ • Podrška timu u Jira-i i Confluence-u
+
+Obrazovanje
+2008 - 2012 Ekonomski fakultet u Subotici
+Smer Poslovna informatika
+Prosek 8,03
+
+Obuka
+ • Analiza poslovnih procesa ( 3 dana )
+
+Lične veštine
+Poznavanje rada na računaru MS Office, Jira, Confluence, SQL ( osnovni upiti )
+Engleski jezik B2 ( govor i pisanje )
+Vozačka dozvola B kategorija

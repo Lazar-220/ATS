@@ -1,0 +1,21 @@
+{
+  "cv_id": "fc_02",
+  "position_id": "financial_controller",
+  "style": "sr_cyrillic",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "economics faculty, accounting and business finance", "quote": "2011 - 2015 Економски факултет, Универзитет у Нишу"},
+    {"requirement_id": 2, "verdict": "met", "fact": "accounting since 09/2018, more than 8 years", "quote": "02/2020 - данас Рачуновођа, Нишава Продукт доо, Ниш"},
+    {"requirement_id": 3, "verdict": "partial", "fact": "only a two-day basic IFRS course", "quote": "• Примена МСФИ - основни ниво ( 2 дана )"},
+    {"requirement_id": 4, "verdict": "not_met", "fact": "no budgeting or planning", "quote": null},
+    {"requirement_id": 5, "verdict": "met", "fact": "monthly and annual statements", "quote": "• Годишњи финансијски извештаји и завршни рачун"},
+    {"requirement_id": 6, "verdict": "met", "fact": "complex Excel with pivot and macros", "quote": "• Сложене табеле у Excel-у ( пивот, ВЛООКУП, макро )"},
+    {"requirement_id": 7, "verdict": "met", "fact": "SAP FI", "quote": "• Рад у SAP-у од септембра 2025. ( модул FI )"},
+    {"requirement_id": 8, "verdict": "partial", "fact": "SAP since 09/2025 is 14 months of 24", "quote": "• Рад у SAP-у од септембра 2025. ( модул FI )"},
+    {"requirement_id": 9, "verdict": "partial", "fact": "English A2, with a dictionary", "quote": "Енглески језик А2 ( разумем, пишем уз речник )"},
+    {"requirement_id": 10, "verdict": "not_met", "fact": "no licence or ACCA/CFA", "quote": null},
+    {"requirement_id": 11, "verdict": "not_met", "fact": "no Power BI", "quote": null}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 0, "business_analyst": 0, "project_manager": 0, "financial_controller": 2, "sales_manager": 0}
+}

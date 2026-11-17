@@ -1,0 +1,51 @@
+Contact
+Phone
+(+381) 62 5550304
+Email
+nina.stojkovic@example.com
+Location
+Serbia, Belgrade
+
+Skills
+Business analysis / BPMN / UML /
+User stories / Jira / Confluence /
+SQL / Visio / Miro /
+
+Languages
+English: C1
+German: B1
+
+Certificates
+CBAP, IIBA, 2022
+
+Other
+Driving license:
+Category B
+=== RIGHT COLUMN ===
+Nina Stojkovic
+Business Analyst
+Date of birth: 17/08/1990
+
+Experience
+Senior Business Analyst
+Delta Insurance, Belgrade
+03/2019 – ongoing
+Workshops with underwriters and claims
+experts, requirements in Confluence
+User stories with acceptance criteria for
+two policy administration releases a year
+Process models in BPMN for claims handling
+Jira backlog, sprints and release notes
+SQL checks of migrated policy data
+
+Business Analyst
+Orion Bank, Belgrade
+09/2016 – 02/2019
+Requirements for a loan origination app
+Process diagrams in UML and BPMN
+Daily work in Jira
+
+Education
+BSc in Information Systems
+Faculty of Organizational Sciences
+2009 – 2013
