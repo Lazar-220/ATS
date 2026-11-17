@@ -10,7 +10,7 @@ Read this at the start of every session. Update it at the end of every phase.
 | 1.1a Skeleton | merged | 2026-11-16 | `--no-ff` merge of `phase/1.1a-skeleton`. Commit 606dd06 alone fails pyright; fixed by 65f5d37, left unsquashed on the owner's decision. |
 | 1.1b Ingest | merged | 2026-11-16 | `--no-ff` merge of `phase/1.1b-ingest`, five feature commits and one docs commit. |
 | 1.2 Requirements | merged | 2026-11-17 | `--no-ff` merge of `phase/1.2-requirements`: five feature commits, one fix, one test, docs. Merged with the `gemini-3.8-flash` smoke criterion open (owner-approved deviation); superseded on 2026-11-17 when the default moved to `gemini-3.6-flash`, where the smoke run passed. |
-| 1.3 Golden set and harness | built, awaiting owner confirmation | | Branch `phase/1.3-golden-set`, not merged. 80 CVs, six positions, 866 gold verdicts, harness, extraction gate met (F1 97.7%). The manual 20% check of the gold labels is deferred by the owner (approved deviation); an independent audit stands in for it. Gold labels not manually verified. |
+| 1.3 Golden set and harness | merged | 2026-11-17 | `--no-ff` merge of `phase/1.3-golden-set`: schemas and loaders, PDF renderer, harness, 80 CVs over six positions (866 gold verdicts), extraction F1 97.7% (gate met). **Deviations:** the manual 20% check of the gold labels is deferred by the owner (an independent audit, 99.0% agreement, stands in; gold labels not manually verified); DOCX golden CVs dropped (ingest is PDF-only); the default model is `gemini-3.6-flash`, not the plan's `gemini-3.8-flash`. |
 | 1.4a CV parsing | not started | | |
 | 1.4b Judge and score | not started | | |
 | 1.5 Interface | not started | | |
