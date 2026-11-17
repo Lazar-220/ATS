@@ -182,6 +182,26 @@ runs out of attempts leaves the assessment `failed` (upload the CV again to retr
 also when the position's requirement setup failed. A worker that started before this phase does not
 know `judge` or `rejudge` (check `handlers=` in its first log line).
 
+### Read the ranking and an assessment (from phase 1.4b)
+
+Both are read-only and never trigger scoring:
+
+```bash
+curl http://localhost:8000/positions/7208d077-a80a-4c0e-af0e-1f2fcf06ff62/ranking
+# {"position_id":"7208...","rubric_version":1,"rubric_status":"unconfirmed","rows":[
+#   {"assessment_id":"...","candidate_name":"...","filename":"cv_ana.pdf","status":"done","score":87.5,
+#    "mandatory_failed":false,"flagged_verdicts":0,"rubric_version":1,"rubric_unconfirmed":true}, ...]}
+curl http://localhost:8000/assessments/<assessment_id>
+# score, flags, tenure, "cv_text" (the CV's raw text) and "verdicts":[{"text":...,"verdict":"met",
+#   "rationale":...,"flags":[],"evidence":{"quote":...,"char_start":120,"char_end":158}}, ...]
+```
+
+Order: assessments that are `done` first, then candidates with no failed mandatory requirement,
+then score (high to low), then arrival. A `failed` assessment is last with no score.
+`evidence` is a quote that code found in the CV, and its offsets point into `cv_text`; it is `null`
+for `not_met` and for a verdict flagged `quote_not_found` or `no_evidence`. `rubric_unconfirmed` is
+read from the position at the time of the request. 404 for an unknown position or assessment.
+
 ## 3. Commands
 
 | Command | Does | From phase |
