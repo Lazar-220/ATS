@@ -14,6 +14,7 @@ from ats.eval.harness import (
 )
 from ats.eval.render import LineTooWideError, render_golden
 from ats.eval.split import DEFAULT_SEED
+from ats.eval.stages import StageError, SubsetError, load_contacts
 from ats.eval.stub import StubJudge
 from ats.llm.cache import ResponseCache
 from ats.llm.factory import create_llm_client
@@ -21,7 +22,12 @@ from ats.llm.types import LLMError
 from ats.settings import get_settings
 
 RESULTS_DIR = DEFAULT_ROOT.parent / "results"
-STAGES_BY_NAME: dict[str, Stage] = {"extraction": "extraction", "verdicts": "verdicts"}
+STAGES_BY_NAME: dict[str, Stage] = {
+    "extraction": "extraction",
+    "verdicts": "verdicts",
+    "masking": "masking",
+    "parsing": "parsing",
+}
 
 
 def _build(args: argparse.Namespace) -> int:
@@ -69,7 +75,8 @@ def _run(args: argparse.Namespace) -> int:
             file=sys.stderr,
         )
         return 2
-    client = create_llm_client(settings) if "extraction" in stages else None
+    needs_model = "extraction" in stages or "parsing" in stages
+    client = create_llm_client(settings) if needs_model else None
     result = run_eval(
         golden,
         variant=args.variant,
@@ -80,6 +87,7 @@ def _run(args: argparse.Namespace) -> int:
         client=client,
         model=settings.llm_model,
         min_chars_per_page=settings.min_chars_per_page,
+        contacts=load_contacts(Path(args.golden)) if "masking" in stages else None,
     )
     print(format_report(result))
     print()
@@ -104,7 +112,8 @@ def main(argv: list[str] | None = None) -> int:
     run.add_argument(
         "--stages",
         default="verdicts",
-        help="comma list of extraction (calls the model) and verdicts (stub judge until 1.4b)",
+        help="comma list: extraction and parsing call the model; verdicts (stub judge until "
+        "1.4b) and masking do not. parsing runs a seeded subset of the dev split only",
     )
     run.add_argument("--dry-run", action="store_true", help="print calls and cost, call nothing")
     run.add_argument("--yes", action="store_true", help="confirm a run of more than 5 model calls")
@@ -117,7 +126,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     try:
         return args.run(args)
-    except (EvalError, LLMError, RuntimeError) as exc:
+    except (EvalError, StageError, SubsetError, LLMError, RuntimeError) as exc:
         print(f"Eval failed: {exc}", file=sys.stderr)
         return 1
     except LineTooWideError as exc:

@@ -13,6 +13,8 @@ from psycopg.rows import DictRow
 from psycopg_pool import ConnectionPool
 
 from ats.db import task_queue
+from ats.llm.fake import FakeLLMClient
+from ats.pipeline.parsing import ParsedCV
 from ats.worker import ingest as ingest_module
 from integration.test_worker import wait_for
 
@@ -63,16 +65,16 @@ def test_three_cvs_get_clean_text_with_the_right_language_and_script(
         "WHERE kind = 'cv' ORDER BY filename"
     ).fetchall()
     latin, cyrillic, english = cvs
-    assert (latin["status"], latin["lang"], latin["script"]) == ("extracted", "sr", "latin")
+    assert (latin["status"], latin["lang"], latin["script"]) == ("parsed", "sr", "latin")
     assert "Vođenje tima od osam ljudi" in latin["raw_text"]
     assert (cyrillic["status"], cyrillic["lang"], cyrillic["script"]) == (
-        "extracted",
+        "parsed",
         "sr",
         "cyrillic",
     )
     # Stored in the original script; only the lexical comparison transliterates.
     assert "Вођење тима од осам људи" in cyrillic["raw_text"]
-    assert (english["status"], english["lang"], english["script"]) == ("extracted", "en", "latin")
+    assert (english["status"], english["lang"], english["script"]) == ("parsed", "en", "latin")
     assert "Led a team of eight people" in english["raw_text"]
 
 
@@ -97,7 +99,7 @@ def test_a_scanned_cv_is_rejected_and_the_others_still_finish(
         "SELECT status, status_message, raw_text FROM document WHERE kind = 'cv' ORDER BY status"
     ).fetchall()
     extracted, rejected = rows
-    assert extracted["status"] == "extracted"
+    assert extracted["status"] == "parsed"
     assert rejected["status"] == "rejected"
     assert "scan" in rejected["status_message"]
     assert rejected["raw_text"] is None
@@ -169,7 +171,7 @@ def test_unexpected_errors_fail_the_document_and_a_reupload_recovers(
 
     recovered = conn.execute("SELECT status, raw_text FROM document WHERE kind = 'cv'").fetchone()
     assert recovered is not None
-    assert recovered["status"] == "extracted"
+    assert recovered["status"] == "parsed"
     assert "Led a team" in recovered["raw_text"]
 
 
@@ -185,5 +187,140 @@ def test_status_endpoint_shows_done_and_the_scan_message(
     by_name = {d["filename"]: d for d in body["documents"]}
     assert by_name["cv0.pdf"]["status"] == "rejected"
     assert "looks like a scan" in by_name["cv0.pdf"]["message"]
-    assert by_name["cv1.pdf"]["status"] == "extracted"
+    assert by_name["cv1.pdf"]["status"] == "parsed"
     assert by_name["cv1.pdf"]["message"] is None
+
+
+CV_PERSONAL = make_pdf(
+    "Nina Stojkovic\nnina.stojkovic@example.com\n(+381) 62 5550304\n"
+    + "Business analyst at Delta Insurance, requirements and Jira, 2019-2023.\n" * 4
+)
+
+
+def _parsed_cv(is_cv: bool) -> ParsedCV:
+    return ParsedCV(
+        is_cv=is_cv,
+        suspected_injection=False,
+        experience=[],
+        education=[],
+        skills=[],
+        certificates=[],
+        languages=[],
+        projects=[],
+    )
+
+
+def test_the_model_sees_only_masked_text_and_the_originals_land_in_candidate(
+    client: TestClient,
+    worker: ConnectionPool,
+    conn: psycopg.Connection[DictRow],
+    fake_llm: FakeLLMClient,
+) -> None:
+    accepted = upload(client, POSTING, [CV_PERSONAL])
+    wait_until_settled(conn)
+
+    prompts = [call.system + call.user for call in fake_llm.calls if "<cv>" in call.user]
+    assert len(prompts) == 1
+    for secret in ("Nina", "Stojkovic", "nina.stojkovic@example.com", "5550304"):
+        assert secret not in prompts[0]
+    cv = conn.execute(
+        "SELECT status, candidate_id, masked_text, mask_spans, parsed_json, raw_text "
+        "FROM document WHERE kind = 'cv'"
+    ).fetchone()
+    assert cv is not None and cv["status"] == "parsed"
+    assert "Nina" in cv["raw_text"] and "Nina" not in cv["masked_text"]
+    assert {span["placeholder"] for span in cv["mask_spans"]} >= {"[NAME]", "[EMAIL]", "[PHONE]"}
+    assert cv["parsed_json"]["tenure"]["total_months"] == 0
+    candidate = conn.execute(
+        "SELECT full_name, email, phone FROM candidate WHERE id = %s", (cv["candidate_id"],)
+    ).fetchone()
+    assert candidate == {
+        "full_name": "Nina Stojkovic",
+        "email": "nina.stojkovic@example.com",
+        "phone": "(+381) 62 5550304",
+    }
+    linked = conn.execute(
+        "SELECT candidate_id FROM request_candidate WHERE request_id = %s",
+        (accepted["request_id"],),
+    ).fetchone()
+    assert linked is not None and linked["candidate_id"] == cv["candidate_id"]
+
+
+def test_a_document_that_is_not_a_cv_is_flagged_and_gets_no_candidate(
+    client: TestClient,
+    worker: ConnectionPool,
+    conn: psycopg.Connection[DictRow],
+    fake_llm: FakeLLMClient,
+) -> None:
+    fake_llm.responder = lambda _request, _schema: _parsed_cv(False)
+    accepted = upload(client, POSTING, [CV_PERSONAL])
+    wait_until_settled(conn)
+
+    cv = conn.execute(
+        "SELECT status, candidate_id, flags, masked_text FROM document WHERE kind = 'cv'"
+    ).fetchone()
+    assert cv is not None
+    assert cv["status"] == "parsed" and cv["candidate_id"] is None
+    assert [flag["code"] for flag in cv["flags"]] == ["not_a_cv"]
+    assert cv["masked_text"] is not None
+    assert conn.execute("SELECT count(*) AS n FROM candidate").fetchone() == {"n": 0}
+    linked = conn.execute(
+        "SELECT candidate_id FROM request_candidate WHERE request_id = %s",
+        (accepted["request_id"],),
+    ).fetchone()
+    assert linked is not None and linked["candidate_id"] is None
+
+
+def test_a_redelivered_ingest_makes_no_second_candidate_and_no_second_call(
+    client: TestClient,
+    worker: ConnectionPool,
+    conn: psycopg.Connection[DictRow],
+    fake_llm: FakeLLMClient,
+) -> None:
+    upload(client, POSTING, [CV_PERSONAL])
+    wait_until_settled(conn)
+    cv = conn.execute("SELECT id FROM document WHERE kind = 'cv'").fetchone()
+    assert cv is not None
+    calls_before = len(fake_llm.calls)
+
+    with worker.connection() as queue:
+        task_queue.enqueue(queue, "ingest", {"document_id": str(cv["id"])}, dedup_key="redeliver")
+    wait_until_settled(conn)
+
+    assert len(fake_llm.calls) == calls_before
+    assert conn.execute("SELECT count(*) AS n FROM candidate").fetchone() == {"n": 1}
+
+
+def test_a_cv_stuck_at_extracted_is_parsed_when_its_job_runs_again(
+    client: TestClient,
+    worker: ConnectionPool,
+    conn: psycopg.Connection[DictRow],
+    fake_llm: FakeLLMClient,
+) -> None:
+    """The worker died after extraction was committed: the retry must carry on, not skip."""
+    upload(client, POSTING, [CV_PERSONAL])
+    wait_until_settled(conn)
+    cv = conn.execute("SELECT id FROM document WHERE kind = 'cv'").fetchone()
+    assert cv is not None
+    conn.execute(
+        "UPDATE document SET status = 'extracted', candidate_id = NULL, masked_text = NULL, "
+        "mask_spans = NULL, parsed_json = NULL WHERE id = %s",
+        (cv["id"],),
+    )
+    conn.execute("UPDATE request_candidate SET candidate_id = NULL")
+    conn.execute("DELETE FROM candidate")
+
+    with worker.connection() as queue:
+        task_queue.enqueue(queue, "ingest", {"document_id": str(cv["id"])}, dedup_key="resume")
+    wait_until_settled(conn)
+    # The queue is idle once the document is parsed; wait for the status itself.
+    wait_for(
+        lambda: (
+            (
+                conn.execute("SELECT status FROM document WHERE kind = 'cv'").fetchone()
+                or {"status": ""}
+            )["status"]
+            == "parsed"
+        )
+    )
+    assert conn.execute("SELECT count(*) AS n FROM candidate").fetchone() == {"n": 1}

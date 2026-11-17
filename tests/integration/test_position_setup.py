@@ -13,11 +13,13 @@ from ats.db import task_queue
 from ats.db.pool import create_pool
 from ats.db.task_queue import Job
 from ats.llm.fake import FakeLLMClient
+from ats.llm.types import LLMRequest
+from ats.pipeline.parsing import ParsedCV
 from ats.pipeline.requirements import RequirementList
 from ats.services.requirements import POSITION_SETUP_JOB
 from ats.worker.ingest import ingest
 from ats.worker.position_setup import position_setup
-from integration.test_ingest import CV_ENGLISH, CV_LATIN, upload, wait_until_settled
+from integration.test_ingest import CV_ENGLISH, CV_LATIN, _parsed_cv, upload, wait_until_settled
 from integration.test_worker import wait_for
 
 pytestmark = pytest.mark.integration
@@ -48,7 +50,12 @@ SCRIPTED = RequirementList.model_validate_json(
 
 
 def scripted(fake: FakeLLMClient) -> None:
-    fake.responder = lambda _request, _schema: SCRIPTED
+    fake.responder = lambda _request, schema: _parsed_cv(True) if schema is ParsedCV else SCRIPTED
+
+
+def posting_calls(fake: FakeLLMClient) -> list[LLMRequest]:
+    """The requirement extractions; CV parsing calls go through the same client."""
+    return [call for call in fake.calls if "<posting>" in call.user]
 
 
 def test_uploading_a_posting_creates_unconfirmed_requirements(
@@ -84,8 +91,8 @@ def test_uploading_a_posting_creates_unconfirmed_requirements(
     assert degree["parent_id"] is None and years["parent_id"] is None
     assert docker["kind"] == "nice_to_have"
     assert {row["rubric_version"] for row in rows} == {1}
-    assert len(fake_llm.calls) == 1
-    assert "Senior Java developer" in fake_llm.calls[0].user
+    assert len(posting_calls(fake_llm)) == 1
+    assert "Senior Java developer" in posting_calls(fake_llm)[0].user
 
 
 def test_the_same_posting_again_skips_setup_entirely(
@@ -101,7 +108,7 @@ def test_the_same_posting_again_skips_setup_entirely(
     upload(client, POSTING, [CV_LATIN])
     wait_until_settled(conn)
 
-    assert len(fake_llm.calls) == 1
+    assert len(posting_calls(fake_llm)) == 1
     assert conn.execute("SELECT count(*) AS n FROM requirement").fetchone() == {"n": 5}
     setups = conn.execute(
         "SELECT count(*) AS n FROM task_queue WHERE job_type = %s", (POSITION_SETUP_JOB,)
@@ -141,7 +148,7 @@ def test_running_the_job_twice_extracts_once(
     position_setup(job, worker)
     position_setup(job, worker)
 
-    assert len(fake_llm.calls) == 1
+    assert len(posting_calls(fake_llm)) == 1
     assert conn.execute("SELECT count(*) AS n FROM requirement").fetchone() == {"n": 5}
 
 
