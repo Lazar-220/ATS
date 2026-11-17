@@ -1,0 +1,84 @@
+{"cv_id": "be_01", "position_id": "backend_developer", "requirement_id": 1, "verdict": "met", "quote": "professional experience in Python,"}
+{"cv_id": "be_01", "position_id": "backend_developer", "requirement_id": 2, "verdict": "met", "quote": "09/2018 – 02/2021"}
+{"cv_id": "be_01", "position_id": "backend_developer", "requirement_id": 3, "verdict": "met", "quote": "Designed and built the REST API for"}
+{"cv_id": "be_01", "position_id": "backend_developer", "requirement_id": 4, "verdict": "met", "quote": "SQL reports for the finance team"}
+{"cv_id": "be_01", "position_id": "backend_developer", "requirement_id": 5, "verdict": "met", "quote": "Unit and integration tests with pytest,"}
+{"cv_id": "be_01", "position_id": "backend_developer", "requirement_id": 6, "verdict": "met", "quote": "Git with pull-request reviews"}
+{"cv_id": "be_01", "position_id": "backend_developer", "requirement_id": 7, "verdict": "met", "quote": "Docker images for all services,"}
+{"cv_id": "be_01", "position_id": "backend_developer", "requirement_id": 8, "verdict": "met", "quote": "BSc in Computer Science"}
+{"cv_id": "be_01", "position_id": "backend_developer", "requirement_id": 9, "verdict": "met", "quote": "English: C1 (Cambridge Advanced)"}
+{"cv_id": "be_01", "position_id": "backend_developer", "requirement_id": 10, "verdict": "met", "quote": "RabbitMQ for order events, instead of"}
+{"cv_id": "be_01", "position_id": "backend_developer", "requirement_id": 11, "verdict": "met", "quote": "deployment to AWS ECS"}
+{"cv_id": "be_02", "position_id": "backend_developer", "requirement_id": 1, "verdict": "met", "quote": "Poznavanje rada na računaru Python, Flask, MySQL, Git, MS Office (Word, Excel)"}
+{"cv_id": "be_02", "position_id": "backend_developer", "requirement_id": 2, "verdict": "partial", "quote": "12/2024 - danas Programer, Kodlab doo, Niš"}
+{"cv_id": "be_02", "position_id": "backend_developer", "requirement_id": 3, "verdict": "met", "quote": "Razvoj REST API-ja u Flasku ( aplikacija za zakazivanje termina )"}
+{"cv_id": "be_02", "position_id": "backend_developer", "requirement_id": 4, "verdict": "met", "quote": "Pisanje SQL upita, održavanje MySQL baze ( 30 tabela )"}
+{"cv_id": "be_02", "position_id": "backend_developer", "requirement_id": 5, "verdict": "not_met", "quote": null}
+{"cv_id": "be_02", "position_id": "backend_developer", "requirement_id": 6, "verdict": "met", "quote": "Rad u Gitu ( grane, pull request, pregled koda sa kolegama )"}
+{"cv_id": "be_02", "position_id": "backend_developer", "requirement_id": 7, "verdict": "partial", "quote": "Osnovno poznavanje Dockera ( lokalno okruženje, docker-compose )"}
+{"cv_id": "be_02", "position_id": "backend_developer", "requirement_id": 8, "verdict": "met", "quote": "2020 - 2024 Elektronski fakultet, Univerzitet u Nišu"}
+{"cv_id": "be_02", "position_id": "backend_developer", "requirement_id": 9, "verdict": "met", "quote": "Engleski jezik B2 (pisanje i govor)"}
+{"cv_id": "be_02", "position_id": "backend_developer", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "be_02", "position_id": "backend_developer", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "be_03", "position_id": "backend_developer", "requirement_id": 1, "verdict": "met", "quote": "• Razvoj servisa u Pythonu ( Django ) za sistem narudzbina"}
+{"cv_id": "be_03", "position_id": "backend_developer", "requirement_id": 2, "verdict": "met", "quote": "Backend programer, Morava Labs, Kragujevac 09/2022 - danas"}
+{"cv_id": "be_03", "position_id": "backend_developer", "requirement_id": 3, "verdict": "met", "quote": "• REST API sa preko 60 endpointa"}
+{"cv_id": "be_03", "position_id": "backend_developer", "requirement_id": 4, "verdict": "met", "quote": "• Optimizacija SQL upita u PostgreSQL bazi"}
+{"cv_id": "be_03", "position_id": "backend_developer", "requirement_id": 5, "verdict": "met", "quote": "• Unit testovi u pytest-u za sve nove servise"}
+{"cv_id": "be_03", "position_id": "backend_developer", "requirement_id": 6, "verdict": "met", "quote": "• Rad u Gitu, pregled koda u GitLab-u"}
+{"cv_id": "be_03", "position_id": "backend_developer", "requirement_id": 7, "verdict": "met", "quote": "• Kontejnerizacija servisa u Dockeru, deploy na Azure App Service"}
+{"cv_id": "be_03", "position_id": "backend_developer", "requirement_id": 8, "verdict": "partial", "quote": "Osnovne studije, cetvrta godina, diplomski rad u izradi"}
+{"cv_id": "be_03", "position_id": "backend_developer", "requirement_id": 9, "verdict": "met", "quote": "Maternji jezik: srpski Strani jezici: engleski - tecno"}
+{"cv_id": "be_03", "position_id": "backend_developer", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "be_03", "position_id": "backend_developer", "requirement_id": 11, "verdict": "met", "quote": "• Kontejnerizacija servisa u Dockeru, deploy na Azure App Service"}
+{"cv_id": "be_04", "position_id": "backend_developer", "requirement_id": 1, "verdict": "met", "quote": "Softver inženjer sa šest godina iskustva, najviše u backend razvoju na Python-u."}
+{"cv_id": "be_04", "position_id": "backend_developer", "requirement_id": 2, "verdict": "met", "quote": "Software Engineer, Vega Logistics, Beograd 04/2021 - present"}
+{"cv_id": "be_04", "position_id": "backend_developer", "requirement_id": 3, "verdict": "met", "quote": "• Designed the public HTTP/JSON interface for our mobile apps: versioned resources,"}
+{"cv_id": "be_04", "position_id": "backend_developer", "requirement_id": 4, "verdict": "met", "quote": "• Tuning of slow PostgreSQL queries ( EXPLAIN ANALYZE, partial indexes )"}
+{"cv_id": "be_04", "position_id": "backend_developer", "requirement_id": 5, "verdict": "met", "quote": "• Pisanje testova u pytest-u za sve nove module, svaki PR prolazi code review"}
+{"cv_id": "be_04", "position_id": "backend_developer", "requirement_id": 6, "verdict": "met", "quote": "• Radio sam u Git-u u timu od pet ljudi"}
+{"cv_id": "be_04", "position_id": "backend_developer", "requirement_id": 7, "verdict": "met", "quote": "• Order service packaged in Docker and deployed on GCP Cloud Run"}
+{"cv_id": "be_04", "position_id": "backend_developer", "requirement_id": 8, "verdict": "met", "quote": "Matematički fakultet, Univerzitet u Beogradu 2015 - 2020"}
+{"cv_id": "be_04", "position_id": "backend_developer", "requirement_id": 9, "verdict": "met", "quote": "Mother tongue(s): Srpski Other language(s): English - C1"}
+{"cv_id": "be_04", "position_id": "backend_developer", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "be_04", "position_id": "backend_developer", "requirement_id": 11, "verdict": "met", "quote": "• Order service packaged in Docker and deployed on GCP Cloud Run"}
+{"cv_id": "pm_01", "position_id": "project_manager", "requirement_id": 1, "verdict": "met", "quote": "Fakultet organizacionih nauka, Univerzitet u Beogradu | master studije | 2011 - 2016"}
+{"cv_id": "pm_01", "position_id": "project_manager", "requirement_id": 2, "verdict": "met", "quote": "Rukovodilac projekata sa 10 godina iskustva u isporuci softvera za finansijski sektor,"}
+{"cv_id": "pm_01", "position_id": "project_manager", "requirement_id": 3, "verdict": "met", "quote": "• Uvođenje Scrum-a u dva tima, Scrum Master od 2019. godine"}
+{"cv_id": "pm_01", "position_id": "project_manager", "requirement_id": 4, "verdict": "met", "quote": "• Uvođenje Scrum-a u dva tima, Scrum Master od 2019. godine"}
+{"cv_id": "pm_01", "position_id": "project_manager", "requirement_id": 5, "verdict": "met", "quote": "• Sprint planiranje, retrospektive i backlog u alatu Jira"}
+{"cv_id": "pm_01", "position_id": "project_manager", "requirement_id": 6, "verdict": "met", "quote": "• Izrada i praćenje budžeta svakog projekta, mesečno izveštavanje upravnog odbora"}
+{"cv_id": "pm_01", "position_id": "project_manager", "requirement_id": 7, "verdict": "met", "quote": "• Vođenje tima od 9 ljudi ( programeri, testeri, analitičar )"}
+{"cv_id": "pm_01", "position_id": "project_manager", "requirement_id": 8, "verdict": "met", "quote": "Engleski jezik - C1 / Nemački jezik - A2"}
+{"cv_id": "pm_01", "position_id": "project_manager", "requirement_id": 9, "verdict": "met", "quote": "PMP - Project Management Institute (2020)"}
+{"cv_id": "pm_01", "position_id": "project_manager", "requirement_id": 10, "verdict": "met", "quote": "• Vođenje projekata razvoja softvera za osiguravajuće kompanije"}
+{"cv_id": "pm_02", "position_id": "project_manager", "requirement_id": 1, "verdict": "met", "quote": "2013 - 2017 Факултет техничких наука, Универзитет у Новом Саду"}
+{"cv_id": "pm_02", "position_id": "project_manager", "requirement_id": 2, "verdict": "partial", "quote": "03/2018 - 02/2020 Руководилац пројеката, Тамиш Софтвер, Панчево"}
+{"cv_id": "pm_02", "position_id": "project_manager", "requirement_id": 3, "verdict": "met", "quote": "• Увођење Scrum-а у тим од 5 људи, двонедељни спринтови"}
+{"cv_id": "pm_02", "position_id": "project_manager", "requirement_id": 4, "verdict": "met", "quote": "01/2019 - 04/2021 Руководилац пројеката ( хонорарно ), Банат Дигитал, Зрењанин"}
+{"cv_id": "pm_02", "position_id": "project_manager", "requirement_id": 5, "verdict": "met", "quote": "• Планирање рокова у алату Jira, недељни извештаји за клијента"}
+{"cv_id": "pm_02", "position_id": "project_manager", "requirement_id": 6, "verdict": "met", "quote": "• Израда и праћење буџета пројеката ( до 80.000 евра )"}
+{"cv_id": "pm_02", "position_id": "project_manager", "requirement_id": 7, "verdict": "met", "quote": "• Тим од 6 програмера и тестера"}
+{"cv_id": "pm_02", "position_id": "project_manager", "requirement_id": 8, "verdict": "met", "quote": "Енглески језик Б2 ( говор и писање )"}
+{"cv_id": "pm_02", "position_id": "project_manager", "requirement_id": 9, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_02", "position_id": "project_manager", "requirement_id": 10, "verdict": "met", "quote": "• Вођење пројеката развоја веб апликација за локалне самоуправе"}
+{"cv_id": "pm_03", "position_id": "project_manager", "requirement_id": 1, "verdict": "met", "quote": "BSc in Business Administration, Faculty of Economics, University of Belgrade 2015 - 2019"}
+{"cv_id": "pm_03", "position_id": "project_manager", "requirement_id": 2, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_03", "position_id": "project_manager", "requirement_id": 3, "verdict": "partial", "quote": "• Two-day Scrum workshop, basic knowledge of Scrum roles and events"}
+{"cv_id": "pm_03", "position_id": "project_manager", "requirement_id": 4, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_03", "position_id": "project_manager", "requirement_id": 5, "verdict": "met", "quote": "• Backlog and sprint boards in Jira, weekly status call with the client"}
+{"cv_id": "pm_03", "position_id": "project_manager", "requirement_id": 6, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_03", "position_id": "project_manager", "requirement_id": 7, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_03", "position_id": "project_manager", "requirement_id": 8, "verdict": "met", "quote": "Mother tongue(s): Serbian Other language(s): English - native-level ( grew up between"}
+{"cv_id": "pm_03", "position_id": "project_manager", "requirement_id": 9, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_03", "position_id": "project_manager", "requirement_id": 10, "verdict": "met", "quote": "• Delivery of two mobile apps for retail clients"}
+{"cv_id": "pm_04", "position_id": "project_manager", "requirement_id": 1, "verdict": "met", "quote": "• Elektrotehnički fakultet"}
+{"cv_id": "pm_04", "position_id": "project_manager", "requirement_id": 2, "verdict": "partial", "quote": "Sava Systems | Beograd | 01/2020-12/2022"}
+{"cv_id": "pm_04", "position_id": "project_manager", "requirement_id": 3, "verdict": "met", "quote": "Scrum Master tima | 04/2021-12/2024"}
+{"cv_id": "pm_04", "position_id": "project_manager", "requirement_id": 4, "verdict": "met", "quote": "Scrum Master tima | 04/2021-12/2024"}
+{"cv_id": "pm_04", "position_id": "project_manager", "requirement_id": 5, "verdict": "met", "quote": "• Backlog i sprintovi u Jira-i"}
+{"cv_id": "pm_04", "position_id": "project_manager", "requirement_id": 6, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_04", "position_id": "project_manager", "requirement_id": 7, "verdict": "met", "quote": "• Tim od 7 programera i 2 testera"}
+{"cv_id": "pm_04", "position_id": "project_manager", "requirement_id": 8, "verdict": "met", "quote": "• Engleski jezik - C1"}
+{"cv_id": "pm_04", "position_id": "project_manager", "requirement_id": 9, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_04", "position_id": "project_manager", "requirement_id": 10, "verdict": "met", "quote": "• Vođenje tri projekta za klijente"}

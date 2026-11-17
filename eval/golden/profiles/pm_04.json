@@ -1,0 +1,20 @@
+{
+  "cv_id": "pm_04",
+  "position_id": "project_manager",
+  "style": "sr_latin",
+  "template": "two_column",
+  "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "electrical engineering faculty, a technical field", "quote": "• Elektrotehnički fakultet"},
+    {"requirement_id": 2, "verdict": "partial", "fact": "project lead 01/2020-12/2022 is 36 months of 48; the tech lead job after it is not project management", "quote": "Sava Systems | Beograd | 01/2020-12/2022"},
+    {"requirement_id": 3, "verdict": "met", "fact": "Scrum Master of his team", "quote": "Scrum Master tima | 04/2021-12/2024"},
+    {"requirement_id": 4, "verdict": "met", "fact": "Scrum Master 04/2021-12/2024, 45 months", "quote": "Scrum Master tima | 04/2021-12/2024"},
+    {"requirement_id": 5, "verdict": "met", "fact": "backlog and sprints in Jira", "quote": "• Backlog i sprintovi u Jira-i"},
+    {"requirement_id": 6, "verdict": "not_met", "fact": "no budget work mentioned", "quote": null},
+    {"requirement_id": 7, "verdict": "met", "fact": "team of 7 developers and 2 testers", "quote": "• Tim od 7 programera i 2 testera"},
+    {"requirement_id": 8, "verdict": "met", "fact": "English C1", "quote": "• Engleski jezik - C1"},
+    {"requirement_id": 9, "verdict": "not_met", "fact": "no PMP or PRINCE2; a Scrum course is not one of them", "quote": null},
+    {"requirement_id": 10, "verdict": "met", "fact": "software projects for banks", "quote": "• Vođenje tri projekta za klijente"}
+  ],
+  "relevance": {"backend_developer": 2, "project_manager": 2}
+}

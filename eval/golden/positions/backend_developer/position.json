@@ -1,0 +1,29 @@
+{
+  "id": "backend_developer",
+  "title": "Backend Developer",
+  "lang": "en",
+  "requirements": [
+    {"id": 1, "text": "Strong knowledge of Python", "kind": "mandatory", "weight": 3, "min_months": null, "parent": null,
+     "aliases": ["Python", "Python proficiency", "Strong Python skills"]},
+    {"id": 2, "text": "At least 3 years of professional experience with Python", "kind": "mandatory", "weight": 1, "min_months": 36, "parent": 1,
+     "aliases": ["3+ years of Python experience", "3 years of professional Python experience"]},
+    {"id": 3, "text": "Extensive experience designing and building REST APIs", "kind": "mandatory", "weight": 3, "min_months": null, "parent": null,
+     "aliases": ["REST API experience", "Design and development of REST APIs"]},
+    {"id": 4, "text": "Working knowledge of SQL", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["SQL", "SQL knowledge", "Knowledge of SQL and PostgreSQL"]},
+    {"id": 5, "text": "Experience writing automated tests with pytest or a similar framework", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Automated testing experience", "Experience with automated tests (pytest or similar)"]},
+    {"id": 6, "text": "Git in daily work", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Git", "Experience with Git"]},
+    {"id": 7, "text": "Docker in daily work", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Docker", "Experience with Docker"]},
+    {"id": 8, "text": "Bachelor's degree in computer science or a related field", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Bachelor's degree in computer science", "University degree in computer science or a related field"]},
+    {"id": 9, "text": "English, written and spoken, at B2 level or higher", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["English B2 or higher", "Proficiency in English (B2)"]},
+    {"id": 10, "text": "Experience with message queues such as RabbitMQ or Kafka", "kind": "nice_to_have", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Message queue experience", "RabbitMQ or Kafka"]},
+    {"id": 11, "text": "Experience with a cloud provider (AWS, GCP or Azure)", "kind": "nice_to_have", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Cloud experience", "Experience with AWS, GCP or Azure"]}
+  ]
+}

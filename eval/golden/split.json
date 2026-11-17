@@ -1,0 +1,14 @@
+{
+  "seed": 20261117,
+  "test_fraction": 0.3,
+  "assignment": {
+    "be_01": "test",
+    "be_02": "dev",
+    "be_03": "dev",
+    "be_04": "dev",
+    "pm_01": "test",
+    "pm_02": "dev",
+    "pm_03": "dev",
+    "pm_04": "dev"
+  }
+}

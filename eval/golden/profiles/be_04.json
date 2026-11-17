@@ -1,0 +1,21 @@
+{
+  "cv_id": "be_04",
+  "position_id": "backend_developer",
+  "style": "mixed",
+  "template": "single",
+  "hard_case": {"tag": "implicit_evidence", "note": "The CV never says REST or API. Requirement 3 is met only through 'public HTTP/JSON interface ... versioned resources, OpenAPI documentation'."},
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "backend Python for six years", "quote": "Softver inženjer sa šest godina iskustva, najviše u backend razvoju na Python-u."},
+    {"requirement_id": 2, "verdict": "met", "fact": "Python since 08/2020, about 6 years", "quote": "Software Engineer, Vega Logistics, Beograd 04/2021 - present"},
+    {"requirement_id": 3, "verdict": "met", "fact": "implicit: designed a versioned HTTP/JSON interface with OpenAPI docs, which is a REST API without the word", "quote": "• Designed the public HTTP/JSON interface for our mobile apps: versioned resources,"},
+    {"requirement_id": 4, "verdict": "met", "fact": "tunes PostgreSQL queries", "quote": "• Tuning of slow PostgreSQL queries ( EXPLAIN ANALYZE, partial indexes )"},
+    {"requirement_id": 5, "verdict": "met", "fact": "pytest tests for all new modules", "quote": "• Pisanje testova u pytest-u za sve nove module, svaki PR prolazi code review"},
+    {"requirement_id": 6, "verdict": "met", "fact": "Git in a team of five", "quote": "• Radio sam u Git-u u timu od pet ljudi"},
+    {"requirement_id": 7, "verdict": "met", "fact": "packages and deploys with Docker", "quote": "• Order service packaged in Docker and deployed on GCP Cloud Run"},
+    {"requirement_id": 8, "verdict": "met", "fact": "bachelor in informatics, Faculty of Mathematics, 2020", "quote": "Matematički fakultet, Univerzitet u Beogradu 2015 - 2020"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English C1", "quote": "Mother tongue(s): Srpski Other language(s): English - C1"},
+    {"requirement_id": 10, "verdict": "not_met", "fact": "no message queues", "quote": null},
+    {"requirement_id": 11, "verdict": "met", "fact": "deploys to GCP Cloud Run", "quote": "• Order service packaged in Docker and deployed on GCP Cloud Run"}
+  ],
+  "relevance": {"backend_developer": 3, "project_manager": 0}
+}

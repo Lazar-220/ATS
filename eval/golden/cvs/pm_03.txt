@@ -1,0 +1,33 @@
+Tamara Obradovic
+Female
+09/02/1996
+(+381) 66 5550203
+Serbia, Belgrade
+tamara.obradovic@example.com
+
+ABOUT ME
+Former marketing coordinator who moved into software project management in 2024.
+Organised, calm under deadlines and keen to work on larger projects.
+
+EXPERIENCE
+PROJECT MANAGER, Lumen Apps, Belgrade 09/2024 - 02/2026
+• Delivery of two mobile apps for retail clients
+• Backlog and sprint boards in Jira, weekly status call with the client
+• Coordinating a team of 4 ( two developers, designer, tester )
+• Two-day Scrum workshop, basic knowledge of Scrum roles and events
+MARKETING COORDINATOR, Brandwave Agency, Belgrade 07/2019 - 08/2024
+• Planning of campaigns for consumer brands, deadlines for 12 clients
+• Briefing of freelancers and external printers
+
+EDUCATION
+BSc in Business Administration, Faculty of Economics, University of Belgrade 2015 - 2019
+
+SKILLS
+Jira / Confluence / Trello / MS Project / MS Office ( Word, Excel, PowerPoint ) /
+
+LANGUAGE SKILLS
+Mother tongue(s): Serbian Other language(s): English - native-level ( grew up between
+Belgrade and Dublin )
+
+CURRENTLY
+Looking for a new role in software project management.

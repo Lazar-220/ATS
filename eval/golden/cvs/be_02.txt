@@ -1,0 +1,32 @@
+Lični podaci
+Prezime i ime Jovana Đurić
+Lokacija Srbija, Niš
+Telefonski broj 064 5550102
+E-mail jovana.djuric@example.com
+Državljanstvo srpsko
+Datum rođenja 21.08.2001
+
+Obrazovanje
+2020 - 2024 Elektronski fakultet, Univerzitet u Nišu
+Smer Računarstvo i informatika
+Prosek 8,41
+Obuka
+ • Python - osnovni i napredni kurs (Udemy, 2023)
+ • Baze podataka i SQL
+ • Osnove Linux operativnog sistema
+
+Prethodno iskustvo
+12/2024 - danas Programer, Kodlab doo, Niš
+ • Razvoj REST API-ja u Flasku ( aplikacija za zakazivanje termina )
+ • Pisanje SQL upita, održavanje MySQL baze ( 30 tabela )
+ • Rad u Gitu ( grane, pull request, pregled koda sa kolegama )
+ • Osnovno poznavanje Dockera ( lokalno okruženje, docker-compose )
+06/2024 - 09/2024 Stručna praksa, Studio Pixel, Niš
+ • Ispravljanje grešaka u Python skriptama za obradu podataka
+
+Lične veštine
+Socijalne veštine Timski rad, komunikativnost, spremnost na učenje
+Organizacione veštine Planiranje zadataka, rad u dinamičnom okruženju
+Poznavanje rada na računaru Python, Flask, MySQL, Git, MS Office (Word, Excel)
+Engleski jezik B2 (pisanje i govor)
+Vozačka dozvola B kategorija
