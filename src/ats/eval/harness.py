@@ -10,7 +10,7 @@ The pipeline functions are called directly, not over HTTP. Stages:
 """
 
 import json
-from collections import defaultdict
+from collections import Counter, defaultdict
 from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import UTC, date, datetime
@@ -23,6 +23,7 @@ from ats.buildinfo import code_version
 from ats.eval.golden import GOLDEN_AS_OF, GoldSet
 from ats.eval.matching import match_requirements
 from ats.eval.metrics import (
+    VERDICT_ORDER,
     ExtractionMetrics,
     GroundingMetrics,
     VerdictMetrics,
@@ -188,6 +189,10 @@ class GroupAccuracy(BaseModel):
 
 class VerdictReport(BaseModel):
     judge: str
+    # How the gold verdicts of the evaluated pairs are spread, and the accuracy of always
+    # answering the most common one: a judge has to beat that, not 50%.
+    gold_distribution: dict[str, int]
+    majority_class_accuracy: float
     cvs: int
     overall: VerdictMetrics
     grounding: GroundingMetrics
@@ -315,8 +320,11 @@ def _run_verdicts(
                     quote_exists=quote_exists(answer.quote, text) if answer.quote else None,
                 )
             )
+    gold_counts = Counter(i.gold for i in items)
     return VerdictReport(
         judge=judge.name,
+        gold_distribution={v: gold_counts.get(v, 0) for v in VERDICT_ORDER},
+        majority_class_accuracy=max(gold_counts.values()) / len(items) if items else 0.0,
         cvs=len(cv_ids),
         overall=verdict_metrics([(i.gold, i.predicted) for i in items]),
         grounding=grounding_metrics(grounding_input),
@@ -451,6 +459,11 @@ def format_report(result: RunResult) -> str:
     if result.verdicts:
         v = result.verdicts
         lines += ["", f"VERDICTS ({v.cvs} CVs, {v.overall.n} pairs), judge: {v.judge}"]
+        spread = ", ".join(f"{k} {n}" for k, n in v.gold_distribution.items())
+        lines.append(
+            f"  gold verdicts: {spread}; always answering the majority class scores "
+            f"{_pct(v.majority_class_accuracy).strip()}"
+        )
         if v.judge == "stub":
             lines.append("  The judge is a stub that spoils gold labels on purpose; the numbers")
             lines.append("  prove the plumbing and say nothing about the model.")

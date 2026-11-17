@@ -214,6 +214,11 @@ def test_a_perfect_judge_scores_one_and_every_gold_quote_exists_in_the_extracted
     verdicts = result.verdicts
     assert verdicts is not None
     assert verdicts.overall.accuracy == 1.0
+    assert sum(verdicts.gold_distribution.values()) == verdicts.overall.n
+    assert (
+        verdicts.majority_class_accuracy
+        == max(verdicts.gold_distribution.values()) / verdicts.overall.n
+    )
     assert verdicts.overall.weighted_kappa == 1.0
     assert verdicts.grounding.quote_exists_share == 1.0
     assert verdicts.grounding.unquoted == 0

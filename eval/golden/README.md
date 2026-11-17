@@ -41,6 +41,25 @@ Relevance (CV against a position, for endpoint 2): 3 = would be shortlisted; 2 =
 gaps in the mandatory requirements; 1 = weak, related field; 0 = irrelevant. It is a design
 judgement made with the profile, not a formula.
 
+## Class distribution of the gold verdicts
+
+Verdicts are skewed toward `met`, so accuracy must be read against the majority class.
+
+| Part | Pairs | met | partial | not_met | Majority-class accuracy |
+| --- | --- | --- | --- | --- | --- |
+| overall | 866 | 589 (68.0%) | 77 (8.9%) | 200 (23.1%) | 68.0% |
+| dev | 606 | 411 (67.8%) | 47 (7.8%) | 148 (24.4%) | 67.8% |
+| test | 260 | 178 (68.5%) | 30 (11.5%) | 52 (20.0%) | 68.5% |
+
+A judge that answers `met` for every pair already scores about 68%. `partial` is rare (77 pairs),
+so macro-F1 and the weighted kappa matter more than accuracy, and the `partial` class has few
+test examples (30). Every result file carries the distribution of the pairs it evaluated and the
+majority-class accuracy in its header.
+
+**The stub judge numbers are not a baseline.** The stub spoils gold labels on purpose to prove the
+plumbing; its accuracy, kappa and grounding say nothing about any model. The first baseline is the
+real judge of phase 1.4b.
+
 ## Formats
 
 PDF only, single-column and two-column. DOCX golden CVs are out of scope: endpoint 1 rejects
