@@ -6,7 +6,11 @@ The pipeline functions are called directly, not over HTTP. Stages:
   requirements by `matching.py`. This calls the model, once per posting; the response cache
   makes a repeat free.
 - `verdicts`: a judge answers every labelled CV-requirement pair of the chosen split, scored
-  against the gold verdicts. Until 1.4b the judge is `StubJudge`.
+  against the gold verdicts. The judge is `StubJudge`: no model, plumbing only.
+- `judge` (variant A, from 1.4b): the same scoring with the real pipeline judge, which calls the
+  model twice per CV (parse, judge) and checks the quotes. Reported with the flagged-verdict
+  share, the majority-class accuracy, a sensitivity run without the uncertain verdicts, and the
+  run count.
 """
 
 import json
@@ -34,6 +38,7 @@ from ats.eval.metrics import (
     quote_exists,
     verdict_metrics,
 )
+from ats.eval.pipeline_judge import PipelineJudge
 from ats.eval.schemas import Verdict
 from ats.eval.stages import (
     ContactTruth,
@@ -48,8 +53,13 @@ from ats.eval.stages import (
 from ats.eval.stub import Judge
 from ats.llm.cache import ResponseCache, cache_key
 from ats.llm.pricing import RATES, Rate, cost_usd, rate_on
-from ats.llm.types import LLMClient
+from ats.llm.types import LLMClient, LLMOutputInvalid, RateLimitError
+from ats.pipeline.context import ContextRequirement, build_context
 from ats.pipeline.extract import extract_text
+from ats.pipeline.facts import build_facts
+from ats.pipeline.judge import PROMPT_VERSION as JUDGE_PROMPT
+from ats.pipeline.judge import JudgeIncomplete, JudgeOutput
+from ats.pipeline.judge import build_request as build_judge_request
 from ats.pipeline.masking import mask_text
 from ats.pipeline.parsing import PROMPT_VERSION as PARSING_PROMPT
 from ats.pipeline.parsing import THINKING_LEVEL as PARSING_THINKING
@@ -58,7 +68,7 @@ from ats.pipeline.parsing import build_request as build_parsing_request
 from ats.pipeline.requirements import PROMPT_VERSION as REQUIREMENTS_PROMPT
 from ats.pipeline.requirements import RequirementList, build_request, extract_requirements
 
-type Stage = Literal["extraction", "verdicts", "masking", "parsing"]
+type Stage = Literal["extraction", "verdicts", "masking", "parsing", "judge"]
 type SplitChoice = Literal["dev", "test", "all"]
 
 # Rough sizes for the dry run only. Characters per token is an average for Latin text with
@@ -69,6 +79,10 @@ EXTRACTION_OUTPUT_TOKENS = 500
 # A parsed CV is a list of items with snippets: about 1,500 output tokens, a guess until one
 # real call is on record.
 PARSING_OUTPUT_TOKENS = 1500
+# The judge answers a verdict, a quote and a rationale per requirement (about 120 tokens) after
+# some thinking (low): a guess until one real call is on record.
+JUDGE_OUTPUT_TOKENS_PER_REQUIREMENT = 120
+JUDGE_THINKING_TOKENS = 500
 
 # CLAUDE.md: a run that calls the real model more than this many times needs a confirmation.
 MAX_CALLS_WITHOUT_CONFIRMATION = 5
@@ -91,6 +105,7 @@ class RunPlan:
     est_output_tokens: int
     subset: Subset | None = None
     fallback_model: str | None = None
+    judge_cvs: int = 0
 
     @property
     def uncached_calls(self) -> int:
@@ -112,6 +127,12 @@ class RunPlan:
             lines.append("The verdict stage uses the stub judge: no calls, no cost.")
         if "masking" in self.stages:
             lines.append("The masking stage is code only: no calls, no cost.")
+        if "judge" in self.stages:
+            lines.append(
+                f"The judge stage (variant A) calls the model for {self.judge_cvs} CVs of the "
+                f"split: one parse call and one judge call each (prompts {PARSING_PROMPT}, "
+                f"{JUDGE_PROMPT}); a judge answer that lacks a requirement costs one more."
+            )
         if self.subset is not None:
             lines += _describe_subset(self.subset)
         if self.fallback_model:
@@ -166,8 +187,12 @@ def plan_run(
     cache: ResponseCache,
     min_chars_per_page: int,
     fallback_model: str | None = None,
+    split: SplitChoice = "dev",
+    limit: int | None = None,
+    as_of: date = GOLDEN_AS_OF,
 ) -> RunPlan:
     calls = cached = in_tokens = out_tokens = 0
+    judge_cvs = 0
     subset: Subset | None = None
     if "extraction" in stages:
         for position_id in sorted(golden.positions):
@@ -191,8 +216,67 @@ def plan_run(
                 continue
             in_tokens += int((len(request.system) + len(request.user)) / CHARS_PER_TOKEN)
             out_tokens += PARSING_OUTPUT_TOKENS
+    if "judge" in stages:
+        for cv_id in select_cvs(golden, split, limit):
+            judge_cvs += 1
+            cv = golden.cvs[cv_id]
+            text = extract_text(cv.pdf.read_bytes(), min_chars_per_page=min_chars_per_page).text
+            masked = mask_text(text)
+            parse_request = build_parsing_request(masked.masked_text)
+            calls += 1
+            parse_hit = cache.get(cache_key(model, parse_request, ParsedCV))
+            if parse_hit is None:
+                in_tokens += int(
+                    (len(parse_request.system) + len(parse_request.user)) / CHARS_PER_TOKEN
+                )
+                out_tokens += PARSING_OUTPUT_TOKENS
+            else:
+                cached += 1
+            requirements = golden.positions[cv.profile.position_id].meta.requirements
+            context_reqs = [
+                ContextRequirement(r.id, r.text, r.kind, r.weight, r.min_months, r.parent)
+                for r in requirements
+            ]
+            calls += 1
+            if parse_hit is not None:
+                # The parse is cached, so the judge prompt is known exactly and can be looked up.
+                parsed = ParsedCV.model_validate_json(parse_hit.text)
+                facts = build_facts(parsed, masked.masked_text, masked.spans, as_of)
+                judge_request = build_judge_request(
+                    build_context(masked.masked_text, facts.parsed_json, context_reqs)
+                )
+                if cache.get(cache_key(model, judge_request, JudgeOutput)) is not None:
+                    cached += 1
+                    continue
+            else:
+                # Parse not cached: the facts are not known yet, so the prompt size is a guess
+                # from the masked CV, the rubric and the instructions.
+                judge_request = build_judge_request(
+                    build_context(
+                        masked.masked_text,
+                        {
+                            "experience": [],
+                            "tenure": {"total_months": 0, "as_of": as_of.isoformat()},
+                        },
+                        context_reqs,
+                    )
+                )
+            in_tokens += int(
+                (len(judge_request.system) + len(judge_request.user)) / CHARS_PER_TOKEN
+            )
+            out_tokens += JUDGE_THINKING_TOKENS + JUDGE_OUTPUT_TOKENS_PER_REQUIREMENT * len(
+                requirements
+            )
     return RunPlan(
-        tuple(stages), model, calls, cached, in_tokens, out_tokens, subset, fallback_model
+        tuple(stages),
+        model,
+        calls,
+        cached,
+        in_tokens,
+        out_tokens,
+        subset,
+        fallback_model,
+        judge_cvs,
     )
 
 
@@ -241,11 +325,38 @@ class VerdictItem(BaseModel):
     gold_quote: str | None
     predicted_quote: str | None
     quote_exists: bool | None  # None: no quote to check
+    # Quote-check flags from the pipeline judge; empty for the stub.
+    flags: list[str] = []
+    # One of the verdicts the golden-set writers or the audit were unsure of (uncertain.json).
+    uncertain: bool = False
 
 
 class GroupAccuracy(BaseModel):
     n: int
     accuracy: float
+
+
+class Sensitivity(BaseModel):
+    """The same metrics without the uncertain verdicts (docs/PROGRESS.md, carried over from 1.3)."""
+
+    excluded: int
+    n: int
+    accuracy: float
+    macro_f1: float
+    majority_class_accuracy: float
+
+
+class FlaggedReport(BaseModel):
+    verdicts: int
+    flagged: int
+    flagged_share: float
+    by_code: dict[str, int]
+    # Of the met or partial verdicts, which are the ones that need a quote.
+    claims: int
+    flagged_claims: int
+    flagged_claim_share: float | None
+    # Quotes the API would show as evidence: unflagged, so found in the CV by the check.
+    evidence_quotes: int
 
 
 class VerdictReport(BaseModel):
@@ -260,6 +371,13 @@ class VerdictReport(BaseModel):
     by_style: dict[str, GroupAccuracy]
     by_hard_case: dict[str, GroupAccuracy]
     items: list[VerdictItem]
+    flagged: FlaggedReport
+    sensitivity: Sensitivity | None = None
+    # CVs the judge could not answer (incomplete or invalid output after the retries); they are
+    # left out of every number above and listed here.
+    failed_cvs: list[str] = []
+    # Set when a 429 survived the client's retries: the run stops there.
+    stopped: str | None = None
 
 
 class UsageReport(BaseModel):
@@ -268,6 +386,8 @@ class UsageReport(BaseModel):
     input_tokens: int
     output_tokens: int
     latency_s: float
+    # Nearest-rank 95th percentile over the calls the model answered (cache hits excluded).
+    latency_p95_s: float | None = None
     cost_usd: float | None
     rate: str | None
 
@@ -291,6 +411,9 @@ class RunResult(BaseModel):
     pipeline_version: PipelineVersion
     extraction: ExtractionReport | None
     verdicts: VerdictReport | None
+    # 1 plus the earlier result files with the same variant, split, stages, limit and
+    # pipeline_version. Model output is not deterministic (§5.3): read every number with it.
+    run_count: int = 1
     masking: MaskingReport | None = None
     parsing: ParsingReport | None = None
     usage: UsageReport
@@ -354,21 +477,58 @@ def _group(rows: dict[str, list[bool]]) -> dict[str, GroupAccuracy]:
     }
 
 
+def _majority(items: Sequence[VerdictItem]) -> float:
+    counts = Counter(i.gold for i in items)
+    return max(counts.values()) / len(items) if items else 0.0
+
+
+def _flag_report(items: Sequence[VerdictItem]) -> FlaggedReport:
+    claims = [i for i in items if i.predicted != "not_met"]
+    flagged = [i for i in items if i.flags]
+    flagged_claims = [i for i in claims if i.flags]
+    return FlaggedReport(
+        verdicts=len(items),
+        flagged=len(flagged),
+        flagged_share=len(flagged) / len(items) if items else 0.0,
+        by_code=dict(sorted(Counter(code for i in items for code in i.flags).items())),
+        claims=len(claims),
+        flagged_claims=len(flagged_claims),
+        flagged_claim_share=len(flagged_claims) / len(claims) if claims else None,
+        evidence_quotes=sum(1 for i in claims if i.predicted_quote and not i.flags),
+    )
+
+
 def _run_verdicts(
-    golden: GoldSet, judge: Judge, cv_ids: Sequence[str], min_chars_per_page: int
+    golden: GoldSet,
+    judge: Judge,
+    cv_ids: Sequence[str],
+    min_chars_per_page: int,
+    uncertain: frozenset[tuple[str, int]] = frozenset(),
 ) -> VerdictReport:
     items: list[VerdictItem] = []
     grounding_input: list[tuple[Verdict, str | None, str]] = []
     by_style: dict[str, list[bool]] = defaultdict(list)
     by_hard_case: dict[str, list[bool]] = defaultdict(list)
+    failed: list[str] = []
+    stopped: str | None = None
+    evaluated = 0
     for cv_id in cv_ids:
         cv = golden.cvs[cv_id]
         position = golden.positions[cv.profile.position_id].meta
         text = extract_text(cv.pdf.read_bytes(), min_chars_per_page=min_chars_per_page).text
-        answers = {a.requirement_id: a for a in judge.judge(cv_id, text, position)}
+        try:
+            answers = {a.requirement_id: a for a in judge.judge(cv_id, text, position)}
+        except RateLimitError as exc:
+            # A daily quota does not come back within the run; keep what is judged and say so.
+            stopped = f"rate limit after {evaluated} of {len(cv_ids)} CVs, at {cv_id}: {exc}"
+            break
+        except (JudgeIncomplete, LLMOutputInvalid) as exc:
+            failed.append(f"{cv_id}: {exc}")
+            continue
         gold_rows = golden.verdicts_for(cv_id)
         if set(answers) != {row.requirement_id for row in gold_rows}:
             raise EvalError(f"the judge did not answer every requirement of {cv_id} exactly once")
+        evaluated += 1
         for row in gold_rows:
             answer = answers[row.requirement_id]
             hit = answer.verdict == row.verdict
@@ -385,19 +545,36 @@ def _run_verdicts(
                     gold_quote=row.quote,
                     predicted_quote=answer.quote,
                     quote_exists=quote_exists(answer.quote, text) if answer.quote else None,
+                    flags=list(answer.flags),
+                    uncertain=(cv_id, row.requirement_id) in uncertain,
                 )
             )
     gold_counts = Counter(i.gold for i in items)
+    kept = [i for i in items if not i.uncertain]
+    sensitivity: Sensitivity | None = None
+    if uncertain and kept:
+        kept_metrics = verdict_metrics([(i.gold, i.predicted) for i in kept])
+        sensitivity = Sensitivity(
+            excluded=len(items) - len(kept),
+            n=len(kept),
+            accuracy=kept_metrics.accuracy,
+            macro_f1=kept_metrics.macro_f1,
+            majority_class_accuracy=_majority(kept),
+        )
     return VerdictReport(
         judge=judge.name,
         gold_distribution={v: gold_counts.get(v, 0) for v in VERDICT_ORDER},
-        majority_class_accuracy=max(gold_counts.values()) / len(items) if items else 0.0,
-        cvs=len(cv_ids),
+        majority_class_accuracy=_majority(items),
+        cvs=evaluated,
         overall=verdict_metrics([(i.gold, i.predicted) for i in items]),
         grounding=grounding_metrics(grounding_input),
         by_style=_group(by_style),
         by_hard_case=_group(by_hard_case),
         items=items,
+        flagged=_flag_report(items),
+        sensitivity=sensitivity,
+        failed_cvs=failed,
+        stopped=stopped,
     )
 
 
@@ -422,6 +599,7 @@ def run_eval(
     fallback_model: str | None = None,
     as_of: date = GOLDEN_AS_OF,
     price_date: date | None = None,
+    uncertain: frozenset[tuple[str, int]] = frozenset(),
 ) -> RunResult:
     if variant != "A":
         raise EvalError(f"variant {variant} does not exist yet; B, C and D arrive in phase 3")
@@ -432,10 +610,14 @@ def run_eval(
         if client is None:
             raise EvalError("the extraction stage needs an LLM client")
         extraction, usage_rows = _run_extraction(golden, client, min_chars_per_page)
-    if "verdicts" in stages:
+    if "verdicts" in stages or "judge" in stages:
+        if "judge" in stages and not isinstance(judge, PipelineJudge):
+            raise EvalError("the judge stage needs the pipeline judge (and so an LLM client)")
         verdicts = _run_verdicts(
-            golden, judge, select_cvs(golden, split, limit), min_chars_per_page
+            golden, judge, select_cvs(golden, split, limit), min_chars_per_page, uncertain
         )
+        if isinstance(judge, PipelineJudge):
+            usage_rows += judge.usage_rows
 
     masking: MaskingReport | None = None
     parsing: ParsingReport | None = None
@@ -476,7 +658,8 @@ def run_eval(
         pipeline_version=PipelineVersion(
             code=code_version(),
             prompts={"requirements": REQUIREMENTS_PROMPT}
-            | ({"cv_parse": PARSING_PROMPT} if "parsing" in stages else {}),
+            | ({"cv_parse": PARSING_PROMPT} if "parsing" in stages or "judge" in stages else {})
+            | ({"judge": JUDGE_PROMPT} if "judge" in stages else {}),
             model=model,
             judge=judge.name,
         ),
@@ -490,6 +673,7 @@ def run_eval(
             input_tokens=input_tokens,
             output_tokens=output_tokens,
             latency_s=sum(row[2] for row in usage_rows),
+            latency_p95_s=_p95([row[2] for row in usage_rows if not row[3]]),
             cost_usd=(
                 cost_usd(rate, sum(r[0] for r in primary_rows), sum(r[1] for r in primary_rows))
                 if rate
@@ -498,6 +682,32 @@ def run_eval(
             rate=rate.label if rate else None,
         ),
     )
+
+
+def count_prior_runs(directory: Path, result: RunResult) -> int:
+    """How many earlier result files describe the same configuration as `result`."""
+    count = 0
+    for path in sorted(directory.glob("*.json")) if directory.is_dir() else []:
+        try:
+            earlier = RunResult.model_validate_json(path.read_text(encoding="utf-8"))
+        except ValueError:
+            continue  # a file from an older result format is not a run of this configuration
+        if (
+            earlier.variant == result.variant
+            and earlier.split == result.split
+            and earlier.limit == result.limit
+            and earlier.stages == result.stages
+            and earlier.pipeline_version == result.pipeline_version
+        ):
+            count += 1
+    return count
+
+
+def _p95(values: list[float]) -> float | None:
+    if not values:
+        return None
+    ordered = sorted(values)
+    return ordered[max(0, -(-95 * len(ordered) // 100) - 1)]
 
 
 def write_result(result: RunResult, directory: Path) -> Path:
@@ -523,7 +733,8 @@ def format_report(result: RunResult) -> str:
     version = result.pipeline_version
     lines = [
         f"Eval  variant {result.variant}  split {result.split}"
-        + (f"  limit {result.limit}" if result.limit is not None else ""),
+        + (f"  limit {result.limit}" if result.limit is not None else "")
+        + f"  run {result.run_count} of this configuration",
         f"pipeline_version: {version.label}",
         f"gold labels: {result.gold_labels.removeprefix('gold labels ')}",
     ]
@@ -570,13 +781,39 @@ def format_report(result: RunResult) -> str:
             f"  gold verdicts: {spread}; always answering the majority class scores "
             f"{_pct(v.majority_class_accuracy).strip()}"
         )
+        if v.judge == "llm":
+            lines.append(
+                "  Real pipeline judge (variant A); gold labels are not manually verified."
+            )
         if v.judge == "stub":
             lines.append("  The judge is a stub that spoils gold labels on purpose; the numbers")
             lines.append("  prove the plumbing and say nothing about the model.")
         kappa = "n/a" if v.overall.weighted_kappa is None else f"{v.overall.weighted_kappa:.3f}"
         lines.append(
             f"  accuracy {_pct(v.overall.accuracy).strip()}   macro-F1 {v.overall.macro_f1:.3f}"
-            f"   weighted kappa {kappa}"
+            f"   weighted kappa {kappa}   (run {result.run_count}, "
+            f"{result.usage.cache_hits} cache hits)"
+        )
+        if v.stopped:
+            lines.append(f"  STOPPED: {v.stopped}")
+        if v.failed_cvs:
+            lines.append(f"  {len(v.failed_cvs)} CVs failed and are left out of every number:")
+            lines += [f"    {failure}" for failure in v.failed_cvs]
+        if v.sensitivity:
+            sens = v.sensitivity
+            lines.append(
+                f"  without the {sens.excluded} uncertain verdicts (n={sens.n}): accuracy "
+                f"{_pct(sens.accuracy).strip()}   macro-F1 {sens.macro_f1:.3f}   majority class "
+                f"{_pct(sens.majority_class_accuracy).strip()}   (run {result.run_count})"
+            )
+        f = v.flagged
+        codes = ", ".join(f"{code} {n}" for code, n in f.by_code.items()) or "none"
+        claim_share = _pct(f.flagged_claim_share).strip()
+        lines.append(
+            f"  flagged verdicts: {f.flagged}/{f.verdicts} ({_pct(f.flagged_share).strip()}); "
+            f"of the {f.claims} met/partial verdicts {f.flagged_claims} ({claim_share}); "
+            f"by flag: {codes}; quotes shown as evidence: {f.evidence_quotes} "
+            f"(run {result.run_count})"
         )
         lines.append("  confusion (rows gold, columns predicted):")
         lines.append(f"    {'':<10}" + "".join(f"{label:>9}" for label in v.overall.labels))
@@ -625,4 +862,9 @@ def format_report(result: RunResult) -> str:
     lines += ["", f"USAGE  LLM calls {u.llm_calls}, cache hits {u.cache_hits}, {tokens}"]
     if u.cost_usd is not None:
         lines.append(f"  cost ${u.cost_usd:.4f} ({u.rate}), latency {u.latency_s:.1f}s")
+        if result.verdicts and result.verdicts.cvs and result.verdicts.judge == "llm":
+            per_cv = u.cost_usd / result.verdicts.cvs
+            lines.append(f"  cost per CV (parse + judge) ${per_cv:.4f}")
+    if u.latency_p95_s is not None:
+        lines.append(f"  p95 latency per model call {u.latency_p95_s:.1f}s (answered, not cached)")
     return "\n".join(lines)
