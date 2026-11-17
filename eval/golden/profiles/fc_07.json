@@ -1,0 +1,17 @@
+{
+  "cv_id": "fc_07", "position_id": "financial_controller", "style": "sr_latin", "template": "single", "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "economics faculty, accounting", "quote": "Ekonomski fakultet, Univerzitet u Nišu | smer Računovodstvo | 2009 - 2013"},
+    {"requirement_id": 2, "verdict": "met", "fact": "accounting since 05/2016, over 10 years", "quote": "Knjigovođa | Mikro Servis, Niš | 05/2016 - 01/2019"},
+    {"requirement_id": 3, "verdict": "met", "fact": "statements under IFRS", "quote": "• Knjiženje, obračun PDV-a, zaključni računi i finansijski izveštaji po MSFI"},
+    {"requirement_id": 4, "verdict": "not_met", "fact": "no budgeting or planning", "quote": null},
+    {"requirement_id": 5, "verdict": "met", "fact": "monthly and annual reports", "quote": "• Mesečni i godišnji finansijski izveštaji za vlasnika"},
+    {"requirement_id": 6, "verdict": "partial", "fact": "Excel at medium level", "quote": "• Excel ( srednji nivo ): pivot tabele i VLOOKUP"},
+    {"requirement_id": 7, "verdict": "met", "fact": "SAP FI", "quote": "• Rad u SAP-u ( modul FI ), od 2022. godine"},
+    {"requirement_id": 8, "verdict": "met", "fact": "SAP since 2022, about 4 years", "quote": "• Rad u SAP-u ( modul FI ), od 2022. godine"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English B2", "quote": "Engleski jezik - B2"},
+    {"requirement_id": 10, "verdict": "not_met", "fact": "no licence", "quote": null},
+    {"requirement_id": 11, "verdict": "not_met", "fact": "no Power BI", "quote": null}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 0, "business_analyst": 0, "project_manager": 0, "financial_controller": 2, "sales_manager": 0}
+}

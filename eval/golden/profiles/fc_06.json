@@ -1,0 +1,18 @@
+{
+  "cv_id": "fc_06", "position_id": "financial_controller", "style": "sr_cyrillic", "template": "single",
+  "hard_case": {"tag": "overlapping_periods", "note": "Two controller jobs overlap (04/2020-03/2023 is 36 months, 01/2022-12/2024 is 36). Added up that is 72 months, over the 60 required. The union is 04/2020-12/2024, 57 months, so requirement 2 is partial."},
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "economics faculty, finance and accounting", "quote": "2009 - 2013 Економски факултет, Универзитет у Новом Саду"},
+    {"requirement_id": 2, "verdict": "partial", "fact": "union of overlapping periods is 57 months of 60, not the 72 that adding them gives", "quote": "04/2020 - 03/2023 Финансијски контролер, Војводина Агро доо, Нови Сад"},
+    {"requirement_id": 3, "verdict": "met", "fact": "IFRS reports", "quote": "• Месечни и годишњи финансијски извештаји по МСФИ"},
+    {"requirement_id": 4, "verdict": "met", "fact": "budgets and plans", "quote": "• Годишњи буџет и планови за три пословне јединице"},
+    {"requirement_id": 5, "verdict": "met", "fact": "monthly and annual reports", "quote": "• Месечни и годишњи финансијски извештаји по МСФИ"},
+    {"requirement_id": 6, "verdict": "met", "fact": "advanced Excel", "quote": "Рад на рачунару MS Office, SAP, Excel ( напредни ниво )"},
+    {"requirement_id": 7, "verdict": "met", "fact": "SAP FI/CO daily", "quote": "• Рад у SAP-у ( FI/CO ), свакодневно"},
+    {"requirement_id": 8, "verdict": "met", "fact": "SAP 04/2020-12/2024, 57 months", "quote": "• Рад у SAP-у, преко 3 године"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English B2", "quote": "Енглески језик Б2 ( говор и писање )"},
+    {"requirement_id": 10, "verdict": "not_met", "fact": "no licence", "quote": null},
+    {"requirement_id": 11, "verdict": "not_met", "fact": "no Power BI", "quote": null}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 0, "business_analyst": 0, "project_manager": 0, "financial_controller": 2, "sales_manager": 0}
+}

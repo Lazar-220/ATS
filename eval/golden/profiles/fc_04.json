@@ -1,0 +1,17 @@
+{
+  "cv_id": "fc_04", "position_id": "financial_controller", "style": "sr_ascii", "template": "two_column", "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "economics faculty, accounting", "quote": "2017-2021 | smer Racunovodstvo"},
+    {"requirement_id": 2, "verdict": "partial", "fact": "accounting 10/2022-10/2024 and analyst 11/2024 to present: 49 months of 60", "quote": "Kragujevac Plast | 10/2022-10/2024"},
+    {"requirement_id": 3, "verdict": "partial", "fact": "only basics of IFRS", "quote": "• Osnove MSFI"},
+    {"requirement_id": 4, "verdict": "partial", "fact": "took part in the budget, did not own it", "quote": "• Ucestvovao u izradi godisnjeg"},
+    {"requirement_id": 5, "verdict": "met", "fact": "monthly statements and annual closing", "quote": "• Mesecni finansijski izvestaji"},
+    {"requirement_id": 6, "verdict": "met", "fact": "advanced Excel", "quote": "• Excel ( napredni nivo )"},
+    {"requirement_id": 7, "verdict": "not_met", "fact": "Pantheon only, no SAP", "quote": null},
+    {"requirement_id": 8, "verdict": "not_met", "fact": "no SAP", "quote": null},
+    {"requirement_id": 9, "verdict": "met", "fact": "English B2", "quote": "• Engleski jezik - B2"},
+    {"requirement_id": 10, "verdict": "not_met", "fact": "no licence", "quote": null},
+    {"requirement_id": 11, "verdict": "not_met", "fact": "no Power BI", "quote": null}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 0, "business_analyst": 0, "project_manager": 0, "financial_controller": 2, "sales_manager": 0}
+}
