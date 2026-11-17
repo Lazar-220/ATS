@@ -41,7 +41,7 @@ setup-missing:
 VARIANT ?= A
 SPLIT ?= dev
 eval:
-	uv run python -m ats.eval run --variant $(VARIANT) --split $(SPLIT) 		$(if $(LIMIT),--limit $(LIMIT)) $(if $(STAGES),--stages $(STAGES)) 		$(if $(DRY_RUN),--dry-run) $(if $(YES),--yes)
+	uv run python -m ats.eval run --variant $(VARIANT) --split $(SPLIT) 		$(if $(LIMIT),--limit $(LIMIT)) $(if $(STAGES),--stages $(STAGES)) 		$(if $(DRY_RUN),--dry-run) $(if $(YES),--yes) $(if $(FALLBACK),--fallback $(FALLBACK))
 
 test-int:
 	uv run pytest -q -m integration

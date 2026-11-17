@@ -1,5 +1,6 @@
 from functools import lru_cache
 from pathlib import Path
+from typing import Literal
 
 from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -23,6 +24,11 @@ class Settings(BaseSettings):
     # The free tier allows 5 requests per minute (§6.1); raise it on the paid tier.
     llm_rpm: int = 5
     llm_cache_dir: Path = Path("data/llm_cache")
+    # Eval runs only (`ats.eval`): switch to OpenRouter after a Gemini daily quota. The API and
+    # the worker never read these.
+    llm_fallback: Literal["", "openrouter"] = ""
+    openrouter_api_key: SecretStr | None = None
+    openrouter_model: str = "google/gemma-4-31b-it:free"
 
 
 @lru_cache

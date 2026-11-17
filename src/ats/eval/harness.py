@@ -20,6 +20,7 @@ from typing import Literal
 from pydantic import BaseModel
 
 from ats.buildinfo import code_version
+from ats.eval.fallback import DEV_SMOKE_LABEL
 from ats.eval.golden import GOLDEN_AS_OF, GoldSet
 from ats.eval.matching import match_requirements
 from ats.eval.metrics import (
@@ -35,14 +36,29 @@ from ats.eval.metrics import (
 )
 from ats.eval.pricing import RATES, Rate, cost_usd, rate_on
 from ats.eval.schemas import Verdict
+from ats.eval.stages import (
+    ContactTruth,
+    MaskingReport,
+    ParsingReport,
+    Subset,
+    UsageRow,
+    run_masking,
+    run_parsing,
+    select_subset,
+)
 from ats.eval.stub import Judge
 from ats.llm.cache import ResponseCache, cache_key
 from ats.llm.types import LLMClient
 from ats.pipeline.extract import extract_text
+from ats.pipeline.masking import mask_text
+from ats.pipeline.parsing import PROMPT_VERSION as PARSING_PROMPT
+from ats.pipeline.parsing import THINKING_LEVEL as PARSING_THINKING
+from ats.pipeline.parsing import ParsedCV
+from ats.pipeline.parsing import build_request as build_parsing_request
 from ats.pipeline.requirements import PROMPT_VERSION as REQUIREMENTS_PROMPT
 from ats.pipeline.requirements import RequirementList, build_request, extract_requirements
 
-type Stage = Literal["extraction", "verdicts"]
+type Stage = Literal["extraction", "verdicts", "masking", "parsing"]
 type SplitChoice = Literal["dev", "test", "all"]
 
 # Rough sizes for the dry run only. Characters per token is an average for Latin text with
@@ -50,6 +66,9 @@ type SplitChoice = Literal["dev", "test", "all"]
 # (354 and 508 output tokens, thinking included, docs/PROGRESS.md).
 CHARS_PER_TOKEN = 3.5
 EXTRACTION_OUTPUT_TOKENS = 500
+# A parsed CV is a list of items with snippets: about 1,500 output tokens, a guess until one
+# real call is on record.
+PARSING_OUTPUT_TOKENS = 1500
 
 # CLAUDE.md: a run that calls the real model more than this many times needs a confirmation.
 MAX_CALLS_WITHOUT_CONFIRMATION = 5
@@ -70,6 +89,8 @@ class RunPlan:
     already_cached: int
     est_input_tokens: int
     est_output_tokens: int
+    subset: Subset | None = None
+    fallback_model: str | None = None
 
     @property
     def uncached_calls(self) -> int:
@@ -89,6 +110,17 @@ class RunPlan:
         ]
         if "verdicts" in self.stages:
             lines.append("The verdict stage uses the stub judge: no calls, no cost.")
+        if "masking" in self.stages:
+            lines.append("The masking stage is code only: no calls, no cost.")
+        if self.subset is not None:
+            lines += _describe_subset(self.subset)
+        if self.fallback_model:
+            lines.append(
+                f"Fallback enabled (opt-in): after a daily quota on {self.model} the run "
+                f"continues on OpenRouter {self.fallback_model}, at most 50 calls a day and "
+                f"20 per minute; the result is labelled '{DEV_SMOKE_LABEL}'. "
+                f"The cost estimate above is for {self.model}."
+            )
         lines.append(
             f"Estimate for the {self.uncached_calls} uncached calls: about "
             f"{self.est_input_tokens} input and {self.est_output_tokens} output tokens "
@@ -109,6 +141,18 @@ class RunPlan:
         return "\n".join(lines)
 
 
+def _describe_subset(subset: Subset) -> list[str]:
+    lines = [
+        f"Parsing subset: seed {subset.seed}, {len(subset.cv_ids)} dev-split CVs, one call each "
+        f"(prompt {PARSING_PROMPT}, thinking_level {PARSING_THINKING}).",
+        "Coverage proof (value: selected CVs):",
+    ]
+    for dim, values in subset.coverage.items():
+        lines.append(f"  {dim}")
+        lines += [f"    {value}: {', '.join(ids)}" for value, ids in values.items()]
+    return lines
+
+
 def _posting_text(golden: GoldSet, position_id: str, min_chars_per_page: int) -> str:
     pdf = golden.positions[position_id].posting_pdf
     return extract_text(pdf.read_bytes(), min_chars_per_page=min_chars_per_page).text
@@ -121,8 +165,10 @@ def plan_run(
     model: str,
     cache: ResponseCache,
     min_chars_per_page: int,
+    fallback_model: str | None = None,
 ) -> RunPlan:
     calls = cached = in_tokens = out_tokens = 0
+    subset: Subset | None = None
     if "extraction" in stages:
         for position_id in sorted(golden.positions):
             request = build_request(_posting_text(golden, position_id, min_chars_per_page))
@@ -132,7 +178,22 @@ def plan_run(
                 continue
             in_tokens += int((len(request.system) + len(request.user)) / CHARS_PER_TOKEN)
             out_tokens += EXTRACTION_OUTPUT_TOKENS
-    return RunPlan(tuple(stages), model, calls, cached, in_tokens, out_tokens)
+    if "parsing" in stages:
+        subset = select_subset(golden)
+        for cv_id in subset.cv_ids:
+            text = extract_text(
+                golden.cvs[cv_id].pdf.read_bytes(), min_chars_per_page=min_chars_per_page
+            ).text
+            request = build_parsing_request(mask_text(text).masked_text)
+            calls += 1
+            if cache.get(cache_key(model, request, ParsedCV)) is not None:
+                cached += 1
+                continue
+            in_tokens += int((len(request.system) + len(request.user)) / CHARS_PER_TOKEN)
+            out_tokens += PARSING_OUTPUT_TOKENS
+    return RunPlan(
+        tuple(stages), model, calls, cached, in_tokens, out_tokens, subset, fallback_model
+    )
 
 
 # --- The result ----------------------------------------------------------------------------
@@ -217,6 +278,9 @@ GOLD_LABEL_STATUS = "gold labels not manually verified"
 
 class RunResult(BaseModel):
     gold_labels: str = GOLD_LABEL_STATUS
+    # Set when a fallback model answered any call: such a run is a smoke test, not a baseline.
+    label: str | None = None
+    models: dict[str, str | None] = {}
     variant: str
     split: str
     limit: int | None
@@ -227,6 +291,8 @@ class RunResult(BaseModel):
     pipeline_version: PipelineVersion
     extraction: ExtractionReport | None
     verdicts: VerdictReport | None
+    masking: MaskingReport | None = None
+    parsing: ParsingReport | None = None
     usage: UsageReport
 
 
@@ -235,9 +301,9 @@ class RunResult(BaseModel):
 
 def _run_extraction(
     golden: GoldSet, client: LLMClient, min_chars_per_page: int
-) -> tuple[ExtractionReport, list[tuple[int, int, float, bool]]]:
+) -> tuple[ExtractionReport, list[UsageRow]]:
     items: list[ExtractionItem] = []
-    usage: list[tuple[int, int, float, bool]] = []
+    usage: list[UsageRow] = []
     for position_id in sorted(golden.positions):
         meta = golden.positions[position_id].meta
         result = extract_requirements(
@@ -249,6 +315,7 @@ def _run_extraction(
                 result.usage.output_tokens,
                 result.usage.latency_s,
                 result.usage.cache_hit,
+                result.usage.model,
             )
         )
         drafts = result.output.requirements
@@ -351,6 +418,8 @@ def run_eval(
     client: LLMClient | None,
     model: str,
     min_chars_per_page: int,
+    contacts: dict[str, ContactTruth] | None = None,
+    fallback_model: str | None = None,
     as_of: date = GOLDEN_AS_OF,
     price_date: date | None = None,
 ) -> RunResult:
@@ -358,7 +427,7 @@ def run_eval(
         raise EvalError(f"variant {variant} does not exist yet; B, C and D arrive in phase 3")
     extraction: ExtractionReport | None = None
     verdicts: VerdictReport | None = None
-    usage_rows: list[tuple[int, int, float, bool]] = []
+    usage_rows: list[UsageRow] = []
     if "extraction" in stages:
         if client is None:
             raise EvalError("the extraction stage needs an LLM client")
@@ -368,11 +437,36 @@ def run_eval(
             golden, judge, select_cvs(golden, split, limit), min_chars_per_page
         )
 
+    masking: MaskingReport | None = None
+    parsing: ParsingReport | None = None
+    if "masking" in stages:
+        if contacts is None:
+            raise EvalError("the masking stage needs contacts.json")
+        masking = run_masking(
+            golden, contacts, select_cvs(golden, split, limit), min_chars_per_page
+        )
+    if "parsing" in stages:
+        if client is None:
+            raise EvalError("the parsing stage needs an LLM client")
+        if split != "dev":
+            raise EvalError("the parsing stage runs on the dev split only")
+        subset = select_subset(golden)
+        parsing, parsing_usage = run_parsing(
+            golden, client, subset.cv_ids, min_chars_per_page, as_of
+        )
+        usage_rows += parsing_usage
+
     input_tokens = sum(row[0] for row in usage_rows)
     output_tokens = sum(row[1] for row in usage_rows)
     now = datetime.now(UTC)
-    rate = rate_on(model, price_date or now.date()) if usage_rows else None
+    # Only calls the primary model answered are priced; the fallback models are free.
+    primary_rows = [row for row in usage_rows if row[4] in ("", model)]
+    rate = rate_on(model, price_date or now.date()) if primary_rows else None
+    answered_by = {row[4] for row in usage_rows if row[4]}
+    label = DEV_SMOKE_LABEL if answered_by - {model} else None
     return RunResult(
+        label=label,
+        models={"primary": model, "fallback": fallback_model},
         variant=variant,
         split=split,
         limit=limit,
@@ -381,19 +475,26 @@ def run_eval(
         as_of=as_of.isoformat(),
         pipeline_version=PipelineVersion(
             code=code_version(),
-            prompts={"requirements": REQUIREMENTS_PROMPT},
+            prompts={"requirements": REQUIREMENTS_PROMPT}
+            | ({"cv_parse": PARSING_PROMPT} if "parsing" in stages else {}),
             model=model,
             judge=judge.name,
         ),
         extraction=extraction,
         verdicts=verdicts,
+        masking=masking,
+        parsing=parsing,
         usage=UsageReport(
             llm_calls=sum(1 for row in usage_rows if not row[3]),
             cache_hits=sum(1 for row in usage_rows if row[3]),
             input_tokens=input_tokens,
             output_tokens=output_tokens,
             latency_s=sum(row[2] for row in usage_rows),
-            cost_usd=cost_usd(rate, input_tokens, output_tokens) if rate else None,
+            cost_usd=(
+                cost_usd(rate, sum(r[0] for r in primary_rows), sum(r[1] for r in primary_rows))
+                if rate
+                else None
+            ),
             rate=rate.label if rate else None,
         ),
     )
@@ -426,6 +527,11 @@ def format_report(result: RunResult) -> str:
         f"pipeline_version: {version.label}",
         f"gold labels: {result.gold_labels.removeprefix('gold labels ')}",
     ]
+    if result.label:
+        lines.append(
+            f"LABEL: {result.label}. Primary {result.models.get('primary')}, fallback "
+            f"{result.models.get('fallback')}: some calls were answered by the fallback model."
+        )
     if result.split == "test":
         lines.append("NOTE: the test split is for published numbers; tune on dev only.")
     if result.extraction:
@@ -488,6 +594,32 @@ def format_report(result: RunResult) -> str:
                     f"{k} {_pct(a.accuracy).strip()} (n={a.n})" for k, a in groups.items()
                 )
                 lines.append(f"  accuracy {title}: {text}")
+    if result.masking:
+        m = result.masking
+        lines += ["", f"MASKING LEAKS ({m.cvs} CVs, code only)"]
+        lines.append(
+            f"  email {len(m.email_leaks)} ({_pct(m.email_rate).strip()}), "
+            f"phone {len(m.phone_leaks)} ({_pct(m.phone_rate).strip()}), "
+            f"name {len(m.name_leaks)} ({_pct(m.name_rate).strip()})"
+        )
+        lines += [f"  email leaked: {cv_id}" for cv_id in m.email_leaks]
+        lines += [f"  phone leaked: {cv_id}" for cv_id in m.phone_leaks]
+        lines += [f"  name leaked: {leak.cv_id} {leak.tokens}" for leak in m.name_leaks]
+    if result.parsing:
+        p = result.parsing
+        lines += ["", f"PARSING (real model, {p.cvs} of {p.requested} CVs)"]
+        if p.stopped:
+            lines.append(f"  STOPPED: {p.stopped}")
+        lines.append(
+            f"  not a CV {len(p.not_a_cv)}, low coverage {len(p.low_coverage)} {p.low_coverage}, "
+            f"suspected injection {len(p.suspected_injection)}"
+        )
+        for template, row in p.by_template.items():
+            lines.append(
+                f"  {template}: {int(row['cvs'])} CVs, mean coverage "
+                f"{row['mean_coverage'] * 100:.1f}%, "
+                f"unlocated snippets {int(row['unlocated_items'])}"
+            )
     u = result.usage
     tokens = f"tokens {u.input_tokens} in / {u.output_tokens} out"
     lines += ["", f"USAGE  LLM calls {u.llm_calls}, cache hits {u.cache_hits}, {tokens}"]

@@ -10,7 +10,11 @@ from pydantic import BaseModel
 
 from ats.llm.cache import ResponseCache
 from ats.llm.fake import FakeLLMClient
-from ats.llm.gemini import GeminiTransport, _retry_after_s  # pyright: ignore[reportPrivateUsage]
+from ats.llm.gemini import (  # pyright: ignore[reportPrivateUsage]
+    GeminiTransport,
+    _is_daily_quota,  # pyright: ignore[reportPrivateUsage]
+    _retry_after_s,  # pyright: ignore[reportPrivateUsage]
+)
 from ats.llm.managed import ManagedLLMClient
 from ats.llm.ratelimit import RateLimiter
 from ats.llm.types import (
@@ -206,6 +210,94 @@ def test_the_fake_client_returns_outputs_in_order_and_records_requests() -> None
     assert fake.calls == [REQUEST, REQUEST]
     with pytest.raises(AssertionError):
         fake.generate(REQUEST, Answer)
+
+
+def _quota_body(*quota_ids: str) -> dict[str, Any]:
+    """The shape of a 429 as the Gemini API sends it: RetryInfo plus a QuotaFailure."""
+    return {
+        "error": {
+            "code": 429,
+            "status": "RESOURCE_EXHAUSTED",
+            "details": [
+                {
+                    "@type": "type.googleapis.com/google.rpc.QuotaFailure",
+                    "violations": [
+                        {"quotaMetric": "generate_content_free_tier_requests", "quotaId": q}
+                        for q in quota_ids
+                    ],
+                },
+                {"@type": "type.googleapis.com/google.rpc.RetryInfo", "retryDelay": "34s"},
+            ],
+        }
+    }
+
+
+DAILY_ID = "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+MINUTE_ID = "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+
+
+@pytest.mark.parametrize(
+    ("body", "daily"),
+    [
+        (_quota_body(DAILY_ID), True),
+        (_quota_body(MINUTE_ID, DAILY_ID), True),  # any violation will do
+        (_quota_body(MINUTE_ID), False),
+        (_quota_body("SomethingNew-FreeTier"), False),  # unknown id: not daily
+        ({"error": {"code": 429, "message": "quota PerDay exhausted"}}, False),  # no text match
+        ({"error": {"details": "garbage"}}, False),
+        ({"error": {"details": [{"@type": "google.rpc.QuotaFailure", "violations": None}]}}, False),
+        ({"error": {"details": [None]}}, False),
+        (None, False),
+    ],
+)
+def test_only_a_per_day_quota_id_in_a_quota_failure_marks_a_429_daily(
+    body: Any, daily: bool
+) -> None:
+    assert _is_daily_quota(body) is daily
+
+
+def test_a_429_with_a_daily_quota_is_one_attempt_and_is_not_retried(tmp_path: Path) -> None:
+    time = SimulatedTime()
+    transport = ScriptedTransport(RateLimitError("429", retry_after_s=34.0, daily=True), good())
+    client = make_client(transport, tmp_path, time)
+
+    with pytest.raises(RateLimitError) as raised:
+        client.generate(REQUEST, Answer)
+
+    assert raised.value.daily
+    assert transport.calls == 1
+    assert time.slept == []
+
+
+def test_a_per_minute_429_and_a_429_with_malformed_details_keep_their_retries(
+    tmp_path: Path,
+) -> None:
+    time = SimulatedTime()
+    transport = ScriptedTransport(
+        RateLimitError("429", daily=_is_daily_quota(_quota_body(MINUTE_ID))),
+        RateLimitError("429", daily=_is_daily_quota({"error": {"details": "garbage"}})),
+        good(3),
+    )
+    client = make_client(transport, tmp_path, time)
+
+    assert client.generate(REQUEST, Answer).output == Answer(value=3)
+    assert transport.calls == 3
+
+
+def test_the_gemini_adapter_flags_a_daily_429_from_the_sdk_error(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def failing(**_kwargs: object) -> None:
+        raise errors.ClientError(429, _quota_body(DAILY_ID))
+
+    transport = GeminiTransport("not-a-real-key")
+    monkeypatch.setattr(
+        transport, "_client", SimpleNamespace(models=SimpleNamespace(generate_content=failing))
+    )
+
+    with pytest.raises(RateLimitError) as raised:
+        transport.complete("m", REQUEST, Answer)
+    assert raised.value.daily and raised.value.retry_after_s == 34.0
 
 
 def test_the_retry_delay_is_read_from_the_provider_error() -> None:

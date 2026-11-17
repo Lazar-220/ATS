@@ -148,4 +148,4 @@ def test_killing_the_worker_mid_job_loses_nothing(test_db_url: str, queue_conn: 
 
 
 def test_the_schema_version_is_read_from_the_database(pool: ConnectionPool) -> None:
-    assert read_schema_version(pool) == "0002"
+    assert read_schema_version(pool) == "0003"

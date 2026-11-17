@@ -185,7 +185,12 @@ def _derive_status(
     posting = next(doc for doc in documents if doc.kind == "posting")
     if posting.status in ("rejected", "failed"):
         return "failed"  # without the posting there is nothing to score against
-    pending = [doc for doc in documents if doc.status == "uploaded"]
+    # A CV is also pending while extracted but not yet parsed; a posting ends at `extracted`.
+    pending = [
+        doc
+        for doc in documents
+        if doc.status == "uploaded" or (doc.kind == "cv" and doc.status == "extracted")
+    ]
     if len(pending) == len(documents):
         return "queued"
     return "running" if pending else "done"

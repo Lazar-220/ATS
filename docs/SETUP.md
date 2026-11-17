@@ -150,19 +150,30 @@ A process keeps the code it started with, so a worker left over from before a br
 `git pull` looks healthy and quietly lacks newer job types. Its first log line says what it is:
 
 ```
-worker starting: code=phase/1.2-requirements@7837fa7 schema=0002 handlers=ingest,noop,position_setup llm_model=gemini-3.6-flash llm_rpm=5 llm_key=set
+worker starting: code=phase/1.2-requirements@7837fa7 schema=0003 handlers=ingest,noop,position_setup llm_model=gemini-3.6-flash llm_rpm=5 llm_key=set
 ```
 
 Compare `code=` with `git log -1`, `schema=` with `uv run alembic heads`, and `handlers=` with the
 job types you expect (`position_setup` from phase 1.2). `-dirty` means tracked files had uncommitted
 changes when it started. Restart the worker after changing worker code; `make worker` does not reload.
 
+### CV parsing in the worker (from phase 1.4a)
+
+The ingest job now carries a CV past text extraction: it masks name, email, phone and address
+(`document.masked_text`, the replaced raw ranges in `document.mask_spans`), makes one LLM call on
+the masked text, and stores the parsed items with snippet positions, months per item and total
+tenure in `document.parsed_json`, and the flags (`not_a_cv`, `suspected_injection`,
+`low_coverage`) in `document.flags`. The document ends as `parsed`. The original contact data is
+written to `candidate` only for a document the model judged to be a CV. This needs `LLM_API_KEY`
+in the worker's environment; one CV is one call (cached by the response cache). A worker that
+started before this phase does not know the step: restart it (`schema=0003` in its first log line).
+
 ## 3. Commands
 
 | Command | Does | From phase |
 | --- | --- | --- |
 | `make up` / `make down` | start / stop Postgres | 1.1a |
-| `make migrate` | apply Alembic migrations (the nine v1 tables, plus `hr_answer` from 1.2) | 1.1a |
+| `make migrate` | apply Alembic migrations (the nine v1 tables, plus `hr_answer` from 1.2 and `document.mask_spans` from 1.4a) | 1.1a |
 | `make up-all` | whole stack in Docker (postgres, api, worker, web) | 1.1a |
 | `make api` | FastAPI with reload on :8000 | 1.1a |
 | `make worker` | job worker | 1.1a |
@@ -171,7 +182,7 @@ changes when it started. Restart the worker after changing worker code; `make wo
 | `make test` | unit tests | 0 |
 | `make test-int` | integration tests (needs `make up`) | 1.1a |
 | `make setup-missing [POSITION=<id>] [YES=1]` | enqueue position setup for positions that have posting text but no requirements and no setup job; lists only unless `YES=1`; `POSITION` takes an id or its first characters | 1.2 |
-| `make eval VARIANT=A SPLIT=dev [LIMIT=n] [STAGES=extraction,verdicts] [DRY_RUN=1] [YES=1]` | eval harness: loads the golden set, prints a metrics table and writes `eval/results/<time>_<variant>_<split>.json` with `pipeline_version` (git commit, prompt versions, model). The default stage is `verdicts`, against a stub judge until 1.4b: no model calls. `STAGES=extraction,verdicts` adds the requirement extraction, one real call per golden posting (cached by the response cache). `DRY_RUN=1` prints the call count and the estimated cost and calls nothing. A run that would make more than 5 uncached model calls is refused until `YES=1` | 1.3 |
+| `make eval VARIANT=A SPLIT=dev [LIMIT=n] [STAGES=extraction,verdicts] [DRY_RUN=1] [YES=1]` | eval harness: loads the golden set, prints a metrics table and writes `eval/results/<time>_<variant>_<split>.json` with `pipeline_version` (git commit, prompt versions, model). The default stage is `verdicts`, against a stub judge until 1.4b: no model calls. `STAGES=extraction,verdicts` adds the requirement extraction, one real call per golden posting (cached by the response cache). `DRY_RUN=1` prints the call count and the estimated cost and calls nothing. A run that would make more than 5 uncached model calls is refused until `YES=1`. From 1.4a, `STAGES=masking` measures the masking leak rate (email, phone, name) against `eval/golden/contacts.json` with no model call; `STAGES=parsing` runs the CV parsing prompt on a seeded subset of at most 18 dev-split CVs (seed 20261117, one real call each; `DRY_RUN=1` prints the CV ids, the coverage proof, the model, the prompt version and the estimated cost; dev split only; a 429 stops the run and reports how many CVs were parsed: at once for a daily quota, after the client's 4 retries for a per-minute one). `FALLBACK=openrouter` (or `--fallback openrouter`, or `LLM_FALLBACK=openrouter`) opts in to the OpenRouter fallback: after a Gemini daily quota the rest of the run goes to the free model, at 20 requests per minute and at most 50 real calls per UTC day (read from `GET /api/v1/key`, `free_model_daily_requests`, and counted locally in `LLM_CACHE_DIR`). A run that used it is labelled `dev-smoke, non-baseline` in its report and result file, with both model names; its numbers are not baselines. `DRY_RUN=1` prints the fallback line when it is on | 1.3 |
 | `uv run python -m ats.eval build` | validate the golden set's profiles, write `labels/*.jsonl` and `split.json` (see `eval/golden/README.md`) | 1.3 |
 | `uv run python -m ats.eval render` | render posting and CV sources to PDF; writes only the files whose bytes change | 1.3 |
 | `make eval-redteam` | injection red-team set | 1.7 |
@@ -197,6 +208,9 @@ changes when it started. Restart the worker after changing worker code; `make wo
 | `LLM_API_KEY` | none | Gemini API key; never committed | 1.2 |
 | `LLM_RPM` | `5` | requests per minute (free tier). The limiter is in-process: valid for one worker only | 1.2 |
 | `LLM_CACHE_DIR` | `data/llm_cache` | LLM response cache, one JSON file per hash of model, prompts, thinking level and schema; in Docker the `llm_cache` volume | 1.2 |
+| `LLM_FALLBACK` | empty (off) | eval runs only: `openrouter` continues a run on an OpenRouter free model after a Gemini daily quota. The API and the worker never read it. Also `make eval FALLBACK=openrouter` | 1.4a |
+| `OPENROUTER_API_KEY` | none | key for the fallback; never committed; needed only with `LLM_FALLBACK` | 1.4a |
+| `OPENROUTER_MODEL` | `google/gemma-4-31b-it:free` | the free model the fallback uses (checked in OpenRouter's public model list on 2026-11-17) | 1.4a |
 | `GIT_COMMIT` | derived from `git` | overrides the code version in the worker's startup line; set it where there is no `.git` (a Docker image shows `unknown` otherwise) | 1.2 |
 | `LANGFUSE_ENABLED` | `false` | tracing on or off | 1.6 |
 | `EMBEDDING_MODEL` | `BAAI/bge-m3` | local embedding model | 2.1 |
@@ -214,6 +228,7 @@ Planned from §6.3 of the plan. The actual pinned versions are in `pyproject.tom
 | 1.1a | `fastapi`, `uvicorn[standard]`, `pydantic`, `pydantic-settings`, `psycopg[binary,pool]`, `alembic` | Docker image `pgvector/pgvector:pg17`; npm: `react`, `react-dom`, `@tanstack/react-query`; dev: `typescript`, `vite`, `@vitejs/plugin-react`, `@types/react`, `@types/react-dom`, `@types/node`, `eslint`, `@eslint/js`, `typescript-eslint`, `eslint-plugin-react-hooks`, `globals` |
 | 1.1b | `pymupdf` (`>=1.28,<2`, see below), `python-multipart`, `cyrtranslit`, `lingua-language-detector` | |
 | 1.2 | `google-genai` | npm: `@tanstack/react-table` |
+| 1.4a | `httpx` moved from the dev group to the main dependencies (the OpenRouter transport uses it). It was already in `uv.lock` through `google-genai`; the lock gained no package | |
 | 1.3 | eval group: `scikit-learn` (brings `numpy`, `scipy`, `joblib`, `threadpoolctl`); `statsmodels` is deferred to 1.8 | |
 | 1.4b | `rapidfuzz` | |
 | 1.6 | `langfuse` | Langfuse self-host: web, worker, Postgres, ClickHouse, Redis, MinIO |

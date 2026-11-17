@@ -61,6 +61,7 @@ dependencies = [
     { name = "cyrtranslit" },
     { name = "fastapi" },
     { name = "google-genai" },
+    { name = "httpx" },
     { name = "lingua-language-detector" },
     { name = "psycopg", extra = ["binary", "pool"] },
     { name = "pydantic-settings" },
@@ -71,7 +72,6 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
-    { name = "httpx" },
     { name = "pyright" },
     { name = "pytest" },
     { name = "pytest-asyncio" },
@@ -87,6 +87,7 @@ requires-dist = [
     { name = "cyrtranslit", specifier = ">=1.2.0" },
     { name = "fastapi", specifier = ">=0.163.1" },
     { name = "google-genai", specifier = ">=3.3.0" },
+    { name = "httpx", specifier = ">=0.28.1" },
     { name = "lingua-language-detector", specifier = ">=2.2.0" },
     { name = "psycopg", extras = ["binary", "pool"], specifier = ">=3.3.9" },
     { name = "pydantic-settings", specifier = ">=2.16.3" },
@@ -97,7 +98,6 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "httpx", specifier = ">=0.28.1" },
     { name = "pyright", specifier = ">=1.1.414" },
     { name = "pytest", specifier = ">=9.2.0" },
     { name = "pytest-asyncio", specifier = ">=1.5.0" },

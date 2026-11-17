@@ -68,6 +68,7 @@ def test_required_day_one_columns_exist(conn: Conn) -> None:
     names = {row["name"] for row in rows}
     assert {
         "document.raw_text",
+        "document.mask_spans",
         "job_position.source_sha256",
         "job_position.rubric_version",
         "job_position.rubric_status",

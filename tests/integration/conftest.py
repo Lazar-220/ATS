@@ -10,10 +10,13 @@ from alembic.config import Config
 from fastapi.testclient import TestClient
 from psycopg.rows import DictRow, dict_row
 from psycopg_pool import ConnectionPool
+from pydantic import BaseModel
 
 from ats.api.main import app
 from ats.db.pool import create_pool
 from ats.llm.fake import FakeLLMClient
+from ats.llm.types import LLMRequest
+from ats.pipeline.parsing import ParsedCV
 from ats.pipeline.requirements import RequirementDraft, RequirementList
 from ats.settings import get_settings
 from ats.worker import ingest, position_setup  # noqa: F401  (importing registers the handlers)
@@ -82,8 +85,24 @@ def fake_llm(monkeypatch: pytest.MonkeyPatch) -> FakeLLMClient:
     one = RequirementDraft(
         id=1, text="Python", kind="mandatory", weight=1, min_months=None, parent=None
     )
-    fake = FakeLLMClient(responder=lambda _request, _schema: RequirementList(requirements=[one]))
+
+    def answer(_request: LLMRequest, schema: type[BaseModel]) -> BaseModel:
+        if schema is ParsedCV:
+            return ParsedCV(
+                is_cv=True,
+                suspected_injection=False,
+                experience=[],
+                education=[],
+                skills=[],
+                certificates=[],
+                languages=[],
+                projects=[],
+            )
+        return RequirementList(requirements=[one])
+
+    fake = FakeLLMClient(responder=answer)
     monkeypatch.setattr(position_setup, "get_llm_client", lambda: fake)
+    monkeypatch.setattr(ingest, "get_llm_client", lambda: fake)
     return fake
 
 

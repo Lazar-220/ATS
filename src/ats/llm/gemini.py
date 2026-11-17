@@ -40,7 +40,10 @@ class GeminiTransport:
             )
         except errors.APIError as exc:
             if exc.code == 429:
-                raise RateLimitError(str(exc), _retry_after_s(exc.details)) from exc  # pyright: ignore[reportUnknownMemberType, reportUnknownArgumentType]
+                body: Any = exc.details  # pyright: ignore[reportUnknownMemberType, reportUnknownVariableType]
+                raise RateLimitError(
+                    str(exc), _retry_after_s(body), daily=_is_daily_quota(body)
+                ) from exc
             if exc.code in RETRYABLE_SERVER_CODES:
                 raise TransientServerError(str(exc), exc.code) from exc
             raise
@@ -56,6 +59,28 @@ class GeminiTransport:
                 else 0
             ),
         )
+
+
+# Google's rate-limits page does not document the 429 body. The `google.rpc.QuotaFailure`
+# detail and its `quotaId` are the standard error model, but the "PerDay" marker (for example
+# "GenerateRequestsPerDayPerProjectPerModel-FreeTier") is a naming convention seen in forum
+# reports, not a contract. So anything unexpected means "not daily", and the client keeps its
+# normal 429 retries.
+DAILY_QUOTA_MARKER = "PerDay"
+
+
+def _is_daily_quota(details: Any) -> bool:
+    """True when some `QuotaFailure` violation's `quotaId` names a per-day quota."""
+    try:
+        for item in details["error"]["details"]:
+            if not str(item.get("@type", "")).endswith("google.rpc.QuotaFailure"):
+                continue
+            for violation in item["violations"]:
+                if DAILY_QUOTA_MARKER in str(violation.get("quotaId", "")):
+                    return True
+    except (KeyError, TypeError, AttributeError):
+        pass
+    return False
 
 
 def _retry_after_s(details: Any) -> float | None:

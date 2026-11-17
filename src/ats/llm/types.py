@@ -29,6 +29,8 @@ class LLMUsage:
     output_tokens: int
     latency_s: float
     cache_hit: bool
+    # The model that answered; empty for the fake client.
+    model: str = ""
 
 
 @dataclass(frozen=True)
@@ -58,11 +60,17 @@ class LLMError(Exception):
 
 
 class RateLimitError(LLMError):
-    """The provider answered 429. `retry_after_s` is its own hint, when it gave one."""
+    """The provider answered 429. `retry_after_s` is its own hint, when it gave one.
 
-    def __init__(self, message: str, retry_after_s: float | None = None) -> None:
+    `daily` is true when the 429 says a per-day quota is spent: waiting seconds cannot help.
+    """
+
+    def __init__(
+        self, message: str, retry_after_s: float | None = None, *, daily: bool = False
+    ) -> None:
         super().__init__(message)
         self.retry_after_s = retry_after_s
+        self.daily = daily
 
 
 class TransientServerError(LLMError):
