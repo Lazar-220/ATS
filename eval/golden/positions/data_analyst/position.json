@@ -1,0 +1,29 @@
+{
+  "id": "data_analyst",
+  "title": "Data Analyst",
+  "lang": "en",
+  "requirements": [
+    {"id": 1, "text": "Strong knowledge of SQL", "kind": "mandatory", "weight": 3, "min_months": null, "parent": null,
+     "aliases": ["SQL", "Strong SQL skills", "Strong knowledge of SQL"]},
+    {"id": 2, "text": "At least 3 years of experience writing SQL queries on large datasets", "kind": "mandatory", "weight": 1, "min_months": 36, "parent": 1,
+     "aliases": ["3+ years of SQL experience", "3 years of experience writing SQL queries", "SQL queries on large datasets for at least 3 years"]},
+    {"id": 3, "text": "Excel for data cleaning and analysis", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Excel", "Experience with Excel", "Excel for data analysis"]},
+    {"id": 4, "text": "Python for data cleaning and analysis", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Python", "Experience with Python", "Python for data analysis"]},
+    {"id": 5, "text": "Experience building dashboards in Power BI, Tableau or a similar tool", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Dashboard experience", "Experience building dashboards", "Power BI or Tableau"]},
+    {"id": 6, "text": "Solid understanding of statistics (hypothesis testing, regression)", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Statistics", "Understanding of statistics", "Hypothesis testing and regression"]},
+    {"id": 7, "text": "Ability to present findings to non-technical stakeholders", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Presenting findings to non-technical stakeholders", "Presentation skills for non-technical audiences"]},
+    {"id": 8, "text": "Bachelor's degree in a quantitative field (mathematics, statistics, economics or computer science)", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Bachelor's degree in a quantitative field", "Degree in mathematics, statistics, economics or computer science"]},
+    {"id": 9, "text": "English, written and spoken, at B2 level or higher", "kind": "mandatory", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["English B2 or higher", "Proficiency in English (B2)"]},
+    {"id": 10, "text": "Experience with a cloud data warehouse such as BigQuery or Snowflake", "kind": "nice_to_have", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["Cloud data warehouse experience", "BigQuery or Snowflake"]},
+    {"id": 11, "text": "Experience designing and analysing A/B tests", "kind": "nice_to_have", "weight": 1, "min_months": null, "parent": null,
+     "aliases": ["A/B testing", "Experience with A/B tests", "Designing and analyzing A/B tests"]}
+  ]
+}

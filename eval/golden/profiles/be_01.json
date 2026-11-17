@@ -17,5 +17,5 @@
     {"requirement_id": 10, "verdict": "met", "fact": "RabbitMQ for order events", "quote": "RabbitMQ for order events, instead of"},
     {"requirement_id": 11, "verdict": "met", "fact": "deployed services to AWS ECS", "quote": "deployment to AWS ECS"}
   ],
-  "relevance": {"backend_developer": 3, "project_manager": 0}
+  "relevance": {"backend_developer": 3, "data_analyst": 1, "business_analyst": 0, "project_manager": 0, "financial_controller": 0, "sales_manager": 0}
 }

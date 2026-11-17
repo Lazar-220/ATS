@@ -16,5 +16,5 @@
     {"requirement_id": 9, "verdict": "not_met", "fact": "no certificate", "quote": null},
     {"requirement_id": 10, "verdict": "met", "fact": "delivered mobile apps at a software company", "quote": "• Delivery of two mobile apps for retail clients"}
   ],
-  "relevance": {"backend_developer": 0, "project_manager": 1}
+  "relevance": {"backend_developer": 0, "data_analyst": 0, "business_analyst": 1, "project_manager": 1, "financial_controller": 0, "sales_manager": 0}
 }

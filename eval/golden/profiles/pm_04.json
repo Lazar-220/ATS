@@ -16,5 +16,5 @@
     {"requirement_id": 9, "verdict": "not_met", "fact": "no PMP or PRINCE2; a Scrum course is not one of them", "quote": null},
     {"requirement_id": 10, "verdict": "met", "fact": "software projects for banks", "quote": "• Vođenje tri projekta za klijente"}
   ],
-  "relevance": {"backend_developer": 2, "project_manager": 2}
+  "relevance": {"backend_developer": 2, "data_analyst": 0, "business_analyst": 1, "project_manager": 2, "financial_controller": 0, "sales_manager": 0}
 }

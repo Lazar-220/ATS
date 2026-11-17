@@ -16,5 +16,5 @@
     {"requirement_id": 9, "verdict": "met", "fact": "PMP certificate 2020", "quote": "PMP - Project Management Institute (2020)"},
     {"requirement_id": 10, "verdict": "met", "fact": "delivers software projects", "quote": "• Vođenje projekata razvoja softvera za osiguravajuće kompanije"}
   ],
-  "relevance": {"backend_developer": 0, "project_manager": 3}
+  "relevance": {"backend_developer": 0, "data_analyst": 0, "business_analyst": 2, "project_manager": 3, "financial_controller": 0, "sales_manager": 0}
 }

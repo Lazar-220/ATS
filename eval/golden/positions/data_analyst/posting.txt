@@ -1,0 +1,35 @@
+DATA ANALYST
+Tidewell Analytics, Belgrade (hybrid)
+
+About us
+Tidewell Analytics helps retail chains understand their customers. Our analysts turn
+sales and loyalty data into decisions about pricing, stock and promotions for clients
+in six countries.
+
+What you will do
+- Answer business questions with data and present the answers to client teams
+- Build and maintain dashboards that managers open every morning
+- Clean, join and check data from several sources before it is analysed
+
+What we require
+- Strong knowledge of SQL
+- At least 3 years of experience writing SQL queries on large datasets
+- Excel and Python for data cleaning and analysis
+- Experience building dashboards in Power BI, Tableau or a similar tool
+- Solid understanding of statistics (hypothesis testing, regression)
+- Ability to present findings to non-technical stakeholders
+- Bachelor's degree in a quantitative field (mathematics, statistics, economics or
+  computer science)
+- English, written and spoken, at B2 level or higher
+
+Nice to have
+- Experience with a cloud data warehouse such as BigQuery or Snowflake
+- Experience designing and analysing A/B tests
+
+We offer
+- A salary of 2,500 to 3,800 EUR net, depending on experience
+- 25 days of annual leave and two remote days a week
+- A yearly budget for courses and conferences
+
+How to apply
+Send your CV to careers@tidewell.example. We reply within two weeks.

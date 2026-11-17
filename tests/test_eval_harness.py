@@ -342,9 +342,12 @@ def test_the_command_dry_run_calls_nothing_and_writes_nothing(
 
 
 def test_a_run_of_more_than_five_uncached_calls_is_refused_without_yes(
-    capsys: pytest.CaptureFixture[str], tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    golden: GoldSet,
+    capsys: pytest.CaptureFixture[str],
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    # An empty cache in tmp, and a limit of 1 instead of 5: the mini set has two postings.
+    # An empty cache in tmp, and a limit of 1 instead of 5, so one posting is enough to trip it.
     monkeypatch.setenv("LLM_CACHE_DIR", str(tmp_path / "cache"))
     get_settings.cache_clear()
     monkeypatch.setattr(eval_cli, "MAX_CALLS_WITHOUT_CONFIRMATION", 1)
@@ -359,7 +362,7 @@ def test_a_run_of_more_than_five_uncached_calls_is_refused_without_yes(
     finally:
         get_settings.cache_clear()
     captured = capsys.readouterr()
-    assert "would call the model 2 times" in captured.err
+    assert f"would call the model {len(golden.positions)} times" in captured.err
     assert "Dry run" in captured.out  # the estimate is shown first
     assert list(tmp_path.glob("*.json")) == []
 

@@ -17,5 +17,5 @@
     {"requirement_id": 10, "verdict": "not_met", "fact": "no message queues", "quote": null},
     {"requirement_id": 11, "verdict": "not_met", "fact": "no cloud", "quote": null}
   ],
-  "relevance": {"backend_developer": 2, "project_manager": 0}
+  "relevance": {"backend_developer": 2, "data_analyst": 1, "business_analyst": 0, "project_manager": 0, "financial_controller": 0, "sales_manager": 0}
 }
