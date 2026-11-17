@@ -31,6 +31,94 @@
 {"cv_id": "ba_03", "position_id": "business_analyst", "requirement_id": 9, "verdict": "met", "quote": "Mother tongue(s): Srpski Other language(s): English - C1"}
 {"cv_id": "ba_03", "position_id": "business_analyst", "requirement_id": 10, "verdict": "not_met", "quote": null}
 {"cv_id": "ba_03", "position_id": "business_analyst", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "ba_04", "position_id": "business_analyst", "requirement_id": 1, "verdict": "met", "quote": "• Business requirements documents and process descriptions"}
+{"cv_id": "ba_04", "position_id": "business_analyst", "requirement_id": 2, "verdict": "met", "quote": "Business Analyst | PayLine Fintech | 10/2016 - 03/2019"}
+{"cv_id": "ba_04", "position_id": "business_analyst", "requirement_id": 3, "verdict": "met", "quote": "• User stories with acceptance criteria for the mobile app"}
+{"cv_id": "ba_04", "position_id": "business_analyst", "requirement_id": 4, "verdict": "met", "quote": "• Daily work in Jira: backlog grooming, sprint planning"}
+{"cv_id": "ba_04", "position_id": "business_analyst", "requirement_id": 5, "verdict": "met", "quote": "• Jira boards and Confluence pages"}
+{"cv_id": "ba_04", "position_id": "business_analyst", "requirement_id": 6, "verdict": "met", "quote": "• BPMN models of the card issuing process"}
+{"cv_id": "ba_04", "position_id": "business_analyst", "requirement_id": 7, "verdict": "met", "quote": "• SQL checks of transaction data before releases"}
+{"cv_id": "ba_04", "position_id": "business_analyst", "requirement_id": 8, "verdict": "met", "quote": "BSc Economics, Faculty of Economics, Belgrade, 2006 - 2010"}
+{"cv_id": "ba_04", "position_id": "business_analyst", "requirement_id": 9, "verdict": "met", "quote": "English - C1"}
+{"cv_id": "ba_04", "position_id": "business_analyst", "requirement_id": 10, "verdict": "met", "quote": "Senior Business Analyst | Sava Bank | 04/2019 - present"}
+{"cv_id": "ba_04", "position_id": "business_analyst", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "ba_05", "position_id": "business_analyst", "requirement_id": 1, "verdict": "met", "quote": "and dispatch managers, documented in Confluence"}
+{"cv_id": "ba_05", "position_id": "business_analyst", "requirement_id": 2, "verdict": "met", "quote": "Kolo Software | 09/2017 - 04/2020"}
+{"cv_id": "ba_05", "position_id": "business_analyst", "requirement_id": 3, "verdict": "met", "quote": "User stories and acceptance criteria for TMS"}
+{"cv_id": "ba_05", "position_id": "business_analyst", "requirement_id": 4, "verdict": "met", "quote": "Jira administration and daily backlog work"}
+{"cv_id": "ba_05", "position_id": "business_analyst", "requirement_id": 5, "verdict": "met", "quote": "Jira boards for two scrum teams"}
+{"cv_id": "ba_05", "position_id": "business_analyst", "requirement_id": 6, "verdict": "met", "quote": "Process models in BPMN for order handling"}
+{"cv_id": "ba_05", "position_id": "business_analyst", "requirement_id": 7, "verdict": "met", "quote": "SQL queries to check order and tariff data"}
+{"cv_id": "ba_05", "position_id": "business_analyst", "requirement_id": 8, "verdict": "met", "quote": "BSc Information Systems"}
+{"cv_id": "ba_05", "position_id": "business_analyst", "requirement_id": 9, "verdict": "met", "quote": "English - C1"}
+{"cv_id": "ba_05", "position_id": "business_analyst", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "ba_05", "position_id": "business_analyst", "requirement_id": 11, "verdict": "met", "quote": "IIBA-CCBA, 2021"}
+{"cv_id": "ba_06", "position_id": "business_analyst", "requirement_id": 1, "verdict": "partial", "quote": "- Meeting notes and lists of requests for a small internal tool"}
+{"cv_id": "ba_06", "position_id": "business_analyst", "requirement_id": 2, "verdict": "not_met", "quote": null}
+{"cv_id": "ba_06", "position_id": "business_analyst", "requirement_id": 3, "verdict": "not_met", "quote": null}
+{"cv_id": "ba_06", "position_id": "business_analyst", "requirement_id": 4, "verdict": "partial", "quote": "- Jira (basic) for tracking tickets"}
+{"cv_id": "ba_06", "position_id": "business_analyst", "requirement_id": 5, "verdict": "not_met", "quote": null}
+{"cv_id": "ba_06", "position_id": "business_analyst", "requirement_id": 6, "verdict": "not_met", "quote": null}
+{"cv_id": "ba_06", "position_id": "business_analyst", "requirement_id": 7, "verdict": "not_met", "quote": null}
+{"cv_id": "ba_06", "position_id": "business_analyst", "requirement_id": 8, "verdict": "met", "quote": "BSc Economics, Faculty of Economics, Nis, 2021 - 2025"}
+{"cv_id": "ba_06", "position_id": "business_analyst", "requirement_id": 9, "verdict": "met", "quote": "English: B2"}
+{"cv_id": "ba_06", "position_id": "business_analyst", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "ba_06", "position_id": "business_analyst", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "ba_07", "position_id": "business_analyst", "requirement_id": 1, "verdict": "met", "quote": "- Prikupljanje zahteva od klijenata, dokumenti sa zahtevima u Confluence-u"}
+{"cv_id": "ba_07", "position_id": "business_analyst", "requirement_id": 2, "verdict": "partial", "quote": "Sumadija Soft d.o.o. | 11/2023 - danas"}
+{"cv_id": "ba_07", "position_id": "business_analyst", "requirement_id": 3, "verdict": "met", "quote": "- User stories sa kriterijumima prihvatanja za ERP modul"}
+{"cv_id": "ba_07", "position_id": "business_analyst", "requirement_id": 4, "verdict": "met", "quote": "- Svakodnevni rad u Jira-i: backlog, sprintovi"}
+{"cv_id": "ba_07", "position_id": "business_analyst", "requirement_id": 5, "verdict": "met", "quote": "- Svakodnevni rad u Jira-i: backlog, sprintovi"}
+{"cv_id": "ba_07", "position_id": "business_analyst", "requirement_id": 6, "verdict": "partial", "quote": "- BPMN ( osnove ), dijagrami procesa narudzbina"}
+{"cv_id": "ba_07", "position_id": "business_analyst", "requirement_id": 7, "verdict": "met", "quote": "- SQL upiti za proveru podataka pre isporuke"}
+{"cv_id": "ba_07", "position_id": "business_analyst", "requirement_id": 8, "verdict": "met", "quote": "Ekonomski fakultet, Kragujevac | 2005 - 2010"}
+{"cv_id": "ba_07", "position_id": "business_analyst", "requirement_id": 9, "verdict": "met", "quote": "Engleski: B2"}
+{"cv_id": "ba_07", "position_id": "business_analyst", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "ba_07", "position_id": "business_analyst", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "ba_08", "position_id": "business_analyst", "requirement_id": 1, "verdict": "met", "quote": "• Radionice sa aktuarima i službom likvidacije, prikupljanje i dokumentovanje zahteva"}
+{"cv_id": "ba_08", "position_id": "business_analyst", "requirement_id": 2, "verdict": "met", "quote": "09/2014 - 04/2018"}
+{"cv_id": "ba_08", "position_id": "business_analyst", "requirement_id": 3, "verdict": "met", "quote": "• User stories i kriterijumi prihvatanja za portal klijenata"}
+{"cv_id": "ba_08", "position_id": "business_analyst", "requirement_id": 4, "verdict": "met", "quote": "• Jira: svakodnevno vođenje backloga i sprintova"}
+{"cv_id": "ba_08", "position_id": "business_analyst", "requirement_id": 5, "verdict": "met", "quote": "• Jira: svakodnevno vođenje backloga i sprintova"}
+{"cv_id": "ba_08", "position_id": "business_analyst", "requirement_id": 6, "verdict": "met", "quote": "• BPMN modeli procesa obrade štete"}
+{"cv_id": "ba_08", "position_id": "business_analyst", "requirement_id": 7, "verdict": "met", "quote": "• SQL upiti za proveru migriranih polisa"}
+{"cv_id": "ba_08", "position_id": "business_analyst", "requirement_id": 8, "verdict": "met", "quote": "Diplomirani inženjer informacionih sistema"}
+{"cv_id": "ba_08", "position_id": "business_analyst", "requirement_id": 9, "verdict": "met", "quote": "Engleski jezik C1 ( slušanje, čitanje, govor, pisanje )"}
+{"cv_id": "ba_08", "position_id": "business_analyst", "requirement_id": 10, "verdict": "met", "quote": "05/2018 - danas Viši poslovni analitičar, Panonija Osiguranje, Novi Sad"}
+{"cv_id": "ba_08", "position_id": "business_analyst", "requirement_id": 11, "verdict": "met", "quote": "ECBA, IIBA, 2015"}
+{"cv_id": "ba_09", "position_id": "business_analyst", "requirement_id": 1, "verdict": "met", "quote": "• Прикупљање захтева од продаје и логистике, документи у Confluence-у"}
+{"cv_id": "ba_09", "position_id": "business_analyst", "requirement_id": 2, "verdict": "partial", "quote": "11/2023 - данас"}
+{"cv_id": "ba_09", "position_id": "business_analyst", "requirement_id": 3, "verdict": "met", "quote": "• Корисничке приче ( user stories ) са критеријумима прихватања"}
+{"cv_id": "ba_09", "position_id": "business_analyst", "requirement_id": 4, "verdict": "met", "quote": "• Рад у алату Jira сваког дана"}
+{"cv_id": "ba_09", "position_id": "business_analyst", "requirement_id": 5, "verdict": "met", "quote": "• Рад у алату Jira сваког дана"}
+{"cv_id": "ba_09", "position_id": "business_analyst", "requirement_id": 6, "verdict": "not_met", "quote": null}
+{"cv_id": "ba_09", "position_id": "business_analyst", "requirement_id": 7, "verdict": "partial", "quote": "• SQL - основно знање, провера података"}
+{"cv_id": "ba_09", "position_id": "business_analyst", "requirement_id": 8, "verdict": "met", "quote": "Смер Пословна информатика"}
+{"cv_id": "ba_09", "position_id": "business_analyst", "requirement_id": 9, "verdict": "met", "quote": "Енглески језик Б2"}
+{"cv_id": "ba_09", "position_id": "business_analyst", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "ba_09", "position_id": "business_analyst", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "ba_10", "position_id": "business_analyst", "requirement_id": 1, "verdict": "met", "quote": "- Requirements gathering with claims and sales departments"}
+{"cv_id": "ba_10", "position_id": "business_analyst", "requirement_id": 2, "verdict": "met", "quote": "Business Analyst, Delta Commerce, 04/2021 - 04/2025"}
+{"cv_id": "ba_10", "position_id": "business_analyst", "requirement_id": 3, "verdict": "not_met", "quote": null}
+{"cv_id": "ba_10", "position_id": "business_analyst", "requirement_id": 4, "verdict": "met", "quote": "- Daily work in Jira (since 05/2025)"}
+{"cv_id": "ba_10", "position_id": "business_analyst", "requirement_id": 5, "verdict": "partial", "quote": "- Daily work in Jira (since 05/2025)"}
+{"cv_id": "ba_10", "position_id": "business_analyst", "requirement_id": 6, "verdict": "met", "quote": "- UML activity and class diagrams"}
+{"cv_id": "ba_10", "position_id": "business_analyst", "requirement_id": 7, "verdict": "met", "quote": "- SQL queries for data checks"}
+{"cv_id": "ba_10", "position_id": "business_analyst", "requirement_id": 8, "verdict": "met", "quote": "BSc Information Systems, University of Novi Sad, 2016 - 2020"}
+{"cv_id": "ba_10", "position_id": "business_analyst", "requirement_id": 9, "verdict": "met", "quote": "English - B2"}
+{"cv_id": "ba_10", "position_id": "business_analyst", "requirement_id": 10, "verdict": "met", "quote": "Business Analyst, Tisza Insurance, 05/2025 - present"}
+{"cv_id": "ba_10", "position_id": "business_analyst", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "ba_11", "position_id": "business_analyst", "requirement_id": 1, "verdict": "met", "quote": "• Prikupljanje i dokumentovanje zahteva sa poslovnim jedinicama"}
+{"cv_id": "ba_11", "position_id": "business_analyst", "requirement_id": 2, "verdict": "met", "quote": "Business Analyst | Adriatic Banka | 10/2021 - danas"}
+{"cv_id": "ba_11", "position_id": "business_analyst", "requirement_id": 3, "verdict": "met", "quote": "• User stories i acceptance criteria za internet bankarstvo"}
+{"cv_id": "ba_11", "position_id": "business_analyst", "requirement_id": 4, "verdict": "met", "quote": "• Jira, svakodnevno, backlog i release planiranje"}
+{"cv_id": "ba_11", "position_id": "business_analyst", "requirement_id": 5, "verdict": "met", "quote": "• Jira, svakodnevno, backlog i release planiranje"}
+{"cv_id": "ba_11", "position_id": "business_analyst", "requirement_id": 6, "verdict": "met", "quote": "• Modeliranje procesa u BPMN-u"}
+{"cv_id": "ba_11", "position_id": "business_analyst", "requirement_id": 7, "verdict": "partial", "quote": "• SQL upiti za proveru podataka ( osnovni nivo )"}
+{"cv_id": "ba_11", "position_id": "business_analyst", "requirement_id": 8, "verdict": "partial", "quote": "• Smer Informacioni sistemi, 4. godina, diplomski rad u izradi"}
+{"cv_id": "ba_11", "position_id": "business_analyst", "requirement_id": 9, "verdict": "met", "quote": "English - B2"}
+{"cv_id": "ba_11", "position_id": "business_analyst", "requirement_id": 10, "verdict": "met", "quote": "Business Analyst | Adriatic Banka | 10/2021 - danas"}
+{"cv_id": "ba_11", "position_id": "business_analyst", "requirement_id": 11, "verdict": "partial", "quote": "CBAP Exam Prep | 2026 ( u toku )"}
 {"cv_id": "be_01", "position_id": "backend_developer", "requirement_id": 1, "verdict": "met", "quote": "professional experience in Python,"}
 {"cv_id": "be_01", "position_id": "backend_developer", "requirement_id": 2, "verdict": "met", "quote": "09/2018 – 02/2021"}
 {"cv_id": "be_01", "position_id": "backend_developer", "requirement_id": 3, "verdict": "met", "quote": "Designed and built the REST API for"}
@@ -75,6 +163,72 @@
 {"cv_id": "be_04", "position_id": "backend_developer", "requirement_id": 9, "verdict": "met", "quote": "Mother tongue(s): Srpski Other language(s): English - C1"}
 {"cv_id": "be_04", "position_id": "backend_developer", "requirement_id": 10, "verdict": "not_met", "quote": null}
 {"cv_id": "be_04", "position_id": "backend_developer", "requirement_id": 11, "verdict": "met", "quote": "• Order service packaged in Docker and deployed on GCP Cloud Run"}
+{"cv_id": "be_05", "position_id": "backend_developer", "requirement_id": 1, "verdict": "met", "quote": "Backend engineer, 9 years of Python in production. Payment and fintech services."}
+{"cv_id": "be_05", "position_id": "backend_developer", "requirement_id": 2, "verdict": "met", "quote": "Senior Backend Engineer, PayLoop, Novi Sad                          03/2020 - present"}
+{"cv_id": "be_05", "position_id": "backend_developer", "requirement_id": 3, "verdict": "met", "quote": "- Built and maintain 14 REST APIs ( FastAPI ) used by web and mobile clients, ~2M requests/day"}
+{"cv_id": "be_05", "position_id": "backend_developer", "requirement_id": 4, "verdict": "met", "quote": "- PostgreSQL: schema design, migrations ( Alembic ), query tuning"}
+{"cv_id": "be_05", "position_id": "backend_developer", "requirement_id": 5, "verdict": "met", "quote": "- pytest + factory_boy, coverage 88% on core services"}
+{"cv_id": "be_05", "position_id": "backend_developer", "requirement_id": 6, "verdict": "met", "quote": "- MySQL / PostgreSQL, Celery tasks, Git flow"}
+{"cv_id": "be_05", "position_id": "backend_developer", "requirement_id": 7, "verdict": "met", "quote": "- Docker, docker-compose, CI in GitLab, deployments on AWS ECS"}
+{"cv_id": "be_05", "position_id": "backend_developer", "requirement_id": 8, "verdict": "met", "quote": "BSc Computer Science, Faculty of Technical Sciences, Novi Sad, 2009 - 2013"}
+{"cv_id": "be_05", "position_id": "backend_developer", "requirement_id": 9, "verdict": "met", "quote": "English - C1 ( daily work with international teams ), Serbian - native"}
+{"cv_id": "be_05", "position_id": "backend_developer", "requirement_id": 10, "verdict": "met", "quote": "- Kafka consumers for payment events, retries and dead-letter topics"}
+{"cv_id": "be_05", "position_id": "backend_developer", "requirement_id": 11, "verdict": "met", "quote": "- Docker, docker-compose, CI in GitLab, deployments on AWS ECS"}
+{"cv_id": "be_06", "position_id": "backend_developer", "requirement_id": 1, "verdict": "met", "quote": "Developer with 4 years on web"}
+{"cv_id": "be_06", "position_id": "backend_developer", "requirement_id": 2, "verdict": "met", "quote": "05/2022 - Present"}
+{"cv_id": "be_06", "position_id": "backend_developer", "requirement_id": 3, "verdict": "partial", "quote": "• REST API for a mobile app"}
+{"cv_id": "be_06", "position_id": "backend_developer", "requirement_id": 4, "verdict": "met", "quote": "• SQL reports and views in"}
+{"cv_id": "be_06", "position_id": "backend_developer", "requirement_id": 5, "verdict": "not_met", "quote": null}
+{"cv_id": "be_06", "position_id": "backend_developer", "requirement_id": 6, "verdict": "met", "quote": "• Git, code review in pull"}
+{"cv_id": "be_06", "position_id": "backend_developer", "requirement_id": 7, "verdict": "partial", "quote": "Docker"}
+{"cv_id": "be_06", "position_id": "backend_developer", "requirement_id": 8, "verdict": "met", "quote": "BSc Computer Science"}
+{"cv_id": "be_06", "position_id": "backend_developer", "requirement_id": 9, "verdict": "met", "quote": "English - B2"}
+{"cv_id": "be_06", "position_id": "backend_developer", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "be_06", "position_id": "backend_developer", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "be_07", "position_id": "backend_developer", "requirement_id": 1, "verdict": "partial", "quote": "* Od 05/2026 mali servis za obradu slika u Pythonu ( FastAPI )"}
+{"cv_id": "be_07", "position_id": "backend_developer", "requirement_id": 2, "verdict": "not_met", "quote": null}
+{"cv_id": "be_07", "position_id": "backend_developer", "requirement_id": 3, "verdict": "met", "quote": "* REST API za mobilnu aplikaciju prodavnice, 40+ ruta, JWT autentifikacija"}
+{"cv_id": "be_07", "position_id": "backend_developer", "requirement_id": 4, "verdict": "met", "quote": "* Laravel, MySQL, optimizacija upita i indeksa"}
+{"cv_id": "be_07", "position_id": "backend_developer", "requirement_id": 5, "verdict": "not_met", "quote": null}
+{"cv_id": "be_07", "position_id": "backend_developer", "requirement_id": 6, "verdict": "met", "quote": "* Git (feature grane, merge zahtevi)"}
+{"cv_id": "be_07", "position_id": "backend_developer", "requirement_id": 7, "verdict": "met", "quote": "* Docker za lokalno okruzenje i produkciju, docker-compose"}
+{"cv_id": "be_07", "position_id": "backend_developer", "requirement_id": 8, "verdict": "met", "quote": "Fakultet organizacionih nauka, Beograd, smer Informacioni sistemi | 2011 - 2016"}
+{"cv_id": "be_07", "position_id": "backend_developer", "requirement_id": 9, "verdict": "met", "quote": "Engleski - B2 ( tehnicka dokumentacija, sastanci )"}
+{"cv_id": "be_07", "position_id": "backend_developer", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "be_07", "position_id": "backend_developer", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "be_08", "position_id": "backend_developer", "requirement_id": 1, "verdict": "met", "quote": "• Python servisi ( FastAPI, Flask ), REST API za 9 proizvoda"}
+{"cv_id": "be_08", "position_id": "backend_developer", "requirement_id": 2, "verdict": "met", "quote": "09/2019 - danas        Backend inženjer, Orbita Soft, Niš"}
+{"cv_id": "be_08", "position_id": "backend_developer", "requirement_id": 3, "verdict": "met", "quote": "• Dizajn API-ja: verzionisanje, paginacija, OpenAPI dokumentacija"}
+{"cv_id": "be_08", "position_id": "backend_developer", "requirement_id": 4, "verdict": "met", "quote": "• PostgreSQL, složeni upiti i migracije"}
+{"cv_id": "be_08", "position_id": "backend_developer", "requirement_id": 5, "verdict": "met", "quote": "• Testovi u pytest-u, CI provera pre svakog merge-a"}
+{"cv_id": "be_08", "position_id": "backend_developer", "requirement_id": 6, "verdict": "met", "quote": "• Docker i Kubernetes ( GCP ), Git svakodnevno"}
+{"cv_id": "be_08", "position_id": "backend_developer", "requirement_id": 7, "verdict": "met", "quote": "• Docker i Kubernetes ( GCP ), Git svakodnevno"}
+{"cv_id": "be_08", "position_id": "backend_developer", "requirement_id": 8, "verdict": "met", "quote": "2013 - 2017            Elektronski fakultet u Nišu, Računarstvo i informatika"}
+{"cv_id": "be_08", "position_id": "backend_developer", "requirement_id": 9, "verdict": "met", "quote": "Strani jezik           engleski - C1 (razumevanje, govor, pisanje)"}
+{"cv_id": "be_08", "position_id": "backend_developer", "requirement_id": 10, "verdict": "met", "quote": "• RabbitMQ za asinhrone obrade"}
+{"cv_id": "be_08", "position_id": "backend_developer", "requirement_id": 11, "verdict": "met", "quote": "• Docker i Kubernetes ( GCP ), Git svakodnevno"}
+{"cv_id": "be_09", "position_id": "backend_developer", "requirement_id": 1, "verdict": "partial", "quote": "• Исправке грешака у постојећем Python коду"}
+{"cv_id": "be_09", "position_id": "backend_developer", "requirement_id": 2, "verdict": "not_met", "quote": null}
+{"cv_id": "be_09", "position_id": "backend_developer", "requirement_id": 3, "verdict": "not_met", "quote": null}
+{"cv_id": "be_09", "position_id": "backend_developer", "requirement_id": 4, "verdict": "partial", "quote": "• Основно знање SQL-а, упити над тест базом"}
+{"cv_id": "be_09", "position_id": "backend_developer", "requirement_id": 5, "verdict": "not_met", "quote": null}
+{"cv_id": "be_09", "position_id": "backend_developer", "requirement_id": 6, "verdict": "met", "quote": "• Git у свакодневном раду на тимском репозиторијуму"}
+{"cv_id": "be_09", "position_id": "backend_developer", "requirement_id": 7, "verdict": "not_met", "quote": null}
+{"cv_id": "be_09", "position_id": "backend_developer", "requirement_id": 8, "verdict": "partial", "quote": "• Смер Рачунарство и информатика, 4. година, дипломски рад у изради"}
+{"cv_id": "be_09", "position_id": "backend_developer", "requirement_id": 9, "verdict": "met", "quote": "Енглески језик Б2"}
+{"cv_id": "be_09", "position_id": "backend_developer", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "be_09", "position_id": "backend_developer", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "be_10", "position_id": "backend_developer", "requirement_id": 1, "verdict": "met", "quote": "- Python (Flask, FastAPI) microservices for order processing"}
+{"cv_id": "be_10", "position_id": "backend_developer", "requirement_id": 2, "verdict": "met", "quote": "Backend Developer, Pannon Cloud Services, 09/2022 - present"}
+{"cv_id": "be_10", "position_id": "backend_developer", "requirement_id": 3, "verdict": "met", "quote": "- REST APIs consumed by the mobile and web clients"}
+{"cv_id": "be_10", "position_id": "backend_developer", "requirement_id": 4, "verdict": "met", "quote": "- PostgreSQL schemas, queries and migrations"}
+{"cv_id": "be_10", "position_id": "backend_developer", "requirement_id": 5, "verdict": "not_met", "quote": null}
+{"cv_id": "be_10", "position_id": "backend_developer", "requirement_id": 6, "verdict": "met", "quote": "- Git and code review in daily work"}
+{"cv_id": "be_10", "position_id": "backend_developer", "requirement_id": 7, "verdict": "met", "quote": "- Docker images for local development and CI"}
+{"cv_id": "be_10", "position_id": "backend_developer", "requirement_id": 8, "verdict": "met", "quote": "BSc Computer Science, Faculty of Technical Sciences, Novi Sad, 2013 - 2017"}
+{"cv_id": "be_10", "position_id": "backend_developer", "requirement_id": 9, "verdict": "met", "quote": "English - B2"}
+{"cv_id": "be_10", "position_id": "backend_developer", "requirement_id": 10, "verdict": "met", "quote": "- RabbitMQ consumers for email and invoice jobs"}
+{"cv_id": "be_10", "position_id": "backend_developer", "requirement_id": 11, "verdict": "not_met", "quote": null}
 {"cv_id": "da_01", "position_id": "data_analyst", "requirement_id": 1, "verdict": "met", "quote": "• Daily SQL on a 400 GB BigQuery sales warehouse: joins, window functions, tuning"}
 {"cv_id": "da_01", "position_id": "data_analyst", "requirement_id": 2, "verdict": "met", "quote": "Senior Data Analyst | Retailia Group | 02/2020 - present"}
 {"cv_id": "da_01", "position_id": "data_analyst", "requirement_id": 3, "verdict": "met", "quote": "• SQL reports and Excel models for the marketing team"}
@@ -108,6 +262,94 @@
 {"cv_id": "da_03", "position_id": "data_analyst", "requirement_id": 9, "verdict": "met", "quote": "• Engleski jezik - B2"}
 {"cv_id": "da_03", "position_id": "data_analyst", "requirement_id": 10, "verdict": "not_met", "quote": null}
 {"cv_id": "da_03", "position_id": "data_analyst", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "da_04", "position_id": "data_analyst", "requirement_id": 1, "verdict": "met", "quote": "• SQL on a 400M-row orders table in BigQuery"}
+{"cv_id": "da_04", "position_id": "data_analyst", "requirement_id": 2, "verdict": "met", "quote": "09/2018 - 02/2021"}
+{"cv_id": "da_04", "position_id": "data_analyst", "requirement_id": 3, "verdict": "met", "quote": "• Excel models and pivot tables for store managers"}
+{"cv_id": "da_04", "position_id": "data_analyst", "requirement_id": 4, "verdict": "met", "quote": "• Python (pandas) scripts for cleaning partner feeds"}
+{"cv_id": "da_04", "position_id": "data_analyst", "requirement_id": 5, "verdict": "met", "quote": "• Revenue and churn dashboards in Tableau"}
+{"cv_id": "da_04", "position_id": "data_analyst", "requirement_id": 6, "verdict": "met", "quote": "• Hypothesis tests on promotion results"}
+{"cv_id": "da_04", "position_id": "data_analyst", "requirement_id": 7, "verdict": "met", "quote": "• Monthly findings deck for the commercial team"}
+{"cv_id": "da_04", "position_id": "data_analyst", "requirement_id": 8, "verdict": "met", "quote": "BSc Mathematics | University of Belgrade | 2012 - 2016"}
+{"cv_id": "da_04", "position_id": "data_analyst", "requirement_id": 9, "verdict": "met", "quote": "English - C1"}
+{"cv_id": "da_04", "position_id": "data_analyst", "requirement_id": 10, "verdict": "met", "quote": "• SQL on a 400M-row orders table in BigQuery"}
+{"cv_id": "da_04", "position_id": "data_analyst", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "da_05", "position_id": "data_analyst", "requirement_id": 1, "verdict": "met", "quote": "SQL queries on sales and stock tables"}
+{"cv_id": "da_05", "position_id": "data_analyst", "requirement_id": 2, "verdict": "partial", "quote": "Fresh Market Group | 08/2024 - present"}
+{"cv_id": "da_05", "position_id": "data_analyst", "requirement_id": 3, "verdict": "met", "quote": "Monthly Excel reports with pivot tables"}
+{"cv_id": "da_05", "position_id": "data_analyst", "requirement_id": 4, "verdict": "partial", "quote": "Python (basic)"}
+{"cv_id": "da_05", "position_id": "data_analyst", "requirement_id": 5, "verdict": "met", "quote": "Power BI dashboard for store sales"}
+{"cv_id": "da_05", "position_id": "data_analyst", "requirement_id": 6, "verdict": "not_met", "quote": null}
+{"cv_id": "da_05", "position_id": "data_analyst", "requirement_id": 7, "verdict": "met", "quote": "Presented results to the sales director"}
+{"cv_id": "da_05", "position_id": "data_analyst", "requirement_id": 8, "verdict": "met", "quote": "BSc Economics"}
+{"cv_id": "da_05", "position_id": "data_analyst", "requirement_id": 9, "verdict": "met", "quote": "English - B2"}
+{"cv_id": "da_05", "position_id": "data_analyst", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "da_05", "position_id": "data_analyst", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "da_06", "position_id": "data_analyst", "requirement_id": 1, "verdict": "not_met", "quote": null}
+{"cv_id": "da_06", "position_id": "data_analyst", "requirement_id": 2, "verdict": "not_met", "quote": null}
+{"cv_id": "da_06", "position_id": "data_analyst", "requirement_id": 3, "verdict": "met", "quote": "- Booking lists cleaned and merged in Excel (VLOOKUP, pivot)"}
+{"cv_id": "da_06", "position_id": "data_analyst", "requirement_id": 4, "verdict": "not_met", "quote": null}
+{"cv_id": "da_06", "position_id": "data_analyst", "requirement_id": 5, "verdict": "not_met", "quote": null}
+{"cv_id": "da_06", "position_id": "data_analyst", "requirement_id": 6, "verdict": "not_met", "quote": null}
+{"cv_id": "da_06", "position_id": "data_analyst", "requirement_id": 7, "verdict": "not_met", "quote": null}
+{"cv_id": "da_06", "position_id": "data_analyst", "requirement_id": 8, "verdict": "not_met", "quote": null}
+{"cv_id": "da_06", "position_id": "data_analyst", "requirement_id": 9, "verdict": "met", "quote": "English: B2 (spoken and written)"}
+{"cv_id": "da_06", "position_id": "data_analyst", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "da_06", "position_id": "data_analyst", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "da_07", "position_id": "data_analyst", "requirement_id": 1, "verdict": "met", "quote": "• SQL upiti nad bazom porudžbina ( PostgreSQL )"}
+{"cv_id": "da_07", "position_id": "data_analyst", "requirement_id": 2, "verdict": "partial", "quote": "07/2024 - danas"}
+{"cv_id": "da_07", "position_id": "data_analyst", "requirement_id": 3, "verdict": "met", "quote": "• Excel za čišćenje izvoza iz ERP-a"}
+{"cv_id": "da_07", "position_id": "data_analyst", "requirement_id": 4, "verdict": "met", "quote": "• Python ( pandas ) za pripremu podataka"}
+{"cv_id": "da_07", "position_id": "data_analyst", "requirement_id": 5, "verdict": "met", "quote": "• Izveštaji i dashboardi u Power BI-u"}
+{"cv_id": "da_07", "position_id": "data_analyst", "requirement_id": 6, "verdict": "met", "quote": "• Testiranje hipoteza i regresija nad podacima o prodaji"}
+{"cv_id": "da_07", "position_id": "data_analyst", "requirement_id": 7, "verdict": "met", "quote": "• Prezentacije rezultata upravi kompanije"}
+{"cv_id": "da_07", "position_id": "data_analyst", "requirement_id": 8, "verdict": "met", "quote": "Master matematike, Prirodno-matematički fakultet, Kragujevac | 2006 - 2011"}
+{"cv_id": "da_07", "position_id": "data_analyst", "requirement_id": 9, "verdict": "met", "quote": "Engleski jezik: B2"}
+{"cv_id": "da_07", "position_id": "data_analyst", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "da_07", "position_id": "data_analyst", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "da_08", "position_id": "data_analyst", "requirement_id": 1, "verdict": "met", "quote": "• SQL upiti nad tabelama racuna, preko 300 miliona redova"}
+{"cv_id": "da_08", "position_id": "data_analyst", "requirement_id": 2, "verdict": "met", "quote": "10/2017 - 01/2020"}
+{"cv_id": "da_08", "position_id": "data_analyst", "requirement_id": 3, "verdict": "met", "quote": "• Excel modeli, pivot tabele, makroi"}
+{"cv_id": "da_08", "position_id": "data_analyst", "requirement_id": 4, "verdict": "met", "quote": "• Python ( pandas ) za ciscenje i spajanje izvora"}
+{"cv_id": "da_08", "position_id": "data_analyst", "requirement_id": 5, "verdict": "met", "quote": "• Dashboardi u Power BI-u za nabavku i prodaju"}
+{"cv_id": "da_08", "position_id": "data_analyst", "requirement_id": 6, "verdict": "met", "quote": "• t-test i regresija u analizi kreditnog rizika"}
+{"cv_id": "da_08", "position_id": "data_analyst", "requirement_id": 7, "verdict": "met", "quote": "• Mesecna prezentacija nalaza direktorima"}
+{"cv_id": "da_08", "position_id": "data_analyst", "requirement_id": 8, "verdict": "met", "quote": "Diplomirani ekonomista, smer Statistika i informatika"}
+{"cv_id": "da_08", "position_id": "data_analyst", "requirement_id": 9, "verdict": "met", "quote": "Engleski - C1"}
+{"cv_id": "da_08", "position_id": "data_analyst", "requirement_id": 10, "verdict": "met", "quote": "• Rad u Snowflake skladistu podataka"}
+{"cv_id": "da_08", "position_id": "data_analyst", "requirement_id": 11, "verdict": "met", "quote": "• A/B testovi popusta u prodavnicama"}
+{"cv_id": "da_09", "position_id": "data_analyst", "requirement_id": 1, "verdict": "met", "quote": "- SQL upiti nad tabelama isporuka"}
+{"cv_id": "da_09", "position_id": "data_analyst", "requirement_id": 2, "verdict": "partial", "quote": "Subotica | 08/2024 - present"}
+{"cv_id": "da_09", "position_id": "data_analyst", "requirement_id": 3, "verdict": "met", "quote": "- Weekly report u Excelu za vozni park"}
+{"cv_id": "da_09", "position_id": "data_analyst", "requirement_id": 4, "verdict": "partial", "quote": "Python ( osnove ) /"}
+{"cv_id": "da_09", "position_id": "data_analyst", "requirement_id": 5, "verdict": "met", "quote": "- Tableau dashboard za praćenje kašnjenja"}
+{"cv_id": "da_09", "position_id": "data_analyst", "requirement_id": 6, "verdict": "not_met", "quote": null}
+{"cv_id": "da_09", "position_id": "data_analyst", "requirement_id": 7, "verdict": "met", "quote": "- Prezentacija rezultata dispečerima"}
+{"cv_id": "da_09", "position_id": "data_analyst", "requirement_id": 8, "verdict": "met", "quote": "Bachelor, Ekonomija | Ekonomski fakultet"}
+{"cv_id": "da_09", "position_id": "data_analyst", "requirement_id": 9, "verdict": "met", "quote": "Engleski - B2"}
+{"cv_id": "da_09", "position_id": "data_analyst", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "da_09", "position_id": "data_analyst", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "da_10", "position_id": "data_analyst", "requirement_id": 1, "verdict": "met", "quote": "- Complex SQL queries and views in Snowflake (joins, window functions)"}
+{"cv_id": "da_10", "position_id": "data_analyst", "requirement_id": 2, "verdict": "met", "quote": "06/2018 - 12/2020"}
+{"cv_id": "da_10", "position_id": "data_analyst", "requirement_id": 3, "verdict": "met", "quote": "- Excel for ad-hoc data cleaning and reconciliation"}
+{"cv_id": "da_10", "position_id": "data_analyst", "requirement_id": 4, "verdict": "not_met", "quote": null}
+{"cv_id": "da_10", "position_id": "data_analyst", "requirement_id": 5, "verdict": "met", "quote": "- Looker Studio dashboards for transaction monitoring"}
+{"cv_id": "da_10", "position_id": "data_analyst", "requirement_id": 6, "verdict": "partial", "quote": "- Basic statistics: averages, variance, simple trends"}
+{"cv_id": "da_10", "position_id": "data_analyst", "requirement_id": 7, "verdict": "not_met", "quote": null}
+{"cv_id": "da_10", "position_id": "data_analyst", "requirement_id": 8, "verdict": "met", "quote": "BSc Computer Science, University of Nis, 2014 - 2018"}
+{"cv_id": "da_10", "position_id": "data_analyst", "requirement_id": 9, "verdict": "met", "quote": "English - B2"}
+{"cv_id": "da_10", "position_id": "data_analyst", "requirement_id": 10, "verdict": "met", "quote": "- Complex SQL queries and views in Snowflake (joins, window functions)"}
+{"cv_id": "da_10", "position_id": "data_analyst", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "da_11", "position_id": "data_analyst", "requirement_id": 1, "verdict": "met", "quote": "• SQL упити над табелама са преко 200 милиона редова"}
+{"cv_id": "da_11", "position_id": "data_analyst", "requirement_id": 2, "verdict": "met", "quote": "09/2016 - 06/2019"}
+{"cv_id": "da_11", "position_id": "data_analyst", "requirement_id": 3, "verdict": "met", "quote": "• Excel модели и пивот табеле"}
+{"cv_id": "da_11", "position_id": "data_analyst", "requirement_id": 4, "verdict": "met", "quote": "• Python ( pandas ) за чишћење и припрему података"}
+{"cv_id": "da_11", "position_id": "data_analyst", "requirement_id": 5, "verdict": "met", "quote": "• Дашборди у Power BI за продају и одлив корисника"}
+{"cv_id": "da_11", "position_id": "data_analyst", "requirement_id": 6, "verdict": "met", "quote": "• Регресиона анализа ризика штете"}
+{"cv_id": "da_11", "position_id": "data_analyst", "requirement_id": 7, "verdict": "met", "quote": "• Презентација налаза менаџерима продаје"}
+{"cv_id": "da_11", "position_id": "data_analyst", "requirement_id": 8, "verdict": "met", "quote": "Дипломирани математичар, смер статистика"}
+{"cv_id": "da_11", "position_id": "data_analyst", "requirement_id": 9, "verdict": "met", "quote": "Енглески језик Ц1"}
+{"cv_id": "da_11", "position_id": "data_analyst", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "da_11", "position_id": "data_analyst", "requirement_id": 11, "verdict": "met", "quote": "• A/B тестови понуда, анализа резултата"}
 {"cv_id": "fc_01", "position_id": "financial_controller", "requirement_id": 1, "verdict": "met", "quote": "Ekonomski fakultet, Univerzitet u Beogradu | smer Računovodstvo i revizija | 2005 - 2010"}
 {"cv_id": "fc_01", "position_id": "financial_controller", "requirement_id": 2, "verdict": "met", "quote": "Finansijski kontroler sa 12 godina iskustva u proizvodnim kompanijama. Radim sa upravom na"}
 {"cv_id": "fc_01", "position_id": "financial_controller", "requirement_id": 3, "verdict": "met", "quote": "• Mesečni i godišnji finansijski izveštaji po MSFI za upravu i vlasnike"}
@@ -185,6 +427,116 @@
 {"cv_id": "fc_07", "position_id": "financial_controller", "requirement_id": 9, "verdict": "met", "quote": "Engleski jezik - B2"}
 {"cv_id": "fc_07", "position_id": "financial_controller", "requirement_id": 10, "verdict": "not_met", "quote": null}
 {"cv_id": "fc_07", "position_id": "financial_controller", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_08", "position_id": "financial_controller", "requirement_id": 1, "verdict": "met", "quote": "Ekonomski fakultet, Univerzitet u Beogradu | smer Racunovodstvo i revizija | 2005-2010"}
+{"cv_id": "fc_08", "position_id": "financial_controller", "requirement_id": 2, "verdict": "met", "quote": "Finansijski kontroler | Sava Mlin doo, Beograd | 03/2017 - trenutno"}
+{"cv_id": "fc_08", "position_id": "financial_controller", "requirement_id": 3, "verdict": "met", "quote": "• Mesecni i godisnji finansijski izvestaji po MSFI"}
+{"cv_id": "fc_08", "position_id": "financial_controller", "requirement_id": 4, "verdict": "met", "quote": "• Izrada godisnjeg budzeta i kvartalnih planova"}
+{"cv_id": "fc_08", "position_id": "financial_controller", "requirement_id": 5, "verdict": "met", "quote": "• Mesecni i godisnji finansijski izvestaji po MSFI"}
+{"cv_id": "fc_08", "position_id": "financial_controller", "requirement_id": 6, "verdict": "met", "quote": "• Excel ( pivot, makroi ) za konsolidaciju po sektorima"}
+{"cv_id": "fc_08", "position_id": "financial_controller", "requirement_id": 7, "verdict": "partial", "quote": "Racunarske vestine: MS Office / SAP / Pantheon /"}
+{"cv_id": "fc_08", "position_id": "financial_controller", "requirement_id": 8, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_08", "position_id": "financial_controller", "requirement_id": 9, "verdict": "met", "quote": "Engleski jezik: B2 ( govor i pisanje )"}
+{"cv_id": "fc_08", "position_id": "financial_controller", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_08", "position_id": "financial_controller", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_09", "position_id": "financial_controller", "requirement_id": 1, "verdict": "met", "quote": "• Finance and Accounting"}
+{"cv_id": "fc_09", "position_id": "financial_controller", "requirement_id": 2, "verdict": "met", "quote": "Financial Controller | Pannon Foods"}
+{"cv_id": "fc_09", "position_id": "financial_controller", "requirement_id": 3, "verdict": "met", "quote": "under IFRS"}
+{"cv_id": "fc_09", "position_id": "financial_controller", "requirement_id": 4, "verdict": "met", "quote": "• Annual budget and 3-year plan"}
+{"cv_id": "fc_09", "position_id": "financial_controller", "requirement_id": 5, "verdict": "met", "quote": "• Monthly and annual statements"}
+{"cv_id": "fc_09", "position_id": "financial_controller", "requirement_id": 6, "verdict": "met", "quote": "• Excel models for margin analysis"}
+{"cv_id": "fc_09", "position_id": "financial_controller", "requirement_id": 7, "verdict": "met", "quote": "• SAP FI/CO, daily use since 2012"}
+{"cv_id": "fc_09", "position_id": "financial_controller", "requirement_id": 8, "verdict": "met", "quote": "• SAP FI/CO, daily use since 2012"}
+{"cv_id": "fc_09", "position_id": "financial_controller", "requirement_id": 9, "verdict": "met", "quote": "• English - C1"}
+{"cv_id": "fc_09", "position_id": "financial_controller", "requirement_id": 10, "verdict": "met", "quote": "ACCA qualification - 2016"}
+{"cv_id": "fc_09", "position_id": "financial_controller", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_10", "position_id": "financial_controller", "requirement_id": 1, "verdict": "met", "quote": "2011 - 2016 Економски факултет у Крагујевцу, смер Рачуноводство"}
+{"cv_id": "fc_10", "position_id": "financial_controller", "requirement_id": 2, "verdict": "partial", "quote": "01/2023 - данас Рачуновођа за контролинг, Шумадија Метал доо, Крагујевац"}
+{"cv_id": "fc_10", "position_id": "financial_controller", "requirement_id": 3, "verdict": "partial", "quote": "• Основно знање МСФИ, радим по упутству централе"}
+{"cv_id": "fc_10", "position_id": "financial_controller", "requirement_id": 4, "verdict": "met", "quote": "• Припрема буџета и финансијских планова за производњу"}
+{"cv_id": "fc_10", "position_id": "financial_controller", "requirement_id": 5, "verdict": "met", "quote": "• Месечни извештаји за управу, годишњи финансијски извештаји"}
+{"cv_id": "fc_10", "position_id": "financial_controller", "requirement_id": 6, "verdict": "met", "quote": "• Excel ( пивот табеле, VLOOKUP, макрои )"}
+{"cv_id": "fc_10", "position_id": "financial_controller", "requirement_id": 7, "verdict": "met", "quote": "• Рад у SAP-у ( модул FI ), свакодневно"}
+{"cv_id": "fc_10", "position_id": "financial_controller", "requirement_id": 8, "verdict": "met", "quote": "01/2023 - данас Рачуновођа за контролинг, Шумадија Метал доо, Крагујевац"}
+{"cv_id": "fc_10", "position_id": "financial_controller", "requirement_id": 9, "verdict": "met", "quote": "Енглески језик Б2 ( говор и писање )"}
+{"cv_id": "fc_10", "position_id": "financial_controller", "requirement_id": 10, "verdict": "partial", "quote": "ACCA ( у току, положено 6 од 13 испита )"}
+{"cv_id": "fc_10", "position_id": "financial_controller", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_11", "position_id": "financial_controller", "requirement_id": 1, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_11", "position_id": "financial_controller", "requirement_id": 2, "verdict": "met", "quote": "Senior Accountant / Controller | Novi Pak doo, Beograd | 06/2015 - present"}
+{"cv_id": "fc_11", "position_id": "financial_controller", "requirement_id": 3, "verdict": "partial", "quote": "• Osnovno poznavanje MSFI, izveštaji za matičnu firmu"}
+{"cv_id": "fc_11", "position_id": "financial_controller", "requirement_id": 4, "verdict": "met", "quote": "• Izrada budžeta i rolling forecast-a za 4 sektora"}
+{"cv_id": "fc_11", "position_id": "financial_controller", "requirement_id": 5, "verdict": "met", "quote": "• Mesečni i godišnji izveštaji, priprema za reviziju"}
+{"cv_id": "fc_11", "position_id": "financial_controller", "requirement_id": 6, "verdict": "met", "quote": "• Excel: pivot, SUMIFS, makroi"}
+{"cv_id": "fc_11", "position_id": "financial_controller", "requirement_id": 7, "verdict": "met", "quote": "• Rad u SAP-u ( FI/CO ) od 2019"}
+{"cv_id": "fc_11", "position_id": "financial_controller", "requirement_id": 8, "verdict": "met", "quote": "• Rad u SAP-u ( FI/CO ) od 2019"}
+{"cv_id": "fc_11", "position_id": "financial_controller", "requirement_id": 9, "verdict": "met", "quote": "English: C1 ( govor i pisanje ), nemački: A2"}
+{"cv_id": "fc_11", "position_id": "financial_controller", "requirement_id": 10, "verdict": "met", "quote": "Licenca ovlašćenog računovođe ( 2014 )"}
+{"cv_id": "fc_11", "position_id": "financial_controller", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_12", "position_id": "financial_controller", "requirement_id": 1, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_12", "position_id": "financial_controller", "requirement_id": 2, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_12", "position_id": "financial_controller", "requirement_id": 3, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_12", "position_id": "financial_controller", "requirement_id": 4, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_12", "position_id": "financial_controller", "requirement_id": 5, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_12", "position_id": "financial_controller", "requirement_id": 6, "verdict": "partial", "quote": "Excel - osnovni nivo"}
+{"cv_id": "fc_12", "position_id": "financial_controller", "requirement_id": 7, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_12", "position_id": "financial_controller", "requirement_id": 8, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_12", "position_id": "financial_controller", "requirement_id": 9, "verdict": "partial", "quote": "Engleski - A2, razumem struku, slabije govorim"}
+{"cv_id": "fc_12", "position_id": "financial_controller", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_12", "position_id": "financial_controller", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_13", "position_id": "financial_controller", "requirement_id": 1, "verdict": "met", "quote": "Faculty of Economics, University of Belgrade | 2002-2007 | Finance and Accounting"}
+{"cv_id": "fc_13", "position_id": "financial_controller", "requirement_id": 2, "verdict": "met", "quote": "Finance Controller | Drina Pharma doo, Belgrade | 09/2016 - present"}
+{"cv_id": "fc_13", "position_id": "financial_controller", "requirement_id": 3, "verdict": "met", "quote": "• Monthly management accounts and annual statements under IFRS"}
+{"cv_id": "fc_13", "position_id": "financial_controller", "requirement_id": 4, "verdict": "met", "quote": "• Budget and 3-year financial plan for the group, quarterly reforecast"}
+{"cv_id": "fc_13", "position_id": "financial_controller", "requirement_id": 5, "verdict": "met", "quote": "• Monthly management accounts and annual statements under IFRS"}
+{"cv_id": "fc_13", "position_id": "financial_controller", "requirement_id": 6, "verdict": "met", "quote": "• Excel: pivot tables, Power Query, VBA macros for consolidation"}
+{"cv_id": "fc_13", "position_id": "financial_controller", "requirement_id": 7, "verdict": "met", "quote": "• SAP FI/CO user and key user since 2012, month-end close"}
+{"cv_id": "fc_13", "position_id": "financial_controller", "requirement_id": 8, "verdict": "met", "quote": "• SAP FI/CO user and key user since 2012, month-end close"}
+{"cv_id": "fc_13", "position_id": "financial_controller", "requirement_id": 9, "verdict": "met", "quote": "English - fluent ( C1 ), German - A2"}
+{"cv_id": "fc_13", "position_id": "financial_controller", "requirement_id": 10, "verdict": "met", "quote": "Certified accountant licence ( Serbia ), 2013"}
+{"cv_id": "fc_13", "position_id": "financial_controller", "requirement_id": 11, "verdict": "met", "quote": "• Dashboards in Power BI for cost centre owners"}
+{"cv_id": "fc_14", "position_id": "financial_controller", "requirement_id": 1, "verdict": "met", "quote": "• Смер Финансије и рачуноводство"}
+{"cv_id": "fc_14", "position_id": "financial_controller", "requirement_id": 2, "verdict": "met", "quote": "Финансијски контролер | Југ Комерц"}
+{"cv_id": "fc_14", "position_id": "financial_controller", "requirement_id": 3, "verdict": "met", "quote": "• Извештавање по МСФИ"}
+{"cv_id": "fc_14", "position_id": "financial_controller", "requirement_id": 4, "verdict": "met", "quote": "• Израда буџета и финансијских планова"}
+{"cv_id": "fc_14", "position_id": "financial_controller", "requirement_id": 5, "verdict": "met", "quote": "• Месечни и годишњи извештаји"}
+{"cv_id": "fc_14", "position_id": "financial_controller", "requirement_id": 6, "verdict": "partial", "quote": "• Excel ( основно знање )"}
+{"cv_id": "fc_14", "position_id": "financial_controller", "requirement_id": 7, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_14", "position_id": "financial_controller", "requirement_id": 8, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_14", "position_id": "financial_controller", "requirement_id": 9, "verdict": "met", "quote": "• Енглески језик - Б2"}
+{"cv_id": "fc_14", "position_id": "financial_controller", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_14", "position_id": "financial_controller", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_15", "position_id": "financial_controller", "requirement_id": 1, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_15", "position_id": "financial_controller", "requirement_id": 2, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_15", "position_id": "financial_controller", "requirement_id": 3, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_15", "position_id": "financial_controller", "requirement_id": 4, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_15", "position_id": "financial_controller", "requirement_id": 5, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_15", "position_id": "financial_controller", "requirement_id": 6, "verdict": "partial", "quote": "Rad na računaru MS Office, Excel ( osnovno )"}
+{"cv_id": "fc_15", "position_id": "financial_controller", "requirement_id": 7, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_15", "position_id": "financial_controller", "requirement_id": 8, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_15", "position_id": "financial_controller", "requirement_id": 9, "verdict": "met", "quote": "Engleski jezik C1 ( govor i pisanje )"}
+{"cv_id": "fc_15", "position_id": "financial_controller", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_15", "position_id": "financial_controller", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_16", "position_id": "financial_controller", "requirement_id": 1, "verdict": "met", "quote": "• Smer Finansije i racunovodstvo"}
+{"cv_id": "fc_16", "position_id": "financial_controller", "requirement_id": 2, "verdict": "partial", "quote": "Kontroler | Panonija Mleko doo"}
+{"cv_id": "fc_16", "position_id": "financial_controller", "requirement_id": 3, "verdict": "partial", "quote": "• Osnovno znanje MSFI"}
+{"cv_id": "fc_16", "position_id": "financial_controller", "requirement_id": 4, "verdict": "met", "quote": "• Izrada budzeta i planova"}
+{"cv_id": "fc_16", "position_id": "financial_controller", "requirement_id": 5, "verdict": "met", "quote": "• Mesecni i godisnji izvestaji"}
+{"cv_id": "fc_16", "position_id": "financial_controller", "requirement_id": 6, "verdict": "met", "quote": "• Excel modeli za pracenje odstupanja"}
+{"cv_id": "fc_16", "position_id": "financial_controller", "requirement_id": 7, "verdict": "met", "quote": "• Rad u SAP-u ( FI, CO ), od 2023"}
+{"cv_id": "fc_16", "position_id": "financial_controller", "requirement_id": 8, "verdict": "met", "quote": "• Rad u SAP-u ( FI, CO ), od 2023"}
+{"cv_id": "fc_16", "position_id": "financial_controller", "requirement_id": 9, "verdict": "met", "quote": "• Engleski - B2"}
+{"cv_id": "fc_16", "position_id": "financial_controller", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_16", "position_id": "financial_controller", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "fc_17", "position_id": "financial_controller", "requirement_id": 1, "verdict": "met", "quote": "Смер Финансије и рачуноводство"}
+{"cv_id": "fc_17", "position_id": "financial_controller", "requirement_id": 2, "verdict": "met", "quote": "06/2014 - данас Руководилац контролинга, Београд Лоџистик доо, Београд"}
+{"cv_id": "fc_17", "position_id": "financial_controller", "requirement_id": 3, "verdict": "met", "quote": "• Месечни и годишњи финансијски извештаји по МСФИ"}
+{"cv_id": "fc_17", "position_id": "financial_controller", "requirement_id": 4, "verdict": "met", "quote": "• Годишњи буџет и тригодишњи финансијски план групе"}
+{"cv_id": "fc_17", "position_id": "financial_controller", "requirement_id": 5, "verdict": "met", "quote": "• Месечни и годишњи финансијски извештаји по МСФИ"}
+{"cv_id": "fc_17", "position_id": "financial_controller", "requirement_id": 6, "verdict": "met", "quote": "• Excel ( напредни ниво ), модели за предвиђање готовине"}
+{"cv_id": "fc_17", "position_id": "financial_controller", "requirement_id": 7, "verdict": "met", "quote": "• Рад у SAP-у ( FI/CO ) од 2012. године"}
+{"cv_id": "fc_17", "position_id": "financial_controller", "requirement_id": 8, "verdict": "met", "quote": "• Рад у SAP-у ( FI/CO ) од 2012. године"}
+{"cv_id": "fc_17", "position_id": "financial_controller", "requirement_id": 9, "verdict": "met", "quote": "Енглески језик Ц1 ( говор и писање )"}
+{"cv_id": "fc_17", "position_id": "financial_controller", "requirement_id": 10, "verdict": "met", "quote": "Лиценца овлашћеног рачуновође ( 2010 )"}
+{"cv_id": "fc_17", "position_id": "financial_controller", "requirement_id": 11, "verdict": "met", "quote": "• Извештаји у Power BI-ју за директоре сектора"}
 {"cv_id": "pm_01", "position_id": "project_manager", "requirement_id": 1, "verdict": "met", "quote": "Fakultet organizacionih nauka, Univerzitet u Beogradu | master studije | 2011 - 2016"}
 {"cv_id": "pm_01", "position_id": "project_manager", "requirement_id": 2, "verdict": "met", "quote": "Rukovodilac projekata sa 10 godina iskustva u isporuci softvera za finansijski sektor,"}
 {"cv_id": "pm_01", "position_id": "project_manager", "requirement_id": 3, "verdict": "met", "quote": "• Uvođenje Scrum-a u dva tima, Scrum Master od 2019. godine"}
@@ -225,6 +577,106 @@
 {"cv_id": "pm_04", "position_id": "project_manager", "requirement_id": 8, "verdict": "met", "quote": "• Engleski jezik - C1"}
 {"cv_id": "pm_04", "position_id": "project_manager", "requirement_id": 9, "verdict": "not_met", "quote": null}
 {"cv_id": "pm_04", "position_id": "project_manager", "requirement_id": 10, "verdict": "met", "quote": "• Vođenje tri projekta za klijente"}
+{"cv_id": "pm_05", "position_id": "project_manager", "requirement_id": 1, "verdict": "met", "quote": "• Smer Informacioni sistemi"}
+{"cv_id": "pm_05", "position_id": "project_manager", "requirement_id": 2, "verdict": "met", "quote": "Rukovodilac projekata | Softline"}
+{"cv_id": "pm_05", "position_id": "project_manager", "requirement_id": 3, "verdict": "met", "quote": "• Scrum Master u tri tima od 2018."}
+{"cv_id": "pm_05", "position_id": "project_manager", "requirement_id": 4, "verdict": "met", "quote": "• Scrum Master u tri tima od 2018."}
+{"cv_id": "pm_05", "position_id": "project_manager", "requirement_id": 5, "verdict": "met", "quote": "• Sprintovi, backlog i izveštaji u Jira-i"}
+{"cv_id": "pm_05", "position_id": "project_manager", "requirement_id": 6, "verdict": "met", "quote": "• Budžet projekata do 600.000 EUR"}
+{"cv_id": "pm_05", "position_id": "project_manager", "requirement_id": 7, "verdict": "met", "quote": "• Tim od 8 ljudi ( programeri, QA )"}
+{"cv_id": "pm_05", "position_id": "project_manager", "requirement_id": 8, "verdict": "met", "quote": "• Engleski - C1"}
+{"cv_id": "pm_05", "position_id": "project_manager", "requirement_id": 9, "verdict": "met", "quote": "PMP - 2020"}
+{"cv_id": "pm_05", "position_id": "project_manager", "requirement_id": 10, "verdict": "met", "quote": "Rukovodilac projekata | Softline"}
+{"cv_id": "pm_06", "position_id": "project_manager", "requirement_id": 1, "verdict": "met", "quote": "2009 - 2014 Faculty of Electrical Engineering, University of Belgrade"}
+{"cv_id": "pm_06", "position_id": "project_manager", "requirement_id": 2, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_06", "position_id": "project_manager", "requirement_id": 3, "verdict": "partial", "quote": "Scrum Master course ( 2 days ), 09/2026 - basic knowledge of Scrum"}
+{"cv_id": "pm_06", "position_id": "project_manager", "requirement_id": 4, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_06", "position_id": "project_manager", "requirement_id": 5, "verdict": "met", "quote": "- Tracking tasks and deadlines for web projects in Jira"}
+{"cv_id": "pm_06", "position_id": "project_manager", "requirement_id": 6, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_06", "position_id": "project_manager", "requirement_id": 7, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_06", "position_id": "project_manager", "requirement_id": 8, "verdict": "met", "quote": "English - B2 ( spoken and written )"}
+{"cv_id": "pm_06", "position_id": "project_manager", "requirement_id": 9, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_06", "position_id": "project_manager", "requirement_id": 10, "verdict": "met", "quote": "09/2026 - present | Junior Project Coordinator | Pixel Forge doo, Belgrade"}
+{"cv_id": "pm_07", "position_id": "project_manager", "requirement_id": 1, "verdict": "met", "quote": "Gradjevinski fakultet, Univerzitet u Novom Sadu | 2008-2013"}
+{"cv_id": "pm_07", "position_id": "project_manager", "requirement_id": 2, "verdict": "partial", "quote": "Rukovodilac projekata | Vojvodina Put doo, Novi Sad | 09/2023 - danas"}
+{"cv_id": "pm_07", "position_id": "project_manager", "requirement_id": 3, "verdict": "partial", "quote": "Scrum - osnovno poznavanje ( kurs 2 dana )"}
+{"cv_id": "pm_07", "position_id": "project_manager", "requirement_id": 4, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_07", "position_id": "project_manager", "requirement_id": 5, "verdict": "met", "quote": "• Zadaci i rokovi u alatu Jira"}
+{"cv_id": "pm_07", "position_id": "project_manager", "requirement_id": 6, "verdict": "met", "quote": "• Izrada i pracenje budzeta projekta ( do 1,2 mil. EUR )"}
+{"cv_id": "pm_07", "position_id": "project_manager", "requirement_id": 7, "verdict": "met", "quote": "• Tim od 6 inzenjera i tehnicara"}
+{"cv_id": "pm_07", "position_id": "project_manager", "requirement_id": 8, "verdict": "met", "quote": "Engleski jezik: B2 ( govor i pisanje )"}
+{"cv_id": "pm_07", "position_id": "project_manager", "requirement_id": 9, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_07", "position_id": "project_manager", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_08", "position_id": "project_manager", "requirement_id": 1, "verdict": "met", "quote": "2005 - 2010 Факултет техничких наука у Новом Саду, смер Индустријско инжењерство"}
+{"cv_id": "pm_08", "position_id": "project_manager", "requirement_id": 2, "verdict": "met", "quote": "01/2019 - данас Менаџер пројеката, Дунав Софт доо, Београд"}
+{"cv_id": "pm_08", "position_id": "project_manager", "requirement_id": 3, "verdict": "met", "quote": "• Scrum Master у два тима од 2019. године"}
+{"cv_id": "pm_08", "position_id": "project_manager", "requirement_id": 4, "verdict": "met", "quote": "• Scrum Master у два тима од 2019. године"}
+{"cv_id": "pm_08", "position_id": "project_manager", "requirement_id": 5, "verdict": "met", "quote": "• Планирање спринтова и backlog у алату Jira"}
+{"cv_id": "pm_08", "position_id": "project_manager", "requirement_id": 6, "verdict": "met", "quote": "• Буџет пројеката, месечни извештај управи"}
+{"cv_id": "pm_08", "position_id": "project_manager", "requirement_id": 7, "verdict": "met", "quote": "• Тим од 7 програмера и тестера"}
+{"cv_id": "pm_08", "position_id": "project_manager", "requirement_id": 8, "verdict": "met", "quote": "Енглески језик Ц1 ( говор и писање )"}
+{"cv_id": "pm_08", "position_id": "project_manager", "requirement_id": 9, "verdict": "met", "quote": "PRINCE2 Practitioner, сертификат из 2017. године"}
+{"cv_id": "pm_08", "position_id": "project_manager", "requirement_id": 10, "verdict": "met", "quote": "01/2019 - данас Менаџер пројеката, Дунав Софт доо, Београд"}
+{"cv_id": "pm_09", "position_id": "project_manager", "requirement_id": 1, "verdict": "met", "quote": "BSc Economics, Faculty of Economics, University of Belgrade, 2006-2010"}
+{"cv_id": "pm_09", "position_id": "project_manager", "requirement_id": 2, "verdict": "met", "quote": "Project Manager | ShopNet doo, Belgrade | 04/2020 - present"}
+{"cv_id": "pm_09", "position_id": "project_manager", "requirement_id": 3, "verdict": "met", "quote": "• Scrum Master for 2 teams since 2020"}
+{"cv_id": "pm_09", "position_id": "project_manager", "requirement_id": 4, "verdict": "met", "quote": "• Scrum Master for 2 teams since 2020"}
+{"cv_id": "pm_09", "position_id": "project_manager", "requirement_id": 5, "verdict": "partial", "quote": "Scrum / MS Project / Jira / Confluence /"}
+{"cv_id": "pm_09", "position_id": "project_manager", "requirement_id": 6, "verdict": "met", "quote": "• Project budgets, monthly cost reports to the director"}
+{"cv_id": "pm_09", "position_id": "project_manager", "requirement_id": 7, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_09", "position_id": "project_manager", "requirement_id": 8, "verdict": "met", "quote": "English - fluent ( C1 )"}
+{"cv_id": "pm_09", "position_id": "project_manager", "requirement_id": 9, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_09", "position_id": "project_manager", "requirement_id": 10, "verdict": "met", "quote": "• Delivery of web shop and logistics integrations for retail clients"}
+{"cv_id": "pm_10", "position_id": "project_manager", "requirement_id": 1, "verdict": "met", "quote": "2003 - 2008 Elektronski fakultet u Nišu, smer Energetika"}
+{"cv_id": "pm_10", "position_id": "project_manager", "requirement_id": 2, "verdict": "met", "quote": "07/2018 - danas Rukovodilac projekata, Jug Energo doo, Niš"}
+{"cv_id": "pm_10", "position_id": "project_manager", "requirement_id": 3, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_10", "position_id": "project_manager", "requirement_id": 4, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_10", "position_id": "project_manager", "requirement_id": 5, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_10", "position_id": "project_manager", "requirement_id": 6, "verdict": "met", "quote": "• Izrada i praćenje budžeta projekta ( do 3 mil. EUR )"}
+{"cv_id": "pm_10", "position_id": "project_manager", "requirement_id": 7, "verdict": "met", "quote": "• Tim od 8 inženjera i izvođača"}
+{"cv_id": "pm_10", "position_id": "project_manager", "requirement_id": 8, "verdict": "met", "quote": "Engleski jezik B2 ( govor i pisanje )"}
+{"cv_id": "pm_10", "position_id": "project_manager", "requirement_id": 9, "verdict": "met", "quote": "PRINCE2 Foundation i Practitioner ( 2019 )"}
+{"cv_id": "pm_10", "position_id": "project_manager", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_11", "position_id": "project_manager", "requirement_id": 1, "verdict": "met", "quote": "Ekonomski fakultet u Kragujevcu"}
+{"cv_id": "pm_11", "position_id": "project_manager", "requirement_id": 2, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_11", "position_id": "project_manager", "requirement_id": 3, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_11", "position_id": "project_manager", "requirement_id": 4, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_11", "position_id": "project_manager", "requirement_id": 5, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_11", "position_id": "project_manager", "requirement_id": 6, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_11", "position_id": "project_manager", "requirement_id": 7, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_11", "position_id": "project_manager", "requirement_id": 8, "verdict": "partial", "quote": "• Engleski - A2 ( osnovno )"}
+{"cv_id": "pm_11", "position_id": "project_manager", "requirement_id": 9, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_11", "position_id": "project_manager", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_12", "position_id": "project_manager", "requirement_id": 1, "verdict": "met", "quote": "Elektrotehnički fakultet, Univerzitet u Beogradu | 2010-2015"}
+{"cv_id": "pm_12", "position_id": "project_manager", "requirement_id": 2, "verdict": "met", "quote": "IT Project Manager | PayWave doo, Beograd | 02/2021 - present"}
+{"cv_id": "pm_12", "position_id": "project_manager", "requirement_id": 3, "verdict": "met", "quote": "• Scrum Master u dva tima od 07/2023, sprint review sa klijentima"}
+{"cv_id": "pm_12", "position_id": "project_manager", "requirement_id": 4, "verdict": "met", "quote": "• Scrum Master u dva tima od 07/2023, sprint review sa klijentima"}
+{"cv_id": "pm_12", "position_id": "project_manager", "requirement_id": 5, "verdict": "met", "quote": "• Jira: epici, sprintovi, izveštaji o napretku"}
+{"cv_id": "pm_12", "position_id": "project_manager", "requirement_id": 6, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_12", "position_id": "project_manager", "requirement_id": 7, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_12", "position_id": "project_manager", "requirement_id": 8, "verdict": "met", "quote": "English: C1 ( govor i pisanje )"}
+{"cv_id": "pm_12", "position_id": "project_manager", "requirement_id": 9, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_12", "position_id": "project_manager", "requirement_id": 10, "verdict": "met", "quote": "IT Project Manager | PayWave doo, Beograd | 02/2021 - present"}
+{"cv_id": "pm_13", "position_id": "project_manager", "requirement_id": 1, "verdict": "met", "quote": "School of Electrical Engineering, University of Belgrade | 2004-2009"}
+{"cv_id": "pm_13", "position_id": "project_manager", "requirement_id": 2, "verdict": "met", "quote": "Senior Project Manager | Nordic Soft doo, Belgrade | 10/2017 - present"}
+{"cv_id": "pm_13", "position_id": "project_manager", "requirement_id": 3, "verdict": "met", "quote": "• Scrum Master and coach for 3 teams since 2017, sprint planning and reviews"}
+{"cv_id": "pm_13", "position_id": "project_manager", "requirement_id": 4, "verdict": "met", "quote": "• Scrum Master and coach for 3 teams since 2017, sprint planning and reviews"}
+{"cv_id": "pm_13", "position_id": "project_manager", "requirement_id": 5, "verdict": "met", "quote": "• Jira boards, roadmaps and release reporting"}
+{"cv_id": "pm_13", "position_id": "project_manager", "requirement_id": 6, "verdict": "met", "quote": "• Project budgets of 200k - 900k EUR, forecast against actuals monthly"}
+{"cv_id": "pm_13", "position_id": "project_manager", "requirement_id": 7, "verdict": "met", "quote": "• Line manager of 11 people ( developers, QA, designer )"}
+{"cv_id": "pm_13", "position_id": "project_manager", "requirement_id": 8, "verdict": "met", "quote": "English - fluent, German - B1"}
+{"cv_id": "pm_13", "position_id": "project_manager", "requirement_id": 9, "verdict": "met", "quote": "PMP, Project Management Institute ( 2015 )"}
+{"cv_id": "pm_13", "position_id": "project_manager", "requirement_id": 10, "verdict": "met", "quote": "Senior Project Manager | Nordic Soft doo, Belgrade | 10/2017 - present"}
+{"cv_id": "pm_14", "position_id": "project_manager", "requirement_id": 1, "verdict": "met", "quote": "Смер Менаџмент, дипломирани економиста"}
+{"cv_id": "pm_14", "position_id": "project_manager", "requirement_id": 2, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_14", "position_id": "project_manager", "requirement_id": 3, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_14", "position_id": "project_manager", "requirement_id": 4, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_14", "position_id": "project_manager", "requirement_id": 5, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_14", "position_id": "project_manager", "requirement_id": 6, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_14", "position_id": "project_manager", "requirement_id": 7, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_14", "position_id": "project_manager", "requirement_id": 8, "verdict": "met", "quote": "Енглески језик Б1 ( говор и писање )"}
+{"cv_id": "pm_14", "position_id": "project_manager", "requirement_id": 9, "verdict": "not_met", "quote": null}
+{"cv_id": "pm_14", "position_id": "project_manager", "requirement_id": 10, "verdict": "not_met", "quote": null}
 {"cv_id": "sm_01", "position_id": "sales_manager", "requirement_id": 1, "verdict": "met", "quote": "2004 - 2009 Ekonomski fakultet u Subotici, smer Marketing"}
 {"cv_id": "sm_01", "position_id": "sales_manager", "requirement_id": 2, "verdict": "met", "quote": "06/2011 - 02/2016 Komercijalista, Sladex doo, Beograd"}
 {"cv_id": "sm_01", "position_id": "sales_manager", "requirement_id": 3, "verdict": "met", "quote": "• Vodim prodajni tim od 6 komercijalista za B2B kupce u regionu"}
@@ -247,3 +699,168 @@
 {"cv_id": "sm_02", "position_id": "sales_manager", "requirement_id": 9, "verdict": "met", "quote": "• Спреман на путовања"}
 {"cv_id": "sm_02", "position_id": "sales_manager", "requirement_id": 10, "verdict": "not_met", "quote": null}
 {"cv_id": "sm_02", "position_id": "sales_manager", "requirement_id": 11, "verdict": "met", "quote": "• Продаја ПЕТ амбалаже за"}
+{"cv_id": "sm_03", "position_id": "sales_manager", "requirement_id": 1, "verdict": "met", "quote": "Ekonomski fakultet, Univerzitet u Beogradu | 2003-2008 | diplomirani ekonomista"}
+{"cv_id": "sm_03", "position_id": "sales_manager", "requirement_id": 2, "verdict": "met", "quote": "Preko 14 godina u B2B prodaji, poslednjih 7 na rukovodecim pozicijama."}
+{"cv_id": "sm_03", "position_id": "sales_manager", "requirement_id": 3, "verdict": "met", "quote": "- Vodim tim od 7 prodavaca i 2 key account menadzera"}
+{"cv_id": "sm_03", "position_id": "sales_manager", "requirement_id": 4, "verdict": "met", "quote": "- Plan prodaje 2024: 117%, 2025: 109% (godisnji promet oko 4,2 mil EUR)"}
+{"cv_id": "sm_03", "position_id": "sales_manager", "requirement_id": 5, "verdict": "met", "quote": "- CRM: Salesforce, nedeljni pipeline izvestaji"}
+{"cv_id": "sm_03", "position_id": "sales_manager", "requirement_id": 6, "verdict": "met", "quote": "- Pregovori o godisnjim ugovorima sa velikim kupcima ( trgovinski lanci, preko 500.000 EUR )"}
+{"cv_id": "sm_03", "position_id": "sales_manager", "requirement_id": 7, "verdict": "met", "quote": "Engleski - C1 (govor i pisanje) / Nemacki - B1"}
+{"cv_id": "sm_03", "position_id": "sales_manager", "requirement_id": 8, "verdict": "met", "quote": "Datum rodjenja: 23.05.1984. | Pol: M | Vozacka dozvola: B kat."}
+{"cv_id": "sm_03", "position_id": "sales_manager", "requirement_id": 9, "verdict": "met", "quote": "Spreman na cesta sluzbena putovanja u zemlji i regionu"}
+{"cv_id": "sm_03", "position_id": "sales_manager", "requirement_id": 10, "verdict": "met", "quote": "Engleski - C1 (govor i pisanje) / Nemacki - B1"}
+{"cv_id": "sm_03", "position_id": "sales_manager", "requirement_id": 11, "verdict": "met", "quote": "- Prodaja kartonske ambalaze za FMCG i prehrambenu industriju"}
+{"cv_id": "sm_04", "position_id": "sales_manager", "requirement_id": 1, "verdict": "met", "quote": "2005-2010 Fakultet tehničkih nauka,"}
+{"cv_id": "sm_04", "position_id": "sales_manager", "requirement_id": 2, "verdict": "met", "quote": "Sažetak: 11 godina u prodaji"}
+{"cv_id": "sm_04", "position_id": "sales_manager", "requirement_id": 3, "verdict": "met", "quote": "• Tim 5 komercijalista i 1 asistent"}
+{"cv_id": "sm_04", "position_id": "sales_manager", "requirement_id": 4, "verdict": "met", "quote": "• Ostvarenje plana: 121% (2023),"}
+{"cv_id": "sm_04", "position_id": "sales_manager", "requirement_id": 5, "verdict": "met", "quote": "• HubSpot: lead-ovi i ponude"}
+{"cv_id": "sm_04", "position_id": "sales_manager", "requirement_id": 6, "verdict": "met", "quote": "• Ugovori sa velikim kupcima iz"}
+{"cv_id": "sm_04", "position_id": "sales_manager", "requirement_id": 7, "verdict": "met", "quote": "• Engleski - C1"}
+{"cv_id": "sm_04", "position_id": "sales_manager", "requirement_id": 8, "verdict": "met", "quote": "• Vozačka dozvola B"}
+{"cv_id": "sm_04", "position_id": "sales_manager", "requirement_id": 9, "verdict": "met", "quote": "• Putovanja do 40% vremena"}
+{"cv_id": "sm_04", "position_id": "sales_manager", "requirement_id": 10, "verdict": "partial", "quote": "• Nemački - A2"}
+{"cv_id": "sm_04", "position_id": "sales_manager", "requirement_id": 11, "verdict": "met", "quote": "• B2B prodaja folija i ambalaže"}
+{"cv_id": "sm_05", "position_id": "sales_manager", "requirement_id": 1, "verdict": "met", "quote": "Faculty of Economics, University of Kragujevac, 2000 - 2005, BSc Economics"}
+{"cv_id": "sm_05", "position_id": "sales_manager", "requirement_id": 2, "verdict": "met", "quote": "Sales manager with 15 years in B2B sales, last 9 as team lead. Packaging and consumer goods."}
+{"cv_id": "sm_05", "position_id": "sales_manager", "requirement_id": 3, "verdict": "met", "quote": "* Team of 9 reps in Serbia and Bosnia; hiring, coaching, monthly targets"}
+{"cv_id": "sm_05", "position_id": "sales_manager", "requirement_id": 4, "verdict": "met", "quote": "* Targets met every year since 2018: 2023 = 119%, 2024 = 111%, 2025 = 107%"}
+{"cv_id": "sm_05", "position_id": "sales_manager", "requirement_id": 5, "verdict": "met", "quote": "* Daily work in Salesforce ( forecast, opportunities, reports )"}
+{"cv_id": "sm_05", "position_id": "sales_manager", "requirement_id": 6, "verdict": "met", "quote": "* Negotiated multi-year supply contracts with 4 national retail chains"}
+{"cv_id": "sm_05", "position_id": "sales_manager", "requirement_id": 7, "verdict": "met", "quote": "English - fluent (C1), German - B2, Serbian - native"}
+{"cv_id": "sm_05", "position_id": "sales_manager", "requirement_id": 8, "verdict": "met", "quote": "Born 1981  |  Driving licence: B  |  Married, 2 children"}
+{"cv_id": "sm_05", "position_id": "sales_manager", "requirement_id": 9, "verdict": "met", "quote": "Willing to travel up to 3 days a week."}
+{"cv_id": "sm_05", "position_id": "sales_manager", "requirement_id": 10, "verdict": "met", "quote": "English - fluent (C1), German - B2, Serbian - native"}
+{"cv_id": "sm_05", "position_id": "sales_manager", "requirement_id": 11, "verdict": "met", "quote": "* Main segment: packaging for FMCG producers"}
+{"cv_id": "sm_06", "position_id": "sales_manager", "requirement_id": 1, "verdict": "met", "quote": "Дипломирани инжењер машинства"}
+{"cv_id": "sm_06", "position_id": "sales_manager", "requirement_id": 2, "verdict": "partial", "quote": "01/2023 - данас    Менаџер продаје, Нишка Трговина доо"}
+{"cv_id": "sm_06", "position_id": "sales_manager", "requirement_id": 3, "verdict": "met", "quote": "• Вођење тима од 6 продаваца у два магацина"}
+{"cv_id": "sm_06", "position_id": "sales_manager", "requirement_id": 4, "verdict": "met", "quote": "• Остварење плана: 104% у 2024, 101% у 2025"}
+{"cv_id": "sm_06", "position_id": "sales_manager", "requirement_id": 5, "verdict": "met", "quote": "• Рад у Pipedrive CRM-у"}
+{"cv_id": "sm_06", "position_id": "sales_manager", "requirement_id": 6, "verdict": "partial", "quote": "• Договори о цени са два већа купца"}
+{"cv_id": "sm_06", "position_id": "sales_manager", "requirement_id": 7, "verdict": "met", "quote": "Енглески језик     Б2 (говор и писање)"}
+{"cv_id": "sm_06", "position_id": "sales_manager", "requirement_id": 8, "verdict": "met", "quote": "Возачка дозвола Б категорије"}
+{"cv_id": "sm_06", "position_id": "sales_manager", "requirement_id": 9, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_06", "position_id": "sales_manager", "requirement_id": 10, "verdict": "partial", "quote": "Немачки језик      основни ниво"}
+{"cv_id": "sm_06", "position_id": "sales_manager", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_07", "position_id": "sales_manager", "requirement_id": 1, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_07", "position_id": "sales_manager", "requirement_id": 2, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_07", "position_id": "sales_manager", "requirement_id": 3, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_07", "position_id": "sales_manager", "requirement_id": 4, "verdict": "partial", "quote": "- mesecni plan prodaje uglavnom ostvaren"}
+{"cv_id": "sm_07", "position_id": "sales_manager", "requirement_id": 5, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_07", "position_id": "sales_manager", "requirement_id": 6, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_07", "position_id": "sales_manager", "requirement_id": 7, "verdict": "partial", "quote": "Engleski - osnovni nivo"}
+{"cv_id": "sm_07", "position_id": "sales_manager", "requirement_id": 8, "verdict": "met", "quote": "Vozacka dozvola B kategorije"}
+{"cv_id": "sm_07", "position_id": "sales_manager", "requirement_id": 9, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_07", "position_id": "sales_manager", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_07", "position_id": "sales_manager", "requirement_id": 11, "verdict": "met", "quote": "- prodaja sokova i voda prodavnicama i kafeima (oko 60 objekata)"}
+{"cv_id": "sm_08", "position_id": "sales_manager", "requirement_id": 1, "verdict": "met", "quote": "2007 - 2012   Fakultet organizacionih nauka, Beograd (Menadzment i organizacija)"}
+{"cv_id": "sm_08", "position_id": "sales_manager", "requirement_id": 2, "verdict": "met", "quote": "2020 - present  Regional Sales Executive, Farmalink Distribucija, Beograd"}
+{"cv_id": "sm_08", "position_id": "sales_manager", "requirement_id": 3, "verdict": "met", "quote": "- svakodnevna raspodela ruta i ciljeva za 5 prodajnih agenata, odgovoran za njihov mesecni rezultat"}
+{"cv_id": "sm_08", "position_id": "sales_manager", "requirement_id": 4, "verdict": "met", "quote": "- ostvarenje targeta 2025: 112%, 2024: 105%"}
+{"cv_id": "sm_08", "position_id": "sales_manager", "requirement_id": 5, "verdict": "partial", "quote": "Salesforce / MS Office / SAP / pregovaranje /"}
+{"cv_id": "sm_08", "position_id": "sales_manager", "requirement_id": 6, "verdict": "met", "quote": "- ugovori sa 3 velike zdravstvene ustanove, godisnja vrednost preko 900.000 EUR"}
+{"cv_id": "sm_08", "position_id": "sales_manager", "requirement_id": 7, "verdict": "met", "quote": "English: C1, written and spoken"}
+{"cv_id": "sm_08", "position_id": "sales_manager", "requirement_id": 8, "verdict": "met", "quote": "Rodjen 1988. u Cacku | Pol: M | Vozacka dozvola B"}
+{"cv_id": "sm_08", "position_id": "sales_manager", "requirement_id": 9, "verdict": "met", "quote": "Ready for business travel across the region"}
+{"cv_id": "sm_08", "position_id": "sales_manager", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_08", "position_id": "sales_manager", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_09", "position_id": "sales_manager", "requirement_id": 1, "verdict": "met", "quote": "Smer: Marketing i trgovina (diplomirani ekonomista)"}
+{"cv_id": "sm_09", "position_id": "sales_manager", "requirement_id": 2, "verdict": "partial", "quote": "Viši komercijalista | Drina Drinks doo | 01/2023 - danas"}
+{"cv_id": "sm_09", "position_id": "sales_manager", "requirement_id": 3, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_09", "position_id": "sales_manager", "requirement_id": 4, "verdict": "met", "quote": "• Plan 2025: 103%, 2024: 107%"}
+{"cv_id": "sm_09", "position_id": "sales_manager", "requirement_id": 5, "verdict": "met", "quote": "• Rad u HubSpot-u ( kontakti, ponude, podsetnici )"}
+{"cv_id": "sm_09", "position_id": "sales_manager", "requirement_id": 6, "verdict": "partial", "quote": "• Pregovori sa lokalnim lancem od 14 prodavnica, godišnji ugovor oko 90.000 EUR"}
+{"cv_id": "sm_09", "position_id": "sales_manager", "requirement_id": 7, "verdict": "met", "quote": "Engleski ( B2 ) - govor i pisanje"}
+{"cv_id": "sm_09", "position_id": "sales_manager", "requirement_id": 8, "verdict": "met", "quote": "Rođena 14. 06. 1991. | Vozačka dozvola B kategorije"}
+{"cv_id": "sm_09", "position_id": "sales_manager", "requirement_id": 9, "verdict": "met", "quote": "Putovanja po Srbiji bez problema, 2-3 dana nedeljno"}
+{"cv_id": "sm_09", "position_id": "sales_manager", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_09", "position_id": "sales_manager", "requirement_id": 11, "verdict": "met", "quote": "• Prodaja bezalkoholnih pića veleprodajama i HoReCa kupcima"}
+{"cv_id": "sm_10", "position_id": "sales_manager", "requirement_id": 1, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_10", "position_id": "sales_manager", "requirement_id": 2, "verdict": "met", "quote": "Искусан у B2B продаји технике"}
+{"cv_id": "sm_10", "position_id": "sales_manager", "requirement_id": 3, "verdict": "met", "quote": "• Тим од 4 продавца на терену"}
+{"cv_id": "sm_10", "position_id": "sales_manager", "requirement_id": 4, "verdict": "met", "quote": "• Остварење плана: 109% у 2024,"}
+{"cv_id": "sm_10", "position_id": "sales_manager", "requirement_id": 5, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_10", "position_id": "sales_manager", "requirement_id": 6, "verdict": "met", "quote": "• Уговори са великим купцима"}
+{"cv_id": "sm_10", "position_id": "sales_manager", "requirement_id": 7, "verdict": "met", "quote": "• Енглески - Б2"}
+{"cv_id": "sm_10", "position_id": "sales_manager", "requirement_id": 8, "verdict": "met", "quote": "• Возачка дозвола Б"}
+{"cv_id": "sm_10", "position_id": "sales_manager", "requirement_id": 9, "verdict": "met", "quote": "• Спреман на путовања"}
+{"cv_id": "sm_10", "position_id": "sales_manager", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_10", "position_id": "sales_manager", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_11", "position_id": "sales_manager", "requirement_id": 1, "verdict": "met", "quote": "Civil engineering (dipl. ing.)"}
+{"cv_id": "sm_11", "position_id": "sales_manager", "requirement_id": 2, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_11", "position_id": "sales_manager", "requirement_id": 3, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_11", "position_id": "sales_manager", "requirement_id": 4, "verdict": "partial", "quote": "- Q2 2026 target exceeded (106%), 3 new accounts"}
+{"cv_id": "sm_11", "position_id": "sales_manager", "requirement_id": 5, "verdict": "met", "quote": "- Using Zoho CRM daily to log calls and offers"}
+{"cv_id": "sm_11", "position_id": "sales_manager", "requirement_id": 6, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_11", "position_id": "sales_manager", "requirement_id": 7, "verdict": "met", "quote": "English - B2 ( reading, writing and meetings )"}
+{"cv_id": "sm_11", "position_id": "sales_manager", "requirement_id": 8, "verdict": "met", "quote": "DOB 21/08/1986 | Licence B"}
+{"cv_id": "sm_11", "position_id": "sales_manager", "requirement_id": 9, "verdict": "met", "quote": "Can travel to sites and customers around Vojvodina"}
+{"cv_id": "sm_11", "position_id": "sales_manager", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_11", "position_id": "sales_manager", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_12", "position_id": "sales_manager", "requirement_id": 1, "verdict": "met", "quote": "2002-2007 Masinski fakultet u"}
+{"cv_id": "sm_12", "position_id": "sales_manager", "requirement_id": 2, "verdict": "met", "quote": "12 godina B2B prodaje, 7 godina"}
+{"cv_id": "sm_12", "position_id": "sales_manager", "requirement_id": 3, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_12", "position_id": "sales_manager", "requirement_id": 4, "verdict": "met", "quote": "• Ostvarenje plana: 107% u 2024,"}
+{"cv_id": "sm_12", "position_id": "sales_manager", "requirement_id": 5, "verdict": "met", "quote": "• Zoho CRM za ponude i kupce"}
+{"cv_id": "sm_12", "position_id": "sales_manager", "requirement_id": 6, "verdict": "partial", "quote": "• Pregovori sa kupcima iz"}
+{"cv_id": "sm_12", "position_id": "sales_manager", "requirement_id": 7, "verdict": "met", "quote": "• Engleski - B2"}
+{"cv_id": "sm_12", "position_id": "sales_manager", "requirement_id": 8, "verdict": "met", "quote": "• Vozacka dozvola B"}
+{"cv_id": "sm_12", "position_id": "sales_manager", "requirement_id": 9, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_12", "position_id": "sales_manager", "requirement_id": 10, "verdict": "partial", "quote": "• Nemacki - A2"}
+{"cv_id": "sm_12", "position_id": "sales_manager", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_13", "position_id": "sales_manager", "requirement_id": 1, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_13", "position_id": "sales_manager", "requirement_id": 2, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_13", "position_id": "sales_manager", "requirement_id": 3, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_13", "position_id": "sales_manager", "requirement_id": 4, "verdict": "met", "quote": "• Prosečno ostvarenje mesečnog plana prodavnice 102%"}
+{"cv_id": "sm_13", "position_id": "sales_manager", "requirement_id": 5, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_13", "position_id": "sales_manager", "requirement_id": 6, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_13", "position_id": "sales_manager", "requirement_id": 7, "verdict": "partial", "quote": "engleski - A2 ( osnovni )"}
+{"cv_id": "sm_13", "position_id": "sales_manager", "requirement_id": 8, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_13", "position_id": "sales_manager", "requirement_id": 9, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_13", "position_id": "sales_manager", "requirement_id": 10, "verdict": "met", "quote": "nemački - B1"}
+{"cv_id": "sm_13", "position_id": "sales_manager", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_14", "position_id": "sales_manager", "requirement_id": 1, "verdict": "met", "quote": "BSc Mechanical Engineering"}
+{"cv_id": "sm_14", "position_id": "sales_manager", "requirement_id": 2, "verdict": "met", "quote": "12 years in B2B sales, 6 of"}
+{"cv_id": "sm_14", "position_id": "sales_manager", "requirement_id": 3, "verdict": "met", "quote": "• Team of 8 (6 reps, 2 KAM)"}
+{"cv_id": "sm_14", "position_id": "sales_manager", "requirement_id": 4, "verdict": "met", "quote": "• Hit target 5 years running:"}
+{"cv_id": "sm_14", "position_id": "sales_manager", "requirement_id": 5, "verdict": "met", "quote": "• Salesforce admin for the team"}
+{"cv_id": "sm_14", "position_id": "sales_manager", "requirement_id": 6, "verdict": "met", "quote": "• Renewed contracts with 5"}
+{"cv_id": "sm_14", "position_id": "sales_manager", "requirement_id": 7, "verdict": "met", "quote": "English - C2"}
+{"cv_id": "sm_14", "position_id": "sales_manager", "requirement_id": 8, "verdict": "met", "quote": "Driving licence B"}
+{"cv_id": "sm_14", "position_id": "sales_manager", "requirement_id": 9, "verdict": "met", "quote": "Travel: up to 50%"}
+{"cv_id": "sm_14", "position_id": "sales_manager", "requirement_id": 10, "verdict": "met", "quote": "German - B2"}
+{"cv_id": "sm_14", "position_id": "sales_manager", "requirement_id": 11, "verdict": "met", "quote": "food packaging."}
+{"cv_id": "sm_15", "position_id": "sales_manager", "requirement_id": 1, "verdict": "partial", "quote": "2019 - тренутно        Економски факултет у Крагујевцу, четврта година"}
+{"cv_id": "sm_15", "position_id": "sales_manager", "requirement_id": 2, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_15", "position_id": "sales_manager", "requirement_id": 3, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_15", "position_id": "sales_manager", "requirement_id": 4, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_15", "position_id": "sales_manager", "requirement_id": 5, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_15", "position_id": "sales_manager", "requirement_id": 6, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_15", "position_id": "sales_manager", "requirement_id": 7, "verdict": "met", "quote": "Енглески језик         Ц1 (положен ЦАЕ 2023)"}
+{"cv_id": "sm_15", "position_id": "sales_manager", "requirement_id": 8, "verdict": "met", "quote": "Возачка дозвола        Б категорије"}
+{"cv_id": "sm_15", "position_id": "sales_manager", "requirement_id": 9, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_15", "position_id": "sales_manager", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_15", "position_id": "sales_manager", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_16", "position_id": "sales_manager", "requirement_id": 1, "verdict": "met", "quote": "Fakultet tehnickih nauka, Novi Sad, elektrotehnika, 1999 - 2005"}
+{"cv_id": "sm_16", "position_id": "sales_manager", "requirement_id": 2, "verdict": "met", "quote": "B2B prodaja 13 godina, rukovodjenje 6 godina."}
+{"cv_id": "sm_16", "position_id": "sales_manager", "requirement_id": 3, "verdict": "met", "quote": "* vodim 4 komercijaliste i 1 asistenta"}
+{"cv_id": "sm_16", "position_id": "sales_manager", "requirement_id": 4, "verdict": "met", "quote": "* ostvarenje plana 2023: 108%, 2024: 106%, 2025: 108%"}
+{"cv_id": "sm_16", "position_id": "sales_manager", "requirement_id": 5, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_16", "position_id": "sales_manager", "requirement_id": 6, "verdict": "met", "quote": "* pregovori sa velikim kupcima ( 3 ugovora preko 400.000 EUR )"}
+{"cv_id": "sm_16", "position_id": "sales_manager", "requirement_id": 7, "verdict": "partial", "quote": "Engleski - citam tehnicku dokumentaciju i prepisku sa dobavljacima"}
+{"cv_id": "sm_16", "position_id": "sales_manager", "requirement_id": 8, "verdict": "met", "quote": "Rodjen 09.09.1980. | B kategorija"}
+{"cv_id": "sm_16", "position_id": "sales_manager", "requirement_id": 9, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_16", "position_id": "sales_manager", "requirement_id": 10, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_16", "position_id": "sales_manager", "requirement_id": 11, "verdict": "not_met", "quote": null}
+{"cv_id": "sm_17", "position_id": "sales_manager", "requirement_id": 1, "verdict": "met", "quote": "Ekonomski fakultet, Univerzitet u Beogradu | 1998 - 2003 | Master ekonomista (smer Marketing)"}
+{"cv_id": "sm_17", "position_id": "sales_manager", "requirement_id": 2, "verdict": "met", "quote": "Prodajni lider sa 17 godina u B2B prodaji u FMCG i industriji ambalaze. Fokus na key accounts,"}
+{"cv_id": "sm_17", "position_id": "sales_manager", "requirement_id": 3, "verdict": "met", "quote": "- tim od 12 ljudi ( 8 prodavaca, 4 key account menadzera )"}
+{"cv_id": "sm_17", "position_id": "sales_manager", "requirement_id": 4, "verdict": "met", "quote": "- realizacija plana: 2022 118%, 2023 112%, 2024 115%, 2025 109%"}
+{"cv_id": "sm_17", "position_id": "sales_manager", "requirement_id": 5, "verdict": "met", "quote": "- uveo Salesforce, danas ga koristi ceo tim"}
+{"cv_id": "sm_17", "position_id": "sales_manager", "requirement_id": 6, "verdict": "met", "quote": "- pregovori i potpisivanje ugovora sa velikim kupcima: top 5 kupaca = 55% prometa"}
+{"cv_id": "sm_17", "position_id": "sales_manager", "requirement_id": 7, "verdict": "met", "quote": "English: fluent ( C1 ), Deutsch: B2"}
+{"cv_id": "sm_17", "position_id": "sales_manager", "requirement_id": 8, "verdict": "met", "quote": "Datum rodjenja: 02.07.1979. | Vozacka dozvola B | Oca troje dece"}
+{"cv_id": "sm_17", "position_id": "sales_manager", "requirement_id": 9, "verdict": "met", "quote": "Putovanja: spreman, oko 30% radnog vremena"}
+{"cv_id": "sm_17", "position_id": "sales_manager", "requirement_id": 10, "verdict": "met", "quote": "English: fluent ( C1 ), Deutsch: B2"}
+{"cv_id": "sm_17", "position_id": "sales_manager", "requirement_id": 11, "verdict": "met", "quote": "Prodajni lider sa 17 godina u B2B prodaji u FMCG i industriji ambalaze. Fokus na key accounts,"}

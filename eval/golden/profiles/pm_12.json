@@ -1,0 +1,77 @@
+{
+  "cv_id": "pm_12",
+  "position_id": "project_manager",
+  "style": "mixed",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "electrical engineering faculty (technical)",
+      "quote": "Elektrotehnički fakultet, Univerzitet u Beogradu | 2010-2015"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "met",
+      "fact": "project manager since 02/2021, 69 months",
+      "quote": "IT Project Manager | PayWave doo, Beograd | 02/2021 - present"
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "met",
+      "fact": "Scrum Master in two teams, PSM I",
+      "quote": "• Scrum Master u dva tima od 07/2023, sprint review sa klijentima"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "Scrum since 07/2023, 40 months",
+      "quote": "• Scrum Master u dva tima od 07/2023, sprint review sa klijentima"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "met",
+      "fact": "epics and sprints in Jira",
+      "quote": "• Jira: epici, sprintovi, izveštaji o napretku"
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "not_met",
+      "fact": "no budget work",
+      "quote": null
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "not_met",
+      "fact": "team of 4 against at least 5",
+      "quote": null
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "English C1",
+      "quote": "English: C1 ( govor i pisanje )"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "not_met",
+      "fact": "PSM I only",
+      "quote": null
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "met",
+      "fact": "fintech software company",
+      "quote": "IT Project Manager | PayWave doo, Beograd | 02/2021 - present"
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 2,
+    "project_manager": 2,
+    "financial_controller": 0,
+    "sales_manager": 0
+  }
+}

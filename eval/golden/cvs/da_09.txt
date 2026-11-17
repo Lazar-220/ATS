@@ -1,0 +1,41 @@
+Basic info
+Born: 12/12/1995
+Place: Subotica
+Mobile: +381 62 5550915
+E-mail:
+milan.horvat@example.com
+
+Skills
+SQL / Excel /
+Tableau /
+Python ( osnove ) /
+Data cleaning /
+
+Jezici
+Engleski - B2
+Mađarski - maternji
+Srpski - C2
+=== RIGHT COLUMN ===
+Milan Horvat
+Data analyst
+
+Summary
+Analitičar sa 3 godine iskustva u logistici.
+Voli da radi sa velikim tabelama.
+
+Education
+Bachelor, Ekonomija | Ekonomski fakultet
+Subotica | 2014 - 2018
+
+Experience
+Data analyst | Pannon Logistika
+Subotica | 08/2024 - present
+- SQL upiti nad tabelama isporuka
+- Tableau dashboard za praćenje kašnjenja
+- Weekly report u Excelu za vozni park
+- Prezentacija rezultata dispečerima
+
+Reporting clerk | Tisa Trans
+Subotica | 03/2019 - 07/2024
+- Excel izveštaji o troškovima goriva
+- Unos i provera podataka

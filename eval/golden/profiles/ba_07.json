@@ -1,0 +1,21 @@
+{
+  "cv_id": "ba_07",
+  "position_id": "business_analyst",
+  "style": "sr_ascii",
+  "template": "single",
+  "hard_case": {"tag": "career_change", "note": "Requirement 2 (4 years as a business analyst): the candidate was an accountant from 03/2016 to 10/2023, an unrelated field, and has been a business analyst only since 11/2023 (about 36 months of 48), so the accounting years do not count; partial."},
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "gathering requirements from clients, documented in Confluence", "quote": "- Prikupljanje zahteva od klijenata, dokumenti sa zahtevima u Confluence-u"},
+    {"requirement_id": 2, "verdict": "partial", "fact": "business analyst since 11/2023, about 36 months", "quote": "Sumadija Soft d.o.o. | 11/2023 - danas"},
+    {"requirement_id": 3, "verdict": "met", "fact": "user stories with acceptance criteria", "quote": "- User stories sa kriterijumima prihvatanja za ERP modul"},
+    {"requirement_id": 4, "verdict": "met", "fact": "daily Jira", "quote": "- Svakodnevni rad u Jira-i: backlog, sprintovi"},
+    {"requirement_id": 5, "verdict": "met", "fact": "daily Jira since 11/2023, about 36 months", "quote": "- Svakodnevni rad u Jira-i: backlog, sprintovi"},
+    {"requirement_id": 6, "verdict": "partial", "fact": "BPMN basics only", "quote": "- BPMN ( osnove ), dijagrami procesa narudzbina"},
+    {"requirement_id": 7, "verdict": "met", "fact": "SQL checks", "quote": "- SQL upiti za proveru podataka pre isporuke"},
+    {"requirement_id": 8, "verdict": "met", "fact": "economics degree", "quote": "Ekonomski fakultet, Kragujevac | 2005 - 2010"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English B2", "quote": "Engleski: B2"},
+    {"requirement_id": 10, "verdict": "not_met", "fact": "none", "quote": null},
+    {"requirement_id": 11, "verdict": "not_met", "fact": "courses only, no certification", "quote": null}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 0, "business_analyst": 2, "project_manager": 1, "financial_controller": 1, "sales_manager": 0}
+}

@@ -1,0 +1,21 @@
+{
+  "cv_id": "ba_11",
+  "position_id": "business_analyst",
+  "style": "mixed",
+  "template": "single",
+  "hard_case": {"tag": "course_in_progress", "note": "Requirement 8 (bachelor's degree): the information systems degree is still in progress (4th year, thesis being written), so partial; the CBAP exam-prep course is in progress too, requirement 11 partial."},
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "gathering and documenting requirements", "quote": "• Prikupljanje i dokumentovanje zahteva sa poslovnim jedinicama"},
+    {"requirement_id": 2, "verdict": "met", "fact": "business analyst since 10/2021, about 61 months", "quote": "Business Analyst | Adriatic Banka | 10/2021 - danas"},
+    {"requirement_id": 3, "verdict": "met", "fact": "user stories and acceptance criteria", "quote": "• User stories i acceptance criteria za internet bankarstvo"},
+    {"requirement_id": 4, "verdict": "met", "fact": "Jira daily", "quote": "• Jira, svakodnevno, backlog i release planiranje"},
+    {"requirement_id": 5, "verdict": "met", "fact": "daily Jira since 10/2021", "quote": "• Jira, svakodnevno, backlog i release planiranje"},
+    {"requirement_id": 6, "verdict": "met", "fact": "BPMN process modelling", "quote": "• Modeliranje procesa u BPMN-u"},
+    {"requirement_id": 7, "verdict": "partial", "fact": "SQL checks at a basic level", "quote": "• SQL upiti za proveru podataka ( osnovni nivo )"},
+    {"requirement_id": 8, "verdict": "partial", "fact": "degree in progress, 4th year", "quote": "• Smer Informacioni sistemi, 4. godina, diplomski rad u izradi"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English B2", "quote": "English - B2"},
+    {"requirement_id": 10, "verdict": "met", "fact": "bank", "quote": "Business Analyst | Adriatic Banka | 10/2021 - danas"},
+    {"requirement_id": 11, "verdict": "partial", "fact": "CBAP exam preparation course in progress", "quote": "CBAP Exam Prep | 2026 ( u toku )"}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 1, "business_analyst": 2, "project_manager": 1, "financial_controller": 0, "sales_manager": 0}
+}

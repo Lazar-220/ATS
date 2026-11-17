@@ -1,0 +1,86 @@
+{
+  "cv_id": "sm_15",
+  "position_id": "sales_manager",
+  "style": "sr_cyrillic",
+  "template": "single",
+  "hard_case": {
+    "tag": "course_in_progress",
+    "note": "Req 1 (finished faculty of economics or technical): the candidate is a fourth-year student at the Faculty of Economics with graduation expected in 2027, so the degree is in progress and the verdict is partial."
+  },
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "partial",
+      "fact": "faculty in progress, 4th year",
+      "quote": "2019 - тренутно        Економски факултет у Крагујевцу, четврта година"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "not_met",
+      "fact": "sales assistant since 03/2025, about 20 months",
+      "quote": null
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "not_met",
+      "fact": "no team",
+      "quote": null
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "not_met",
+      "fact": "no sales results",
+      "quote": null
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "not_met",
+      "fact": "Excel only",
+      "quote": null
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "not_met",
+      "fact": "no negotiation",
+      "quote": null
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "met",
+      "fact": "English C1",
+      "quote": "Енглески језик         Ц1 (положен ЦАЕ 2023)"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "licence B",
+      "quote": "Возачка дозвола        Б категорије"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "not_met",
+      "fact": "no travel statement",
+      "quote": null
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "not_met",
+      "fact": "no German",
+      "quote": null
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "not_met",
+      "fact": "windows and doors, not FMCG",
+      "quote": null
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 0,
+    "sales_manager": 1
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "cv_id": "pm_14",
+  "position_id": "project_manager",
+  "style": "sr_cyrillic",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "economics degree, management track", "quote": "Смер Менаџмент, дипломирани економиста"},
+    {"requirement_id": 2, "verdict": "not_met", "fact": "about 18 months as a works coordinator, under 50% of 48", "quote": null},
+    {"requirement_id": 3, "verdict": "not_met", "fact": "no Scrum", "quote": null},
+    {"requirement_id": 4, "verdict": "not_met", "fact": "no Scrum work", "quote": null},
+    {"requirement_id": 5, "verdict": "not_met", "fact": "no Jira", "quote": null},
+    {"requirement_id": 6, "verdict": "not_met", "fact": "materials in Excel only, no budget", "quote": null},
+    {"requirement_id": 7, "verdict": "not_met", "fact": "team of 3, below the minimum of 5", "quote": null},
+    {"requirement_id": 8, "verdict": "met", "fact": "English B1, spoken and written", "quote": "Енглески језик Б1 ( говор и писање )"},
+    {"requirement_id": 9, "verdict": "not_met", "fact": "none", "quote": null},
+    {"requirement_id": 10, "verdict": "not_met", "fact": "construction maintenance", "quote": null}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 0, "business_analyst": 1, "project_manager": 1, "financial_controller": 0, "sales_manager": 0}
+}

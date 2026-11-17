@@ -1,0 +1,83 @@
+{
+  "cv_id": "be_08",
+  "position_id": "backend_developer",
+  "style": "sr_latin",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "Python services with FastAPI, Flask for 9 years",
+      "quote": "• Python servisi ( FastAPI, Flask ), REST API za 9 proizvoda"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "met",
+      "fact": "Python since 07/2017, about 9 years",
+      "quote": "09/2019 - danas        Backend inženjer, Orbita Soft, Niš"
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "met",
+      "fact": "REST APIs for 9 products with versioning and OpenAPI",
+      "quote": "• Dizajn API-ja: verzionisanje, paginacija, OpenAPI dokumentacija"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "PostgreSQL complex queries and migrations",
+      "quote": "• PostgreSQL, složeni upiti i migracije"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "met",
+      "fact": "pytest and CI",
+      "quote": "• Testovi u pytest-u, CI provera pre svakog merge-a"
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "met",
+      "fact": "Git daily",
+      "quote": "• Docker i Kubernetes ( GCP ), Git svakodnevno"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "met",
+      "fact": "Docker",
+      "quote": "• Docker i Kubernetes ( GCP ), Git svakodnevno"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "computing degree",
+      "quote": "2013 - 2017            Elektronski fakultet u Nišu, Računarstvo i informatika"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "met",
+      "fact": "English C1",
+      "quote": "Strani jezik           engleski - C1 (razumevanje, govor, pisanje)"
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "met",
+      "fact": "RabbitMQ",
+      "quote": "• RabbitMQ za asinhrone obrade"
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "met",
+      "fact": "Kubernetes on GCP",
+      "quote": "• Docker i Kubernetes ( GCP ), Git svakodnevno"
+    }
+  ],
+  "relevance": {
+    "backend_developer": 3,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 0,
+    "sales_manager": 0
+  }
+}

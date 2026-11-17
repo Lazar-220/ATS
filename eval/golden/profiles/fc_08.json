@@ -1,0 +1,86 @@
+{
+  "cv_id": "fc_08",
+  "position_id": "financial_controller",
+  "style": "sr_ascii",
+  "template": "single",
+  "hard_case": {
+    "tag": "list_only",
+    "note": "Requirement 7 (SAP): SAP appears only in the computer skills list, no job bullet uses it, so it is partial; with no use shown, requirement 8 (2 years of SAP) has no evidence and is not_met."
+  },
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "economics faculty, accounting and audit",
+      "quote": "Ekonomski fakultet, Univerzitet u Beogradu | smer Racunovodstvo i revizija | 2005-2010"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "met",
+      "fact": "controller 03/2017-present plus accountant 2011-2017, over 15 years",
+      "quote": "Finansijski kontroler | Sava Mlin doo, Beograd | 03/2017 - trenutno"
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "met",
+      "fact": "IFRS reports in daily work",
+      "quote": "• Mesecni i godisnji finansijski izvestaji po MSFI"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "annual budget and quarterly plans",
+      "quote": "• Izrada godisnjeg budzeta i kvartalnih planova"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "met",
+      "fact": "monthly and annual reports",
+      "quote": "• Mesecni i godisnji finansijski izvestaji po MSFI"
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "met",
+      "fact": "pivot and macros in a job bullet",
+      "quote": "• Excel ( pivot, makroi ) za konsolidaciju po sektorima"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "partial",
+      "fact": "SAP named only in the skills list, no sign of use",
+      "quote": "Racunarske vestine: MS Office / SAP / Pantheon /"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "not_met",
+      "fact": "no job mentions SAP, no duration",
+      "quote": null
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "met",
+      "fact": "English B2 speaking and writing",
+      "quote": "Engleski jezik: B2 ( govor i pisanje )"
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "not_met",
+      "fact": "no licence or certificate",
+      "quote": null
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "not_met",
+      "fact": "no Power BI",
+      "quote": null
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 1,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 2,
+    "sales_manager": 0
+  }
+}

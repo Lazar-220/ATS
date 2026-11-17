@@ -1,0 +1,83 @@
+{
+  "cv_id": "fc_11",
+  "position_id": "financial_controller",
+  "style": "mixed",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "not_met",
+      "fact": "finished law faculty, unrelated to economics",
+      "quote": null
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "met",
+      "fact": "06/2015-present plus 10/2010-05/2015, over 15 years",
+      "quote": "Senior Accountant / Controller | Novi Pak doo, Beograd | 06/2015 - present"
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "partial",
+      "fact": "only basic knowledge of IFRS",
+      "quote": "• Osnovno poznavanje MSFI, izveštaji za matičnu firmu"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "budgets and rolling forecast",
+      "quote": "• Izrada budžeta i rolling forecast-a za 4 sektora"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "met",
+      "fact": "monthly and annual reports",
+      "quote": "• Mesečni i godišnji izveštaji, priprema za reviziju"
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "met",
+      "fact": "pivot, SUMIFS, macros",
+      "quote": "• Excel: pivot, SUMIFS, makroi"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "met",
+      "fact": "SAP FI/CO work",
+      "quote": "• Rad u SAP-u ( FI/CO ) od 2019"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "SAP since 2019, about 7 years",
+      "quote": "• Rad u SAP-u ( FI/CO ) od 2019"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "met",
+      "fact": "English C1",
+      "quote": "English: C1 ( govor i pisanje ), nemački: A2"
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "met",
+      "fact": "licence of authorised accountant",
+      "quote": "Licenca ovlašćenog računovođe ( 2014 )"
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "not_met",
+      "fact": "no Power BI",
+      "quote": null
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 2,
+    "sales_manager": 0
+  }
+}

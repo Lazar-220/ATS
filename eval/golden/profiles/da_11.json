@@ -1,0 +1,21 @@
+{
+  "cv_id": "da_11",
+  "position_id": "data_analyst",
+  "style": "sr_cyrillic",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "SQL on 200M-row tables", "quote": "• SQL упити над табелама са преко 200 милиона редова"},
+    {"requirement_id": 2, "verdict": "met", "fact": "SQL since 09/2016, over 10 years", "quote": "09/2016 - 06/2019"},
+    {"requirement_id": 3, "verdict": "met", "fact": "Excel models and pivots", "quote": "• Excel модели и пивот табеле"},
+    {"requirement_id": 4, "verdict": "met", "fact": "pandas cleaning", "quote": "• Python ( pandas ) за чишћење и припрему података"},
+    {"requirement_id": 5, "verdict": "met", "fact": "Power BI dashboards", "quote": "• Дашборди у Power BI за продају и одлив корисника"},
+    {"requirement_id": 6, "verdict": "met", "fact": "regression analysis, statistics degree track", "quote": "• Регресиона анализа ризика штете"},
+    {"requirement_id": 7, "verdict": "met", "fact": "findings presented to sales managers", "quote": "• Презентација налаза менаџерима продаје"},
+    {"requirement_id": 8, "verdict": "met", "fact": "mathematician, statistics track", "quote": "Дипломирани математичар, смер статистика"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English C1", "quote": "Енглески језик Ц1"},
+    {"requirement_id": 10, "verdict": "not_met", "fact": "no cloud warehouse (only an unnamed data warehouse)", "quote": null},
+    {"requirement_id": 11, "verdict": "met", "fact": "A/B tests of offers", "quote": "• A/B тестови понуда, анализа резултата"}
+  ],
+  "relevance": {"backend_developer": 1, "data_analyst": 3, "business_analyst": 0, "project_manager": 0, "financial_controller": 1, "sales_manager": 0}
+}

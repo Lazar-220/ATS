@@ -1,0 +1,83 @@
+{
+  "cv_id": "fc_13",
+  "position_id": "financial_controller",
+  "style": "en",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "economics faculty, finance and accounting",
+      "quote": "Faculty of Economics, University of Belgrade | 2002-2007 | Finance and Accounting"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "met",
+      "fact": "09/2016-present plus 10/2012-08/2016, over 14 years",
+      "quote": "Finance Controller | Drina Pharma doo, Belgrade | 09/2016 - present"
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "met",
+      "fact": "annual statements under IFRS",
+      "quote": "• Monthly management accounts and annual statements under IFRS"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "budget and 3-year plan",
+      "quote": "• Budget and 3-year financial plan for the group, quarterly reforecast"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "met",
+      "fact": "monthly and annual statements",
+      "quote": "• Monthly management accounts and annual statements under IFRS"
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "met",
+      "fact": "pivot, Power Query, VBA",
+      "quote": "• Excel: pivot tables, Power Query, VBA macros for consolidation"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "met",
+      "fact": "SAP FI/CO key user",
+      "quote": "• SAP FI/CO user and key user since 2012, month-end close"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "SAP since 2012, over 14 years",
+      "quote": "• SAP FI/CO user and key user since 2012, month-end close"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "met",
+      "fact": "English fluent C1",
+      "quote": "English - fluent ( C1 ), German - A2"
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "met",
+      "fact": "licensed accountant",
+      "quote": "Certified accountant licence ( Serbia ), 2013"
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "met",
+      "fact": "Power BI dashboards",
+      "quote": "• Dashboards in Power BI for cost centre owners"
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 1,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 3,
+    "sales_manager": 0
+  }
+}

@@ -1,0 +1,29 @@
+MARTA JOVANOVIC
+Data Analyst
+Belgrade, Serbia | marta.jovanovic@example.com | +381 64 5550411
+Date of birth: 04/03/1992
+
+PROFILE
+Data analyst, 6 years in e-commerce and retail reporting.
+
+EXPERIENCE
+Senior Data Analyst | Kupi.rs | 03/2021 - present
+• SQL on a 400M-row orders table in BigQuery
+• Revenue and churn dashboards in Tableau
+• Python (pandas) scripts for cleaning partner feeds
+• Regression model of delivery delay drivers
+• Monthly findings deck for the commercial team
+
+Junior Data Analyst | Retail Insight d.o.o. | 09/2018 - 02/2021
+• SQL reports on sales data in PostgreSQL
+• Excel models and pivot tables for store managers
+• Hypothesis tests on promotion results
+
+EDUCATION
+BSc Mathematics | University of Belgrade | 2012 - 2016
+
+SKILLS
+SQL / Python / Excel / Tableau / BigQuery /
+
+LANGUAGES
+English - C1 | Serbian - native

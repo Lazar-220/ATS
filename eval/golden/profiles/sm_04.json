@@ -1,0 +1,83 @@
+{
+  "cv_id": "sm_04",
+  "position_id": "sales_manager",
+  "style": "sr_latin",
+  "template": "two_column",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "industrial engineering degree",
+      "quote": "2005-2010 Fakultet tehničkih nauka,"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "met",
+      "fact": "B2B since 2013, well over 5 years",
+      "quote": "Sažetak: 11 godina u prodaji"
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "met",
+      "fact": "team of 5",
+      "quote": "• Tim 5 komercijalista i 1 asistent"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "plan 121/114/106%",
+      "quote": "• Ostvarenje plana: 121% (2023),"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "met",
+      "fact": "HubSpot",
+      "quote": "• HubSpot: lead-ovi i ponude"
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "met",
+      "fact": "framework contracts with large auto customers",
+      "quote": "• Ugovori sa velikim kupcima iz"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "met",
+      "fact": "English C1",
+      "quote": "• Engleski - C1"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "licence B",
+      "quote": "• Vozačka dozvola B"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "met",
+      "fact": "travel up to 40%",
+      "quote": "• Putovanja do 40% vremena"
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "partial",
+      "fact": "German A2 only",
+      "quote": "• Nemački - A2"
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "met",
+      "fact": "packaging",
+      "quote": "• B2B prodaja folija i ambalaže"
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 0,
+    "sales_manager": 3
+  }
+}

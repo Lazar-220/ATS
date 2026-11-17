@@ -1,0 +1,77 @@
+{
+  "cv_id": "pm_13",
+  "position_id": "project_manager",
+  "style": "en",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "electrical engineering school",
+      "quote": "School of Electrical Engineering, University of Belgrade | 2004-2009"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "met",
+      "fact": "10/2017-present plus 03/2012-09/2017, over 14 years",
+      "quote": "Senior Project Manager | Nordic Soft doo, Belgrade | 10/2017 - present"
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "met",
+      "fact": "Scrum Master and coach",
+      "quote": "• Scrum Master and coach for 3 teams since 2017, sprint planning and reviews"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "Scrum since 2017, about 9 years",
+      "quote": "• Scrum Master and coach for 3 teams since 2017, sprint planning and reviews"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "met",
+      "fact": "Jira boards and roadmaps",
+      "quote": "• Jira boards, roadmaps and release reporting"
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "met",
+      "fact": "budgets 200k-900k EUR",
+      "quote": "• Project budgets of 200k - 900k EUR, forecast against actuals monthly"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "met",
+      "fact": "11 direct reports",
+      "quote": "• Line manager of 11 people ( developers, QA, designer )"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "English fluent",
+      "quote": "English - fluent, German - B1"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "met",
+      "fact": "PMP",
+      "quote": "PMP, Project Management Institute ( 2015 )"
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "met",
+      "fact": "software company",
+      "quote": "Senior Project Manager | Nordic Soft doo, Belgrade | 10/2017 - present"
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 1,
+    "project_manager": 3,
+    "financial_controller": 0,
+    "sales_manager": 0
+  }
+}

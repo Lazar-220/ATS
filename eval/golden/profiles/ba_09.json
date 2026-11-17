@@ -1,0 +1,21 @@
+{
+  "cv_id": "ba_09",
+  "position_id": "business_analyst",
+  "style": "sr_cyrillic",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "gathering requirements, documents in Confluence", "quote": "• Прикупљање захтева од продаје и логистике, документи у Confluence-у"},
+    {"requirement_id": 2, "verdict": "partial", "fact": "business analyst since 11/2023, about 36 months of 48", "quote": "11/2023 - данас"},
+    {"requirement_id": 3, "verdict": "met", "fact": "user stories with acceptance criteria", "quote": "• Корисничке приче ( user stories ) са критеријумима прихватања"},
+    {"requirement_id": 4, "verdict": "met", "fact": "Jira every day", "quote": "• Рад у алату Jira сваког дана"},
+    {"requirement_id": 5, "verdict": "met", "fact": "daily Jira since 11/2023, about 36 months", "quote": "• Рад у алату Jira сваког дана"},
+    {"requirement_id": 6, "verdict": "not_met", "fact": "no BPMN or UML (Visio only named as a tool)", "quote": null},
+    {"requirement_id": 7, "verdict": "partial", "fact": "basic SQL knowledge only", "quote": "• SQL - основно знање, провера података"},
+    {"requirement_id": 8, "verdict": "met", "fact": "business informatics at a faculty of economics", "quote": "Смер Пословна информатика"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English B2", "quote": "Енглески језик Б2"},
+    {"requirement_id": 10, "verdict": "not_met", "fact": "retail", "quote": null},
+    {"requirement_id": 11, "verdict": "not_met", "fact": "none", "quote": null}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 1, "business_analyst": 2, "project_manager": 1, "financial_controller": 0, "sales_manager": 0}
+}

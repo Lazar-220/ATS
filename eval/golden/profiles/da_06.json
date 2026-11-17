@@ -1,0 +1,21 @@
+{
+  "cv_id": "da_06",
+  "position_id": "data_analyst",
+  "style": "en",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "not_met", "fact": "no SQL", "quote": null},
+    {"requirement_id": 2, "verdict": "not_met", "fact": "no SQL work", "quote": null},
+    {"requirement_id": 3, "verdict": "met", "fact": "cleaning and merging lists in Excel with VLOOKUP and pivot", "quote": "- Booking lists cleaned and merged in Excel (VLOOKUP, pivot)"},
+    {"requirement_id": 4, "verdict": "not_met", "fact": "no Python", "quote": null},
+    {"requirement_id": 5, "verdict": "not_met", "fact": "no dashboards", "quote": null},
+    {"requirement_id": 6, "verdict": "not_met", "fact": "no statistics", "quote": null},
+    {"requirement_id": 7, "verdict": "not_met", "fact": "weekly summary for a manager only, no findings presentation", "quote": null},
+    {"requirement_id": 8, "verdict": "not_met", "fact": "BA Tourism is a finished unrelated degree", "quote": null},
+    {"requirement_id": 9, "verdict": "met", "fact": "English B2", "quote": "English: B2 (spoken and written)"},
+    {"requirement_id": 10, "verdict": "not_met", "fact": "none", "quote": null},
+    {"requirement_id": 11, "verdict": "not_met", "fact": "none", "quote": null}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 1, "business_analyst": 0, "project_manager": 0, "financial_controller": 0, "sales_manager": 0}
+}

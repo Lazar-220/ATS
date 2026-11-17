@@ -1,0 +1,83 @@
+{
+  "cv_id": "sm_09",
+  "position_id": "sales_manager",
+  "style": "sr_latin",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "economics degree",
+      "quote": "Smer: Marketing i trgovina (diplomirani ekonomista)"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "partial",
+      "fact": "B2B since 01/2023: 46 months of 60; earlier role admin",
+      "quote": "Viši komercijalista | Drina Drinks doo | 01/2023 - danas"
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "not_met",
+      "fact": "no permanent subordinates",
+      "quote": null
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "plan 103% and 107%",
+      "quote": "• Plan 2025: 103%, 2024: 107%"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "met",
+      "fact": "HubSpot",
+      "quote": "• Rad u HubSpot-u ( kontakti, ponude, podsetnici )"
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "partial",
+      "fact": "negotiates with a local chain of 14 shops, ~90k EUR",
+      "quote": "• Pregovori sa lokalnim lancem od 14 prodavnica, godišnji ugovor oko 90.000 EUR"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "met",
+      "fact": "English B2",
+      "quote": "Engleski ( B2 ) - govor i pisanje"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "licence B",
+      "quote": "Rođena 14. 06. 1991. | Vozačka dozvola B kategorije"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "met",
+      "fact": "travel 2-3 days weekly",
+      "quote": "Putovanja po Srbiji bez problema, 2-3 dana nedeljno"
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "not_met",
+      "fact": "does not speak German",
+      "quote": null
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "met",
+      "fact": "beverages, FMCG",
+      "quote": "• Prodaja bezalkoholnih pića veleprodajama i HoReCa kupcima"
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 0,
+    "sales_manager": 2
+  }
+}

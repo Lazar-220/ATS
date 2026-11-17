@@ -1,0 +1,77 @@
+{
+  "cv_id": "pm_08",
+  "position_id": "project_manager",
+  "style": "sr_cyrillic",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "technical sciences faculty",
+      "quote": "2005 - 2010 Факултет техничких наука у Новом Саду, смер Индустријско инжењерство"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "met",
+      "fact": "01/2019-present plus 05/2014-12/2018, over 12 years",
+      "quote": "01/2019 - данас Менаџер пројеката, Дунав Софт доо, Београд"
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "met",
+      "fact": "Scrum Master in two teams",
+      "quote": "• Scrum Master у два тима од 2019. године"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "Scrum since 2019, over 7 years",
+      "quote": "• Scrum Master у два тима од 2019. године"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "met",
+      "fact": "Jira for sprints and backlog",
+      "quote": "• Планирање спринтова и backlog у алату Jira"
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "met",
+      "fact": "project budgets, monthly report",
+      "quote": "• Буџет пројеката, месечни извештај управи"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "met",
+      "fact": "team of 7",
+      "quote": "• Тим од 7 програмера и тестера"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "English C1",
+      "quote": "Енглески језик Ц1 ( говор и писање )"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "met",
+      "fact": "PRINCE2 Practitioner",
+      "quote": "PRINCE2 Practitioner, сертификат из 2017. године"
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "met",
+      "fact": "software company",
+      "quote": "01/2019 - данас Менаџер пројеката, Дунав Софт доо, Београд"
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 1,
+    "project_manager": 3,
+    "financial_controller": 0,
+    "sales_manager": 0
+  }
+}

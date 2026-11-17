@@ -1,0 +1,83 @@
+{
+  "cv_id": "sm_12",
+  "position_id": "sales_manager",
+  "style": "sr_ascii",
+  "template": "two_column",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "mechanical engineering degree",
+      "quote": "2002-2007 Masinski fakultet u"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "met",
+      "fact": "B2B since 2014, 12 years; summary says 8 years but roles are 2014-present",
+      "quote": "12 godina B2B prodaje, 7 godina"
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "not_met",
+      "fact": "team of 3, below 4",
+      "quote": null
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "plan 107% and 110%",
+      "quote": "• Ostvarenje plana: 107% u 2024,"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "met",
+      "fact": "Zoho CRM",
+      "quote": "• Zoho CRM za ponude i kupce"
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "partial",
+      "fact": "tenders up to 150k EUR with water-sector customers, not clearly large customers",
+      "quote": "• Pregovori sa kupcima iz"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "met",
+      "fact": "English B2",
+      "quote": "• Engleski - B2"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "licence B",
+      "quote": "• Vozacka dozvola B"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "not_met",
+      "fact": "no travel statement",
+      "quote": null
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "partial",
+      "fact": "German A2",
+      "quote": "• Nemacki - A2"
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "not_met",
+      "fact": "pumps and valves",
+      "quote": null
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 0,
+    "sales_manager": 2
+  }
+}

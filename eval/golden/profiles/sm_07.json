@@ -1,0 +1,83 @@
+{
+  "cv_id": "sm_07",
+  "position_id": "sales_manager",
+  "style": "sr_ascii",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "not_met",
+      "fact": "vocational school, faculty not finished",
+      "quote": null
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "not_met",
+      "fact": "sales since 03/2022 mostly retail, B2B only since 02/2024: 33 months in total at most, retail excluded under 30",
+      "quote": null
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "not_met",
+      "fact": "no team",
+      "quote": null
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "partial",
+      "fact": "plan mostly met, no figures",
+      "quote": "- mesecni plan prodaje uglavnom ostvaren"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "not_met",
+      "fact": "Excel only, no CRM",
+      "quote": null
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "not_met",
+      "fact": "no contracts with large customers",
+      "quote": null
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "partial",
+      "fact": "basic English only",
+      "quote": "Engleski - osnovni nivo"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "licence B",
+      "quote": "Vozacka dozvola B kategorije"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "not_met",
+      "fact": "no travel statement",
+      "quote": null
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "not_met",
+      "fact": "no German",
+      "quote": null
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "met",
+      "fact": "sells beverages to shops and cafes (FMCG)",
+      "quote": "- prodaja sokova i voda prodavnicama i kafeima (oko 60 objekata)"
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 0,
+    "sales_manager": 1
+  }
+}

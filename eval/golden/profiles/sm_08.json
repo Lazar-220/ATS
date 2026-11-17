@@ -1,0 +1,86 @@
+{
+  "cv_id": "sm_08",
+  "position_id": "sales_manager",
+  "style": "mixed",
+  "template": "single",
+  "hard_case": {
+    "tag": "implicit_evidence",
+    "note": "Req 3 (team of at least 4): the CV never says team lead or tim. Evidence is only 'raspodela ruta i ciljeva za 5 prodajnih agenata, odgovoran za njihov mesecni rezultat', which implies leading five people."
+  },
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "FON, management and organisation",
+      "quote": "2007 - 2012   Fakultet organizacionih nauka, Beograd (Menadzment i organizacija)"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "met",
+      "fact": "B2B since 2015, about 11 years",
+      "quote": "2020 - present  Regional Sales Executive, Farmalink Distribucija, Beograd"
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "met",
+      "fact": "implicit: allocates routes and targets for 5 agents, responsible for their monthly result",
+      "quote": "- svakodnevna raspodela ruta i ciljeva za 5 prodajnih agenata, odgovoran za njihov mesecni rezultat"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "targets 112% and 105%",
+      "quote": "- ostvarenje targeta 2025: 112%, 2024: 105%"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "partial",
+      "fact": "Salesforce only in skills list",
+      "quote": "Salesforce / MS Office / SAP / pregovaranje /"
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "met",
+      "fact": "contracts with 3 large health institutions",
+      "quote": "- ugovori sa 3 velike zdravstvene ustanove, godisnja vrednost preko 900.000 EUR"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "met",
+      "fact": "English C1",
+      "quote": "English: C1, written and spoken"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "licence B",
+      "quote": "Rodjen 1988. u Cacku | Pol: M | Vozacka dozvola B"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "met",
+      "fact": "travel",
+      "quote": "Ready for business travel across the region"
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "not_met",
+      "fact": "explicitly no German",
+      "quote": null
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "not_met",
+      "fact": "medical supplies, not FMCG or packaging",
+      "quote": null
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 0,
+    "sales_manager": 2
+  }
+}

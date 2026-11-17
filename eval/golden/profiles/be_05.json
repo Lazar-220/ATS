@@ -1,0 +1,83 @@
+{
+  "cv_id": "be_05",
+  "position_id": "backend_developer",
+  "style": "en",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "9 years of Python in production",
+      "quote": "Backend engineer, 9 years of Python in production. Payment and fintech services."
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "met",
+      "fact": "Python 2016-present, 10 years",
+      "quote": "Senior Backend Engineer, PayLoop, Novi Sad                          03/2020 - present"
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "met",
+      "fact": "built 14 REST APIs",
+      "quote": "- Built and maintain 14 REST APIs ( FastAPI ) used by web and mobile clients, ~2M requests/day"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "PostgreSQL schema and tuning",
+      "quote": "- PostgreSQL: schema design, migrations ( Alembic ), query tuning"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "met",
+      "fact": "pytest, coverage 88%",
+      "quote": "- pytest + factory_boy, coverage 88% on core services"
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "met",
+      "fact": "Git flow",
+      "quote": "- MySQL / PostgreSQL, Celery tasks, Git flow"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "met",
+      "fact": "Docker and CI",
+      "quote": "- Docker, docker-compose, CI in GitLab, deployments on AWS ECS"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "BSc Computer Science",
+      "quote": "BSc Computer Science, Faculty of Technical Sciences, Novi Sad, 2009 - 2013"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "met",
+      "fact": "English C1",
+      "quote": "English - C1 ( daily work with international teams ), Serbian - native"
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "met",
+      "fact": "Kafka consumers",
+      "quote": "- Kafka consumers for payment events, retries and dead-letter topics"
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "met",
+      "fact": "AWS ECS",
+      "quote": "- Docker, docker-compose, CI in GitLab, deployments on AWS ECS"
+    }
+  ],
+  "relevance": {
+    "backend_developer": 3,
+    "data_analyst": 1,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 0,
+    "sales_manager": 0
+  }
+}

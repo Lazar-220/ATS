@@ -1,0 +1,21 @@
+{
+  "cv_id": "ba_05",
+  "position_id": "business_analyst",
+  "style": "en",
+  "template": "two_column",
+  "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "workshops documented in Confluence", "quote": "and dispatch managers, documented in Confluence"},
+    {"requirement_id": 2, "verdict": "met", "fact": "business analyst since 09/2017, over 9 years", "quote": "Kolo Software | 09/2017 - 04/2020"},
+    {"requirement_id": 3, "verdict": "met", "fact": "user stories and acceptance criteria", "quote": "User stories and acceptance criteria for TMS"},
+    {"requirement_id": 4, "verdict": "met", "fact": "Jira administration", "quote": "Jira administration and daily backlog work"},
+    {"requirement_id": 5, "verdict": "met", "fact": "daily Jira work since 2017", "quote": "Jira boards for two scrum teams"},
+    {"requirement_id": 6, "verdict": "met", "fact": "BPMN models", "quote": "Process models in BPMN for order handling"},
+    {"requirement_id": 7, "verdict": "met", "fact": "SQL checks", "quote": "SQL queries to check order and tariff data"},
+    {"requirement_id": 8, "verdict": "met", "fact": "BSc Information Systems", "quote": "BSc Information Systems"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English C1", "quote": "English - C1"},
+    {"requirement_id": 10, "verdict": "not_met", "fact": "logistics and software, no insurance or banking", "quote": null},
+    {"requirement_id": 11, "verdict": "met", "fact": "IIBA-CCBA", "quote": "IIBA-CCBA, 2021"}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 1, "business_analyst": 3, "project_manager": 2, "financial_controller": 0, "sales_manager": 0}
+}

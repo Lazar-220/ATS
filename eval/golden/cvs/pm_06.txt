@@ -1,0 +1,29 @@
+Nemanja Vukovic
+Project Coordinator ( former teacher )
+Belgrade, Serbia | +381 62 5550366 | nemanja.vukovic@example.com
+Born 1990-03-26 | Driving licence B
+
+SUMMARY
+Teacher who moved into project work this year. Learns fast, calm with deadlines.
+
+EXPERIENCE
+09/2026 - present | Junior Project Coordinator | Pixel Forge doo, Belgrade
+- Tracking tasks and deadlines for web projects in Jira
+- Weekly status notes for the project manager
+- Taking part in sprint planning
+09/2017 - 08/2026 | Teacher of electrical engineering subjects | Technical School, Pancevo
+- Classes for 4 groups, practical workshops
+- Head of the school robotics club
+
+EDUCATION
+2009 - 2014 Faculty of Electrical Engineering, University of Belgrade
+Teacher training programme, 2017
+
+COURSES
+Scrum Master course ( 2 days ), 09/2026 - basic knowledge of Scrum
+Excel for work, online
+
+SKILLS
+Jira / Confluence / MS Office /
+English - B2 ( spoken and written )
+Patient, organised, good with people

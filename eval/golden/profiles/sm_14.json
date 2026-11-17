@@ -1,0 +1,83 @@
+{
+  "cv_id": "sm_14",
+  "position_id": "sales_manager",
+  "style": "en",
+  "template": "two_column",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "mechanical engineering BSc",
+      "quote": "BSc Mechanical Engineering"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "met",
+      "fact": "12 years B2B",
+      "quote": "12 years in B2B sales, 6 of"
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "met",
+      "fact": "team of 8",
+      "quote": "• Team of 8 (6 reps, 2 KAM)"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "target 5 years running",
+      "quote": "• Hit target 5 years running:"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "met",
+      "fact": "Salesforce",
+      "quote": "• Salesforce admin for the team"
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "met",
+      "fact": "renewed contracts with large FMCG customers",
+      "quote": "• Renewed contracts with 5"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "met",
+      "fact": "English C2",
+      "quote": "English - C2"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "licence B",
+      "quote": "Driving licence B"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "met",
+      "fact": "travel up to 50%",
+      "quote": "Travel: up to 50%"
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "met",
+      "fact": "German B2",
+      "quote": "German - B2"
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "met",
+      "fact": "food packaging, FMCG customers",
+      "quote": "food packaging."
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 0,
+    "sales_manager": 3
+  }
+}

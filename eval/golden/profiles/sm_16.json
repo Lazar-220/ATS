@@ -1,0 +1,83 @@
+{
+  "cv_id": "sm_16",
+  "position_id": "sales_manager",
+  "style": "sr_ascii",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "electrical engineering degree",
+      "quote": "Fakultet tehnickih nauka, Novi Sad, elektrotehnika, 1999 - 2005"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "met",
+      "fact": "B2B 13 years",
+      "quote": "B2B prodaja 13 godina, rukovodjenje 6 godina."
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "met",
+      "fact": "leads 4 salespeople + assistant",
+      "quote": "* vodim 4 komercijaliste i 1 asistenta"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "plan 108/106/108%",
+      "quote": "* ostvarenje plana 2023: 108%, 2024: 106%, 2025: 108%"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "not_met",
+      "fact": "no CRM mentioned",
+      "quote": null
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "met",
+      "fact": "3 contracts over 400k with large customers",
+      "quote": "* pregovori sa velikim kupcima ( 3 ugovora preko 400.000 EUR )"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "partial",
+      "fact": "reads documentation and correspondence only, no speaking",
+      "quote": "Engleski - citam tehnicku dokumentaciju i prepisku sa dobavljacima"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "licence B",
+      "quote": "Rodjen 09.09.1980. | B kategorija"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "not_met",
+      "fact": "no travel statement",
+      "quote": null
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "not_met",
+      "fact": "explicitly no German",
+      "quote": null
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "not_met",
+      "fact": "cables, not FMCG or packaging",
+      "quote": null
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 0,
+    "sales_manager": 2
+  }
+}

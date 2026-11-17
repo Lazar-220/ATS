@@ -1,0 +1,31 @@
+PETAR ANDRIC
+Business Analyst
+Subotica / Remote | petar.andric@example.com | +381 62 5551010
+
+EXPERIENCE
+
+Business Analyst, Tisza Insurance, 05/2025 - present
+- Requirements gathering with claims and sales departments
+- Functional specifications and process descriptions in Word
+- Daily work in Jira (since 05/2025)
+- UML activity and class diagrams
+- SQL queries for data checks
+
+Business Analyst, Delta Commerce, 04/2021 - 04/2025
+- Interviews with stakeholders, requirement lists in Redmine
+- Functional specifications for an online shop
+- Test scenarios and UAT support
+- Process diagrams in UML
+
+Junior Analyst, Delta Commerce, 10/2020 - 03/2021
+- Data entry checks and reports
+
+EDUCATION
+BSc Information Systems, University of Novi Sad, 2016 - 2020
+
+SKILLS
+Jira / Redmine / UML / SQL / Visio /
+
+LANGUAGES
+English - B2
+Hungarian - native

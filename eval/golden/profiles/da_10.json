@@ -1,0 +1,21 @@
+{
+  "cv_id": "da_10",
+  "position_id": "data_analyst",
+  "style": "en",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "complex SQL, window functions, stored procedures", "quote": "- Complex SQL queries and views in Snowflake (joins, window functions)"},
+    {"requirement_id": 2, "verdict": "met", "fact": "SQL since 06/2018, over 8 years", "quote": "06/2018 - 12/2020"},
+    {"requirement_id": 3, "verdict": "met", "fact": "Excel for cleaning and reconciliation", "quote": "- Excel for ad-hoc data cleaning and reconciliation"},
+    {"requirement_id": 4, "verdict": "not_met", "fact": "no Python", "quote": null},
+    {"requirement_id": 5, "verdict": "met", "fact": "Looker Studio dashboards", "quote": "- Looker Studio dashboards for transaction monitoring"},
+    {"requirement_id": 6, "verdict": "partial", "fact": "only basic statistics, no hypothesis testing or regression", "quote": "- Basic statistics: averages, variance, simple trends"},
+    {"requirement_id": 7, "verdict": "not_met", "fact": "no presenting to stakeholders", "quote": null},
+    {"requirement_id": 8, "verdict": "met", "fact": "BSc Computer Science", "quote": "BSc Computer Science, University of Nis, 2014 - 2018"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English B2", "quote": "English - B2"},
+    {"requirement_id": 10, "verdict": "met", "fact": "Snowflake", "quote": "- Complex SQL queries and views in Snowflake (joins, window functions)"},
+    {"requirement_id": 11, "verdict": "not_met", "fact": "no A/B tests", "quote": null}
+  ],
+  "relevance": {"backend_developer": 1, "data_analyst": 2, "business_analyst": 0, "project_manager": 0, "financial_controller": 0, "sales_manager": 0}
+}

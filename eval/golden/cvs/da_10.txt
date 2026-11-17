@@ -1,0 +1,28 @@
+Tomas Berg
+BI / Reporting Analyst
+Nis, Serbia | tomas.berg@example.com | +381 61 5551010
+
+EXPERIENCE
+
+Reporting Analyst, Danubia Payments, 01/2021 - present
+- Complex SQL queries and views in Snowflake (joins, window functions)
+- Looker Studio dashboards for transaction monitoring
+- Excel for ad-hoc data cleaning and reconciliation
+- Basic statistics: averages, variance, simple trends
+
+Database Developer, Nistech Solutions, 06/2018 - 12/2020
+- SQL stored procedures and report queries on MySQL
+- Data exports for finance and sales
+
+EDUCATION
+BSc Computer Science, University of Nis, 2014 - 2018
+
+SKILLS
+SQL / Snowflake / Looker Studio / Excel / MySQL /
+
+LANGUAGES
+English - B2
+Serbian - native
+
+INTERESTS
+Chess, cycling

@@ -1,0 +1,83 @@
+{
+  "cv_id": "be_07",
+  "position_id": "backend_developer",
+  "style": "sr_ascii",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "partial",
+      "fact": "Python only since 05/2026, small service",
+      "quote": "* Od 05/2026 mali servis za obradu slika u Pythonu ( FastAPI )"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "not_met",
+      "fact": "Python about 6 months of 36",
+      "quote": null
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "met",
+      "fact": "REST API with 40+ routes, JWT",
+      "quote": "* REST API za mobilnu aplikaciju prodavnice, 40+ ruta, JWT autentifikacija"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "MySQL query and index optimisation",
+      "quote": "* Laravel, MySQL, optimizacija upita i indeksa"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "not_met",
+      "fact": "no automated tests mentioned",
+      "quote": null
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "met",
+      "fact": "Git feature branches",
+      "quote": "* Git (feature grane, merge zahtevi)"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "met",
+      "fact": "Docker local and production",
+      "quote": "* Docker za lokalno okruzenje i produkciju, docker-compose"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "information systems degree",
+      "quote": "Fakultet organizacionih nauka, Beograd, smer Informacioni sistemi | 2011 - 2016"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "met",
+      "fact": "English B2",
+      "quote": "Engleski - B2 ( tehnicka dokumentacija, sastanci )"
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "not_met",
+      "fact": "no queues",
+      "quote": null
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "not_met",
+      "fact": "no cloud",
+      "quote": null
+    }
+  ],
+  "relevance": {
+    "backend_developer": 2,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 0,
+    "sales_manager": 0
+  }
+}

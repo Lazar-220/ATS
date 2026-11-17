@@ -1,0 +1,30 @@
+Lični podaci
+Prezime i ime        Ilić Sanja
+Adresa               Zrenjanin, Srbija
+Telefon              +381 60 5550492
+E-pošta              sanja.ilic@example.com
+Datum rođenja        05.11.1992.
+Pol                  Ž
+
+Radno iskustvo
+09/2021 - danas      Rukovodilac prodavnice, Kozmetika Lux, Zrenjanin
+                     • Vođenje prodavnice sa 2 prodavačice
+                     • Prosečno ostvarenje mesečnog plana prodavnice 102%
+                     • Naručivanje robe kod dobavljača, inventar
+03/2021 - 08/2021    Veleprodajni referent (pripravnik), Kozmetika Lux
+                     • Prijem porudžbina od salona
+2016 - 2020          Prodavac, Dečiji Svet, Zrenjanin
+                     • Rad sa kupcima, kasa, izlog
+
+Obrazovanje i osposobljavanje
+2011 - 2016          Pravni fakultet, Novi Sad, diplomirani pravnik
+2018                 Kurs: Veštine prodaje i komunikacije
+
+Jezici
+Maternji jezik       srpski
+Strani jezik         nemački - B1
+                     engleski - A2 ( osnovni )
+
+Dodatne informacije
+Računar: Word, Excel, Outlook
+Hobi: čitanje, kuvanje

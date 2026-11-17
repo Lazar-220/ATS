@@ -1,0 +1,21 @@
+{
+  "cv_id": "be_10",
+  "position_id": "backend_developer",
+  "style": "en",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "Python microservices with Flask and FastAPI", "quote": "- Python (Flask, FastAPI) microservices for order processing"},
+    {"requirement_id": 2, "verdict": "met", "fact": "Python since 09/2022 (50 months) plus earlier scripts", "quote": "Backend Developer, Pannon Cloud Services, 09/2022 - present"},
+    {"requirement_id": 3, "verdict": "met", "fact": "REST APIs for mobile and web clients", "quote": "- REST APIs consumed by the mobile and web clients"},
+    {"requirement_id": 4, "verdict": "met", "fact": "PostgreSQL schemas and queries", "quote": "- PostgreSQL schemas, queries and migrations"},
+    {"requirement_id": 5, "verdict": "not_met", "fact": "no automated tests mentioned", "quote": null},
+    {"requirement_id": 6, "verdict": "met", "fact": "Git and code review daily", "quote": "- Git and code review in daily work"},
+    {"requirement_id": 7, "verdict": "met", "fact": "Docker images", "quote": "- Docker images for local development and CI"},
+    {"requirement_id": 8, "verdict": "met", "fact": "BSc Computer Science", "quote": "BSc Computer Science, Faculty of Technical Sciences, Novi Sad, 2013 - 2017"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English B2", "quote": "English - B2"},
+    {"requirement_id": 10, "verdict": "met", "fact": "RabbitMQ consumers", "quote": "- RabbitMQ consumers for email and invoice jobs"},
+    {"requirement_id": 11, "verdict": "not_met", "fact": "no cloud provider (company name only)", "quote": null}
+  ],
+  "relevance": {"backend_developer": 2, "data_analyst": 1, "business_analyst": 0, "project_manager": 0, "financial_controller": 0, "sales_manager": 0}
+}

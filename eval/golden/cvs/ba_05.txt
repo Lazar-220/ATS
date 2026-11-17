@@ -1,0 +1,46 @@
+CONTACT
+Phone
++381 63 5550505
+Email
+andrej.lukic@example.com
+Location
+Belgrade, Serbia
+
+SKILLS
+Requirements analysis
+User stories
+BPMN / UML
+Jira / Confluence
+SQL
+Miro / Visio
+
+LANGUAGES
+English - C1
+Serbian - native
+
+CERTIFICATES
+IIBA-CCBA, 2021
+=== RIGHT COLUMN ===
+ANDREJ LUKIC
+Business Analyst
+
+EXPERIENCE
+Senior Business Analyst
+Transline Logistics | 05/2020 - present
+Requirements workshops with warehouse leads
+and dispatch managers, documented in Confluence
+User stories and acceptance criteria for TMS
+Process models in BPMN for order handling
+Jira administration and daily backlog work
+SQL queries to check order and tariff data
+
+Business Analyst
+Kolo Software | 09/2017 - 04/2020
+Requirements for a customer portal
+UML diagrams, use cases
+Jira boards for two scrum teams
+
+EDUCATION
+BSc Information Systems
+Faculty of Organizational Sciences
+2012 - 2016

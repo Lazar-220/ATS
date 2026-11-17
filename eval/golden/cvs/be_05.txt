@@ -1,0 +1,30 @@
+NIKOLA STEVANOVIC
+Senior Backend Engineer
+
+Novi Sad, Serbia | +381 63 5550260 | nikola.stevanovic@example.com
+GitHub: github.com/nstevanovic-dev | DOB 04.06.1990 | Driving licence B
+
+SUMMARY
+Backend engineer, 9 years of Python in production. Payment and fintech services.
+
+EXPERIENCE
+Senior Backend Engineer, PayLoop, Novi Sad                          03/2020 - present
+- Built and maintain 14 REST APIs ( FastAPI ) used by web and mobile clients, ~2M requests/day
+- Kafka consumers for payment events, retries and dead-letter topics
+- PostgreSQL: schema design, migrations ( Alembic ), query tuning
+- pytest + factory_boy, coverage 88% on core services
+- Docker, docker-compose, CI in GitLab, deployments on AWS ECS
+- Code review, mentoring 2 juniors
+
+Python Developer, Webgrid, Novi Sad                                 09/2016 - 02/2020
+- Django REST framework APIs for e-commerce clients
+- MySQL / PostgreSQL, Celery tasks, Git flow
+
+EDUCATION
+BSc Computer Science, Faculty of Technical Sciences, Novi Sad, 2009 - 2013
+
+SKILLS
+Python / FastAPI / Django / PostgreSQL / Redis / Kafka / Docker / AWS / Git /
+
+LANGUAGES
+English - C1 ( daily work with international teams ), Serbian - native

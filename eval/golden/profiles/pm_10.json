@@ -1,0 +1,77 @@
+{
+  "cv_id": "pm_10",
+  "position_id": "project_manager",
+  "style": "sr_latin",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "electronic engineering faculty (technical)",
+      "quote": "2003 - 2008 Elektronski fakultet u Nišu, smer Energetika"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "met",
+      "fact": "project lead since 07/2018, over 100 months",
+      "quote": "07/2018 - danas Rukovodilac projekata, Jug Energo doo, Niš"
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "not_met",
+      "fact": "works by PRINCE2, no Scrum",
+      "quote": null
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "not_met",
+      "fact": "no Scrum",
+      "quote": null
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "not_met",
+      "fact": "plans in MS Project, no Jira",
+      "quote": null
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "met",
+      "fact": "project budget up to 3m EUR",
+      "quote": "• Izrada i praćenje budžeta projekta ( do 3 mil. EUR )"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "met",
+      "fact": "team of 8",
+      "quote": "• Tim od 8 inženjera i izvođača"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "English B2",
+      "quote": "Engleski jezik B2 ( govor i pisanje )"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "met",
+      "fact": "PRINCE2 Practitioner",
+      "quote": "PRINCE2 Foundation i Practitioner ( 2019 )"
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "not_met",
+      "fact": "energy sector",
+      "quote": null
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 2,
+    "financial_controller": 0,
+    "sales_manager": 0
+  }
+}

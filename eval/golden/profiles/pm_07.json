@@ -1,0 +1,77 @@
+{
+  "cv_id": "pm_07",
+  "position_id": "project_manager",
+  "style": "sr_ascii",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "civil engineering faculty (technical)",
+      "quote": "Gradjevinski fakultet, Univerzitet u Novom Sadu | 2008-2013"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "partial",
+      "fact": "project lead since 09/2023, 38 months of 48; the earlier site engineer job is not project lead",
+      "quote": "Rukovodilac projekata | Vojvodina Put doo, Novi Sad | 09/2023 - danas"
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "partial",
+      "fact": "basic knowledge of Scrum only",
+      "quote": "Scrum - osnovno poznavanje ( kurs 2 dana )"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "not_met",
+      "fact": "Scrum used since 08/2026, 3 months of 24",
+      "quote": null
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "met",
+      "fact": "tasks and deadlines in Jira",
+      "quote": "• Zadaci i rokovi u alatu Jira"
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "met",
+      "fact": "project budget up to 1.2m EUR",
+      "quote": "• Izrada i pracenje budzeta projekta ( do 1,2 mil. EUR )"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "met",
+      "fact": "team of 6",
+      "quote": "• Tim od 6 inzenjera i tehnicara"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "English B2",
+      "quote": "Engleski jezik: B2 ( govor i pisanje )"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "not_met",
+      "fact": "no certificate",
+      "quote": null
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "not_met",
+      "fact": "construction, not software",
+      "quote": null
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 2,
+    "financial_controller": 0,
+    "sales_manager": 0
+  }
+}

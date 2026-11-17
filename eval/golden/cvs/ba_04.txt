@@ -1,0 +1,32 @@
+JELENA RADIC
+Business Analyst
+Belgrade | jelena.radic@example.com | +381 64 5550404
+Date of birth: 22/11/1987
+
+SUMMARY
+Business analyst, 9 years in banking and fintech projects.
+
+EXPERIENCE
+Senior Business Analyst | Sava Bank | 04/2019 - present
+• Requirements workshops with product owners and compliance
+• Business requirements documents and process descriptions
+• User stories with acceptance criteria for the mobile app
+• Daily work in Jira: backlog grooming, sprint planning
+• BPMN models of the card issuing process
+• SQL checks of transaction data before releases
+
+Business Analyst | PayLine Fintech | 10/2016 - 03/2019
+• Gathering requirements for a payment gateway
+• UML use case and sequence diagrams
+• Jira boards and Confluence pages
+
+EDUCATION
+BSc Economics, Faculty of Economics, Belgrade, 2006 - 2010
+MSc Information Systems, FON, Belgrade, 2010 - 2012
+
+SKILLS
+Jira / Confluence / BPMN / UML / SQL / Visio /
+
+LANGUAGES
+English - C1
+German - A2

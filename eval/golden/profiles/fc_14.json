@@ -1,0 +1,83 @@
+{
+  "cv_id": "fc_14",
+  "position_id": "financial_controller",
+  "style": "sr_cyrillic",
+  "template": "two_column",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "economics faculty, finance and accounting",
+      "quote": "• Смер Финансије и рачуноводство"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "met",
+      "fact": "02/2016-present plus 03/2009-01/2016, over 17 years",
+      "quote": "Финансијски контролер | Југ Комерц"
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "met",
+      "fact": "IFRS reporting",
+      "quote": "• Извештавање по МСФИ"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "budgets and plans",
+      "quote": "• Израда буџета и финансијских планова"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "met",
+      "fact": "monthly and annual reports",
+      "quote": "• Месечни и годишњи извештаји"
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "partial",
+      "fact": "Excel at basic level only",
+      "quote": "• Excel ( основно знање )"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "not_met",
+      "fact": "works in Navision and Pantheon, no SAP",
+      "quote": null
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "not_met",
+      "fact": "no SAP",
+      "quote": null
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "met",
+      "fact": "English B2",
+      "quote": "• Енглески језик - Б2"
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "not_met",
+      "fact": "no licence",
+      "quote": null
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "not_met",
+      "fact": "no Power BI",
+      "quote": null
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 0,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 2,
+    "sales_manager": 0
+  }
+}

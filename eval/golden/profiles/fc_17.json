@@ -1,0 +1,83 @@
+{
+  "cv_id": "fc_17",
+  "position_id": "financial_controller",
+  "style": "sr_cyrillic",
+  "template": "single",
+  "hard_case": null,
+  "claims": [
+    {
+      "requirement_id": 1,
+      "verdict": "met",
+      "fact": "economics faculty, finance and accounting",
+      "quote": "Смер Финансије и рачуноводство"
+    },
+    {
+      "requirement_id": 2,
+      "verdict": "met",
+      "fact": "06/2014-present plus 03/2008-05/2014, over 18 years",
+      "quote": "06/2014 - данас Руководилац контролинга, Београд Лоџистик доо, Београд"
+    },
+    {
+      "requirement_id": 3,
+      "verdict": "met",
+      "fact": "IFRS reports",
+      "quote": "• Месечни и годишњи финансијски извештаји по МСФИ"
+    },
+    {
+      "requirement_id": 4,
+      "verdict": "met",
+      "fact": "annual budget and 3-year plan",
+      "quote": "• Годишњи буџет и тригодишњи финансијски план групе"
+    },
+    {
+      "requirement_id": 5,
+      "verdict": "met",
+      "fact": "monthly and annual reports",
+      "quote": "• Месечни и годишњи финансијски извештаји по МСФИ"
+    },
+    {
+      "requirement_id": 6,
+      "verdict": "met",
+      "fact": "advanced Excel",
+      "quote": "• Excel ( напредни ниво ), модели за предвиђање готовине"
+    },
+    {
+      "requirement_id": 7,
+      "verdict": "met",
+      "fact": "SAP FI/CO",
+      "quote": "• Рад у SAP-у ( FI/CO ) од 2012. године"
+    },
+    {
+      "requirement_id": 8,
+      "verdict": "met",
+      "fact": "SAP since 2012, over 14 years",
+      "quote": "• Рад у SAP-у ( FI/CO ) од 2012. године"
+    },
+    {
+      "requirement_id": 9,
+      "verdict": "met",
+      "fact": "English C1",
+      "quote": "Енглески језик Ц1 ( говор и писање )"
+    },
+    {
+      "requirement_id": 10,
+      "verdict": "met",
+      "fact": "authorised accountant licence",
+      "quote": "Лиценца овлашћеног рачуновође ( 2010 )"
+    },
+    {
+      "requirement_id": 11,
+      "verdict": "met",
+      "fact": "Power BI reports",
+      "quote": "• Извештаји у Power BI-ју за директоре сектора"
+    }
+  ],
+  "relevance": {
+    "backend_developer": 0,
+    "data_analyst": 1,
+    "business_analyst": 0,
+    "project_manager": 0,
+    "financial_controller": 3,
+    "sales_manager": 0
+  }
+}

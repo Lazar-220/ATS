@@ -1,0 +1,21 @@
+{
+  "cv_id": "da_07",
+  "position_id": "data_analyst",
+  "style": "sr_latin",
+  "template": "single",
+  "hard_case": {"tag": "career_change", "note": "Requirement 2 (3 years of SQL): the candidate taught mathematics for 12 years, an unrelated field, and works as an analyst only since 07/2024 (about 28 months of 36), so the teaching years do not count; partial."},
+  "claims": [
+    {"requirement_id": 1, "verdict": "met", "fact": "SQL queries on an orders database, SQL course", "quote": "• SQL upiti nad bazom porudžbina ( PostgreSQL )"},
+    {"requirement_id": 2, "verdict": "partial", "fact": "SQL work only since 07/2024, about 28 months", "quote": "07/2024 - danas"},
+    {"requirement_id": 3, "verdict": "met", "fact": "Excel cleaning of ERP exports", "quote": "• Excel za čišćenje izvoza iz ERP-a"},
+    {"requirement_id": 4, "verdict": "met", "fact": "pandas data preparation", "quote": "• Python ( pandas ) za pripremu podataka"},
+    {"requirement_id": 5, "verdict": "met", "fact": "Power BI dashboards", "quote": "• Izveštaji i dashboardi u Power BI-u"},
+    {"requirement_id": 6, "verdict": "met", "fact": "hypothesis testing and regression, taught statistics", "quote": "• Testiranje hipoteza i regresija nad podacima o prodaji"},
+    {"requirement_id": 7, "verdict": "met", "fact": "presentations to management", "quote": "• Prezentacije rezultata upravi kompanije"},
+    {"requirement_id": 8, "verdict": "met", "fact": "Master of mathematics", "quote": "Master matematike, Prirodno-matematički fakultet, Kragujevac | 2006 - 2011"},
+    {"requirement_id": 9, "verdict": "met", "fact": "English B2", "quote": "Engleski jezik: B2"},
+    {"requirement_id": 10, "verdict": "not_met", "fact": "no cloud warehouse", "quote": null},
+    {"requirement_id": 11, "verdict": "not_met", "fact": "no A/B tests", "quote": null}
+  ],
+  "relevance": {"backend_developer": 0, "data_analyst": 2, "business_analyst": 0, "project_manager": 0, "financial_controller": 1, "sales_manager": 0}
+}
