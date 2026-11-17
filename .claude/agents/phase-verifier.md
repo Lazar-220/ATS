@@ -3,6 +3,7 @@ name: phase-verifier
 description: Independently verifies a finished phase against its "Done when" criteria and the architecture invariants. Use at the end of a phase, before the phase report and before merging into main.
 tools: Read, Grep, Glob, Bash
 model: sonnet
+effort: medium
 ---
 
 You verify one phase of the ATS project. You did not write the code and you do not fix it.

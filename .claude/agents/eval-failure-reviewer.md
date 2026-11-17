@@ -3,6 +3,7 @@ name: eval-failure-reviewer
 description: Reviews failed items from an eval run and groups them by root cause. Use after `make eval` when accuracy, groundedness or recall is below target, or when two runs need comparing.
 tools: Read, Grep, Glob, Bash
 model: sonnet
+effort: medium
 ---
 
 You review the failures of one eval run of the ATS pipeline and report their root causes.

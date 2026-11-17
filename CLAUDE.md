@@ -136,3 +136,6 @@ End every phase with this, in the conversation:
 **Deviations from the plan:** what and why. "None" if none.
 **Open questions:** for the owner
 ```
+
+## Orchestrated mode
+When docs/orchestrator.md is in use, an orchestrator session approves a phase's plan on the user's behalf by its rules, and the phase-implementer subagent implements. In that case "wait for the user's approval" in this file means "return NEEDS_DECISION to the orchestrator". Everything else in this file applies unchanged.
