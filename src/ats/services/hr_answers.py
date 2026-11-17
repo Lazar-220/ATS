@@ -128,7 +128,7 @@ def apply_answer(conn: psycopg.Connection[Any], answer: ConfirmAnswer | EditAnsw
 
 
 def _enqueue_rejudges(conn: psycopg.Connection[Any], position_id: UUID, version: int) -> int:
-    """One job per assessment of the position. The handler arrives in phase 1.4b."""
+    """One job per assessment of the position (handled by `ats.worker.judge`)."""
     assessments = conn.execute(
         "SELECT id FROM assessment WHERE position_id = %s ORDER BY created_at, id", (position_id,)
     ).fetchall()

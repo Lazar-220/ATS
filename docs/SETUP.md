@@ -168,6 +168,20 @@ written to `candidate` only for a document the model judged to be a CV. This nee
 in the worker's environment; one CV is one call (cached by the response cache). A worker that
 started before this phase does not know the step: restart it (`schema=0003` in its first log line).
 
+### Judging and scoring in the worker (from phase 1.4b)
+
+When a CV is parsed and its position has requirements, the worker makes one judge call per
+candidate-position pair (`judge` job; more only if the answer lacks a requirement or has one
+twice: then one more call, then the job fails). Code checks each quote against the CV, computes the
+score and stores one `assessment` with a `verdict` per requirement. Either arrival (CV parsed, or
+requirements ready) can come last; the job's dedup key `judge:<candidate>:<position>:<rubric_version>`
+makes the second one a no-op. The same CV and posting submitted again make no LLM call. An edit of
+the requirements enqueues `rejudge` jobs, which judge the assessment again in place. A job that
+runs out of attempts leaves the assessment `failed` (upload the CV again to retry). Request status is
+`done` only when every CV that has a candidate has an assessment (`done` or `failed`), and `failed`
+also when the position's requirement setup failed. A worker that started before this phase does not
+know `judge` or `rejudge` (check `handlers=` in its first log line).
+
 ## 3. Commands
 
 | Command | Does | From phase |

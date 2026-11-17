@@ -34,7 +34,6 @@ from ats.eval.metrics import (
     quote_exists,
     verdict_metrics,
 )
-from ats.eval.pricing import RATES, Rate, cost_usd, rate_on
 from ats.eval.schemas import Verdict
 from ats.eval.stages import (
     ContactTruth,
@@ -48,6 +47,7 @@ from ats.eval.stages import (
 )
 from ats.eval.stub import Judge
 from ats.llm.cache import ResponseCache, cache_key
+from ats.llm.pricing import RATES, Rate, cost_usd, rate_on
 from ats.llm.types import LLMClient
 from ats.pipeline.extract import extract_text
 from ats.pipeline.masking import mask_text

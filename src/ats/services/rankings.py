@@ -15,6 +15,7 @@ from uuid import UUID, uuid4
 import psycopg
 
 from ats.db import task_queue
+from ats.services.assessments import enqueue_judgements
 from ats.services.requirements import retry_failed_setup
 
 INGEST_JOB = "ingest"
@@ -154,6 +155,15 @@ def create_ranking(
             "ON CONFLICT DO NOTHING",
             (request_id, document_ids[cv.sha256]),
         )
+    # A CV parsed in an earlier request has its candidate already; link it, and judge it unless
+    # that was done for this position (the dedup key and the stored assessment make a repeat free).
+    conn.execute(
+        "UPDATE request_candidate rc SET candidate_id = d.candidate_id FROM document d "
+        "WHERE d.id = rc.document_id AND rc.request_id = %s AND rc.candidate_id IS NULL "
+        "AND d.candidate_id IS NOT NULL",
+        (request_id,),
+    )
+    enqueue_judgements(conn, position_id, retry_failed=True)
     return CreatedRanking(request_id=request_id, position_id=position_id)
 
 
@@ -175,16 +185,17 @@ class RankingState:
 
 
 def _derive_status(
-    documents: list[DocumentState],
+    documents: list[DocumentState], *, setup_failed: bool = False, unassessed: int = 0
 ) -> Literal["queued", "running", "done", "failed"]:
-    """Request status from its documents.
+    """Request status from its documents and its assessments.
 
-    It is computed at read time on purpose: until the scoring phases exist there is no stage
-    after ingest, and a stored value would need coordination between the ingest jobs.
+    It is computed at read time on purpose: a stored value would need coordination between the
+    independent ingest and judge jobs. `unassessed` counts the CVs of the request that have a
+    candidate but no assessment yet (neither `done` nor `failed`).
     """
     posting = next(doc for doc in documents if doc.kind == "posting")
-    if posting.status in ("rejected", "failed"):
-        return "failed"  # without the posting there is nothing to score against
+    if posting.status in ("rejected", "failed") or setup_failed:
+        return "failed"  # without requirements there is nothing to score against
     # A CV is also pending while extracted but not yet parsed; a posting ends at `extracted`.
     pending = [
         doc
@@ -193,7 +204,7 @@ def _derive_status(
     ]
     if len(pending) == len(documents):
         return "queued"
-    return "running" if pending else "done"
+    return "running" if pending or unassessed else "done"
 
 
 def get_ranking_state(conn: psycopg.Connection[Any], request_id: UUID) -> RankingState | None:
@@ -214,9 +225,25 @@ def get_ranking_state(conn: psycopg.Connection[Any], request_id: UUID) -> Rankin
         {"position": request[0], "request": request_id},
     ).fetchall()
     documents = [DocumentState(*row) for row in rows]
+    setup_failed = conn.execute(
+        "SELECT EXISTS (SELECT 1 FROM task_queue WHERE dedup_key = %s AND status = 'failed')",
+        (f"position_setup:{request[0]}",),
+    ).fetchone()
+    unassessed = conn.execute(
+        "SELECT count(*) FROM request_candidate rc "
+        "JOIN document d ON d.id = rc.document_id "
+        "WHERE rc.request_id = %(request)s AND d.status = 'parsed' AND d.candidate_id IS NOT NULL "
+        "AND NOT EXISTS (SELECT 1 FROM assessment a WHERE a.candidate_id = d.candidate_id "
+        "                AND a.position_id = %(position)s AND a.status IN ('done', 'failed'))",
+        {"request": request_id, "position": request[0]},
+    ).fetchone()
     return RankingState(
         request_id=request_id,
         position_id=request[0],
-        status=_derive_status(documents),
+        status=_derive_status(
+            documents,
+            setup_failed=bool(setup_failed and setup_failed[0]),
+            unassessed=int(unassessed[0]) if unassessed else 0,
+        ),
         documents=documents,
     )

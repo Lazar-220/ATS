@@ -22,6 +22,7 @@ from ats.pipeline.facts import build_facts
 from ats.pipeline.language import detect_language, detect_script
 from ats.pipeline.masking import mask_text
 from ats.pipeline.parsing import parse_cv
+from ats.services.assessments import enqueue_judgements_for_document
 from ats.services.rankings import INGEST_JOB
 from ats.services.requirements import enqueue_setup
 from ats.settings import get_settings
@@ -142,6 +143,9 @@ def _parse(pool: ConnectionPool, document_id: UUID) -> None:
                 document_id,
             ),
         )
+        if candidate_id is not None:
+            # In the same transaction as the candidate, so a parsed CV is never left unjudged.
+            enqueue_judgements_for_document(conn, document_id)
     log.info(
         "document %s parsed: is_cv=%s flags=%s (in=%s out=%s tokens, cache_hit=%s)",
         document_id,
