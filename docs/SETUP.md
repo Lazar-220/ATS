@@ -150,19 +150,30 @@ A process keeps the code it started with, so a worker left over from before a br
 `git pull` looks healthy and quietly lacks newer job types. Its first log line says what it is:
 
 ```
-worker starting: code=phase/1.2-requirements@7837fa7 schema=0002 handlers=ingest,noop,position_setup llm_model=gemini-3.6-flash llm_rpm=5 llm_key=set
+worker starting: code=phase/1.2-requirements@7837fa7 schema=0003 handlers=ingest,noop,position_setup llm_model=gemini-3.6-flash llm_rpm=5 llm_key=set
 ```
 
 Compare `code=` with `git log -1`, `schema=` with `uv run alembic heads`, and `handlers=` with the
 job types you expect (`position_setup` from phase 1.2). `-dirty` means tracked files had uncommitted
 changes when it started. Restart the worker after changing worker code; `make worker` does not reload.
 
+### CV parsing in the worker (from phase 1.4a)
+
+The ingest job now carries a CV past text extraction: it masks name, email, phone and address
+(`document.masked_text`, the replaced raw ranges in `document.mask_spans`), makes one LLM call on
+the masked text, and stores the parsed items with snippet positions, months per item and total
+tenure in `document.parsed_json`, and the flags (`not_a_cv`, `suspected_injection`,
+`low_coverage`) in `document.flags`. The document ends as `parsed`. The original contact data is
+written to `candidate` only for a document the model judged to be a CV. This needs `LLM_API_KEY`
+in the worker's environment; one CV is one call (cached by the response cache). A worker that
+started before this phase does not know the step: restart it (`schema=0003` in its first log line).
+
 ## 3. Commands
 
 | Command | Does | From phase |
 | --- | --- | --- |
 | `make up` / `make down` | start / stop Postgres | 1.1a |
-| `make migrate` | apply Alembic migrations (the nine v1 tables, plus `hr_answer` from 1.2) | 1.1a |
+| `make migrate` | apply Alembic migrations (the nine v1 tables, plus `hr_answer` from 1.2 and `document.mask_spans` from 1.4a) | 1.1a |
 | `make up-all` | whole stack in Docker (postgres, api, worker, web) | 1.1a |
 | `make api` | FastAPI with reload on :8000 | 1.1a |
 | `make worker` | job worker | 1.1a |
@@ -171,7 +182,7 @@ changes when it started. Restart the worker after changing worker code; `make wo
 | `make test` | unit tests | 0 |
 | `make test-int` | integration tests (needs `make up`) | 1.1a |
 | `make setup-missing [POSITION=<id>] [YES=1]` | enqueue position setup for positions that have posting text but no requirements and no setup job; lists only unless `YES=1`; `POSITION` takes an id or its first characters | 1.2 |
-| `make eval VARIANT=A SPLIT=dev [LIMIT=n] [STAGES=extraction,verdicts] [DRY_RUN=1] [YES=1]` | eval harness: loads the golden set, prints a metrics table and writes `eval/results/<time>_<variant>_<split>.json` with `pipeline_version` (git commit, prompt versions, model). The default stage is `verdicts`, against a stub judge until 1.4b: no model calls. `STAGES=extraction,verdicts` adds the requirement extraction, one real call per golden posting (cached by the response cache). `DRY_RUN=1` prints the call count and the estimated cost and calls nothing. A run that would make more than 5 uncached model calls is refused until `YES=1` | 1.3 |
+| `make eval VARIANT=A SPLIT=dev [LIMIT=n] [STAGES=extraction,verdicts] [DRY_RUN=1] [YES=1]` | eval harness: loads the golden set, prints a metrics table and writes `eval/results/<time>_<variant>_<split>.json` with `pipeline_version` (git commit, prompt versions, model). The default stage is `verdicts`, against a stub judge until 1.4b: no model calls. `STAGES=extraction,verdicts` adds the requirement extraction, one real call per golden posting (cached by the response cache). `DRY_RUN=1` prints the call count and the estimated cost and calls nothing. A run that would make more than 5 uncached model calls is refused until `YES=1`. From 1.4a, `STAGES=masking` measures the masking leak rate (email, phone, name) against `eval/golden/contacts.json` with no model call; `STAGES=parsing` runs the CV parsing prompt on a seeded subset of at most 18 dev-split CVs (seed 20261117, one real call each; `DRY_RUN=1` prints the CV ids, the coverage proof, the model, the prompt version and the estimated cost; dev split only; a 429 that survives the client's retries stops the run and reports how many CVs were parsed) | 1.3 |
 | `uv run python -m ats.eval build` | validate the golden set's profiles, write `labels/*.jsonl` and `split.json` (see `eval/golden/README.md`) | 1.3 |
 | `uv run python -m ats.eval render` | render posting and CV sources to PDF; writes only the files whose bytes change | 1.3 |
 | `make eval-redteam` | injection red-team set | 1.7 |
