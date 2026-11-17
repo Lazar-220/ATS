@@ -1,1 +1,5 @@
 * text=auto eol=lf
+
+# Golden set: sources are text with LF; rendered PDFs are binary (listed after, so it wins).
+eval/golden/** text eol=lf
+eval/golden/**/*.pdf binary
