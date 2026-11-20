@@ -202,6 +202,26 @@ then score (high to low), then arrival. A `failed` assessment is last with no sc
 for `not_met` and for a verdict flagged `quote_not_found` or `no_evidence`. `rubric_unconfirmed` is
 read from the position at the time of the request. 404 for an unknown position or assessment.
 
+### The interface (from phase 1.5)
+
+`make web` serves the interface on :5173; it forwards `/api/*` to the API. It has four screens, all
+reachable with the browser's back button (hash routes): the home page (upload form, then the
+positions), the requirements of a position (from 1.2), the ranked list of a position, and one
+assessment (requirements with verdict, rationale and flags next to the CV text, the verified quote
+highlighted). Every screen needs the API; the ranking fills as the worker finishes each CV.
+
+The TypeScript types in `web/src/api-types.ts` are generated from the API's OpenAPI schema
+(`web/openapi.json`, written by `python -m ats.api.openapi`, no server needed). After a route or
+schema change run `make api-types` and commit both files; `make check` fails when either is stale.
+Pure logic of the web app (highlight offsets, routes, status labels) is tested with Node's own
+runner: `npm --prefix web test` (part of `make check`; needs Node 22.18 or newer, which strips
+types natively).
+
+**Trying it with no key and no quota.** Set `LLM_PROVIDER=fake` in `.env` and restart the worker:
+requirements, CV parsing and verdicts are then canned keyword matches (still through
+`LLMClient`, still masked text only). The worker's first log line says `llm_provider=FAKE` and it
+logs a warning. Scores from it mean nothing; switch back to `gemini` for real judgements.
+
 ## 3. Commands
 
 | Command | Does | From phase |
