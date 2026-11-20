@@ -9,7 +9,8 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "gen:types": "node scripts/gen-types.mjs",
-    "check:types": "node scripts/gen-types.mjs --check"
+    "check:types": "node scripts/gen-types.mjs --check",
+    "test": "node --test \"src/**/*.test.ts\""
   },
   "dependencies": {
     "@tanstack/react-query": "^5.107.1",

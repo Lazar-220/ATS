@@ -4,6 +4,7 @@ import { useState } from "react";
 import { fetchHealth } from "./api";
 import { PositionEditor } from "./PositionEditor";
 import { PositionsList } from "./PositionsList";
+import { UploadForm } from "./Upload";
 
 export function App() {
   const [positionId, setPositionId] = useState<string | null>(null);
@@ -29,6 +30,7 @@ export function App() {
       </p>
       {positionId === null ? (
         <>
+          <UploadForm onOpenRanking={setPositionId} />
           <h2>Positions</h2>
           <PositionsList onOpen={setPositionId} />
         </>

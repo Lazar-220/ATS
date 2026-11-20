@@ -57,7 +57,7 @@ check:
 	uv run ruff format --check .
 	uv run pyright
 	uv run pytest -q -m "$(UNIT_TESTS)"
-	@if [ -d web ]; then npm --prefix web run check:types && npm --prefix web run typecheck && npm --prefix web run lint; \
+	@if [ -d web ]; then npm --prefix web run check:types && npm --prefix web run typecheck && npm --prefix web run lint && npm --prefix web run test; \
 	else echo "web/ not present yet (added in phase 1.1a): skipping frontend checks"; fi
 
 test:
