@@ -65,3 +65,28 @@ def test_offsets_are_mapped_from_masked_text_back_to_raw_text() -> None:
     assert result.flags == ()
     assert result.char_start is not None and result.char_end is not None
     assert raw[result.char_start : result.char_end] == "Java developer for 5 years"
+
+
+def test_a_quote_may_not_start_inside_a_number() -> None:
+    assert find_quote("5 years", "lead 15 years", 90) is None
+    assert find_quote("lead 1", "lead 15 years", 90) is None  # nor end inside one
+
+
+def test_the_whole_number_is_found_with_the_right_offsets() -> None:
+    text = "lead 15 years"
+    match = find_quote("15 years", text, 90)
+    assert match is not None and match.exact
+    assert text[match.start : match.end] == "15 years"
+
+
+def test_a_later_whole_occurrence_is_taken_when_the_first_cuts_a_number() -> None:
+    text = "lead 15 years, then 5 years of Python"
+    match = find_quote("5 years", text, 90)
+    assert match is not None and text[match.start : match.end] == "5 years"
+    assert match.start == text.index("then 5") + len("then ")
+
+
+def test_a_quote_at_the_very_start_or_end_of_the_text_passes() -> None:
+    assert find_quote("5 years", "5 years", 90) is not None
+    assert find_quote("2019", "since 2019", 90) is not None
+    assert find_quote("since 20", "since 2019", 90) is None

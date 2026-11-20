@@ -77,13 +77,34 @@ class QuoteMatch:
     score: float
 
 
+def _splits_number(hay: str, start: int, end: int) -> bool:
+    """The range starts or ends inside a run of digits: "5 years" inside "15 years"."""
+    return (start > 0 and hay[start - 1].isdigit() and hay[start].isdigit()) or (
+        end < len(hay) and hay[end - 1].isdigit() and hay[end].isdigit()
+    )
+
+
+def _find_whole_numbers(hay: str, needle: str) -> int:
+    """First verbatim occurrence that does not cut a number, or -1.
+
+    Only digit runs are guarded, not word edges: Serbian inflection means a quote may
+    legitimately begin or end inside a word, but "5" is never "15".
+    """
+    index = hay.find(needle)
+    while index >= 0:
+        if not _splits_number(hay, index, index + len(needle)):
+            return index
+        index = hay.find(needle, index + 1)
+    return -1
+
+
 def find_quote(quote: str, text: str, threshold: int) -> QuoteMatch | None:
     """Where `quote` is in `text`, or None when it is not there (§3.2)."""
     needle = normalize(quote)
     if not needle:
         return None
     hay, origin = normalize_with_map(text)
-    index = hay.find(needle)
+    index = _find_whole_numbers(hay, needle)
     if index >= 0:
         start, end, exact, score = index, index + len(needle), True, 100.0
     else:
@@ -94,7 +115,7 @@ def find_quote(quote: str, text: str, threshold: int) -> QuoteMatch | None:
         exact, score = False, float(alignment.score)
         # A near match that changes a number is a different fact.
         window = set(_DIGITS.findall(hay[start:end]))
-        if not set(_DIGITS.findall(needle)) <= window:
+        if not set(_DIGITS.findall(needle)) <= window or _splits_number(hay, start, end):
             return None
     if end <= start:
         return None
