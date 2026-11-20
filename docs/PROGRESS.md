@@ -13,7 +13,7 @@ Read this at the start of every session. Update it at the end of every phase.
 | 1.3 Golden set and harness | merged | 2026-11-17 | `--no-ff` merge of `phase/1.3-golden-set`: schemas and loaders, PDF renderer, harness, 80 CVs over six positions (866 gold verdicts), extraction F1 97.7% (gate met). **Deviations:** the manual 20% check of the gold labels is deferred by the owner (an independent audit, 99.0% agreement, stands in; gold labels not manually verified); DOCX golden CVs dropped (ingest is PDF-only); the default model is `gemini-3.6-flash`, not the plan's `gemini-3.8-flash`. |
 | 1.4a CV parsing | merged; real-call item deferred | 2026-11-17 | `--no-ff` merge of `phase/1.4a-cv-parsing`: five feature units, the daily-quota fix and the eval-only OpenRouter fallback. **Deviation:** the "parsed JSON for dev CVs from the real model" item is deferred, by owner decision, to a measurement pass (see Decisions and Carried over); no real LLM call was made in this phase. |
 | 1.4b Judge and score | merged; real-call items deferred | 2026-11-20 | `--no-ff` merge of `phase/1.4b-judge`: seven units plus verifier fixes (judge retry bypasses the cache, whole-number and decimal quote check, contact-data and address tests, flaky ingest test fixed). Phase-verifier: no blocking defects (two rounds). Merged on the owner's autonomous-run instruction of 2026-11-20. **Deviation (owner, 2026-11-17, Speed plan):** every item that needs real LLM calls moves to a measurement pass the owner triggers (baseline accuracy on the test split, the dev run and fixes, flagged share on real output, cost per CV, p95 latency, the eval-failure-reviewer review). Built and tested against the fake client; no real call was made. |
-| 1.5 Interface | built, awaiting verification and merge | | Six commits on `phase/1.5-interface`: types, a fake provider, upload, ranked list, assessment view, navigation. The "Done when" items that need a browser walkthrough are the owner's (see `MANUAL_CHECKS.md`). |
+| 1.5 Interface | merged; browser walkthrough pending (owner) | 2026-11-20 | `--no-ff` merge of `phase/1.5-interface`. Phase-verifier (one round): no blocking defects, all invariants PASS. `make check` 255 py + 22 node tests, `make test-int` 81, first run. Seven commits on `phase/1.5-interface`: types, a fake provider, upload, ranked list, assessment view, navigation. The "Done when" items that need a browser walkthrough are the owner's (see `MANUAL_CHECKS.md`). |
 | 1.6 Observability | not started | | |
 | 1.7 Guardrails and CI | not started | | |
 | 1.8 v1 gate | not started | | |
@@ -172,4 +172,10 @@ Work a phase deferred, with the phase that must pick it up.
   - A comma list with no space is flagged ("Java 11" in "Java 11,17,21"). This is a false flag: the verdict stays, only the evidence is hidden.
   - Space-separated thousands are not guarded ("000 EUR" in "10 000 EUR" passes). It only matters if the judge quotes from mid-number.
   - Watch for all three in the `quote_not_found` flags of the dev measurement run.
+- 1.5 interface, non-blocking items from the phase-verifier:
+  - Scroll-to-quote has no automated test.
+  - Where two quotes overlap, the shared stretch takes the selected style.
+  - A `met`/`partial` verdict whose quote check never ran would show no badge. The pipeline cannot produce one today.
+  - No screen has been seen in a browser yet (`MANUAL_CHECKS.md`).
+- `LLM_PROVIDER=fake` gives meaningless demo scores. It is logged loudly at worker start, and it must never be set in a real `.env`.
 - Environment: `make up` needs Docker Desktop running on this Windows machine, and `make` must be run from Git Bash, not cmd.exe or PowerShell.
