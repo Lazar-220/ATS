@@ -49,6 +49,14 @@ eval:
 smoke-real:
 	uv run python -m ats.eval run --variant A --split dev --limit 2 --stages judge $(if $(YES),--yes,--dry-run)
 
+# Langfuse self-host (six services, about 4 GB of RAM; run `make down` first, see docs/SETUP.md).
+# The UI is on http://localhost:3000. Stopping keeps the traces (no -v).
+langfuse-up:
+	docker compose -f compose.langfuse.yaml up -d --wait
+
+langfuse-down:
+	docker compose -f compose.langfuse.yaml down
+
 # Regenerate the web types from the API schema (no server or database needed).
 api-types:
 	uv run python -m ats.api.openapi
@@ -69,7 +77,6 @@ test:
 	uv run pytest -q -m "$(UNIT_TESTS)"
 
 # Targets that belong to a later phase fail loudly instead of doing nothing.
-langfuse-up langfuse-down: ; @echo "make $@ is added in phase 1.6"; exit 1
 eval-redteam: ; @echo "make $@ is added in phase 1.7"; exit 1
 reindex: ; @echo "make $@ is added in phase 2.1"; exit 1
 mcp: ; @echo "make $@ is added in phase 3.7"; exit 1

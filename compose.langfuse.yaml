@@ -1,0 +1,181 @@
+# Langfuse self-host (v3): web, worker, Postgres, ClickHouse, Redis, MinIO (plan section 6.3).
+#
+# Started by `make langfuse-up`, a separate compose project (`ats-langfuse`) so the application's
+# Postgres in compose.yaml is never touched. Written from the images' own environment and not
+# diffed against the official self-host compose: the owner should do that once (docs/PROGRESS.md,
+# Owner review).
+#
+# Every secret below is an obviously-local placeholder. This stack listens on 127.0.0.1 only and
+# holds development traces: do not reuse these values anywhere that is reachable from a network.
+# Host ports: 3000 (UI and API) only; nothing here uses 5432, 8000 or 5173.
+#
+# RAM: the memory limits below keep the six services under about 5 GB in total. Stop the
+# api, worker and web containers (`make down`) while this stack runs on a 12 GB machine.
+
+name: ats-langfuse
+
+x-langfuse-env: &langfuse-env
+  DATABASE_URL: postgresql://langfuse:langfuse-local@lf-postgres:5432/langfuse
+  # ClickHouse: the migration URL is the native protocol, the app URL is HTTP.
+  CLICKHOUSE_URL: http://clickhouse:8123
+  CLICKHOUSE_MIGRATION_URL: clickhouse://clickhouse:9000
+  CLICKHOUSE_USER: clickhouse
+  CLICKHOUSE_PASSWORD: clickhouse-local
+  CLICKHOUSE_CLUSTER_ENABLED: "false"
+  REDIS_HOST: redis
+  REDIS_PORT: "6379"
+  REDIS_AUTH: redis-local
+  # Events and media go to MinIO through its S3 API.
+  LANGFUSE_S3_EVENT_UPLOAD_BUCKET: langfuse
+  LANGFUSE_S3_EVENT_UPLOAD_REGION: auto
+  LANGFUSE_S3_EVENT_UPLOAD_ACCESS_KEY_ID: minio
+  LANGFUSE_S3_EVENT_UPLOAD_SECRET_ACCESS_KEY: minio-local-secret
+  LANGFUSE_S3_EVENT_UPLOAD_ENDPOINT: http://minio:9000
+  LANGFUSE_S3_EVENT_UPLOAD_FORCE_PATH_STYLE: "true"
+  LANGFUSE_S3_EVENT_UPLOAD_PREFIX: events/
+  LANGFUSE_S3_MEDIA_UPLOAD_BUCKET: langfuse
+  LANGFUSE_S3_MEDIA_UPLOAD_REGION: auto
+  LANGFUSE_S3_MEDIA_UPLOAD_ACCESS_KEY_ID: minio
+  LANGFUSE_S3_MEDIA_UPLOAD_SECRET_ACCESS_KEY: minio-local-secret
+  LANGFUSE_S3_MEDIA_UPLOAD_ENDPOINT: http://minio:9000
+  LANGFUSE_S3_MEDIA_UPLOAD_FORCE_PATH_STYLE: "true"
+  LANGFUSE_S3_MEDIA_UPLOAD_PREFIX: media/
+  SALT: local-development-salt-not-a-secret
+  # 64 hex characters, as the image requires.
+  ENCRYPTION_KEY: "0000000000000000000000000000000000000000000000000000000000000000"
+  TELEMETRY_ENABLED: "false"
+  NEXT_TELEMETRY_DISABLED: "1"
+
+services:
+  langfuse-web:
+    image: langfuse/langfuse:3.227.1
+    restart: unless-stopped
+    # With 1 GB the Next.js server died with "JavaScript heap out of memory" at about 500 MB
+    # during start-up (observed), so it gets room and an explicit V8 heap size.
+    mem_limit: 1536m
+    depends_on:
+      lf-postgres: {condition: service_healthy}
+      clickhouse: {condition: service_healthy}
+      redis: {condition: service_healthy}
+      minio: {condition: service_healthy}
+    ports:
+      - "127.0.0.1:${LANGFUSE_PORT:-3000}:3000"
+    environment:
+      <<: *langfuse-env
+      NODE_OPTIONS: --max-old-space-size=1024
+      # Next.js binds to the container's own address unless told otherwise; the published port
+      # and the health check below need it on every interface.
+      HOSTNAME: 0.0.0.0
+      NEXTAUTH_URL: http://localhost:${LANGFUSE_PORT:-3000}
+      NEXTAUTH_SECRET: local-development-nextauth-secret
+      # Headless init: an organization, a project, its API keys and a user exist on first start,
+      # so the proof runs need no clicking. The keys are the placeholders in .env.example.
+      LANGFUSE_INIT_ORG_ID: ats-local
+      LANGFUSE_INIT_ORG_NAME: ats-local
+      LANGFUSE_INIT_PROJECT_ID: ats
+      LANGFUSE_INIT_PROJECT_NAME: ats
+      LANGFUSE_INIT_PROJECT_PUBLIC_KEY: pk-lf-ats-local
+      LANGFUSE_INIT_PROJECT_SECRET_KEY: sk-lf-ats-local
+      LANGFUSE_INIT_USER_EMAIL: dev@ats.local
+      LANGFUSE_INIT_USER_NAME: dev
+      LANGFUSE_INIT_USER_PASSWORD: ats-local-password
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:3000/api/public/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
+
+  langfuse-worker:
+    image: langfuse/langfuse-worker:3.227.1
+    restart: unless-stopped
+    mem_limit: 1g
+    depends_on:
+      lf-postgres: {condition: service_healthy}
+      clickhouse: {condition: service_healthy}
+      redis: {condition: service_healthy}
+      minio: {condition: service_healthy}
+    environment:
+      <<: *langfuse-env
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://$$(hostname -i):3030/api/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  lf-postgres:
+    image: postgres:17.6-alpine
+    restart: unless-stopped
+    mem_limit: 384m
+    environment:
+      POSTGRES_USER: langfuse
+      POSTGRES_PASSWORD: langfuse-local
+      POSTGRES_DB: langfuse
+    volumes:
+      - lf_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U langfuse -d langfuse"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:25.8
+    restart: unless-stopped
+    mem_limit: 1536m
+    user: "101:101"
+    environment:
+      CLICKHOUSE_DB: default
+      CLICKHOUSE_USER: clickhouse
+      CLICKHOUSE_PASSWORD: clickhouse-local
+    volumes:
+      - lf_clickhouse_data:/var/lib/clickhouse
+      - lf_clickhouse_logs:/var/log/clickhouse-server
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:8123/ping || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  redis:
+    image: redis:7.4.5-alpine
+    restart: unless-stopped
+    mem_limit: 192m
+    command: ["redis-server", "--requirepass", "redis-local", "--maxmemory-policy", "noeviction"]
+    volumes:
+      - lf_redis:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a redis-local ping | grep -q PONG"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  minio:
+    # The minio/minio images are no longer published on Docker Hub or Quay; this is the Chainguard
+    # build (its server reports RELEASE.2026-11-16). Pinned by digest because the registry offers
+    # no version tags without a subscription.
+    image: cgr.dev/chainguard/minio@sha256:e9cf6b99c226e9539ed0f14b6f00e37b07da153c7ba1f4f8709c807574b471ec
+    restart: unless-stopped
+    mem_limit: 384m
+    # Creates the bucket Langfuse writes to, then serves the S3 API.
+    entrypoint: sh
+    command: -c "mkdir -p /data/langfuse && minio server /data --address ':9000' --console-address ':9001'"
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio-local-secret
+    volumes:
+      - lf_minio:/data
+    healthcheck:
+      # The image has no curl or wget; a TCP connect to the S3 port is the cheapest check.
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/9000"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  lf_postgres:
+  lf_clickhouse_data:
+  lf_clickhouse_logs:
+  lf_redis:
+  lf_minio:
