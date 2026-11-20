@@ -153,4 +153,11 @@ Work a phase deferred, with the phase that must pick it up.
 | 1.4b | ~~Sensitivity check (1.3 row) and majority-class accuracy.~~ Built into the report (`eval/golden/uncertain.json`, 32 pairs); the numbers come with the measurement pass. | step 3 |
 | 1.4b | Calibrate `QUOTE_FUZZY_THRESHOLD` (90, from the plan) on the golden set: read the `quote_not_found` flags of the dev run for false flags (a real quote missed, for example through a two-column interleaving) and, if there are some, report before changing the 90. | step 1 |
 | 1.4b | A decomposed accent (a letter plus a combining mark) in the CV against a precomposed one in the quote is not equal after the per-character NFKC that the offset map allows; the fuzzy score usually catches it. Watch for it in the `quote_not_found` flags. | step 1 |
-| 1.4b | The integration test `test_unexpected_errors_fail_the_document_and_a_reupload_recovers` (from 1.1b) failed once in a full integration run and passed in 3 of 3 reruns and in the next full run: its wait can return between the posting's and the CV's last attempt. Not touched by this phase. | 1.7 (CI) |
+| 1.4b | ~~The integration test `test_unexpected_errors_fail_the_document_and_a_reupload_recovers` is flaky.~~ **Fixed:** the test waited for "some document failed and no job running", but the posting fails too and its job can end while the CV's job is queued for a retry, so the CV's message was still empty. The code writes status and message in one `UPDATE`, so nothing could show a failed state without a message. The test now waits for the settled queue. 30 of 30 single runs and 3 of 3 `make test-int` passed. | closed |
+
+## Known risks / deferred
+
+- The fuzzy quote path rejects a match whose best alignment cuts a number; it does not try another alignment. This gives false flags (`quote_not_found` on a real quote), never false passes.
+- Address masking (1.4a) catches a labelled address and a street with a number; an unlabelled address line and a bare street leak, and the profile's address is not measured.
+- The 1.4b items that need the real LLM are deferred to the measurement pass (steps 1 to 3 in Carried over): verdict accuracy and baseline, the share of flagged verdicts on real output, the failure review, cost per CV and p95 latency, and the `QUOTE_FUZZY_THRESHOLD` calibration.
+- Environment: `make up` needs Docker Desktop running on this Windows machine, and `make` must be run from Git Bash, not cmd.exe or PowerShell.

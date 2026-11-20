@@ -32,7 +32,7 @@ memory=8GB
 cp .env.example .env        # then set LLM_API_KEY in .env yourself
 uv sync                     # Python dependencies
 npm install --prefix web    # frontend dependencies (from phase 1.1a)
-make up                     # Postgres + pgvector in Docker
+make up                     # Postgres + pgvector in Docker (Docker Desktop must be running)
 make migrate                # create the schema
 ```
 
@@ -206,7 +206,7 @@ read from the position at the time of the request. 404 for an unknown position o
 
 | Command | Does | From phase |
 | --- | --- | --- |
-| `make up` / `make down` | start / stop Postgres | 1.1a |
+| `make up` / `make down` | start / stop Postgres. On this Windows machine Docker Desktop must be running first, and every `make` target must be run from Git Bash, not cmd.exe or PowerShell (the Makefile breaks there) | 1.1a |
 | `make migrate` | apply Alembic migrations (the nine v1 tables, plus `hr_answer` from 1.2 and `document.mask_spans` from 1.4a) | 1.1a |
 | `make up-all` | whole stack in Docker (postgres, api, worker, web) | 1.1a |
 | `make api` | FastAPI with reload on :8000 | 1.1a |
