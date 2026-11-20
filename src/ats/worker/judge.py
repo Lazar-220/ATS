@@ -19,7 +19,7 @@ from psycopg_pool import ConnectionPool
 
 from ats.db.task_queue import Job
 from ats.llm.factory import get_llm_client
-from ats.llm.pricing import cost_usd, rate_on
+from ats.llm.pricing import usage_cost
 from ats.llm.types import LLMClient
 from ats.observability import Observation, Tracer, get_tracer
 from ats.pipeline.context import ContextRequirement, build_context
@@ -208,8 +208,9 @@ def _judge_and_store(
                 "mandatory_failed": score.mandatory_failed,
             }
         )
-    rate = rate_on(settings.llm_model, datetime.now(UTC).date())
-    cost = cost_usd(rate, judged.usage.input_tokens, judged.usage.output_tokens) if rate else None
+    cost = usage_cost(settings.llm_model, judged.usage, datetime.now(UTC).date())
+    ingest = cast(dict[str, Any], loaded["parsed_json"].get("ingest") or {})
+    parse = cast(dict[str, Any], ingest.get("parse") or {})
     trace = {
         "prompt_version": PROMPT_VERSION,
         "thinking_level": THINKING_LEVEL,
@@ -218,6 +219,10 @@ def _judge_and_store(
         "as_of": pack.as_of,
         "judge_calls": judged.calls,
         "cache_hit": judged.usage.cache_hit,
+        "cached_input_tokens": judged.usage.cached_input_tokens,
+        # `cost_usd` on the row is this judge call; the CV's parse call is paid once per CV, so
+        # it is shown beside it and not added to each pair (cost per CV is the sum).
+        "cv_parse_cost_usd": parse.get("cost_usd"),
         "latency_s": round(judged.usage.latency_s, 3),
         "quote_fuzzy_threshold": settings.quote_fuzzy_threshold,
         # Code-only steps timed here; extraction, masking and parsing are in the CV's own row.

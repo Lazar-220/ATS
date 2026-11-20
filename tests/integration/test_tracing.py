@@ -1,6 +1,7 @@
 """One trace per assessment, and nothing personal in anything sent to tracing (phase 1.6)."""
 
 import json
+from datetime import date
 from typing import Any
 
 import psycopg
@@ -12,8 +13,9 @@ from psycopg_pool import ConnectionPool
 from tracing import MemoryTracing
 
 from ats.llm.factory import create_llm_client
+from ats.llm.pricing import rate_on
 from ats.observability import LangfuseTracer, set_tracer
-from ats.settings import Settings
+from ats.settings import Settings, get_settings
 from ats.worker import ingest, judge, position_setup
 from integration.test_ingest import upload, wait_until_settled
 
@@ -101,6 +103,11 @@ def test_one_trace_per_assessment_with_every_step_and_nothing_personal(
     for secret in PERSONAL:
         assert secret not in sent, f"{secret!r} reached the tracing exporter"
     assert row["trace"]["steps_s"].keys() >= {"judge", "quote_check", "score"}
+    # Cost is stored on the assessment (the judge call) and the CV's parse cost sits beside it.
+    # The demo client reports invented token counts, so the numbers are not real prices.
+    if rate_on(get_settings().llm_model, date.today()) is not None:
+        assert row["cost_usd"] is not None and row["cost_usd"] > 0
+        assert row["trace"]["cv_parse_cost_usd"] > 0
 
 
 class _DownClient:

@@ -62,17 +62,24 @@ class ManagedLLMClient:
                 return self._result(request, output, 0, 0, started, cache_hit=True)
             # An entry that no longer fits the schema is a miss; the new answer overwrites it.
 
-        input_tokens = output_tokens = 0
+        input_tokens = output_tokens = cached_tokens = 0
         # §4.5: invalid output gets one retry call, then the caller fails. Both calls are billed.
         for _attempt in range(2):
             completion = self._complete(request, schema)
             input_tokens += completion.input_tokens
             output_tokens += completion.output_tokens
+            cached_tokens += completion.cached_input_tokens
             output = _parse(completion.text, schema)
             if output is not None:
                 self._cache.put(key, completion)  # only validated answers are cached
                 return self._result(
-                    request, output, input_tokens, output_tokens, started, cache_hit=False
+                    request,
+                    output,
+                    input_tokens,
+                    output_tokens,
+                    started,
+                    cache_hit=False,
+                    cached_input_tokens=cached_tokens,
                 )
             log.warning(
                 "model output did not match %s (%s)", schema.__name__, request.prompt_version
@@ -119,6 +126,7 @@ class ManagedLLMClient:
         started: float,
         *,
         cache_hit: bool,
+        cached_input_tokens: int = 0,
     ) -> LLMResult[T]:
         usage = LLMUsage(
             input_tokens=input_tokens,
@@ -126,6 +134,7 @@ class ManagedLLMClient:
             latency_s=self._clock() - started,
             cache_hit=cache_hit,
             model=self._model,
+            cached_input_tokens=cached_input_tokens,
         )
         log.info(
             "llm call model=%s prompt=%s thinking=%s in=%s out=%s latency=%.2fs cache_hit=%s",

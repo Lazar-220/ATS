@@ -18,6 +18,7 @@ from psycopg_pool import ConnectionPool
 
 from ats.db.task_queue import Job
 from ats.llm.factory import get_llm_client
+from ats.llm.pricing import usage_cost
 from ats.observability import Observation, get_tracer
 from ats.pipeline.extract import PdfRejected, extract_text
 from ats.pipeline.facts import build_facts
@@ -122,6 +123,7 @@ def _parse(
     with pool.connection() as conn:
         row = conn.execute("SELECT raw_text FROM document WHERE id = %s", (document_id,)).fetchone()
     assert row is not None and row[0] is not None
+    settings = get_settings()
     tracer = get_tracer()
     with tracer.span("masking") as span:
         started = time.perf_counter()
@@ -189,6 +191,16 @@ def _parse(
                         # Where the assessment's trace finds the steps that ran here (1.6).
                         "ingest": {
                             "trace_id": trace_id,
+                            "parse": {
+                                "model": settings.llm_model,
+                                "input_tokens": result.usage.input_tokens,
+                                "output_tokens": result.usage.output_tokens,
+                                "cached_input_tokens": result.usage.cached_input_tokens,
+                                "cache_hit": result.usage.cache_hit,
+                                "cost_usd": usage_cost(
+                                    settings.llm_model, result.usage, date.today()
+                                ),
+                            },
                             "steps_s": {
                                 "extraction": extraction_s,
                                 "masking": masking_s,

@@ -31,6 +31,9 @@ class LLMUsage:
     cache_hit: bool
     # The model that answered; empty for the fake client.
     model: str = ""
+    # Part of `input_tokens` that the provider served from its prompt cache (§6.1); billed at
+    # a tenth of the input price.
+    cached_input_tokens: int = 0
 
 
 @dataclass(frozen=True)
@@ -53,6 +56,7 @@ class RawCompletion:
     text: str
     input_tokens: int
     output_tokens: int
+    cached_input_tokens: int = 0
 
 
 class LLMError(Exception):

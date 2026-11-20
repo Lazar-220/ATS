@@ -58,6 +58,7 @@ class GeminiTransport:
                 if usage
                 else 0
             ),
+            cached_input_tokens=(usage.cached_content_token_count or 0) if usage else 0,
         )
 
 

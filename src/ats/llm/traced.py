@@ -5,8 +5,11 @@ tokens) and the latency is what the caller waited. What it records is what the m
 and answered: the prompts (the CV in them is masked text, §2.4) and the parsed output.
 """
 
+from datetime import UTC, datetime
+
 from pydantic import BaseModel
 
+from ats.llm.pricing import usage_cost_parts
 from ats.llm.types import LLMClient, LLMRequest, LLMResult
 from ats.observability import Tracer
 
@@ -35,6 +38,8 @@ class TracedLLMClient:
         ) as generation:
             result = self._inner.generate(request, schema)
             usage = result.usage
+            # None for a model without a known price: the field is left out, not guessed.
+            cost = usage_cost_parts(self._model, usage, datetime.now(UTC).date())
             generation.update(
                 output=result.output.model_dump(mode="json"),
                 usage_details={
@@ -42,11 +47,13 @@ class TracedLLMClient:
                     "output": usage.output_tokens,
                     "total": usage.input_tokens + usage.output_tokens,
                 },
+                cost_details=cost,
                 metadata={
                     "prompt_version": request.prompt_version,
                     "schema": schema.__name__,
                     "provider": self._provider,
                     "cache_hit": usage.cache_hit,
+                    "cached_input_tokens": usage.cached_input_tokens,
                     "latency_s": round(usage.latency_s, 3),
                 },
             )

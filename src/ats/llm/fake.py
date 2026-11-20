@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from ats.llm.types import LLMRequest, LLMResult, LLMUsage
 
 Responder = Callable[[LLMRequest, type[BaseModel]], BaseModel]
+UsageEstimator = Callable[[LLMRequest, BaseModel], LLMUsage]
 
 
 class FakeLLMClient:
@@ -14,9 +15,15 @@ class FakeLLMClient:
     are returned in order. Each request is kept in `calls`.
     """
 
-    def __init__(self, *outputs: BaseModel, responder: Responder | None = None) -> None:
+    def __init__(
+        self,
+        *outputs: BaseModel,
+        responder: Responder | None = None,
+        usage: UsageEstimator | None = None,
+    ) -> None:
         self._outputs = list(outputs)
         self.responder = responder
+        self._usage = usage
         self.calls: list[LLMRequest] = []
 
     def generate[T: BaseModel](self, request: LLMRequest, schema: type[T]) -> LLMResult[T]:
@@ -29,6 +36,8 @@ class FakeLLMClient:
             raise AssertionError("FakeLLMClient has no output left for this call")
         if not isinstance(output, schema):
             raise AssertionError(f"FakeLLMClient output is not a {schema.__name__}")
+        if self._usage is not None:
+            return LLMResult(output=output, usage=self._usage(request, output))
         return LLMResult(
             output=output,
             usage=LLMUsage(input_tokens=0, output_tokens=0, latency_s=0.0, cache_hit=False),
