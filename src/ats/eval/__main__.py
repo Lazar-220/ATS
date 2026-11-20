@@ -3,19 +3,21 @@ import sys
 from pathlib import Path
 
 from ats.eval.fallback import create_eval_llm_client
-from ats.eval.golden import DEFAULT_ROOT, GoldSetError, build_labels, load_golden
+from ats.eval.golden import DEFAULT_ROOT, GOLDEN_AS_OF, GoldSetError, build_labels, load_golden
 from ats.eval.harness import (
     MAX_CALLS_WITHOUT_CONFIRMATION,
     EvalError,
     Stage,
+    count_prior_runs,
     format_report,
     plan_run,
     run_eval,
     write_result,
 )
+from ats.eval.pipeline_judge import PipelineJudge
 from ats.eval.render import LineTooWideError, render_golden
 from ats.eval.split import DEFAULT_SEED
-from ats.eval.stages import StageError, SubsetError, load_contacts
+from ats.eval.stages import StageError, SubsetError, load_contacts, load_uncertain
 from ats.eval.stub import StubJudge
 from ats.llm.cache import ResponseCache
 from ats.llm.types import LLMError
@@ -27,6 +29,7 @@ STAGES_BY_NAME: dict[str, Stage] = {
     "verdicts": "verdicts",
     "masking": "masking",
     "parsing": "parsing",
+    "judge": "judge",
 }
 
 
@@ -68,6 +71,8 @@ def _run(args: argparse.Namespace) -> int:
         cache=ResponseCache(settings.llm_cache_dir),
         min_chars_per_page=settings.min_chars_per_page,
         fallback_model=fallback_model,
+        split=args.split,
+        limit=args.limit,
     )
     if args.dry_run:
         print(plan.describe())
@@ -80,21 +85,29 @@ def _run(args: argparse.Namespace) -> int:
             file=sys.stderr,
         )
         return 2
-    needs_model = "extraction" in stages or "parsing" in stages
+    needs_model = "extraction" in stages or "parsing" in stages or "judge" in stages
     client = create_eval_llm_client(settings, fallback) if needs_model else None
+    judge: PipelineJudge | StubJudge = StubJudge(golden)
+    if "judge" in stages:
+        assert client is not None
+        judge = PipelineJudge(
+            client, as_of=GOLDEN_AS_OF, quote_threshold=settings.quote_fuzzy_threshold
+        )
     result = run_eval(
         golden,
         variant=args.variant,
         split=args.split,
         limit=args.limit,
         stages=stages,
-        judge=StubJudge(golden),
+        judge=judge,
         client=client,
         model=settings.llm_model,
         min_chars_per_page=settings.min_chars_per_page,
         contacts=load_contacts(Path(args.golden)) if "masking" in stages else None,
         fallback_model=fallback_model,
+        uncertain=load_uncertain(Path(args.golden), golden),
     )
+    result.run_count = count_prior_runs(RESULTS_DIR, result) + 1
     print(format_report(result))
     print()
     print(f"Result written to {write_result(result, RESULTS_DIR)}")
@@ -118,8 +131,9 @@ def main(argv: list[str] | None = None) -> int:
     run.add_argument(
         "--stages",
         default="verdicts",
-        help="comma list: extraction and parsing call the model; verdicts (stub judge until "
-        "1.4b) and masking do not. parsing runs a seeded subset of the dev split only",
+        help="comma list: extraction, parsing and judge call the model; verdicts (a stub "
+        "judge) and masking do not. judge is variant A: parse and judge call per CV of the "
+        "split. parsing runs a seeded subset of the dev split only",
     )
     run.add_argument("--dry-run", action="store_true", help="print calls and cost, call nothing")
     run.add_argument(

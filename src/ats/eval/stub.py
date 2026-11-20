@@ -21,6 +21,8 @@ class JudgedVerdict:
     requirement_id: int
     verdict: Verdict
     quote: str | None
+    # Quote-check flags (quote_not_found, no_evidence). A flagged quote is not evidence.
+    flags: tuple[str, ...] = ()
 
 
 class Judge(Protocol):

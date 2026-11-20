@@ -1,0 +1,165 @@
+{
+ "about": "Verdicts the golden-set writers or the 1.3 audit were unsure the CV text supports (docs/PROGRESS.md, Decisions, 1.3). The 1.4b baseline is reported with and without them. Derivation: docs/PROGRESS.md, Decisions, 1.4b.",
+ "pairs": [
+  {
+   "cv_id": "pm_12",
+   "requirement_id": 7,
+   "reason": "writers' flag: team of 4 plus QA against a minimum of 5"
+  },
+  {
+   "cv_id": "fc_10",
+   "requirement_id": 3,
+   "reason": "basic-knowledge convention (resolved: the claim whose fact says basic knowledge)"
+  },
+  {
+   "cv_id": "fc_11",
+   "requirement_id": 3,
+   "reason": "basic-knowledge convention (resolved: the claim whose fact says basic knowledge)"
+  },
+  {
+   "cv_id": "fc_14",
+   "requirement_id": 6,
+   "reason": "basic-knowledge convention (resolved: the claim whose fact says basic level)"
+  },
+  {
+   "cv_id": "fc_16",
+   "requirement_id": 3,
+   "reason": "basic-knowledge convention (resolved: the claim whose fact says basic knowledge)"
+  },
+  {
+   "cv_id": "fc_11",
+   "requirement_id": 1,
+   "reason": "finished law/philology degree labelled not_met as unrelated"
+  },
+  {
+   "cv_id": "fc_15",
+   "requirement_id": 1,
+   "reason": "finished law/philology degree labelled not_met as unrelated"
+  },
+  {
+   "cv_id": "pm_06",
+   "requirement_id": 2,
+   "reason": "duration rests on weeks (work started 09/2026; resolved: the duration claims)"
+  },
+  {
+   "cv_id": "pm_06",
+   "requirement_id": 4,
+   "reason": "duration rests on weeks (work started 09/2026; resolved: the duration claims)"
+  },
+  {
+   "cv_id": "pm_07",
+   "requirement_id": 2,
+   "reason": "duration rests on weeks (work started 08/2026; resolved: the duration claims)"
+  },
+  {
+   "cv_id": "pm_07",
+   "requirement_id": 4,
+   "reason": "duration rests on weeks (work started 08/2026; resolved: the duration claims)"
+  },
+  {
+   "cv_id": "sm_06",
+   "requirement_id": 2,
+   "reason": "writers' flag"
+  },
+  {
+   "cv_id": "sm_06",
+   "requirement_id": 6,
+   "reason": "writers' flag"
+  },
+  {
+   "cv_id": "sm_12",
+   "requirement_id": 2,
+   "reason": "writers' flag"
+  },
+  {
+   "cv_id": "sm_12",
+   "requirement_id": 6,
+   "reason": "writers' flag"
+  },
+  {
+   "cv_id": "sm_09",
+   "requirement_id": 6,
+   "reason": "writers' flag"
+  },
+  {
+   "cv_id": "sm_07",
+   "requirement_id": 4,
+   "reason": "writers' flag"
+  },
+  {
+   "cv_id": "sm_11",
+   "requirement_id": 4,
+   "reason": "writers' flag"
+  },
+  {
+   "cv_id": "sm_08",
+   "requirement_id": 3,
+   "reason": "writers' flag: implicit evidence"
+  },
+  {
+   "cv_id": "be_06",
+   "requirement_id": 3,
+   "reason": "writers' flag"
+  },
+  {
+   "cv_id": "be_07",
+   "requirement_id": 1,
+   "reason": "writers' flag"
+  },
+  {
+   "cv_id": "be_07",
+   "requirement_id": 2,
+   "reason": "writers' flag"
+  },
+  {
+   "cv_id": "ba_08",
+   "requirement_id": 11,
+   "reason": "ECBA as a similar certification, met"
+  },
+  {
+   "cv_id": "ba_10",
+   "requirement_id": 5,
+   "reason": "writers' flag"
+  },
+  {
+   "cv_id": "da_05",
+   "requirement_id": 2,
+   "reason": "duration verdict near a threshold (resolved: the duration claim)"
+  },
+  {
+   "cv_id": "da_09",
+   "requirement_id": 2,
+   "reason": "duration verdict near a threshold (resolved: the duration claim)"
+  },
+  {
+   "cv_id": "ba_07",
+   "requirement_id": 2,
+   "reason": "duration verdict near a threshold (resolved: the duration claims; 12 months, not 9, from the threshold)"
+  },
+  {
+   "cv_id": "ba_07",
+   "requirement_id": 5,
+   "reason": "duration verdict near a threshold (resolved: the duration claims; 12 months, not 9, from the threshold)"
+  },
+  {
+   "cv_id": "ba_09",
+   "requirement_id": 2,
+   "reason": "duration verdict near a threshold (resolved: the duration claims; 12 months, not 9, from the threshold)"
+  },
+  {
+   "cv_id": "ba_09",
+   "requirement_id": 5,
+   "reason": "duration verdict near a threshold (resolved: the duration claims; 12 months, not 9, from the threshold)"
+  },
+  {
+   "cv_id": "sm_07",
+   "requirement_id": 9,
+   "reason": "kept after the audit: willingness to travel, field visits only"
+  },
+  {
+   "cv_id": "sm_13",
+   "requirement_id": 11,
+   "reason": "kept after the audit: FMCG or packaging, retail cosmetics"
+  }
+ ]
+}

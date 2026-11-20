@@ -12,7 +12,12 @@ from ats.worker.startup import read_schema_version, startup_summary
 
 def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
-    for module in ("ats.worker.handlers", "ats.worker.ingest", "ats.worker.position_setup"):
+    for module in (
+        "ats.worker.handlers",
+        "ats.worker.ingest",
+        "ats.worker.judge",
+        "ats.worker.position_setup",
+    ):
         importlib.import_module(module)  # importing registers the handlers
     settings = get_settings()
     stop = threading.Event()

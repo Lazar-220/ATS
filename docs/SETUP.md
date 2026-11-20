@@ -32,7 +32,7 @@ memory=8GB
 cp .env.example .env        # then set LLM_API_KEY in .env yourself
 uv sync                     # Python dependencies
 npm install --prefix web    # frontend dependencies (from phase 1.1a)
-make up                     # Postgres + pgvector in Docker
+make up                     # Postgres + pgvector in Docker (Docker Desktop must be running)
 make migrate                # create the schema
 ```
 
@@ -168,11 +168,45 @@ written to `candidate` only for a document the model judged to be a CV. This nee
 in the worker's environment; one CV is one call (cached by the response cache). A worker that
 started before this phase does not know the step: restart it (`schema=0003` in its first log line).
 
+### Judging and scoring in the worker (from phase 1.4b)
+
+When a CV is parsed and its position has requirements, the worker makes one judge call per
+candidate-position pair (`judge` job; more only if the answer lacks a requirement or has one
+twice: then one more call, then the job fails). Code checks each quote against the CV, computes the
+score and stores one `assessment` with a `verdict` per requirement. Either arrival (CV parsed, or
+requirements ready) can come last; the job's dedup key `judge:<candidate>:<position>:<rubric_version>`
+makes the second one a no-op. The same CV and posting submitted again make no LLM call. An edit of
+the requirements enqueues `rejudge` jobs, which judge the assessment again in place. A job that
+runs out of attempts leaves the assessment `failed` (upload the CV again to retry). Request status is
+`done` only when every CV that has a candidate has an assessment (`done` or `failed`), and `failed`
+also when the position's requirement setup failed. A worker that started before this phase does not
+know `judge` or `rejudge` (check `handlers=` in its first log line).
+
+### Read the ranking and an assessment (from phase 1.4b)
+
+Both are read-only and never trigger scoring:
+
+```bash
+curl http://localhost:8000/positions/7208d077-a80a-4c0e-af0e-1f2fcf06ff62/ranking
+# {"position_id":"7208...","rubric_version":1,"rubric_status":"unconfirmed","rows":[
+#   {"assessment_id":"...","candidate_name":"...","filename":"cv_ana.pdf","status":"done","score":87.5,
+#    "mandatory_failed":false,"flagged_verdicts":0,"rubric_version":1,"rubric_unconfirmed":true}, ...]}
+curl http://localhost:8000/assessments/<assessment_id>
+# score, flags, tenure, "cv_text" (the CV's raw text) and "verdicts":[{"text":...,"verdict":"met",
+#   "rationale":...,"flags":[],"evidence":{"quote":...,"char_start":120,"char_end":158}}, ...]
+```
+
+Order: assessments that are `done` first, then candidates with no failed mandatory requirement,
+then score (high to low), then arrival. A `failed` assessment is last with no score.
+`evidence` is a quote that code found in the CV, and its offsets point into `cv_text`; it is `null`
+for `not_met` and for a verdict flagged `quote_not_found` or `no_evidence`. `rubric_unconfirmed` is
+read from the position at the time of the request. 404 for an unknown position or assessment.
+
 ## 3. Commands
 
 | Command | Does | From phase |
 | --- | --- | --- |
-| `make up` / `make down` | start / stop Postgres | 1.1a |
+| `make up` / `make down` | start / stop Postgres. On this Windows machine Docker Desktop must be running first, and every `make` target must be run from Git Bash, not cmd.exe or PowerShell (the Makefile breaks there) | 1.1a |
 | `make migrate` | apply Alembic migrations (the nine v1 tables, plus `hr_answer` from 1.2 and `document.mask_spans` from 1.4a) | 1.1a |
 | `make up-all` | whole stack in Docker (postgres, api, worker, web) | 1.1a |
 | `make api` | FastAPI with reload on :8000 | 1.1a |
@@ -182,7 +216,7 @@ started before this phase does not know the step: restart it (`schema=0003` in i
 | `make test` | unit tests | 0 |
 | `make test-int` | integration tests (needs `make up`) | 1.1a |
 | `make setup-missing [POSITION=<id>] [YES=1]` | enqueue position setup for positions that have posting text but no requirements and no setup job; lists only unless `YES=1`; `POSITION` takes an id or its first characters | 1.2 |
-| `make eval VARIANT=A SPLIT=dev [LIMIT=n] [STAGES=extraction,verdicts] [DRY_RUN=1] [YES=1]` | eval harness: loads the golden set, prints a metrics table and writes `eval/results/<time>_<variant>_<split>.json` with `pipeline_version` (git commit, prompt versions, model). The default stage is `verdicts`, against a stub judge until 1.4b: no model calls. `STAGES=extraction,verdicts` adds the requirement extraction, one real call per golden posting (cached by the response cache). `DRY_RUN=1` prints the call count and the estimated cost and calls nothing. A run that would make more than 5 uncached model calls is refused until `YES=1`. From 1.4a, `STAGES=masking` measures the masking leak rate (email, phone, name) against `eval/golden/contacts.json` with no model call; `STAGES=parsing` runs the CV parsing prompt on a seeded subset of at most 18 dev-split CVs (seed 20261117, one real call each; `DRY_RUN=1` prints the CV ids, the coverage proof, the model, the prompt version and the estimated cost; dev split only; a 429 stops the run and reports how many CVs were parsed: at once for a daily quota, after the client's 4 retries for a per-minute one). `FALLBACK=openrouter` (or `--fallback openrouter`, or `LLM_FALLBACK=openrouter`) opts in to the OpenRouter fallback: after a Gemini daily quota the rest of the run goes to the free model, at 20 requests per minute and at most 50 real calls per UTC day (read from `GET /api/v1/key`, `free_model_daily_requests`, and counted locally in `LLM_CACHE_DIR`). A run that used it is labelled `dev-smoke, non-baseline` in its report and result file, with both model names; its numbers are not baselines. `DRY_RUN=1` prints the fallback line when it is on | 1.3 |
+| `make eval VARIANT=A SPLIT=dev [LIMIT=n] [STAGES=extraction,verdicts] [DRY_RUN=1] [YES=1]` | eval harness: loads the golden set, prints a metrics table and writes `eval/results/<time>_<variant>_<split>.json` with `pipeline_version` (git commit, prompt versions, model). The default stage is `verdicts`, against a stub judge: no model calls. From 1.4b, `STAGES=judge` is the variant A judge: per CV of `SPLIT` one parse call and one judge call (about 112 calls on dev, 48 on test; one more when a judge answer lacks a requirement), with the gold requirements, the quotes checked and the report extended with the flagged-verdict share, the majority-class accuracy, the same metrics without the 32 verdicts of `eval/golden/uncertain.json`, the run count and cache hits next to every number, cost per CV and p95 latency. `DRY_RUN=1 STAGES=judge` prints the call count and the estimated cost. The test split is for published numbers: do not tune on it. `STAGES=extraction,verdicts` adds the requirement extraction, one real call per golden posting (cached by the response cache). `DRY_RUN=1` prints the call count and the estimated cost and calls nothing. A run that would make more than 5 uncached model calls is refused until `YES=1`. From 1.4a, `STAGES=masking` measures the masking leak rate (email, phone, name) against `eval/golden/contacts.json` with no model call; `STAGES=parsing` runs the CV parsing prompt on a seeded subset of at most 18 dev-split CVs (seed 20261117, one real call each; `DRY_RUN=1` prints the CV ids, the coverage proof, the model, the prompt version and the estimated cost; dev split only; a 429 stops the run and reports how many CVs were parsed: at once for a daily quota, after the client's 4 retries for a per-minute one). `FALLBACK=openrouter` (or `--fallback openrouter`, or `LLM_FALLBACK=openrouter`) opts in to the OpenRouter fallback: after a Gemini daily quota the rest of the run goes to the free model, at 20 requests per minute and at most 50 real calls per UTC day (read from `GET /api/v1/key`, `free_model_daily_requests`, and counted locally in `LLM_CACHE_DIR`). A run that used it is labelled `dev-smoke, non-baseline` in its report and result file, with both model names; its numbers are not baselines. `DRY_RUN=1` prints the fallback line when it is on | 1.3 |
 | `uv run python -m ats.eval build` | validate the golden set's profiles, write `labels/*.jsonl` and `split.json` (see `eval/golden/README.md`) | 1.3 |
 | `uv run python -m ats.eval render` | render posting and CV sources to PDF; writes only the files whose bytes change | 1.3 |
 | `make eval-redteam` | injection red-team set | 1.7 |
@@ -211,6 +245,7 @@ started before this phase does not know the step: restart it (`schema=0003` in i
 | `LLM_FALLBACK` | empty (off) | eval runs only: `openrouter` continues a run on an OpenRouter free model after a Gemini daily quota. The API and the worker never read it. Also `make eval FALLBACK=openrouter` | 1.4a |
 | `OPENROUTER_API_KEY` | none | key for the fallback; never committed; needed only with `LLM_FALLBACK` | 1.4a |
 | `OPENROUTER_MODEL` | `google/gemma-4-31b-it:free` | the free model the fallback uses (checked in OpenRouter's public model list on 2026-11-17) | 1.4a |
+| `QUOTE_FUZZY_THRESHOLD` | `90` | a judge quote passes the quote check when it is in the CV verbatim after normalization, or at this `rapidfuzz` score (0 to 100) or above; numbers in the quote must exist verbatim either way (§3.2) | 1.4b |
 | `GIT_COMMIT` | derived from `git` | overrides the code version in the worker's startup line; set it where there is no `.git` (a Docker image shows `unknown` otherwise) | 1.2 |
 | `LANGFUSE_ENABLED` | `false` | tracing on or off | 1.6 |
 | `EMBEDDING_MODEL` | `BAAI/bge-m3` | local embedding model | 2.1 |
@@ -230,7 +265,7 @@ Planned from §6.3 of the plan. The actual pinned versions are in `pyproject.tom
 | 1.2 | `google-genai` | npm: `@tanstack/react-table` |
 | 1.4a | `httpx` moved from the dev group to the main dependencies (the OpenRouter transport uses it). It was already in `uv.lock` through `google-genai`; the lock gained no package | |
 | 1.3 | eval group: `scikit-learn` (brings `numpy`, `scipy`, `joblib`, `threadpoolctl`); `statsmodels` is deferred to 1.8 | |
-| 1.4b | `rapidfuzz` | |
+| 1.4b | `rapidfuzz` (3.14.6; quote checking, §6.3; it was the only package `uv add` put in `uv.lock`) | |
 | 1.6 | `langfuse` | Langfuse self-host: web, worker, Postgres, ClickHouse, Redis, MinIO |
 | 1.7 | none | GitHub Actions |
 | 2.1 | `sentence-transformers` (with CPU-only `torch`), `pgvector` | model `BAAI/bge-m3`, about 2.3 GB in the Hugging Face cache |

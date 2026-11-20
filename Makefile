@@ -36,8 +36,9 @@ setup-missing:
 	uv run python -m ats.worker.setup_missing $(if $(POSITION),--position $(POSITION)) $(if $(YES),--yes)
 
 # Evaluation harness. make eval VARIANT=A SPLIT=dev LIMIT=5. STAGES=extraction,verdicts adds the
-# requirement extraction, which calls the model; DRY_RUN=1 prints calls and cost and calls nothing;
-# YES=1 confirms a run of more than 5 model calls.
+# requirement extraction, which calls the model; STAGES=judge is the variant A judge (a parse and
+# a judge call per CV of SPLIT); DRY_RUN=1 prints calls and cost and calls nothing; YES=1 confirms a
+# run of more than 5 model calls.
 VARIANT ?= A
 SPLIT ?= dev
 eval:

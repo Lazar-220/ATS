@@ -42,6 +42,20 @@ class StageError(Exception):
     pass
 
 
+UNCERTAIN_FILE = "uncertain.json"
+
+
+def load_uncertain(root: Path, golden: GoldSet) -> frozenset[tuple[str, int]]:
+    """The (cv_id, requirement_id) pairs of `uncertain.json`, checked against the labels."""
+    raw = json.loads((root / UNCERTAIN_FILE).read_text(encoding="utf-8"))
+    known = {(row.cv_id, row.requirement_id) for row in golden.verdicts}
+    pairs = {(row["cv_id"], int(row["requirement_id"])) for row in raw["pairs"]}
+    unknown = sorted(pairs - known)
+    if unknown:
+        raise StageError(f"{UNCERTAIN_FILE} names pairs that have no gold verdict: {unknown}")
+    return frozenset(pairs)
+
+
 def load_contacts(root: Path) -> dict[str, ContactTruth]:
     raw = json.loads((root / CONTACTS_FILE).read_text(encoding="utf-8"))
     return {cv_id: ContactTruth.model_validate(row) for cv_id, row in raw.items()}

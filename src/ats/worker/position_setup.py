@@ -11,6 +11,7 @@ from psycopg_pool import ConnectionPool
 from ats.db.task_queue import Job
 from ats.llm.factory import get_llm_client
 from ats.pipeline.requirements import extract_requirements
+from ats.services.assessments import enqueue_judgements
 from ats.services.requirements import POSITION_SETUP_JOB, insert_requirements
 from ats.worker.registry import register
 
@@ -51,6 +52,8 @@ def position_setup(job: Job, pool: ConnectionPool) -> None:
         if already is not None and already[0] > 0:
             return
         insert_requirements(conn, position_id, locked[0], result.output)
+        # CVs that were parsed before the requirements existed have been waiting for this.
+        enqueue_judgements(conn, position_id)
     log.info(
         "position %s: %s requirements extracted (in=%s out=%s tokens, cache_hit=%s)",
         position_id,

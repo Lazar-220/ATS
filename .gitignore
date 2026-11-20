@@ -29,3 +29,4 @@ models/
 *.onnx
 
 eval/reference/
+.vscode/

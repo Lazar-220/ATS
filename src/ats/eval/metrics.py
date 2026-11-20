@@ -91,6 +91,11 @@ def verdict_metrics(pairs: Sequence[tuple[Verdict, Verdict]]) -> VerdictMetrics:
     gold: list[str] = [g for g, _ in pairs]
     predicted: list[str] = [p for _, p in pairs]
     labels: list[str] = list(VERDICT_ORDER)
+    if not pairs:  # every CV failed or the run stopped before the first one
+        empty = [[0] * len(labels) for _ in labels]
+        return VerdictMetrics(
+            n=0, accuracy=0.0, macro_f1=0.0, labels=labels, confusion=empty, weighted_kappa=None
+        )
     matrix = confusion_matrix(gold, predicted, labels=labels).tolist()
     with warnings.catch_warnings():
         # One class on both sides leaves kappa undefined. It is reported as None below, so the

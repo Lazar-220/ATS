@@ -148,12 +148,9 @@ def test_unexpected_errors_fail_the_document_and_a_reupload_recovers(
 
     monkeypatch.setattr(ingest_module, "extract_text", broken)
     upload(client, POSTING, [CV_ENGLISH])
-    wait_for(
-        lambda: (
-            conn.execute("SELECT 1 FROM document WHERE status = 'failed'").fetchone() is not None
-            and conn.execute("SELECT 1 FROM task_queue WHERE status = 'running'").fetchone() is None
-        )
-    )
+    # The posting fails too, and its job can end while the CV's is still queued for a retry, so
+    # "some document failed and nothing is running" is not the final state.
+    wait_until_settled(conn)
     failed = conn.execute("SELECT status_message FROM document WHERE kind = 'cv'").fetchone()
     assert failed is not None
     assert "Upload the file again" in failed["status_message"]
@@ -219,10 +216,11 @@ def test_the_model_sees_only_masked_text_and_the_originals_land_in_candidate(
     accepted = upload(client, POSTING, [CV_PERSONAL])
     wait_until_settled(conn)
 
+    # The parsing call and the judge call both see the CV; neither may see the originals.
     prompts = [call.system + call.user for call in fake_llm.calls if "<cv>" in call.user]
-    assert len(prompts) == 1
+    assert len(prompts) == 2
     for secret in ("Nina", "Stojkovic", "nina.stojkovic@example.com", "5550304"):
-        assert secret not in prompts[0]
+        assert all(secret not in prompt for prompt in prompts)
     cv = conn.execute(
         "SELECT status, candidate_id, masked_text, mask_spans, parsed_json, raw_text "
         "FROM document WHERE kind = 'cv'"
@@ -308,6 +306,8 @@ def test_a_cv_stuck_at_extracted_is_parsed_when_its_job_runs_again(
         (cv["id"],),
     )
     conn.execute("UPDATE request_candidate SET candidate_id = NULL")
+    conn.execute("DELETE FROM verdict")
+    conn.execute("DELETE FROM assessment")
     conn.execute("DELETE FROM candidate")
 
     with worker.connection() as queue:

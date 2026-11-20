@@ -1,3 +1,4 @@
+import re
 from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
@@ -16,10 +17,15 @@ from ats.api.main import app
 from ats.db.pool import create_pool
 from ats.llm.fake import FakeLLMClient
 from ats.llm.types import LLMRequest
+from ats.pipeline.judge import JudgeOutput, RequirementVerdict
 from ats.pipeline.parsing import ParsedCV
 from ats.pipeline.requirements import RequirementDraft, RequirementList
 from ats.settings import get_settings
-from ats.worker import ingest, position_setup  # noqa: F401  (importing registers the handlers)
+from ats.worker import (  # noqa: F401  (importing registers the handlers)
+    ingest,
+    judge,
+    position_setup,
+)
 from integration.test_worker import start_loop
 
 TEST_DB = "ats_test"
@@ -98,11 +104,23 @@ def fake_llm(monkeypatch: pytest.MonkeyPatch) -> FakeLLMClient:
                 languages=[],
                 projects=[],
             )
+        if schema is JudgeOutput:
+            # Every requirement of the request, answered not_met: no quote to check.
+            ids = [int(i) for i in re.findall(r"^- id (\d+) ", _request.user, re.MULTILINE)]
+            return JudgeOutput(
+                verdicts=[
+                    RequirementVerdict(
+                        requirement_id=i, verdict="not_met", quote=None, rationale="fake"
+                    )
+                    for i in ids
+                ]
+            )
         return RequirementList(requirements=[one])
 
     fake = FakeLLMClient(responder=answer)
     monkeypatch.setattr(position_setup, "get_llm_client", lambda: fake)
     monkeypatch.setattr(ingest, "get_llm_client", lambda: fake)
+    monkeypatch.setattr(judge, "get_llm_client", lambda: fake)
     return fake
 
 
