@@ -63,3 +63,19 @@ def test_without_git_the_version_is_unknown_and_an_override_wins(
 
     monkeypatch.setenv("GIT_COMMIT", "release-7")
     assert code_version(tmp_path) == "release-7"
+
+
+def test_the_fake_provider_is_called_out_in_the_startup_line() -> None:
+    fake = startup_summary(
+        version="x",
+        schema_version="0003",
+        handlers=[],
+        llm_model="m",
+        llm_rpm=5,
+        llm_key_set=False,
+        llm_provider="fake",
+    )
+    real = startup_summary(
+        version="x", schema_version="0003", handlers=[], llm_model="m", llm_rpm=5, llm_key_set=True
+    )
+    assert "FAKE" in fake and "FAKE" not in real

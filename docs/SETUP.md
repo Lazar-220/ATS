@@ -212,7 +212,8 @@ read from the position at the time of the request. 404 for an unknown position o
 | `make api` | FastAPI with reload on :8000 | 1.1a |
 | `make worker` | job worker | 1.1a |
 | `make web` | Vite dev server on :5173 | 1.1a |
-| `make check` | ruff, pyright, unit tests, web typecheck and lint | 0 |
+| `make check` | ruff, pyright, unit tests, web types-up-to-date check, typecheck and lint | 0 |
+| `make api-types` | regenerate `web/openapi.json` and `web/src/api-types.ts` from the API; run it after changing a route or schema (`make check` fails when they are stale) | 1.5 |
 | `make test` | unit tests | 0 |
 | `make test-int` | integration tests (needs `make up`) | 1.1a |
 | `make setup-missing [POSITION=<id>] [YES=1]` | enqueue position setup for positions that have posting text but no requirements and no setup job; lists only unless `YES=1`; `POSITION` takes an id or its first characters | 1.2 |
@@ -239,6 +240,7 @@ read from the position at the time of the request. 404 for an unknown position o
 | `UPLOAD_DIR` | `data/uploads` | stored PDFs, one file per `sha256`; in Docker the `uploads` volume at `/app/data/uploads` | 1.1b |
 | `MAX_UPLOAD_MB` | `10` | largest accepted PDF; a bigger one gets HTTP 413 | 1.1b |
 | `LLM_MODEL` | `gemini-3.6-flash` | model for every LLM role. The plan (§6.1) names `gemini-3.8-flash`, which returned 503 persistently; set it back when it is reachable. Eval results must name the model | 1.2 |
+| `LLM_PROVIDER` | `gemini` | `gemini` (the real model) or `fake`: canned keyword-match answers, no model call and no key, only for trying the interface. Never the default; the worker logs `llm_provider=FAKE` and a warning at startup. Everything still goes through `LLMClient` and sees masked text only | 1.5 |
 | `LLM_API_KEY` | none | Gemini API key; never committed | 1.2 |
 | `LLM_RPM` | `5` | requests per minute (free tier). The limiter is in-process: valid for one worker only | 1.2 |
 | `LLM_CACHE_DIR` | `data/llm_cache` | LLM response cache, one JSON file per hash of model, prompts, thinking level and schema; in Docker the `llm_cache` volume | 1.2 |
@@ -266,6 +268,7 @@ Planned from §6.3 of the plan. The actual pinned versions are in `pyproject.tom
 | 1.4a | `httpx` moved from the dev group to the main dependencies (the OpenRouter transport uses it). It was already in `uv.lock` through `google-genai`; the lock gained no package | |
 | 1.3 | eval group: `scikit-learn` (brings `numpy`, `scipy`, `joblib`, `threadpoolctl`); `statsmodels` is deferred to 1.8 | |
 | 1.4b | `rapidfuzz` (3.14.6; quote checking, §6.3; it was the only package `uv add` put in `uv.lock`) | |
+| 1.5 | none | npm dev: `openapi-typescript` (types from the API schema). It declares a peer `typescript@^5`, so `web/package.json` has an `overrides` entry that lets it use the installed TypeScript 6; without it `npm install` and `npm ci` stop with ERESOLVE |
 | 1.6 | `langfuse` | Langfuse self-host: web, worker, Postgres, ClickHouse, Redis, MinIO |
 | 1.7 | none | GitHub Actions |
 | 2.1 | `sentence-transformers` (with CPU-only `torch`), `pgvector` | model `BAAI/bge-m3`, about 2.3 GB in the Hugging Face cache |

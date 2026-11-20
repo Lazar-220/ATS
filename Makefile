@@ -3,7 +3,7 @@ UNIT_TESTS := not integration and not llm
 
 .PHONY: check test \
 	up down up-all migrate api worker web test-int setup-missing \
-	eval \
+	eval api-types \
 	langfuse-up langfuse-down \
 	eval-redteam \
 	reindex \

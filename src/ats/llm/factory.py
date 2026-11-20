@@ -1,6 +1,7 @@
 from functools import lru_cache
 
 from ats.llm.cache import ResponseCache
+from ats.llm.demo import create_demo_client
 from ats.llm.gemini import GeminiTransport
 from ats.llm.managed import ManagedLLMClient
 from ats.llm.ratelimit import RateLimiter
@@ -9,6 +10,8 @@ from ats.settings import Settings, get_settings
 
 
 def create_llm_client(settings: Settings) -> LLMClient:
+    if settings.llm_provider == "fake":
+        return create_demo_client()
     # Compose passes an unset variable as an empty string, so empty counts as missing.
     api_key = settings.llm_api_key.get_secret_value() if settings.llm_api_key else ""
     if not api_key:

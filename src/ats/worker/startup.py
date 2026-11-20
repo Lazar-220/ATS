@@ -21,14 +21,19 @@ def startup_summary(
     llm_model: str,
     llm_rpm: int,
     llm_key_set: bool,
+    llm_provider: str = "gemini",
 ) -> str:
     """One line a person can compare with `git log`, `alembic heads` and the expected jobs.
 
     The handler list is the quickest tell for a stale worker: a job type it does not list is
     one it cannot run. The key itself is never logged.
     """
-    return (
+    line = (
         f"worker starting: code={version} schema={schema_version} "
         f"handlers={','.join(sorted(handlers))} "
         f"llm_model={llm_model} llm_rpm={llm_rpm} llm_key={'set' if llm_key_set else 'MISSING'}"
     )
+    if llm_provider == "fake":
+        # Scores from this worker are not real judgements; nobody should miss that in the log.
+        line += " llm_provider=FAKE (canned demo answers, no real model is called)"
+    return line
