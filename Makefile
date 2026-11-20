@@ -47,7 +47,7 @@ eval:
 # Manual real-model smoke test: the variant A judge on 2 dev CVs (4 calls, a few cents). Dry run
 # unless YES=1. Honours LLM_MODEL and LLM_RPM. Needs LLM_API_KEY; never run by make check.
 smoke-real:
-	uv run python -m ats.eval run --variant A --split dev --limit 2 --stages judge $(if $(YES),--yes,--dry-run)
+	uv run python -m ats.eval run --variant A --split dev --limit 2 --stages judge --require-real $(if $(YES),--yes,--dry-run)
 
 # Langfuse self-host (six services, about 4 GB of RAM; run `make down` first, see docs/SETUP.md).
 # The UI is on http://localhost:3000. Stopping keeps the traces (no -v).

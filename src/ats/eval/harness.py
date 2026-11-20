@@ -24,7 +24,7 @@ from typing import Literal
 from pydantic import BaseModel
 
 from ats.buildinfo import code_version
-from ats.eval.fallback import DEV_SMOKE_LABEL
+from ats.eval.fallback import DEMO_LABEL, DEV_SMOKE_LABEL
 from ats.eval.golden import GOLDEN_AS_OF, GoldSet
 from ats.eval.matching import match_requirements
 from ats.eval.metrics import (
@@ -400,6 +400,8 @@ class RunResult(BaseModel):
     gold_labels: str = GOLD_LABEL_STATUS
     # Set when a fallback model answered any call: such a run is a smoke test, not a baseline.
     label: str | None = None
+    # LLM_PROVIDER of a run that called a model; None (older files, stub runs) counts as real.
+    llm_provider: str | None = None
     models: dict[str, str | None] = {}
     variant: str
     split: str
@@ -600,6 +602,7 @@ def run_eval(
     as_of: date = GOLDEN_AS_OF,
     price_date: date | None = None,
     uncertain: frozenset[tuple[str, int]] = frozenset(),
+    llm_provider: str | None = None,
 ) -> RunResult:
     if variant != "A":
         raise EvalError(f"variant {variant} does not exist yet; B, C and D arrive in phase 3")
@@ -643,11 +646,14 @@ def run_eval(
     now = datetime.now(UTC)
     # Only calls the primary model answered are priced; the fallback models are free.
     primary_rows = [row for row in usage_rows if row[4] in ("", model)]
-    rate = rate_on(model, price_date or now.date()) if primary_rows else None
+    demo = llm_provider == "fake"
+    # The fake provider has no price, whatever model name is configured.
+    rate = rate_on(model, price_date or now.date()) if primary_rows and not demo else None
     answered_by = {row[4] for row in usage_rows if row[4]}
-    label = DEV_SMOKE_LABEL if answered_by - {model} else None
+    label = DEMO_LABEL if demo else DEV_SMOKE_LABEL if answered_by - {model} else None
     return RunResult(
         label=label,
+        llm_provider=llm_provider,
         models={"primary": model, "fallback": fallback_model},
         variant=variant,
         split=split,
@@ -693,7 +699,8 @@ def count_prior_runs(directory: Path, result: RunResult) -> int:
         except ValueError:
             continue  # a file from an older result format is not a run of this configuration
         if (
-            earlier.variant == result.variant
+            (earlier.llm_provider == "fake") == (result.llm_provider == "fake")
+            and earlier.variant == result.variant
             and earlier.split == result.split
             and earlier.limit == result.limit
             and earlier.stages == result.stages
@@ -738,7 +745,12 @@ def format_report(result: RunResult) -> str:
         f"pipeline_version: {version.label}",
         f"gold labels: {result.gold_labels.removeprefix('gold labels ')}",
     ]
-    if result.label:
+    if result.llm_provider == "fake":
+        lines.append(
+            f"LABEL: {result.label}. LLM_PROVIDER=fake: canned answers, invented token counts, "
+            "no price. Plumbing only, not a measurement."
+        )
+    elif result.label:
         lines.append(
             f"LABEL: {result.label}. Primary {result.models.get('primary')}, fallback "
             f"{result.models.get('fallback')}: some calls were answered by the fallback model."
@@ -860,6 +872,8 @@ def format_report(result: RunResult) -> str:
     u = result.usage
     tokens = f"tokens {u.input_tokens} in / {u.output_tokens} out"
     lines += ["", f"USAGE  LLM calls {u.llm_calls}, cache hits {u.cache_hits}, {tokens}"]
+    if result.llm_provider == "fake":
+        lines.append("  cost: not priced (fake provider)")
     if u.cost_usd is not None:
         lines.append(f"  cost ${u.cost_usd:.4f} ({u.rate}), latency {u.latency_s:.1f}s")
         if result.verdicts and result.verdicts.cvs and result.verdicts.judge == "llm":

@@ -57,7 +57,8 @@ def dataset_name(split: str) -> str:
 def run_name(result: RunResult) -> str:
     """Unique per run: two runs of one configuration are still two experiments."""
     limit = "all" if result.limit is None else f"limit{result.limit}"
-    return f"{result.variant}-{result.split}-{limit}-{result.started_at}"
+    demo = "demo-" if result.llm_provider == "fake" else ""
+    return f"{demo}{result.variant}-{result.split}-{limit}-{result.started_at}"
 
 
 def _accuracy(items: Sequence[VerdictItem]) -> float:
@@ -144,6 +145,7 @@ def export_run(
             ),
             "limit": str(result.limit),
             "label": result.label or "",
+            "llm_provider": result.llm_provider or "",
         },
     )
     client.flush()
