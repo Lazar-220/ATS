@@ -172,6 +172,13 @@ def test_the_judge_request_carries_no_contact_data(tmp_path: Path) -> None:
 
     (request,) = transport.requests
     sent = request.system + "\n" + request.user
-    for value in ("Marko", "Petrovic", "marko.petrovic@example.com", "example.com", "123 4567"):
+    for value in (
+        "Marko",
+        "Petrovic",
+        "marko.petrovic@example.com",
+        "example.com",
+        "123 4567",
+        "Bulevar Kralja Aleksandra",
+    ):
         assert value.lower() not in sent.lower()
     assert "Python for 4 years" in request.user
