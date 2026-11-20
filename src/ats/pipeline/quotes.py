@@ -77,11 +77,40 @@ class QuoteMatch:
     score: float
 
 
+def _digit_run_before(hay: str, end: int) -> int:
+    """Length of the digit run that ends just before `end`."""
+    start = end
+    while start > 0 and hay[start - 1].isdigit():
+        start -= 1
+    return end - start
+
+
+def _digit_run_from(hay: str, start: int) -> int:
+    """Length of the digit run that begins at `start`."""
+    end = start
+    while end < len(hay) and hay[end].isdigit():
+        end += 1
+    return end - start
+
+
 def _splits_number(hay: str, start: int, end: int) -> bool:
-    """The range starts or ends inside a run of digits: "5 years" inside "15 years"."""
-    return (start > 0 and hay[start - 1].isdigit() and hay[start].isdigit()) or (
-        end < len(hay) and hay[end - 1].isdigit() and hay[end].isdigit()
-    )
+    """The range cuts a number: "5 years" inside "15 years", "1.5 years" or "1,5 godina".
+
+    A "." or "," between digits is a decimal mark, so it does not end a number, except next to
+    a 4-digit run: that is a year in a date ("03.2019 - 06.2023"), and quoting the year alone is
+    fine.
+    """
+    if start > 0 and hay[start].isdigit():
+        if hay[start - 1].isdigit():
+            return True
+        if start > 1 and hay[start - 1] in ".," and hay[start - 2].isdigit():
+            return 4 not in (_digit_run_before(hay, start - 1), _digit_run_from(hay, start))
+    if end < len(hay) and hay[end - 1].isdigit():
+        if hay[end].isdigit():
+            return True
+        if end + 1 < len(hay) and hay[end] in ".," and hay[end + 1].isdigit():
+            return 4 not in (_digit_run_before(hay, end), _digit_run_from(hay, end + 1))
+    return False
 
 
 def _find_whole_numbers(hay: str, needle: str) -> int:

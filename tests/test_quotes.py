@@ -90,3 +90,30 @@ def test_a_quote_at_the_very_start_or_end_of_the_text_passes() -> None:
     assert find_quote("5 years", "5 years", 90) is not None
     assert find_quote("2019", "since 2019", 90) is not None
     assert find_quote("since 20", "since 2019", 90) is None
+
+
+def test_a_quote_may_not_cut_a_decimal_number() -> None:
+    assert find_quote("5 years", "experience: 1.5 years", 90) is None
+    assert find_quote("5 godina", "iskustvo 1,5 godina", 90) is None
+    assert find_quote("lead 1", "lead 1.5", 90) is None
+    assert find_quote("1.5 years", "experience: 1.5 years", 90) is not None
+
+
+def test_a_year_inside_a_date_may_be_quoted_alone() -> None:
+    text = "03.2019 - 06.2023 Acme"
+    match = find_quote("2019", text, 90)
+    assert match is not None and text[match.start : match.end] == "2019"
+    assert find_quote("2023", text, 90) is not None
+    assert find_quote("since 2019", "since 2019.05 at Acme", 90) is not None
+
+
+def test_a_near_match_that_cuts_a_number_is_not_accepted() -> None:
+    assert find_quote("12 years of Java", "123 years of Java", 90) is None
+    assert find_quote("since 2019 at Acme", "since 20190 at Acme", 90) is None
+
+
+def test_a_fuzzy_alignment_ending_inside_a_number_is_rejected() -> None:
+    # The typo sends it down the fuzzy path; the best alignment stops after the "1" of "15",
+    # so every digit run of the quote is in the window and only the split check catches it.
+    assert find_quote("experience with python 1", "experiance with python 15", 90) is None
+    assert find_quote("experience with python 1", "experiance with python 1", 90) is not None
