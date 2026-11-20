@@ -1,0 +1,1378 @@
+{
+  "components": {
+    "schemas": {
+      "AnswerOut": {
+        "properties": {
+          "duplicate": {
+            "title": "Duplicate",
+            "type": "boolean"
+          },
+          "position_id": {
+            "format": "uuid",
+            "title": "Position Id",
+            "type": "string"
+          },
+          "rejudge_jobs": {
+            "title": "Rejudge Jobs",
+            "type": "integer"
+          },
+          "rubric_status": {
+            "enum": [
+              "unconfirmed",
+              "confirmed"
+            ],
+            "title": "Rubric Status",
+            "type": "string"
+          },
+          "rubric_version": {
+            "title": "Rubric Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "position_id",
+          "rubric_version",
+          "rubric_status",
+          "rejudge_jobs",
+          "duplicate"
+        ],
+        "title": "AnswerOut",
+        "type": "object"
+      },
+      "AssessmentOut": {
+        "properties": {
+          "assessment_id": {
+            "format": "uuid",
+            "title": "Assessment Id",
+            "type": "string"
+          },
+          "candidate_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Candidate Name"
+          },
+          "cost_usd": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cost Usd"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "cv_flags": {
+            "items": {
+              "$ref": "#/components/schemas/FlagOut"
+            },
+            "title": "Cv Flags",
+            "type": "array"
+          },
+          "cv_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cv Text"
+          },
+          "document_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Document Id"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "filename": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Filename"
+          },
+          "input_tokens": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Input Tokens"
+          },
+          "mandatory_failed": {
+            "title": "Mandatory Failed",
+            "type": "boolean"
+          },
+          "output_tokens": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Output Tokens"
+          },
+          "position_id": {
+            "format": "uuid",
+            "title": "Position Id",
+            "type": "string"
+          },
+          "rubric_unconfirmed": {
+            "title": "Rubric Unconfirmed",
+            "type": "boolean"
+          },
+          "rubric_version": {
+            "title": "Rubric Version",
+            "type": "integer"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Score"
+          },
+          "status": {
+            "enum": [
+              "done",
+              "failed"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "tenure": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tenure"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          },
+          "verdicts": {
+            "items": {
+              "$ref": "#/components/schemas/VerdictOut"
+            },
+            "title": "Verdicts",
+            "type": "array"
+          }
+        },
+        "required": [
+          "assessment_id",
+          "position_id",
+          "candidate_name",
+          "document_id",
+          "filename",
+          "status",
+          "score",
+          "mandatory_failed",
+          "rubric_version",
+          "rubric_unconfirmed",
+          "cost_usd",
+          "input_tokens",
+          "output_tokens",
+          "error",
+          "created_at",
+          "updated_at",
+          "cv_flags",
+          "tenure",
+          "cv_text",
+          "verdicts"
+        ],
+        "title": "AssessmentOut",
+        "type": "object"
+      },
+      "Body_create_ranking_rankings_post": {
+        "properties": {
+          "cvs": {
+            "description": "One or more CVs as PDFs",
+            "items": {
+              "contentMediaType": "application/octet-stream",
+              "type": "string"
+            },
+            "title": "Cvs",
+            "type": "array"
+          },
+          "posting": {
+            "contentMediaType": "application/octet-stream",
+            "description": "The job posting as a PDF",
+            "title": "Posting",
+            "type": "string"
+          }
+        },
+        "required": [
+          "posting",
+          "cvs"
+        ],
+        "title": "Body_create_ranking_rankings_post",
+        "type": "object"
+      },
+      "ConfirmAnswer": {
+        "properties": {
+          "dedup_key": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Dedup Key",
+            "type": "string"
+          },
+          "position_id": {
+            "format": "uuid",
+            "title": "Position Id",
+            "type": "string"
+          },
+          "rubric_version": {
+            "title": "Rubric Version",
+            "type": "integer"
+          },
+          "type": {
+            "const": "confirm",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "position_id",
+          "dedup_key",
+          "rubric_version"
+        ],
+        "title": "ConfirmAnswer",
+        "type": "object"
+      },
+      "DocumentStatus": {
+        "properties": {
+          "document_id": {
+            "format": "uuid",
+            "title": "Document Id",
+            "type": "string"
+          },
+          "filename": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Filename"
+          },
+          "kind": {
+            "enum": [
+              "cv",
+              "posting"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "document_id",
+          "kind",
+          "filename",
+          "status",
+          "message"
+        ],
+        "title": "DocumentStatus",
+        "type": "object"
+      },
+      "EditAnswer": {
+        "properties": {
+          "dedup_key": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Dedup Key",
+            "type": "string"
+          },
+          "position_id": {
+            "format": "uuid",
+            "title": "Position Id",
+            "type": "string"
+          },
+          "requirements": {
+            "$ref": "#/components/schemas/RequirementList"
+          },
+          "rubric_version": {
+            "title": "Rubric Version",
+            "type": "integer"
+          },
+          "type": {
+            "const": "edit",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "position_id",
+          "dedup_key",
+          "rubric_version",
+          "requirements"
+        ],
+        "title": "EditAnswer",
+        "type": "object"
+      },
+      "EvidenceOut": {
+        "properties": {
+          "char_end": {
+            "title": "Char End",
+            "type": "integer"
+          },
+          "char_start": {
+            "title": "Char Start",
+            "type": "integer"
+          },
+          "quote": {
+            "title": "Quote",
+            "type": "string"
+          }
+        },
+        "required": [
+          "quote",
+          "char_start",
+          "char_end"
+        ],
+        "title": "EvidenceOut",
+        "type": "object"
+      },
+      "FlagOut": {
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "detail": {
+            "title": "Detail",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "detail"
+        ],
+        "title": "FlagOut",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "Health": {
+        "properties": {
+          "database": {
+            "enum": [
+              "reachable",
+              "unreachable"
+            ],
+            "title": "Database",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "ok",
+              "degraded"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "database"
+        ],
+        "title": "Health",
+        "type": "object"
+      },
+      "PositionDetailOut": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "filename": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Filename"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "requirement_count": {
+            "title": "Requirement Count",
+            "type": "integer"
+          },
+          "requirements": {
+            "items": {
+              "$ref": "#/components/schemas/RequirementOut"
+            },
+            "title": "Requirements",
+            "type": "array"
+          },
+          "rubric_status": {
+            "enum": [
+              "unconfirmed",
+              "confirmed"
+            ],
+            "title": "Rubric Status",
+            "type": "string"
+          },
+          "rubric_version": {
+            "title": "Rubric Version",
+            "type": "integer"
+          },
+          "setup_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Setup Message"
+          },
+          "setup_status": {
+            "enum": [
+              "pending",
+              "running",
+              "done",
+              "failed"
+            ],
+            "title": "Setup Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "filename",
+          "rubric_status",
+          "rubric_version",
+          "created_at",
+          "requirement_count",
+          "setup_status",
+          "setup_message",
+          "requirements"
+        ],
+        "title": "PositionDetailOut",
+        "type": "object"
+      },
+      "PositionOut": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "filename": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Filename"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "requirement_count": {
+            "title": "Requirement Count",
+            "type": "integer"
+          },
+          "rubric_status": {
+            "enum": [
+              "unconfirmed",
+              "confirmed"
+            ],
+            "title": "Rubric Status",
+            "type": "string"
+          },
+          "rubric_version": {
+            "title": "Rubric Version",
+            "type": "integer"
+          },
+          "setup_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Setup Message"
+          },
+          "setup_status": {
+            "enum": [
+              "pending",
+              "running",
+              "done",
+              "failed"
+            ],
+            "title": "Setup Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "filename",
+          "rubric_status",
+          "rubric_version",
+          "created_at",
+          "requirement_count",
+          "setup_status",
+          "setup_message"
+        ],
+        "title": "PositionOut",
+        "type": "object"
+      },
+      "PositionRankingOut": {
+        "properties": {
+          "position_id": {
+            "format": "uuid",
+            "title": "Position Id",
+            "type": "string"
+          },
+          "rows": {
+            "items": {
+              "$ref": "#/components/schemas/RankingRowOut"
+            },
+            "title": "Rows",
+            "type": "array"
+          },
+          "rubric_status": {
+            "enum": [
+              "unconfirmed",
+              "confirmed"
+            ],
+            "title": "Rubric Status",
+            "type": "string"
+          },
+          "rubric_version": {
+            "title": "Rubric Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "position_id",
+          "rubric_version",
+          "rubric_status",
+          "rows"
+        ],
+        "title": "PositionRankingOut",
+        "type": "object"
+      },
+      "RankingAccepted": {
+        "properties": {
+          "position_id": {
+            "format": "uuid",
+            "title": "Position Id",
+            "type": "string"
+          },
+          "request_id": {
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id",
+          "position_id"
+        ],
+        "title": "RankingAccepted",
+        "type": "object"
+      },
+      "RankingRowOut": {
+        "properties": {
+          "assessment_id": {
+            "format": "uuid",
+            "title": "Assessment Id",
+            "type": "string"
+          },
+          "candidate_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Candidate Name"
+          },
+          "document_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Document Id"
+          },
+          "filename": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Filename"
+          },
+          "flagged_verdicts": {
+            "title": "Flagged Verdicts",
+            "type": "integer"
+          },
+          "mandatory_failed": {
+            "title": "Mandatory Failed",
+            "type": "boolean"
+          },
+          "rubric_unconfirmed": {
+            "title": "Rubric Unconfirmed",
+            "type": "boolean"
+          },
+          "rubric_version": {
+            "title": "Rubric Version",
+            "type": "integer"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Score"
+          },
+          "status": {
+            "enum": [
+              "done",
+              "failed"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "assessment_id",
+          "candidate_name",
+          "document_id",
+          "filename",
+          "status",
+          "score",
+          "mandatory_failed",
+          "flagged_verdicts",
+          "rubric_version",
+          "rubric_unconfirmed"
+        ],
+        "title": "RankingRowOut",
+        "type": "object"
+      },
+      "RankingStatus": {
+        "properties": {
+          "documents": {
+            "items": {
+              "$ref": "#/components/schemas/DocumentStatus"
+            },
+            "title": "Documents",
+            "type": "array"
+          },
+          "position_id": {
+            "format": "uuid",
+            "title": "Position Id",
+            "type": "string"
+          },
+          "request_id": {
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "queued",
+              "running",
+              "done",
+              "failed"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id",
+          "position_id",
+          "status",
+          "documents"
+        ],
+        "title": "RankingStatus",
+        "type": "object"
+      },
+      "RequirementDraft": {
+        "description": "One requirement as the model proposes it and as HR edits it.\n\n`id` and `parent` are labels inside one list, not database keys: a list is stored as new\nrows, and the labels say which row refines which.",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "kind": {
+            "enum": [
+              "mandatory",
+              "nice_to_have"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "min_months": {
+            "anyOf": [
+              {
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Min Months"
+          },
+          "parent": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "weight": {
+            "maximum": 5.0,
+            "minimum": 1.0,
+            "title": "Weight",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "text",
+          "kind",
+          "weight",
+          "min_months",
+          "parent"
+        ],
+        "title": "RequirementDraft",
+        "type": "object"
+      },
+      "RequirementList": {
+        "properties": {
+          "requirements": {
+            "items": {
+              "$ref": "#/components/schemas/RequirementDraft"
+            },
+            "minItems": 1,
+            "title": "Requirements",
+            "type": "array"
+          }
+        },
+        "required": [
+          "requirements"
+        ],
+        "title": "RequirementList",
+        "type": "object"
+      },
+      "RequirementOut": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "mandatory",
+              "nice_to_have"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "min_months": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Min Months"
+          },
+          "parent_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Id"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "weight": {
+            "title": "Weight",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "parent_id",
+          "text",
+          "kind",
+          "weight",
+          "min_months"
+        ],
+        "title": "RequirementOut",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      },
+      "VerdictOut": {
+        "properties": {
+          "evidence": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EvidenceOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "flags": {
+            "items": {
+              "$ref": "#/components/schemas/FlagOut"
+            },
+            "title": "Flags",
+            "type": "array"
+          },
+          "kind": {
+            "enum": [
+              "mandatory",
+              "nice_to_have"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "min_months": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Min Months"
+          },
+          "parent_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Id"
+          },
+          "rationale": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rationale"
+          },
+          "requirement_id": {
+            "format": "uuid",
+            "title": "Requirement Id",
+            "type": "string"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "verdict": {
+            "enum": [
+              "met",
+              "partial",
+              "not_met"
+            ],
+            "title": "Verdict",
+            "type": "string"
+          },
+          "weight": {
+            "title": "Weight",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "requirement_id",
+          "parent_id",
+          "text",
+          "kind",
+          "weight",
+          "min_months",
+          "verdict",
+          "rationale",
+          "flags",
+          "evidence"
+        ],
+        "title": "VerdictOut",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "ATS",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/assessments/{assessment_id}": {
+      "get": {
+        "operationId": "get_assessment_assessments__assessment_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "assessment_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Assessment Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssessmentOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Assessment"
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Health"
+      }
+    },
+    "/hr/answers": {
+      "post": {
+        "operationId": "post_answer_hr_answers_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "discriminator": {
+                  "mapping": {
+                    "confirm": "#/components/schemas/ConfirmAnswer",
+                    "edit": "#/components/schemas/EditAnswer"
+                  },
+                  "propertyName": "type"
+                },
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/ConfirmAnswer"
+                  },
+                  {
+                    "$ref": "#/components/schemas/EditAnswer"
+                  }
+                ],
+                "title": "Answer"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnswerOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Post Answer"
+      }
+    },
+    "/positions": {
+      "get": {
+        "operationId": "list_positions_positions_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PositionOut"
+                  },
+                  "title": "Response List Positions Positions Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Positions"
+      }
+    },
+    "/positions/{position_id}": {
+      "get": {
+        "operationId": "get_position_positions__position_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "position_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Position Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PositionDetailOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Position"
+      }
+    },
+    "/positions/{position_id}/ranking": {
+      "get": {
+        "operationId": "get_ranking_positions__position_id__ranking_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "position_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Position Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PositionRankingOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Ranking"
+      }
+    },
+    "/rankings": {
+      "post": {
+        "operationId": "create_ranking_rankings_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_create_ranking_rankings_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RankingAccepted"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Ranking"
+      }
+    },
+    "/rankings/{request_id}": {
+      "get": {
+        "operationId": "get_ranking_rankings__request_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "request_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Request Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RankingStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Ranking"
+      }
+    }
+  }
+}

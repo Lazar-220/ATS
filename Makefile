@@ -44,6 +44,11 @@ SPLIT ?= dev
 eval:
 	uv run python -m ats.eval run --variant $(VARIANT) --split $(SPLIT) 		$(if $(LIMIT),--limit $(LIMIT)) $(if $(STAGES),--stages $(STAGES)) 		$(if $(DRY_RUN),--dry-run) $(if $(YES),--yes) $(if $(FALLBACK),--fallback $(FALLBACK))
 
+# Regenerate the web types from the API schema (no server or database needed).
+api-types:
+	uv run python -m ats.api.openapi
+	npm --prefix web run gen:types
+
 test-int:
 	uv run pytest -q -m integration
 
@@ -52,7 +57,7 @@ check:
 	uv run ruff format --check .
 	uv run pyright
 	uv run pytest -q -m "$(UNIT_TESTS)"
-	@if [ -d web ]; then npm --prefix web run typecheck && npm --prefix web run lint; \
+	@if [ -d web ]; then npm --prefix web run check:types && npm --prefix web run typecheck && npm --prefix web run lint; \
 	else echo "web/ not present yet (added in phase 1.1a): skipping frontend checks"; fi
 
 test:

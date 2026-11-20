@@ -1,192 +1,92 @@
-export interface Health {
-  status: "ok" | "degraded";
-  database: "reachable" | "unreachable";
-}
+import type { components } from "./api-types";
 
-function isHealth(value: unknown): value is Health {
-  if (typeof value !== "object" || value === null) {
-    return false;
-  }
-  const { status, database } = value as Record<string, unknown>;
-  return (
-    (status === "ok" || status === "degraded") &&
-    (database === "reachable" || database === "unreachable")
-  );
-}
+// Types come from the API's OpenAPI schema (`make api-types`); nothing here is written by hand.
+type Schemas = components["schemas"];
 
-// The API answers 503 with the same JSON body when the database is down; that is data, not an error.
-export async function fetchHealth(): Promise<Health> {
-  const response = await fetch("/api/health");
-  const body: unknown = await response.json();
-  if (!isHealth(body)) {
-    throw new Error(`unexpected health response (HTTP ${response.status})`);
-  }
-  return body;
-}
-
-export type Kind = "mandatory" | "nice_to_have";
-export type SetupStatus = "pending" | "running" | "done" | "failed";
-
-export interface Position {
-  id: string;
-  filename: string | null;
-  rubric_status: "unconfirmed" | "confirmed";
-  rubric_version: number;
-  created_at: string;
-  requirement_count: number;
-  setup_status: SetupStatus;
-  setup_message: string | null;
-}
-
-export interface RequirementRow {
-  id: string;
-  parent_id: string | null;
-  text: string;
-  kind: Kind;
-  weight: number;
-  min_months: number | null;
-}
-
-export interface PositionDetail extends Position {
-  requirements: RequirementRow[];
-}
-
-// Requirement as sent in an edit. `id` and `parent` are labels inside the list, not database ids.
-export interface RequirementPayload {
-  id: number;
-  text: string;
-  kind: Kind;
-  weight: number;
-  min_months: number | null;
-  parent: number | null;
-}
-
-export type AnswerRequest =
-  | { type: "confirm"; position_id: string; dedup_key: string; rubric_version: number }
-  | {
-      type: "edit";
-      position_id: string;
-      dedup_key: string;
-      rubric_version: number;
-      requirements: { requirements: RequirementPayload[] };
-    };
-
-export interface AnswerResult {
-  position_id: string;
-  rubric_version: number;
-  rubric_status: "unconfirmed" | "confirmed";
-  rejudge_jobs: number;
-  duplicate: boolean;
-}
+export type Health = Schemas["Health"];
+export type Position = Schemas["PositionOut"];
+export type PositionDetail = Schemas["PositionDetailOut"];
+export type RequirementRow = Schemas["RequirementOut"];
+export type RequirementPayload = Schemas["RequirementDraft"];
+export type Kind = RequirementRow["kind"];
+export type SetupStatus = Position["setup_status"];
+export type AnswerRequest = Schemas["ConfirmAnswer"] | Schemas["EditAnswer"];
+export type AnswerResult = Schemas["AnswerOut"];
+export type RankingAccepted = Schemas["RankingAccepted"];
+export type RankingStatus = Schemas["RankingStatus"];
+export type DocumentStatus = Schemas["DocumentStatus"];
+export type PositionRanking = Schemas["PositionRankingOut"];
+export type RankingRow = Schemas["RankingRowOut"];
+export type Assessment = Schemas["AssessmentOut"];
+export type Verdict = Schemas["VerdictOut"];
+export type Evidence = Schemas["EvidenceOut"];
+export type Flag = Schemas["FlagOut"];
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
 
-function nullable(check: (v: unknown) => boolean): (v: unknown) => boolean {
-  return (v) => v === null || check(v);
-}
-
-const isString = (v: unknown): boolean => typeof v === "string";
-const isNumber = (v: unknown): boolean => typeof v === "number";
-
-function isPosition(value: unknown): value is Position {
-  if (!isRecord(value)) {
-    return false;
-  }
-  return (
-    isString(value["id"]) &&
-    nullable(isString)(value["filename"]) &&
-    (value["rubric_status"] === "unconfirmed" || value["rubric_status"] === "confirmed") &&
-    isNumber(value["rubric_version"]) &&
-    isString(value["created_at"]) &&
-    isNumber(value["requirement_count"]) &&
-    ["pending", "running", "done", "failed"].includes(String(value["setup_status"])) &&
-    nullable(isString)(value["setup_message"])
-  );
-}
-
-function isRequirementRow(value: unknown): value is RequirementRow {
-  return (
-    isRecord(value) &&
-    isString(value["id"]) &&
-    nullable(isString)(value["parent_id"]) &&
-    isString(value["text"]) &&
-    (value["kind"] === "mandatory" || value["kind"] === "nice_to_have") &&
-    isNumber(value["weight"]) &&
-    nullable(isNumber)(value["min_months"])
-  );
-}
-
-function isPositionDetail(value: unknown): value is PositionDetail {
-  return (
-    isPosition(value) &&
-    Array.isArray((value as unknown as Record<string, unknown>)["requirements"]) &&
-    ((value as unknown as Record<string, unknown[]>)["requirements"] ?? []).every(isRequirementRow)
-  );
-}
-
-function isAnswerResult(value: unknown): value is AnswerResult {
-  return (
-    isRecord(value) &&
-    isString(value["position_id"]) &&
-    isNumber(value["rubric_version"]) &&
-    (value["rubric_status"] === "unconfirmed" || value["rubric_status"] === "confirmed") &&
-    isNumber(value["rejudge_jobs"]) &&
-    typeof value["duplicate"] === "boolean"
-  );
-}
-
 // FastAPI sends `detail` as a string, or as a list of {loc, msg} for a request that fails validation.
-function describeError(body: unknown, status: number): string {
+export function describeError(body: unknown, status: number): string {
   if (isRecord(body)) {
     const detail = body["detail"];
     if (typeof detail === "string") {
       return detail;
     }
     if (Array.isArray(detail)) {
-      return detail
-        .map((item: unknown) => (isRecord(item) && isString(item["msg"]) ? String(item["msg"]) : ""))
-        .filter((message) => message !== "")
-        .join("; ");
+      const messages = detail
+        .map((item: unknown) => (isRecord(item) && typeof item["msg"] === "string" ? item["msg"] : ""))
+        .filter((message) => message !== "");
+      if (messages.length > 0) {
+        return messages.join("; ");
+      }
     }
   }
   return `request failed (HTTP ${status})`;
 }
 
-async function request(path: string, init?: RequestInit): Promise<unknown> {
+// The generated types are the contract: the body is trusted to match them once the status is ok.
+async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`/api${path}`, init);
   const body: unknown = await response.json().catch(() => null);
   if (!response.ok) {
     throw new Error(describeError(body, response.status));
   }
-  return body;
+  return body as T;
 }
 
-export async function fetchPositions(): Promise<Position[]> {
-  const body = await request("/positions");
-  if (!Array.isArray(body) || !body.every(isPosition)) {
-    throw new Error("unexpected positions response");
+// The API answers 503 with the same JSON body when the database is down; that is data, not an error.
+export async function fetchHealth(): Promise<Health> {
+  const response = await fetch("/api/health");
+  const body: unknown = await response.json().catch(() => null);
+  if (!isRecord(body) || typeof body["status"] !== "string") {
+    throw new Error(`unexpected health response (HTTP ${response.status})`);
   }
-  return body;
+  return body as Health;
 }
 
-export async function fetchPosition(id: string): Promise<PositionDetail> {
-  const body = await request(`/positions/${id}`);
-  if (!isPositionDetail(body)) {
-    throw new Error("unexpected position response");
-  }
-  return body;
-}
+export const fetchPositions = () => request<Position[]>("/positions");
+export const fetchPosition = (id: string) => request<PositionDetail>(`/positions/${id}`);
+export const fetchRankingStatus = (requestId: string) =>
+  request<RankingStatus>(`/rankings/${requestId}`);
+export const fetchPositionRanking = (positionId: string) =>
+  request<PositionRanking>(`/positions/${positionId}/ranking`);
+export const fetchAssessment = (assessmentId: string) =>
+  request<Assessment>(`/assessments/${assessmentId}`);
 
-export async function postAnswer(answer: AnswerRequest): Promise<AnswerResult> {
-  const body = await request("/hr/answers", {
+export const postAnswer = (answer: AnswerRequest) =>
+  request<AnswerResult>("/hr/answers", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(answer),
   });
-  if (!isAnswerResult(body)) {
-    throw new Error("unexpected answer response");
+
+export function uploadRanking(posting: File, cvs: File[]): Promise<RankingAccepted> {
+  const form = new FormData();
+  form.append("posting", posting);
+  for (const cv of cvs) {
+    form.append("cvs", cv);
   }
-  return body;
+  // No Content-Type header: the browser sets the multipart boundary itself.
+  return request<RankingAccepted>("/rankings", { method: "POST", body: form });
 }
