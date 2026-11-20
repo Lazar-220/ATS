@@ -21,6 +21,8 @@ from ats.settings import Settings
 log = logging.getLogger(__name__)
 
 DEV_SMOKE_LABEL = "dev-smoke, non-baseline"
+# A run answered by the fake provider (LLM_PROVIDER=fake): plumbing only, never a measurement.
+DEMO_LABEL = "demo, non-baseline"
 
 
 class FallbackLLMClient:

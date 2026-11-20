@@ -11,7 +11,7 @@ import re
 from pydantic import BaseModel
 
 from ats.llm.fake import FakeLLMClient
-from ats.llm.types import LLMRequest
+from ats.llm.types import LLMRequest, LLMUsage
 from ats.pipeline.judge import JudgeOutput, RequirementVerdict
 from ats.pipeline.parsing import ParsedCV
 from ats.pipeline.requirements import RequirementDraft, RequirementList
@@ -80,5 +80,16 @@ def _answer(request: LLMRequest, schema: type[BaseModel]) -> BaseModel:
     raise AssertionError(f"the demo client has no answer for {schema.__name__}")
 
 
+def _estimated_usage(request: LLMRequest, output: BaseModel) -> LLMUsage:
+    """About four characters per token. Invented numbers, so that a trace of a walkthrough has
+    usage and cost to show; they say nothing about a real model."""
+    return LLMUsage(
+        input_tokens=(len(request.system) + len(request.user)) // 4,
+        output_tokens=len(output.model_dump_json()) // 4,
+        latency_s=0.0,
+        cache_hit=False,
+    )
+
+
 def create_demo_client() -> FakeLLMClient:
-    return FakeLLMClient(responder=_answer)
+    return FakeLLMClient(responder=_answer, usage=_estimated_usage)

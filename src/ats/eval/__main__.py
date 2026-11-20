@@ -1,12 +1,21 @@
 import argparse
+import logging
 import sys
 from pathlib import Path
 
 from ats.eval.fallback import create_eval_llm_client
-from ats.eval.golden import DEFAULT_ROOT, GOLDEN_AS_OF, GoldSetError, build_labels, load_golden
+from ats.eval.golden import (
+    DEFAULT_ROOT,
+    GOLDEN_AS_OF,
+    GoldSet,
+    GoldSetError,
+    build_labels,
+    load_golden,
+)
 from ats.eval.harness import (
     MAX_CALLS_WITHOUT_CONFIRMATION,
     EvalError,
+    RunResult,
     Stage,
     count_prior_runs,
     format_report,
@@ -14,6 +23,7 @@ from ats.eval.harness import (
     run_eval,
     write_result,
 )
+from ats.eval.langfuse_export import export_run
 from ats.eval.pipeline_judge import PipelineJudge
 from ats.eval.render import LineTooWideError, render_golden
 from ats.eval.split import DEFAULT_SEED
@@ -21,8 +31,10 @@ from ats.eval.stages import StageError, SubsetError, load_contacts, load_uncerta
 from ats.eval.stub import StubJudge
 from ats.llm.cache import ResponseCache
 from ats.llm.types import LLMError
+from ats.observability import LangfuseTracer, get_tracer
 from ats.settings import get_settings
 
+log = logging.getLogger(__name__)
 RESULTS_DIR = DEFAULT_ROOT.parent / "results"
 STAGES_BY_NAME: dict[str, Stage] = {
     "extraction": "extraction",
@@ -59,6 +71,11 @@ def _run(args: argparse.Namespace) -> int:
             raise EvalError(f"unknown stage {name!r}; choose from {', '.join(STAGES_BY_NAME)}")
         stages.append(stage)
     settings = get_settings()
+    if args.require_real and settings.llm_provider == "fake":
+        raise EvalError(
+            "LLM_PROVIDER=fake: this command is the real-model check and would use the demo "
+            "client. Unset LLM_PROVIDER (or set it to gemini) and try again."
+        )
     fallback = str(args.fallback or settings.llm_fallback)
     if fallback not in ("", "openrouter"):
         raise EvalError(f"unknown fallback {fallback!r}; only openrouter exists")
@@ -106,12 +123,36 @@ def _run(args: argparse.Namespace) -> int:
         contacts=load_contacts(Path(args.golden)) if "masking" in stages else None,
         fallback_model=fallback_model,
         uncertain=load_uncertain(Path(args.golden), golden),
+        llm_provider=settings.llm_provider if needs_model else None,
     )
     result.run_count = count_prior_runs(RESULTS_DIR, result) + 1
     print(format_report(result))
     print()
     print(f"Result written to {write_result(result, RESULTS_DIR)}")
+    _export_to_langfuse(result, golden)
     return 0
+
+
+def _export_to_langfuse(result: RunResult, golden: GoldSet) -> None:
+    """With tracing on, the run also goes to Langfuse. A failure there never fails the eval."""
+    tracer = get_tracer()
+    if not isinstance(tracer, LangfuseTracer):
+        return
+    try:
+        outcome = export_run(result, golden, tracer.client)
+    except Exception as exc:
+        print(f"Langfuse export failed ({type(exc).__name__}); the result file is written.")
+        log.warning("langfuse export failed", exc_info=True)
+        return
+    finally:
+        tracer.flush()
+    if outcome is None:
+        print("Langfuse: this run has no verdicts, nothing exported.")
+    else:
+        print(
+            f"Langfuse: dataset {outcome.dataset}, experiment run {outcome.run_name} "
+            f"({outcome.items} items)" + (f", {outcome.url}" if outcome.url else "")
+        )
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -142,6 +183,11 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="opt in: after a Gemini daily quota continue on an OpenRouter free model "
         "(needs OPENROUTER_API_KEY; the result is labelled dev-smoke, non-baseline)",
+    )
+    run.add_argument(
+        "--require-real",
+        action="store_true",
+        help="refuse to run when LLM_PROVIDER=fake (make smoke-real passes it)",
     )
     run.add_argument("--yes", action="store_true", help="confirm a run of more than 5 model calls")
     run.set_defaults(run=_run)

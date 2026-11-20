@@ -222,6 +222,32 @@ requirements, CV parsing and verdicts are then canned keyword matches (still thr
 `LLMClient`, still masked text only). The worker's first log line says `llm_provider=FAKE` and it
 logs a warning. Scores from it mean nothing; switch back to `gemini` for real judgements.
 
+### Tracing and Langfuse (from phase 1.6)
+
+Tracing is off by default and nothing needs Langfuse. To look at prompts, tokens, cost and latency:
+
+```bash
+make down                 # the stack below needs about 2 GB of the Docker VM's 5.7 GB
+make langfuse-up          # six services, http://localhost:3000, user dev@ats.local, password ats-local-password
+# in .env: LANGFUSE_ENABLED=true (the keys in .env.example match the stack), then
+make api                  # from the host, as the compose stack is stopped
+make worker               # LLM_PROVIDER=fake (no key, invented tokens) or the real model
+make langfuse-down        # traces stay in Docker volumes
+```
+
+Every LLM call is a generation (prompt, answer, tokens, cost, latency, `cache_hit`). Each judged pair
+is a trace `assessment` with the spans extraction, masking, parsing, judge, quote_check and score;
+its id is `assessment.trace->>'trace_id'`. The CV's own ingest is a trace `document_ingest` (its id is
+in `document.parsed_json->'ingest'->>'trace_id'`). Traces hold prompts, so they hold masked text
+only. With tracing on, `make eval` also uploads the run as a dataset `ats-golden-<split>` and an
+experiment, so two runs compare per item in Langfuse (Datasets). A Langfuse that is down is logged
+and never fails a job or the eval. Langfuse and the reranker must not run together (§6.3).
+
+Reading back from the CLI (the legacy trace endpoints are off in v4):
+`GET /api/public/v2/observations?traceId=<id>&fields=core,basic,io,usage,model,metadata` and
+`GET /api/public/experiments?fromStartTime=<iso>&datasetId=<id>`, with basic auth
+`pk-lf-ats-local:sk-lf-ats-local`.
+
 ## 3. Commands
 
 | Command | Does | From phase |
@@ -238,11 +264,11 @@ logs a warning. Scores from it mean nothing; switch back to `gemini` for real ju
 | `make test-int` | integration tests (needs `make up`) | 1.1a |
 | `make setup-missing [POSITION=<id>] [YES=1]` | enqueue position setup for positions that have posting text but no requirements and no setup job; lists only unless `YES=1`; `POSITION` takes an id or its first characters | 1.2 |
 | `make eval VARIANT=A SPLIT=dev [LIMIT=n] [STAGES=extraction,verdicts] [DRY_RUN=1] [YES=1]` | eval harness: loads the golden set, prints a metrics table and writes `eval/results/<time>_<variant>_<split>.json` with `pipeline_version` (git commit, prompt versions, model). The default stage is `verdicts`, against a stub judge: no model calls. From 1.4b, `STAGES=judge` is the variant A judge: per CV of `SPLIT` one parse call and one judge call (about 112 calls on dev, 48 on test; one more when a judge answer lacks a requirement), with the gold requirements, the quotes checked and the report extended with the flagged-verdict share, the majority-class accuracy, the same metrics without the 32 verdicts of `eval/golden/uncertain.json`, the run count and cache hits next to every number, cost per CV and p95 latency. `DRY_RUN=1 STAGES=judge` prints the call count and the estimated cost. The test split is for published numbers: do not tune on it. `STAGES=extraction,verdicts` adds the requirement extraction, one real call per golden posting (cached by the response cache). `DRY_RUN=1` prints the call count and the estimated cost and calls nothing. A run that would make more than 5 uncached model calls is refused until `YES=1`. From 1.4a, `STAGES=masking` measures the masking leak rate (email, phone, name) against `eval/golden/contacts.json` with no model call; `STAGES=parsing` runs the CV parsing prompt on a seeded subset of at most 18 dev-split CVs (seed 20261117, one real call each; `DRY_RUN=1` prints the CV ids, the coverage proof, the model, the prompt version and the estimated cost; dev split only; a 429 stops the run and reports how many CVs were parsed: at once for a daily quota, after the client's 4 retries for a per-minute one). `FALLBACK=openrouter` (or `--fallback openrouter`, or `LLM_FALLBACK=openrouter`) opts in to the OpenRouter fallback: after a Gemini daily quota the rest of the run goes to the free model, at 20 requests per minute and at most 50 real calls per UTC day (read from `GET /api/v1/key`, `free_model_daily_requests`, and counted locally in `LLM_CACHE_DIR`). A run that used it is labelled `dev-smoke, non-baseline` in its report and result file, with both model names; its numbers are not baselines. `DRY_RUN=1` prints the fallback line when it is on | 1.3 |
-| `make smoke-real [YES=1]` | manual real-model smoke test: the variant A judge (`make eval STAGES=judge SPLIT=dev LIMIT=2`) on 2 dev CVs, 4 calls, about $0.03. Dry run (no call) unless `YES=1`. Honours `LLM_MODEL` and `LLM_RPM`; needs `LLM_API_KEY`; do not run it with `LLM_PROVIDER=fake` (it would use the demo model). Not part of `make check` | smoke |
+| `make smoke-real [YES=1]` | manual real-model smoke test: the variant A judge (`make eval STAGES=judge SPLIT=dev LIMIT=2`) on 2 dev CVs, 4 calls, about $0.03. Dry run (no call) unless `YES=1`. Honours `LLM_MODEL` and `LLM_RPM`; needs `LLM_API_KEY`; it refuses to run with `LLM_PROVIDER=fake` (`--require-real`). Not part of `make check` | smoke |
 | `uv run python -m ats.eval build` | validate the golden set's profiles, write `labels/*.jsonl` and `split.json` (see `eval/golden/README.md`) | 1.3 |
 | `uv run python -m ats.eval render` | render posting and CV sources to PDF; writes only the files whose bytes change | 1.3 |
 | `make eval-redteam` | injection red-team set | 1.7 |
-| `make langfuse-up` / `make langfuse-down` | Langfuse self-host (about 4 GB of RAM) | 1.6 |
+| `make langfuse-up` / `make langfuse-down` | Langfuse self-host from `compose.langfuse.yaml` (compose project `ats-langfuse`, UI and API on :3000, about 1.6 GiB measured, limits add up to about 5 GiB); run `make down` first on this machine. `down` keeps the traces | 1.6 |
 | `make reindex` | re-chunk and re-embed every CV | 2.1 |
 | `make mcp` | MCP server | 3.7 |
 
@@ -270,7 +296,9 @@ logs a warning. Scores from it mean nothing; switch back to `gemini` for real ju
 | `OPENROUTER_MODEL` | `google/gemma-4-31b-it:free` | the free model the fallback uses (checked in OpenRouter's public model list on 2026-11-17) | 1.4a |
 | `QUOTE_FUZZY_THRESHOLD` | `90` | a judge quote passes the quote check when it is in the CV verbatim after normalization, or at this `rapidfuzz` score (0 to 100) or above; numbers in the quote must exist verbatim either way (§3.2) | 1.4b |
 | `GIT_COMMIT` | derived from `git` | overrides the code version in the worker's startup line; set it where there is no `.git` (a Docker image shows `unknown` otherwise) | 1.2 |
-| `LANGFUSE_ENABLED` | `false` | tracing on or off | 1.6 |
+| `LANGFUSE_ENABLED` | `false` | tracing on or off. Off, the SDK is not even imported and nothing needs Langfuse running. On, every LLM call is a generation and every assessment a trace; a Langfuse that is down never fails a job (failures are logged) | 1.6 |
+| `LANGFUSE_HOST` | `http://localhost:3000` | where the Langfuse API is (the local stack of `make langfuse-up`) | 1.6 |
+| `LANGFUSE_PUBLIC_KEY` / `LANGFUSE_SECRET_KEY` | empty | the Langfuse project's API keys. `.env.example` holds the placeholders that `compose.langfuse.yaml` creates on first start (`pk-lf-ats-local`, `sk-lf-ats-local`); they are for the local stack only. With `LANGFUSE_ENABLED=true` and no keys, tracing stays off with a warning | 1.6 |
 | `EMBEDDING_MODEL` | `BAAI/bge-m3` | local embedding model | 2.1 |
 | `RERANKER_MODEL` | empty (off) | local reranker | 2.2 |
 | `ORCHESTRATOR` | `manual` | `manual` or `langgraph` | 3.6 |
@@ -290,7 +318,7 @@ Planned from §6.3 of the plan. The actual pinned versions are in `pyproject.tom
 | 1.3 | eval group: `scikit-learn` (brings `numpy`, `scipy`, `joblib`, `threadpoolctl`); `statsmodels` is deferred to 1.8 | |
 | 1.4b | `rapidfuzz` (3.14.6; quote checking, §6.3; it was the only package `uv add` put in `uv.lock`) | |
 | 1.5 | none | npm dev: `openapi-typescript` (types from the API schema). It declares a peer `typescript@^5`, so `web/package.json` has an `overrides` entry that lets it use the installed TypeScript 6; without it `npm install` and `npm ci` stop with ERESOLVE |
-| 1.6 | `langfuse` | Langfuse self-host: web, worker, Postgres, ClickHouse, Redis, MinIO |
+| 1.6 | `langfuse` (5.2.0; `uv add` also locked `opentelemetry-sdk`, `opentelemetry-exporter-otlp-proto-http`, `protobuf`, `backoff`, `wrapt` and a few more) | Langfuse self-host: web, worker, Postgres, ClickHouse, Redis, MinIO (images in section 6) |
 | 1.7 | none | GitHub Actions |
 | 2.1 | `sentence-transformers` (with CPU-only `torch`), `pgvector` | model `BAAI/bge-m3`, about 2.3 GB in the Hugging Face cache |
 | 2.2 | none | model `BAAI/bge-reranker-v2-m3`, about 2.3 GB |
@@ -333,3 +361,4 @@ Claude Code logs here everything it creates or changes outside the repository, w
 | 2026-11-16 | Docker volume `ats_uploads` (compose project `ats`) | uploaded PDFs shared by api and worker (phase 1.1b) | `docker compose --profile full down -v` (deletes the PDFs and the database) or `docker volume rm ats_uploads` |
 | 2026-11-16 | Docker images `ats-api`, `ats-worker`, `ats-web`, plus base images `python:3.12-slim`, `node:24-alpine` and `ghcr.io/astral-sh/uv:0.13.8` | `make up-all` (phase 1.1a) | `docker compose --profile full down --rmi local`, then `docker rmi python:3.12-slim node:24-alpine ghcr.io/astral-sh/uv:0.13.8` |
 | 2026-11-16 | Docker volume `ats_llm_cache` (compose project `ats`) | LLM response cache of the worker (phase 1.2) | `docker compose --profile full down -v` or `docker volume rm ats_llm_cache` |
+| 2026-11-20 | Docker images `langfuse/langfuse:4.83.0` (also tagged `:4`), `langfuse/langfuse-worker:4.83.0`, `postgres:17.6-alpine`, `redis:7.4.5-alpine`, `clickhouse/clickhouse-server:26.10.4.207` (also `:latest` and `:25.8` from the first attempt), `langfuse/langfuse:3`, `langfuse/langfuse:3.227.1`, `langfuse/langfuse-worker:3.227.1`, `cgr.dev/chainguard/minio@sha256:e9cf6b99...`; network `ats-langfuse_default`; volumes `ats-langfuse_lf_postgres`, `ats-langfuse_lf_clickhouse_data`, `ats-langfuse_lf_clickhouse_logs`, `ats-langfuse_lf_redis`, `ats-langfuse_lf_minio` (compose project `ats-langfuse`) | Langfuse self-host for phase 1.6 (`make langfuse-up`) | `docker compose -f compose.langfuse.yaml down -v` (deletes the traces), then `docker rmi langfuse/langfuse:4 langfuse/langfuse:4.83.0 langfuse/langfuse-worker:4.83.0 langfuse/langfuse:3 langfuse/langfuse:3.227.1 langfuse/langfuse-worker:3.227.1 postgres:17.6-alpine redis:7.4.5-alpine clickhouse/clickhouse-server:26.10.4.207 clickhouse/clickhouse-server:latest clickhouse/clickhouse-server:25.8 cgr.dev/chainguard/minio@sha256:e9cf6b99c226e9539ed0f14b6f00e37b07da153c7ba1f4f8709c807574b471ec` |

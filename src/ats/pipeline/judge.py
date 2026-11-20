@@ -110,6 +110,7 @@ def _add(a: LLMUsage, b: LLMUsage) -> LLMUsage:
         latency_s=a.latency_s + b.latency_s,
         cache_hit=a.cache_hit and b.cache_hit,
         model=b.model or a.model,
+        cached_input_tokens=a.cached_input_tokens + b.cached_input_tokens,
     )
 
 

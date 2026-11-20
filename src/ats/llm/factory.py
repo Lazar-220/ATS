@@ -5,11 +5,21 @@ from ats.llm.demo import create_demo_client
 from ats.llm.gemini import GeminiTransport
 from ats.llm.managed import ManagedLLMClient
 from ats.llm.ratelimit import RateLimiter
+from ats.llm.traced import TracedLLMClient
 from ats.llm.types import LLMClient
+from ats.observability import get_tracer
 from ats.settings import Settings, get_settings
 
 
 def create_llm_client(settings: Settings) -> LLMClient:
+    client = _create_provider_client(settings)
+    tracer = get_tracer()
+    if not tracer.enabled:
+        return client
+    return TracedLLMClient(client, tracer, model=settings.llm_model, provider=settings.llm_provider)
+
+
+def _create_provider_client(settings: Settings) -> LLMClient:
     if settings.llm_provider == "fake":
         return create_demo_client()
     # Compose passes an unset variable as an empty string, so empty counts as missing.

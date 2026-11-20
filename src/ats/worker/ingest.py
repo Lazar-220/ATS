@@ -9,6 +9,7 @@ Imported by the worker only; the API never loads PyMuPDF or the language models.
 """
 
 import logging
+import time
 from datetime import date
 from uuid import UUID
 
@@ -17,6 +18,8 @@ from psycopg_pool import ConnectionPool
 
 from ats.db.task_queue import Job
 from ats.llm.factory import get_llm_client
+from ats.llm.pricing import usage_cost
+from ats.observability import Observation, get_tracer
 from ats.pipeline.extract import PdfRejected, extract_text
 from ats.pipeline.facts import build_facts
 from ats.pipeline.language import detect_language, detect_script
@@ -33,8 +36,9 @@ log = logging.getLogger(__name__)
 FAILED_MESSAGE = "Processing failed unexpectedly. Upload the file again to retry."
 
 
-def _ingest(pool: ConnectionPool, document_id: UUID) -> None:
+def _ingest(pool: ConnectionPool, document_id: UUID, root: Observation) -> None:
     settings = get_settings()
+    tracer = get_tracer()
     with pool.connection() as conn:
         row = conn.execute(
             "SELECT kind, sha256, storage_path, status FROM document WHERE id = %s",
@@ -44,17 +48,35 @@ def _ingest(pool: ConnectionPool, document_id: UUID) -> None:
         raise LookupError(f"document {document_id} does not exist")
     kind, sha256, storage_path, status = row
     # A redelivered job (its worker died after committing) must not redo or undo the work.
+    root.update(metadata={"document_id": str(document_id), "kind": kind})
     if status == "extracted" and kind == "cv":
-        _parse(pool, document_id)
+        _parse(pool, document_id, root.trace_id, extraction_s=None)
         return
     if status != "uploaded":
         log.info("document %s is already %s, nothing to ingest", document_id, status)
         return
 
     pdf = (settings.upload_dir / storage_path).read_bytes()
-    try:
-        extracted = extract_text(pdf, min_chars_per_page=settings.min_chars_per_page)
-    except PdfRejected as exc:
+    rejection: PdfRejected | None = None
+    extracted = None
+    # Spans carry counts and durations only: the text itself is not for a trace (§2.4).
+    with tracer.span("extraction") as span:
+        started = time.perf_counter()
+        try:
+            extracted = extract_text(pdf, min_chars_per_page=settings.min_chars_per_page)
+        except PdfRejected as exc:
+            rejection = exc
+        extraction_s = time.perf_counter() - started
+        span.update(
+            output={
+                "duration_s": round(extraction_s, 4),
+                "pages": extracted.page_count if extracted else None,
+                "chars": len(extracted.text) if extracted else None,
+                "rejected": rejection is not None,
+            }
+        )
+    if rejection is not None or extracted is None:
+        exc = rejection
         # A rejection is an outcome, not an error: the job completes and the document says why.
         with pool.connection() as conn:
             conn.execute(
@@ -91,18 +113,43 @@ def _ingest(pool: ConnectionPool, document_id: UUID) -> None:
         script,
     )
     if kind == "cv":
-        _parse(pool, document_id)
+        _parse(pool, document_id, root.trace_id, extraction_s=extraction_s)
 
 
-def _parse(pool: ConnectionPool, document_id: UUID) -> None:
+def _parse(
+    pool: ConnectionPool, document_id: UUID, trace_id: str | None, *, extraction_s: float | None
+) -> None:
     """Mask, parse, locate and measure one extracted CV; store the result in one transaction."""
     with pool.connection() as conn:
         row = conn.execute("SELECT raw_text FROM document WHERE id = %s", (document_id,)).fetchone()
     assert row is not None and row[0] is not None
-    masked = mask_text(row[0])
+    settings = get_settings()
+    tracer = get_tracer()
+    with tracer.span("masking") as span:
+        started = time.perf_counter()
+        masked = mask_text(row[0])
+        masking_s = time.perf_counter() - started
+        span.update(
+            output={
+                "duration_s": round(masking_s, 4),
+                "chars": len(masked.masked_text),
+                "masked_spans": len(masked.spans),
+            }
+        )
 
     # The slow call runs outside any transaction, and sees only masked text (§2.4).
-    result = parse_cv(get_llm_client(), masked.masked_text)
+    # The generation of the call nests under the span.
+    with tracer.span("parsing") as span:
+        started = time.perf_counter()
+        result = parse_cv(get_llm_client(), masked.masked_text)
+        parsing_s = time.perf_counter() - started
+        span.update(
+            output={
+                "duration_s": round(parsing_s, 4),
+                "is_cv": result.output.is_cv,
+                "cache_hit": result.usage.cache_hit,
+            }
+        )
     # Production passes today's date; only the eval passes a fixed one.
     facts = build_facts(result.output, masked.masked_text, masked.spans, date.today())
 
@@ -138,7 +185,30 @@ def _parse(pool: ConnectionPool, document_id: UUID) -> None:
                 candidate_id,
                 masked.masked_text,
                 Jsonb([span.model_dump() for span in masked.spans]),
-                Jsonb(facts.parsed_json),
+                Jsonb(
+                    {
+                        **facts.parsed_json,
+                        # Where the assessment's trace finds the steps that ran here (1.6).
+                        "ingest": {
+                            "trace_id": trace_id,
+                            "parse": {
+                                "model": settings.llm_model,
+                                "input_tokens": result.usage.input_tokens,
+                                "output_tokens": result.usage.output_tokens,
+                                "cached_input_tokens": result.usage.cached_input_tokens,
+                                "cache_hit": result.usage.cache_hit,
+                                "cost_usd": usage_cost(
+                                    settings.llm_model, result.usage, date.today()
+                                ),
+                            },
+                            "steps_s": {
+                                "extraction": extraction_s,
+                                "masking": masking_s,
+                                "parsing": parsing_s,
+                            },
+                        },
+                    }
+                ),
                 Jsonb(facts.flags),
                 document_id,
             ),
@@ -170,7 +240,8 @@ def _mark_failed(pool: ConnectionPool, document_id: UUID) -> None:
 def ingest(job: Job, pool: ConnectionPool) -> None:
     document_id = UUID(job.payload["document_id"])
     try:
-        _ingest(pool, document_id)
+        with get_tracer().trace("document_ingest") as root:
+            _ingest(pool, document_id, root)
     except Exception:
         if job.attempts >= job.max_attempts:
             # The queue gives up after this attempt; say so on the document, where HR looks.
