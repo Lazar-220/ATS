@@ -79,3 +79,15 @@ Same inputs as above. Do this from a clean database, with no other tool than the
 1. `make smoke-real`: dry run, no call. Expect `LLM calls: 4`, about 5400 input and 6600 output tokens, about $0.03.
 2. `make smoke-real YES=1`: 4 real calls (parse and judge for 2 dev CVs), a few cents; more only if a judge answer lacks a requirement.
 3. Pass: the run ends with the metrics table and a result file under `eval/results/`, no error, flagged-verdict share low, cost and latency printed. A daily 429 stops the run with a message; try again after the quota resets. A repeat run is served from the cache.
+
+## 1.6 Observability (owner)
+
+Needs about 2 GB of free Docker memory: run `make down` (stops the app's containers) first. Docker Desktop must be running.
+
+1. **Diff the compose file.** Compare `compose.langfuse.yaml` with the official Langfuse self-host compose (langfuse.com, self-hosting, Docker Compose). It was written without the official file, so look for settings it lacks (the images, tags and memory limits are the ones that were tested).
+2. **Start and look.** `make langfuse-up`, then open http://localhost:3000 and sign in with `dev@ats.local` and `ats-local-password` (the placeholders in the compose file). Project `ats`.
+3. **Live trace with the real model** (costs real money, a few cents; free-tier quota is about 20 calls a day). Put `LANGFUSE_ENABLED=true` and the three `LANGFUSE_*` lines from `.env.example` in `.env`, set `LLM_PROVIDER=gemini` and your key, restart `make worker`, upload one posting and one synthetic CV from the interface. In Langfuse, Tracing: open the trace named `assessment`. Expect the spans extraction, masking, parsing, judge, quote_check, score; under `judge` a generation `judge_v1` with the prompt (system and user), the answer, input and output tokens, cost and latency. The CV's own trace is `document_ingest` (generation `cv_parse_v1`). The id of the assessment's trace is in the database: `docker exec ats-postgres-1 psql -U ats -d ats -c "select trace->>'trace_id', cost_usd from assessment"`.
+4. **Real cost per CV and LLM latency** (the numbers the fake provider cannot give): `make eval STAGES=judge SPLIT=dev LIMIT=5 DRY_RUN=1`, then with `YES=1` (20 real calls, about $0.10). The report prints cost per CV (parse and judge) and p95 latency per call. Record them in `docs/PROGRESS.md` (Measured numbers) with the model name and "real model".
+5. **Experiments.** With `LANGFUSE_ENABLED=true` the same `make eval` run also uploads to Langfuse: Datasets, `ats-golden-dev`, and the run list shows one experiment per run. Run it twice (change `LIMIT` or the model) and compare the two per item.
+6. **Personal data.** In any trace, search the text for the candidate's name, email, phone and address: none should appear (the integration test `tests/integration/test_tracing.py` checks this with a synthetic CV; this is the same check on real output).
+7. **Stop.** `make langfuse-down` (the traces stay in Docker volumes; `docker compose -f compose.langfuse.yaml down -v` deletes them). Set `LANGFUSE_ENABLED=false` again if you do not want tracing.

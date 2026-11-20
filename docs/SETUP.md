@@ -222,6 +222,32 @@ requirements, CV parsing and verdicts are then canned keyword matches (still thr
 `LLMClient`, still masked text only). The worker's first log line says `llm_provider=FAKE` and it
 logs a warning. Scores from it mean nothing; switch back to `gemini` for real judgements.
 
+### Tracing and Langfuse (from phase 1.6)
+
+Tracing is off by default and nothing needs Langfuse. To look at prompts, tokens, cost and latency:
+
+```bash
+make down                 # the stack below needs about 2 GB of the Docker VM's 5.7 GB
+make langfuse-up          # six services, http://localhost:3000, user dev@ats.local, password ats-local-password
+# in .env: LANGFUSE_ENABLED=true (the keys in .env.example match the stack), then
+make api                  # from the host, as the compose stack is stopped
+make worker               # LLM_PROVIDER=fake (no key, invented tokens) or the real model
+make langfuse-down        # traces stay in Docker volumes
+```
+
+Every LLM call is a generation (prompt, answer, tokens, cost, latency, `cache_hit`). Each judged pair
+is a trace `assessment` with the spans extraction, masking, parsing, judge, quote_check and score;
+its id is `assessment.trace->>'trace_id'`. The CV's own ingest is a trace `document_ingest` (its id is
+in `document.parsed_json->'ingest'->>'trace_id'`). Traces hold prompts, so they hold masked text
+only. With tracing on, `make eval` also uploads the run as a dataset `ats-golden-<split>` and an
+experiment, so two runs compare per item in Langfuse (Datasets). A Langfuse that is down is logged
+and never fails a job or the eval. Langfuse and the reranker must not run together (§6.3).
+
+Reading back from the CLI (the legacy trace endpoints are off in v4):
+`GET /api/public/v2/observations?traceId=<id>&fields=core,basic,io,usage,model,metadata` and
+`GET /api/public/experiments?fromStartTime=<iso>&datasetId=<id>`, with basic auth
+`pk-lf-ats-local:sk-lf-ats-local`.
+
 ## 3. Commands
 
 | Command | Does | From phase |
@@ -242,7 +268,7 @@ logs a warning. Scores from it mean nothing; switch back to `gemini` for real ju
 | `uv run python -m ats.eval build` | validate the golden set's profiles, write `labels/*.jsonl` and `split.json` (see `eval/golden/README.md`) | 1.3 |
 | `uv run python -m ats.eval render` | render posting and CV sources to PDF; writes only the files whose bytes change | 1.3 |
 | `make eval-redteam` | injection red-team set | 1.7 |
-| `make langfuse-up` / `make langfuse-down` | Langfuse self-host (about 4 GB of RAM) | 1.6 |
+| `make langfuse-up` / `make langfuse-down` | Langfuse self-host from `compose.langfuse.yaml` (compose project `ats-langfuse`, UI and API on :3000, about 1.6 GiB measured, limits add up to about 5 GiB); run `make down` first on this machine. `down` keeps the traces | 1.6 |
 | `make reindex` | re-chunk and re-embed every CV | 2.1 |
 | `make mcp` | MCP server | 3.7 |
 
@@ -292,7 +318,7 @@ Planned from §6.3 of the plan. The actual pinned versions are in `pyproject.tom
 | 1.3 | eval group: `scikit-learn` (brings `numpy`, `scipy`, `joblib`, `threadpoolctl`); `statsmodels` is deferred to 1.8 | |
 | 1.4b | `rapidfuzz` (3.14.6; quote checking, §6.3; it was the only package `uv add` put in `uv.lock`) | |
 | 1.5 | none | npm dev: `openapi-typescript` (types from the API schema). It declares a peer `typescript@^5`, so `web/package.json` has an `overrides` entry that lets it use the installed TypeScript 6; without it `npm install` and `npm ci` stop with ERESOLVE |
-| 1.6 | `langfuse` | Langfuse self-host: web, worker, Postgres, ClickHouse, Redis, MinIO |
+| 1.6 | `langfuse` (5.2.0; `uv add` also locked `opentelemetry-sdk`, `opentelemetry-exporter-otlp-proto-http`, `protobuf`, `backoff`, `wrapt` and a few more) | Langfuse self-host: web, worker, Postgres, ClickHouse, Redis, MinIO (images in section 6) |
 | 1.7 | none | GitHub Actions |
 | 2.1 | `sentence-transformers` (with CPU-only `torch`), `pgvector` | model `BAAI/bge-m3`, about 2.3 GB in the Hugging Face cache |
 | 2.2 | none | model `BAAI/bge-reranker-v2-m3`, about 2.3 GB |
