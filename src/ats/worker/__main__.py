@@ -33,8 +33,13 @@ def main() -> None:
             llm_model=settings.llm_model,
             llm_rpm=settings.llm_rpm,
             llm_key_set=bool(settings.llm_api_key and settings.llm_api_key.get_secret_value()),
+            llm_provider=settings.llm_provider,
         )
     )
+    if settings.llm_provider == "fake":
+        logging.getLogger(__name__).warning(
+            "LLM_PROVIDER=fake: every answer is canned demo data, not a model judgement"
+        )
     try:
         run(
             pool,

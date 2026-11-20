@@ -8,6 +8,8 @@ import {
   type PositionDetail,
 } from "./api";
 import { newRow, removeRow, toDraft, toPayload, validate, type DraftRow } from "./draft";
+import { ErrorNotice } from "./Notice";
+import { href } from "./route";
 import { RequirementsTable } from "./RequirementsTable";
 
 // Omit on each member of the union, so `type` still tells the two answers apart.
@@ -99,7 +101,7 @@ function RequirementsForm({ position }: { position: PositionDetail }) {
   );
 }
 
-export function PositionEditor({ positionId, onBack }: { positionId: string; onBack: () => void }) {
+export function PositionEditor({ positionId }: { positionId: string }) {
   const position = useQuery({
     queryKey: ["position", positionId],
     queryFn: () => fetchPosition(positionId),
@@ -112,16 +114,16 @@ export function PositionEditor({ positionId, onBack }: { positionId: string; onB
 
   return (
     <div>
-      <p>
-        <button type="button" onClick={onBack}>
-          ← Positions
-        </button>
-      </p>
       {position.isPending && <p>Loading…</p>}
-      {position.isError && <p role="alert">{position.error.message}</p>}
+      {position.isError && (
+        <ErrorNotice message={position.error.message} onRetry={() => void position.refetch()} />
+      )}
       {position.data && (
         <>
           <h2>{position.data.filename ?? "Position"}</h2>
+          <p>
+            <a href={href({ name: "ranking", positionId })}>Ranked list</a>
+          </p>
           <p data-testid="rubric-status">
             Rubric <strong>{position.data.rubric_status}</strong>, version{" "}
             <strong>{position.data.rubric_version}</strong>

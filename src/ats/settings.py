@@ -20,6 +20,8 @@ class Settings(BaseSettings):
     max_upload_mb: int = 10
     # §6.1 names gemini-3.8-flash, which returned persistent 503s (docs/PROGRESS.md, 2026-11-17).
     llm_model: str = "gemini-3.6-flash"
+    # "fake" answers with canned demo data and calls no model: for trying the interface only.
+    llm_provider: Literal["gemini", "fake"] = "gemini"
     llm_api_key: SecretStr | None = None
     # The free tier allows 5 requests per minute (§6.1); raise it on the paid tier.
     llm_rpm: int = 5

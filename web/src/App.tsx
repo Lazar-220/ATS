@@ -1,21 +1,46 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 
 import { fetchHealth } from "./api";
+import { AssessmentScreen } from "./AssessmentScreen";
 import { PositionEditor } from "./PositionEditor";
 import { PositionsList } from "./PositionsList";
+import { RankingScreen } from "./RankingScreen";
+import { href } from "./route";
+import { UploadForm } from "./Upload";
+import { useRoute } from "./useRoute";
+
+function Breadcrumb({ items }: { items: { label: string; to: string }[] }) {
+  return (
+    <nav aria-label="Breadcrumb" style={{ marginBottom: "1rem" }}>
+      {items.map((item, index) => (
+        <span key={item.to}>
+          {index > 0 && " › "}
+          <a href={item.to}>{item.label}</a>
+        </span>
+      ))}
+    </nav>
+  );
+}
 
 export function App() {
-  const [positionId, setPositionId] = useState<string | null>(null);
+  const route = useRoute();
   const health = useQuery({
     queryKey: ["health"],
     queryFn: fetchHealth,
     refetchInterval: 5000,
     retry: false,
   });
+  const home = { label: "Positions", to: href({ name: "positions" }) };
 
   return (
-    <main style={{ fontFamily: "system-ui, sans-serif", margin: "2rem auto", maxWidth: "64rem" }}>
+    <main
+      style={{
+        fontFamily: "system-ui, sans-serif",
+        margin: "2rem auto",
+        maxWidth: "72rem",
+        padding: "0 1rem",
+      }}
+    >
       <h1>ATS</h1>
       <p style={{ color: "#555" }}>
         {health.isPending && "Checking the API…"}
@@ -27,13 +52,41 @@ export function App() {
           </span>
         )}
       </p>
-      {positionId === null ? (
+      {route.name === "positions" && (
         <>
+          <UploadForm />
           <h2>Positions</h2>
-          <PositionsList onOpen={setPositionId} />
+          <PositionsList />
         </>
-      ) : (
-        <PositionEditor positionId={positionId} onBack={() => setPositionId(null)} />
+      )}
+      {route.name === "requirements" && (
+        <>
+          <Breadcrumb items={[home]} />
+          <PositionEditor positionId={route.positionId} />
+        </>
+      )}
+      {route.name === "ranking" && (
+        <>
+          <Breadcrumb items={[home]} />
+          <RankingScreen positionId={route.positionId} />
+        </>
+      )}
+      {route.name === "assessment" && (
+        <>
+          <Breadcrumb
+            items={[
+              home,
+              { label: "Ranked list", to: href({ name: "ranking", positionId: route.positionId }) },
+            ]}
+          />
+          <AssessmentScreen assessmentId={route.assessmentId} />
+        </>
+      )}
+      {route.name === "not-found" && (
+        <>
+          <p role="alert">There is no such page.</p>
+          <Breadcrumb items={[home]} />
+        </>
       )}
     </main>
   );
