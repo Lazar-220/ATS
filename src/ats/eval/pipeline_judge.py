@@ -15,6 +15,7 @@ from ats.llm.types import LLMClient, LLMUsage
 from ats.pipeline.context import ContextRequirement, build_context
 from ats.pipeline.facts import build_facts
 from ats.pipeline.judge import judge
+from ats.pipeline.listonly import list_only_detail
 from ats.pipeline.masking import mask_text
 from ats.pipeline.parsing import parse_cv
 from ats.pipeline.quotes import check_quote
@@ -72,5 +73,12 @@ class PipelineJudge:
                 verdict.verdict, verdict.quote, masked.masked_text, masked.spans, self._threshold
             )
             quote = verdict.quote if verdict.verdict != "not_met" else None
-            answers.append(JudgedVerdict(label, verdict.verdict, quote, check.flags))
+            # The list-only rule in code, as in production. The downgrade is not added to the
+            # quote-check flags: those say the quote failed, and this quote is fine.
+            downgraded = list_only_detail(verdict.verdict, check, facts.parsed_json) is not None
+            answers.append(
+                JudgedVerdict(
+                    label, "partial" if downgraded else verdict.verdict, quote, check.flags
+                )
+            )
         return answers

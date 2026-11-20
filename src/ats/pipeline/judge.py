@@ -12,6 +12,7 @@ from pydantic import BaseModel
 
 from ats.llm.types import LLMClient, LLMRequest, LLMUsage, ThinkingLevel
 from ats.pipeline.context import ContextPack, ContextRequirement
+from ats.pipeline.fence import fence
 from ats.prompts import load_prompt
 
 PROMPT_VERSION = "judge_v1"
@@ -44,11 +45,6 @@ class JudgeResult:
     usage: LLMUsage
 
 
-def _fence(text: str, tag: str) -> str:
-    # A literal closing tag inside the CV must not end the data block early.
-    return f"<{tag}>\n{text.replace(f'</{tag}>', f'</ {tag}>')}\n</{tag}>"
-
-
 def _requirement_line(req: ContextRequirement) -> str:
     parts = [f"id {req.label} [{req.kind}, weight {req.weight}]"]
     if req.min_months is not None:
@@ -76,17 +72,17 @@ def _facts(pack: ContextPack) -> str:
 
 def build_request(pack: ContextPack, retry_note: str | None = None) -> LLMRequest:
     requirements = "\n".join(_requirement_line(r) for r in pack.requirements)
-    parts = [_fence(requirements, "requirements")]
+    parts = [fence(requirements, "requirements")]
     if pack.rules:
-        parts.append(_fence("\n".join(pack.rules), "rules"))
+        parts.append(fence("\n".join(pack.rules), "rules"))
     # The facts differ per CV, so they come after the rubric and before the CV.
-    parts.append(_fence(_facts(pack), "facts"))
+    parts.append(fence(_facts(pack), "facts"))
     if retry_note is not None:
         # From the program, before the CV so the CV stays last. It also makes the retry a
         # different request, which the response cache would otherwise answer with the same
         # incomplete answer again.
         parts.append(retry_note)
-    parts.append(_fence(pack.masked_cv, "cv"))
+    parts.append(fence(pack.masked_cv, "cv"))
     return LLMRequest(
         system=load_prompt(PROMPT_VERSION),
         user="\n".join(parts),

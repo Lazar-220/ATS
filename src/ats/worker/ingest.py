@@ -22,6 +22,7 @@ from ats.llm.pricing import usage_cost
 from ats.observability import Observation, get_tracer
 from ats.pipeline.extract import PdfRejected, extract_text
 from ats.pipeline.facts import build_facts
+from ats.pipeline.injection import injection_flag
 from ats.pipeline.language import detect_language, detect_script
 from ats.pipeline.masking import mask_text
 from ats.pipeline.parsing import parse_cv
@@ -136,6 +137,10 @@ def _parse(
     assert row is not None and row[0] is not None
     # Flags set at extraction (hidden text, invisible characters) stay next to the parse flags.
     extraction_flags: list[dict[str, str]] = row[1] or []
+    # Pattern detection runs on the CV as extracted, whatever the model says about it (§4.4).
+    pattern_flag = injection_flag(row[0])
+    if pattern_flag is not None:
+        extraction_flags = [*extraction_flags, pattern_flag]
     settings = get_settings()
     tracer = get_tracer()
     with tracer.span("masking") as span:

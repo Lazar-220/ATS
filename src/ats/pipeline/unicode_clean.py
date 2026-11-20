@@ -15,13 +15,18 @@ import re
 import unicodedata
 from dataclasses import dataclass
 
+c = chr
 _REMOVED = {"Cf", "Co", "Cn"}
 # Other control characters are not text either, and NUL cannot be stored in Postgres: an
 # unmapped tag character comes out of PyMuPDF as NUL.
 _KEPT_CONTROLS = {"\n", "\t", "\r"}
 _WORD = re.compile(r"[^\W\d_]+")
-_CYRILLIC = re.compile(r"[Ѐ-ԯᲀ-᲏ⷠ-ⷿꙀ-ꚟ]")
-_LATIN = re.compile(r"[A-Za-zÀ-ɏḀ-ỿ]")
+# Cyrillic, supplement, extended-C, extended-A and B blocks; Latin basic, supplement,
+# extended-A/B and additional. Built from code points so the source is readable.
+_CYRILLIC = re.compile(
+    f"[{c(0x400)}-{c(0x52F)}{c(0x1C80)}-{c(0x1C8F)}{c(0x2DE0)}-{c(0x2DFF)}{c(0xA640)}-{c(0xA69F)}]"
+)
+_LATIN = re.compile(f"[A-Za-z{c(0xC0)}-{c(0x24F)}{c(0x1E00)}-{c(0x1EFF)}]")
 
 MIXED_SCRIPT = "mixed_script_words"
 INVISIBLE_CHARACTERS = "invisible_characters"
