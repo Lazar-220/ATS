@@ -148,12 +148,9 @@ def test_unexpected_errors_fail_the_document_and_a_reupload_recovers(
 
     monkeypatch.setattr(ingest_module, "extract_text", broken)
     upload(client, POSTING, [CV_ENGLISH])
-    wait_for(
-        lambda: (
-            conn.execute("SELECT 1 FROM document WHERE status = 'failed'").fetchone() is not None
-            and conn.execute("SELECT 1 FROM task_queue WHERE status = 'running'").fetchone() is None
-        )
-    )
+    # The posting fails too, and its job can end while the CV's is still queued for a retry, so
+    # "some document failed and nothing is running" is not the final state.
+    wait_until_settled(conn)
     failed = conn.execute("SELECT status_message FROM document WHERE kind = 'cv'").fetchone()
     assert failed is not None
     assert "Upload the file again" in failed["status_message"]
