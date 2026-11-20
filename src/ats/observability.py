@@ -154,6 +154,11 @@ class LangfuseTracer:
     def __init__(self, client: Any) -> None:
         self._client = client
 
+    @property
+    def client(self) -> Any:
+        """The SDK client, for the eval's dataset calls (`ats.eval.langfuse_export`)."""
+        return self._client
+
     def trace(
         self, name: str, *, input: Any = None, metadata: dict[str, Any] | None = None
     ) -> AbstractContextManager[Observation]:
