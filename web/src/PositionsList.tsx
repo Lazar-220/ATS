@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { fetchPositions } from "./api";
+import { ErrorNotice } from "./Notice";
+import { href } from "./route";
 
 const SETUP_LABEL = {
   pending: "waiting for the posting text",
@@ -9,13 +11,7 @@ const SETUP_LABEL = {
   failed: "failed",
 } as const;
 
-export function PositionsList({
-  onOpen,
-  onOpenRanking,
-}: {
-  onOpen: (id: string) => void;
-  onOpenRanking: (id: string) => void;
-}) {
+export function PositionsList() {
   const positions = useQuery({
     queryKey: ["positions"],
     queryFn: fetchPositions,
@@ -26,10 +22,10 @@ export function PositionsList({
     return <p>Loading…</p>;
   }
   if (positions.isError) {
-    return <p role="alert">{positions.error.message}</p>;
+    return <ErrorNotice message={positions.error.message} onRetry={() => void positions.refetch()} />;
   }
   if (positions.data.length === 0) {
-    return <p>No positions yet. Upload a posting with POST /rankings.</p>;
+    return <p>No positions yet. Upload a posting and CVs above to create one.</p>;
   }
   return (
     <table style={{ borderCollapse: "collapse", width: "100%" }}>
@@ -54,12 +50,8 @@ export function PositionsList({
                 : SETUP_LABEL[position.setup_status]}
             </td>
             <td style={{ padding: "0.25rem" }}>
-              <button type="button" onClick={() => onOpen(position.id)}>
-                Requirements
-              </button>{" "}
-              <button type="button" onClick={() => onOpenRanking(position.id)}>
-                Ranked list
-              </button>
+              <a href={href({ name: "requirements", positionId: position.id })}>Requirements</a>{" "}
+              <a href={href({ name: "ranking", positionId: position.id })}>Ranked list</a>
             </td>
           </tr>
         ))}

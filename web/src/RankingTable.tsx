@@ -1,6 +1,7 @@
 import { createColumnHelper, tableFeatures, useTable } from "@tanstack/react-table";
 
 import type { RankingRow } from "./api";
+import { href } from "./route";
 import { failedMandatoryLabel, formatScore, statusLabel } from "./ranking";
 
 const features = tableFeatures({});
@@ -10,7 +11,7 @@ const UNCONFIRMED_LABEL = "rubric unconfirmed";
 
 // No sorting here: the API's order (assessed first, then no failed mandatory requirement, then
 // score) is the ranking, and a client-side sort would contradict it (§2.4).
-function buildColumns(onOpen: (assessmentId: string) => void) {
+function buildColumns(positionId: string) {
   return helper.columns([
     helper.display({ id: "rank", header: "#", cell: ({ row }) => row.index + 1 }),
     helper.display({
@@ -53,22 +54,22 @@ function buildColumns(onOpen: (assessmentId: string) => void) {
       id: "open",
       header: "",
       cell: ({ row }) => (
-        <button type="button" onClick={() => onOpen(row.original.assessment_id)}>
+        <a
+          href={href({
+            name: "assessment",
+            positionId,
+            assessmentId: row.original.assessment_id,
+          })}
+        >
           Check verdicts
-        </button>
+        </a>
       ),
     }),
   ]);
 }
 
-export function RankingTable({
-  rows,
-  onOpen,
-}: {
-  rows: RankingRow[];
-  onOpen: (assessmentId: string) => void;
-}) {
-  const table = useTable({ features, columns: buildColumns(onOpen), data: rows });
+export function RankingTable({ rows, positionId }: { rows: RankingRow[]; positionId: string }) {
+  const table = useTable({ features, columns: buildColumns(positionId), data: rows });
   return (
     <table style={{ borderCollapse: "collapse", width: "100%" }}>
       <thead>

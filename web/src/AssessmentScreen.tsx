@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { Assessment, Verdict } from "./api";
 import { quoteState, segment, toRanges } from "./highlight";
 import { useAssessment } from "./hooks";
+import { ErrorNotice } from "./Notice";
 import { formatScore } from "./ranking";
 
 const VERDICT_LABEL: Record<Verdict["verdict"], string> = {
@@ -172,7 +173,9 @@ export function AssessmentScreen({ assessmentId }: { assessmentId: string }) {
     return <p>Loading…</p>;
   }
   if (assessment.isError) {
-    return <p role="alert">{assessment.error.message}</p>;
+    return (
+      <ErrorNotice message={assessment.error.message} onRetry={() => void assessment.refetch()} />
+    );
   }
   const data = assessment.data;
   return (

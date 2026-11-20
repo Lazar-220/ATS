@@ -2,6 +2,7 @@ import { useState, type FormEvent } from "react";
 
 import type { RankingStatus } from "./api";
 import { useRankingStatus, useUpload } from "./hooks";
+import { href } from "./route";
 import { documentLabel, documentNeedsAttention, isPdfName, requestLabel } from "./status";
 
 function Progress({ status }: { status: RankingStatus }) {
@@ -39,7 +40,7 @@ function Progress({ status }: { status: RankingStatus }) {
   );
 }
 
-export function UploadForm({ onOpenRanking }: { onOpenRanking: (positionId: string) => void }) {
+export function UploadForm() {
   const [posting, setPosting] = useState<File | null>(null);
   const [cvs, setCvs] = useState<File[]>([]);
   const [problem, setProblem] = useState<string | null>(null);
@@ -105,9 +106,9 @@ export function UploadForm({ onOpenRanking }: { onOpenRanking: (positionId: stri
           <Progress status={status.data} />
           {status.data.status === "done" && (
             <p>
-              <button type="button" onClick={() => onOpenRanking(status.data.position_id)}>
+              <a href={href({ name: "ranking", positionId: status.data.position_id })}>
                 Open the ranked list
-              </button>
+              </a>
             </p>
           )}
           {status.data.status === "failed" && (
