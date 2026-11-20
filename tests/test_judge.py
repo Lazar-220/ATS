@@ -8,7 +8,7 @@ from ats.llm.fake import FakeLLMClient
 from ats.llm.managed import ManagedLLMClient
 from ats.llm.ratelimit import RateLimiter
 from ats.llm.types import LLMRequest, RawCompletion
-from ats.pipeline.context import ContextPack, ContextRequirement
+from ats.pipeline.context import ContextPack, ContextRequirement, build_context
 from ats.pipeline.judge import (
     JudgeIncomplete,
     JudgeOutput,
@@ -16,6 +16,7 @@ from ats.pipeline.judge import (
     build_request,
     judge,
 )
+from ats.pipeline.masking import mask_text
 
 
 def _pack(cv: str = "Worked with Python for 4 years.") -> ContextPack:
@@ -147,3 +148,30 @@ def test_incomplete_twice_fails_after_two_provider_calls_and_a_redelivery_varies
     transport._answers.append(JudgeOutput(verdicts=[_verdict(1), _verdict(2)]))  # pyright: ignore[reportPrivateUsage]
     result = judge(client, _pack(), attempt=2)
     assert result.calls == 2 and len(transport.requests) == 3
+
+
+def test_the_judge_request_carries_no_contact_data(tmp_path: Path) -> None:
+    raw = (
+        "Marko Petrovic\n"
+        "Email: marko.petrovic@example.com\n"
+        "Phone: +381 64 123 4567\n"
+        "Bulevar Kralja Aleksandra 15\n"
+        "Worked with Python for 4 years at Acme.\n"
+    )
+    masked = mask_text(raw)
+    # Guard: masking found all three, so a pass below is not an empty CV.
+    assert masked.contact.full_name and masked.contact.email and masked.contact.phone
+    parsed = {
+        "tenure": {"total_months": 48, "as_of": "2026-11-17"},
+        "experience": [],
+    }
+    pack = build_context(masked.masked_text, parsed, _pack().requirements)
+
+    transport = _Transport(JudgeOutput(verdicts=[_verdict(1), _verdict(2)]))
+    judge(_managed(transport, tmp_path), pack)
+
+    (request,) = transport.requests
+    sent = request.system + "\n" + request.user
+    for value in ("Marko", "Petrovic", "marko.petrovic@example.com", "example.com", "123 4567"):
+        assert value.lower() not in sent.lower()
+    assert "Python for 4 years" in request.user
