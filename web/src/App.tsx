@@ -4,10 +4,16 @@ import { useState } from "react";
 import { fetchHealth } from "./api";
 import { PositionEditor } from "./PositionEditor";
 import { PositionsList } from "./PositionsList";
+import { RankingScreen } from "./RankingScreen";
 import { UploadForm } from "./Upload";
 
+type View =
+  | { name: "positions" }
+  | { name: "requirements"; positionId: string }
+  | { name: "ranking"; positionId: string };
+
 export function App() {
-  const [positionId, setPositionId] = useState<string | null>(null);
+  const [view, setView] = useState<View>({ name: "positions" });
   const health = useQuery({
     queryKey: ["health"],
     queryFn: fetchHealth,
@@ -28,14 +34,31 @@ export function App() {
           </span>
         )}
       </p>
-      {positionId === null ? (
+      {view.name === "positions" && (
         <>
-          <UploadForm onOpenRanking={setPositionId} />
+          <UploadForm onOpenRanking={(positionId) => setView({ name: "ranking", positionId })} />
           <h2>Positions</h2>
-          <PositionsList onOpen={setPositionId} />
+          <PositionsList
+            onOpen={(positionId) => setView({ name: "requirements", positionId })}
+            onOpenRanking={(positionId) => setView({ name: "ranking", positionId })}
+          />
         </>
-      ) : (
-        <PositionEditor positionId={positionId} onBack={() => setPositionId(null)} />
+      )}
+      {view.name === "requirements" && (
+        <PositionEditor
+          positionId={view.positionId}
+          onBack={() => setView({ name: "positions" })}
+        />
+      )}
+      {view.name === "ranking" && (
+        <>
+          <p>
+            <button type="button" onClick={() => setView({ name: "positions" })}>
+              ← Positions
+            </button>
+          </p>
+          <RankingScreen positionId={view.positionId} onOpenAssessment={() => undefined} />
+        </>
       )}
     </main>
   );

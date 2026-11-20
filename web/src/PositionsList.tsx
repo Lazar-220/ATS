@@ -9,7 +9,13 @@ const SETUP_LABEL = {
   failed: "failed",
 } as const;
 
-export function PositionsList({ onOpen }: { onOpen: (id: string) => void }) {
+export function PositionsList({
+  onOpen,
+  onOpenRanking,
+}: {
+  onOpen: (id: string) => void;
+  onOpenRanking: (id: string) => void;
+}) {
   const positions = useQuery({
     queryKey: ["positions"],
     queryFn: fetchPositions,
@@ -49,7 +55,10 @@ export function PositionsList({ onOpen }: { onOpen: (id: string) => void }) {
             </td>
             <td style={{ padding: "0.25rem" }}>
               <button type="button" onClick={() => onOpen(position.id)}>
-                Open
+                Requirements
+              </button>{" "}
+              <button type="button" onClick={() => onOpenRanking(position.id)}>
+                Ranked list
               </button>
             </td>
           </tr>
