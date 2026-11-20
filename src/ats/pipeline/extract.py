@@ -2,7 +2,8 @@
 
 Per page: hidden spans are found from the text trace and the rendered page and dropped (§4.4),
 then the cleaning steps run. A step receives the page and the text so far and returns the new
-text. What was removed is logged and returned as flags for HR; nothing here rejects a CV for it.
+text. After the last page, invisible Unicode characters are deleted and homoglyph words are
+reported. What was removed is logged and returned as flags for HR; nothing here rejects a CV for it.
 """
 
 import logging
@@ -15,6 +16,12 @@ from typing import cast
 import pymupdf
 
 from ats.pipeline.hidden import find_hidden, text_without
+from ats.pipeline.unicode_clean import (
+    INVISIBLE_CHARACTERS,
+    MIXED_SCRIPT,
+    mixed_script_words,
+    remove_invisible,
+)
 
 log = logging.getLogger(__name__)
 
@@ -44,7 +51,7 @@ class ScannedPdfError(PdfRejected):
 class ExtractedText:
     text: str
     page_count: int
-    # For HR, in the shape of `document.flags` (hidden_text).
+    # For HR, in the shape of `document.flags` (hidden_text, invisible_characters, ...).
     flags: list[dict[str, str]] = field(default_factory=lambda: list[dict[str, str]]())
 
 
@@ -105,7 +112,7 @@ def extract_text(
             "The PDF contains little or no selectable text and looks like a scan. "
             "Upload a PDF exported from a text editor, not an image."
         )
-    text = "\n\n".join(page for page in pages if page)
+    text, invisible = remove_invisible("\n\n".join(page for page in pages if page))
     flags: list[dict[str, str]] = []
     if hidden_by_reason:
         reasons = ", ".join(f"{reason} ({n})" for reason, n in sorted(hidden_by_reason.items()))
@@ -114,6 +121,25 @@ def extract_text(
                 "code": HIDDEN_TEXT,
                 "detail": f"removed {sum(hidden_by_reason.values())} characters of hidden text "
                 f"on page(s) {', '.join(map(str, sorted(hidden_pages)))}: {reasons}",
+            }
+        )
+    if invisible:
+        log.warning("removed %s invisible characters (Cf, Co, Cn)", invisible)
+        flags.append(
+            {
+                "code": INVISIBLE_CHARACTERS,
+                "detail": f"removed {invisible} invisible characters "
+                "(zero-width, format, private use)",
+            }
+        )
+    mixed = mixed_script_words(text)
+    if mixed.count:
+        log.warning("%s words mix Cyrillic and Latin letters", mixed.count)
+        flags.append(
+            {
+                "code": MIXED_SCRIPT,
+                "detail": f"{mixed.count} word(s) mix Cyrillic and Latin letters, for example "
+                + ", ".join(mixed.examples),
             }
         )
     return ExtractedText(text=text, page_count=page_count, flags=flags)
