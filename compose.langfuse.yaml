@@ -1,4 +1,4 @@
-# Langfuse self-host (v3): web, worker, Postgres, ClickHouse, Redis, MinIO (plan section 6.3).
+# Langfuse self-host (v4): web, worker, Postgres, ClickHouse, Redis, MinIO (plan section 6.3).
 #
 # Started by `make langfuse-up`, a separate compose project (`ats-langfuse`) so the application's
 # Postgres in compose.yaml is never touched. Written from the images' own environment and not
@@ -7,6 +7,10 @@
 #
 # Every secret below is an obviously-local placeholder. This stack listens on 127.0.0.1 only and
 # holds development traces: do not reuse these values anywhere that is reachable from a network.
+# Version: v4, because the Python SDK in uv.lock (5.x) sends experiments through OpenTelemetry
+# attributes that a v3 server accepts but does not turn into dataset runs (tried: 3.227.1, the
+# SDK got HTTP 400 and no run appeared). v4 needs ClickHouse 26.x for its migrations (25.8 failed).
+#
 # Host ports: 3000 (UI and API) only; nothing here uses 5432, 8000 or 5173.
 #
 # RAM: the memory limits below keep the six services under about 5 GB in total. Stop the
@@ -48,7 +52,7 @@ x-langfuse-env: &langfuse-env
 
 services:
   langfuse-web:
-    image: langfuse/langfuse:3.227.1
+    image: langfuse/langfuse:4.83.0
     restart: unless-stopped
     # With 1 GB the Next.js server died with "JavaScript heap out of memory" at about 500 MB
     # during start-up (observed), so it gets room and an explicit V8 heap size.
@@ -87,7 +91,7 @@ services:
       start_period: 60s
 
   langfuse-worker:
-    image: langfuse/langfuse-worker:3.227.1
+    image: langfuse/langfuse-worker:4.83.0
     restart: unless-stopped
     mem_limit: 1g
     depends_on:
@@ -97,8 +101,10 @@ services:
       minio: {condition: service_healthy}
     environment:
       <<: *langfuse-env
+      # Bound to the container's own address unless told otherwise (see the web service).
+      HOSTNAME: 0.0.0.0
     healthcheck:
-      test: ["CMD-SHELL", "wget -q -O /dev/null http://$$(hostname -i):3030/api/health || exit 1"]
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:3030/api/health || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 30
@@ -121,7 +127,7 @@ services:
       retries: 20
 
   clickhouse:
-    image: clickhouse/clickhouse-server:25.8
+    image: clickhouse/clickhouse-server:26.10.4.207
     restart: unless-stopped
     mem_limit: 1536m
     user: "101:101"
