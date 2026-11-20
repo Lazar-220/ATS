@@ -34,6 +34,12 @@ class Settings(BaseSettings):
     llm_fallback: Literal["", "openrouter"] = ""
     openrouter_api_key: SecretStr | None = None
     openrouter_model: str = "google/gemma-4-31b-it:free"
+    # Tracing is off unless this is true; the app, the worker and the eval run the same without
+    # Langfuse (§6.3). The keys are the project's API keys from the Langfuse UI.
+    langfuse_enabled: bool = False
+    langfuse_host: str = "http://localhost:3000"
+    langfuse_public_key: str = ""
+    langfuse_secret_key: SecretStr | None = None
 
 
 @lru_cache

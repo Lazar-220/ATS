@@ -270,7 +270,9 @@ logs a warning. Scores from it mean nothing; switch back to `gemini` for real ju
 | `OPENROUTER_MODEL` | `google/gemma-4-31b-it:free` | the free model the fallback uses (checked in OpenRouter's public model list on 2026-11-17) | 1.4a |
 | `QUOTE_FUZZY_THRESHOLD` | `90` | a judge quote passes the quote check when it is in the CV verbatim after normalization, or at this `rapidfuzz` score (0 to 100) or above; numbers in the quote must exist verbatim either way (§3.2) | 1.4b |
 | `GIT_COMMIT` | derived from `git` | overrides the code version in the worker's startup line; set it where there is no `.git` (a Docker image shows `unknown` otherwise) | 1.2 |
-| `LANGFUSE_ENABLED` | `false` | tracing on or off | 1.6 |
+| `LANGFUSE_ENABLED` | `false` | tracing on or off. Off, the SDK is not even imported and nothing needs Langfuse running. On, every LLM call is a generation and every assessment a trace; a Langfuse that is down never fails a job (failures are logged) | 1.6 |
+| `LANGFUSE_HOST` | `http://localhost:3000` | where the Langfuse API is (the local stack of `make langfuse-up`) | 1.6 |
+| `LANGFUSE_PUBLIC_KEY` / `LANGFUSE_SECRET_KEY` | empty | the Langfuse project's API keys. `.env.example` holds the placeholders that `compose.langfuse.yaml` creates on first start (`pk-lf-ats-local`, `sk-lf-ats-local`); they are for the local stack only. With `LANGFUSE_ENABLED=true` and no keys, tracing stays off with a warning | 1.6 |
 | `EMBEDDING_MODEL` | `BAAI/bge-m3` | local embedding model | 2.1 |
 | `RERANKER_MODEL` | empty (off) | local reranker | 2.2 |
 | `ORCHESTRATOR` | `manual` | `manual` or `langgraph` | 3.6 |
