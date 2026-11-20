@@ -9,6 +9,7 @@ Imported by the worker only. The API never calls the LLM.
 """
 
 import logging
+import time
 from datetime import UTC, datetime
 from typing import Any, cast
 from uuid import UUID
@@ -20,6 +21,7 @@ from ats.db.task_queue import Job
 from ats.llm.factory import get_llm_client
 from ats.llm.pricing import cost_usd, rate_on
 from ats.llm.types import LLMClient
+from ats.observability import Observation, Tracer, get_tracer
 from ats.pipeline.context import ContextRequirement, build_context
 from ats.pipeline.judge import PROMPT_VERSION, THINKING_LEVEL, judge
 from ats.pipeline.masking import Span
@@ -27,7 +29,7 @@ from ats.pipeline.quotes import check_quote
 from ats.pipeline.score import ScoredRequirement, compute_score
 from ats.services.assessments import JUDGE_JOB
 from ats.services.hr_answers import REJUDGE_JOB
-from ats.settings import get_settings
+from ats.settings import Settings, get_settings
 from ats.worker.registry import register
 
 log = logging.getLogger(__name__)
@@ -91,6 +93,53 @@ def assess(
             "candidate %s, position %s: already assessed, no LLM call", candidate_id, position_id
         )
         return False
+    tracer = get_tracer()
+    with tracer.trace(
+        "assessment",
+        metadata={
+            "candidate_id": str(candidate_id),
+            "position_id": str(position_id),
+            "rubric_version": loaded["version"],
+            "attempt": attempt,
+        },
+    ) as root:
+        _record_ingest_steps(tracer, loaded["parsed_json"])
+        _judge_and_store(pool, client, settings, loaded, candidate_id, position_id, attempt, root)
+    return True
+
+
+def _record_ingest_steps(tracer: Tracer, parsed_json: dict[str, Any]) -> None:
+    """Show the steps that ran at ingest inside this assessment's trace.
+
+    Extraction, masking and parsing happen once per CV, before any position is known, so their
+    real spans are in the ingest trace. These stand-ins carry the measured duration and the
+    link, so one trace still lists every step (the call's generation is in the ingest trace).
+    """
+    ingest = cast(dict[str, Any], parsed_json.get("ingest") or {})
+    steps = cast(dict[str, float | None], ingest.get("steps_s") or {})
+    for name, seconds in steps.items():
+        with tracer.span(
+            name,
+            metadata={
+                "recorded_at_ingest": True,
+                "duration_s": None if seconds is None else round(seconds, 4),
+                "ingest_trace_id": ingest.get("trace_id"),
+            },
+        ):
+            pass
+
+
+def _judge_and_store(
+    pool: ConnectionPool,
+    client: LLMClient,
+    settings: Settings,
+    loaded: dict[str, Any],
+    candidate_id: UUID,
+    position_id: UUID,
+    attempt: int,
+    root: Observation,
+) -> None:
+    tracer = get_tracer()
     version: int = loaded["version"]
     rows = loaded["requirements"]
     # The model sees labels 1..n; the labels map back to row ids here and nowhere else.
@@ -112,25 +161,53 @@ def assess(
     )
 
     # The slow call runs outside any transaction (the CV text is already read).
-    judged = judge(client, pack, attempt=attempt)
-
-    checks = {
-        label: check_quote(
-            verdict.verdict,
-            verdict.quote,
-            loaded["masked_text"],
-            loaded["spans"],
-            settings.quote_fuzzy_threshold,
+    with tracer.span("judge", input={"requirements": len(rows)}) as span:
+        judged = judge(client, pack, attempt=attempt)
+        span.update(
+            output={
+                "calls": judged.calls,
+                "cache_hit": judged.usage.cache_hit,
+                "latency_s": round(judged.usage.latency_s, 3),
+            }
         )
-        for label, verdict in judged.verdicts.items()
-    }
-    score = compute_score(
-        [
-            ScoredRequirement(label_of[row[0]], label_of.get(row[1]), row[3], float(row[4]))
-            for row in rows
-        ],
-        {label: verdict.verdict for label, verdict in judged.verdicts.items()},
-    )
+
+    with tracer.span("quote_check") as span:
+        started = time.perf_counter()
+        checks = {
+            label: check_quote(
+                verdict.verdict,
+                verdict.quote,
+                loaded["masked_text"],
+                loaded["spans"],
+                settings.quote_fuzzy_threshold,
+            )
+            for label, verdict in judged.verdicts.items()
+        }
+        quote_check_s = time.perf_counter() - started
+        span.update(
+            output={
+                "duration_s": round(quote_check_s, 4),
+                "checked": len(checks),
+                "flagged": sum(1 for check in checks.values() if check.flags),
+            }
+        )
+    with tracer.span("score") as span:
+        started = time.perf_counter()
+        score = compute_score(
+            [
+                ScoredRequirement(label_of[row[0]], label_of.get(row[1]), row[3], float(row[4]))
+                for row in rows
+            ],
+            {label: verdict.verdict for label, verdict in judged.verdicts.items()},
+        )
+        score_s = time.perf_counter() - started
+        span.update(
+            output={
+                "duration_s": round(score_s, 4),
+                "score": score.score,
+                "mandatory_failed": score.mandatory_failed,
+            }
+        )
     rate = rate_on(settings.llm_model, datetime.now(UTC).date())
     cost = cost_usd(rate, judged.usage.input_tokens, judged.usage.output_tokens) if rate else None
     trace = {
@@ -143,7 +220,15 @@ def assess(
         "cache_hit": judged.usage.cache_hit,
         "latency_s": round(judged.usage.latency_s, 3),
         "quote_fuzzy_threshold": settings.quote_fuzzy_threshold,
+        # Code-only steps timed here; extraction, masking and parsing are in the CV's own row.
+        "steps_s": {
+            "judge": round(judged.usage.latency_s, 4),
+            "quote_check": round(quote_check_s, 4),
+            "score": round(score_s, 4),
+        },
     }
+    if root.trace_id is not None:
+        trace["trace_id"] = root.trace_id
 
     with pool.connection() as conn:
         # A share lock: an edit (which takes the row for update) waits for this write or
@@ -207,7 +292,6 @@ def assess(
         judged.usage.output_tokens,
         judged.usage.cache_hit,
     )
-    return True
 
 
 def _mark_failed(pool: ConnectionPool, candidate_id: UUID, position_id: UUID, error: str) -> None:
