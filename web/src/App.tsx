@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { fetchHealth } from "./api";
+import { AssessmentScreen } from "./AssessmentScreen";
 import { PositionEditor } from "./PositionEditor";
 import { PositionsList } from "./PositionsList";
 import { RankingScreen } from "./RankingScreen";
@@ -10,7 +11,8 @@ import { UploadForm } from "./Upload";
 type View =
   | { name: "positions" }
   | { name: "requirements"; positionId: string }
-  | { name: "ranking"; positionId: string };
+  | { name: "ranking"; positionId: string }
+  | { name: "assessment"; positionId: string; assessmentId: string };
 
 export function App() {
   const [view, setView] = useState<View>({ name: "positions" });
@@ -57,7 +59,25 @@ export function App() {
               ← Positions
             </button>
           </p>
-          <RankingScreen positionId={view.positionId} onOpenAssessment={() => undefined} />
+          <RankingScreen
+            positionId={view.positionId}
+            onOpenAssessment={(assessmentId) =>
+              setView({ name: "assessment", positionId: view.positionId, assessmentId })
+            }
+          />
+        </>
+      )}
+      {view.name === "assessment" && (
+        <>
+          <p>
+            <button
+              type="button"
+              onClick={() => setView({ name: "ranking", positionId: view.positionId })}
+            >
+              ← Ranked list
+            </button>
+          </p>
+          <AssessmentScreen assessmentId={view.assessmentId} />
         </>
       )}
     </main>
