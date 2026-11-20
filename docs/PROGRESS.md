@@ -180,3 +180,17 @@ Work a phase deferred, with the phase that must pick it up.
   - No screen has been seen in a browser yet (`MANUAL_CHECKS.md`).
 - `LLM_PROVIDER=fake` gives meaningless demo scores. It is logged loudly at worker start, and it must never be set in a real `.env`.
 - Environment: `make up` needs Docker Desktop running on this Windows machine, and `make` must be run from Git Bash, not cmd.exe or PowerShell.
+
+## Owner review
+
+These are decisions the orchestrator made alone during the autonomous run of 2026-11-20. Each one touches a schema, the public API, a threshold, a dependency or a deviation from the plan, so the owner should check it later.
+
+| Date | Phase | Decision | Why | Alternatives rejected |
+| --- | --- | --- | --- | --- |
+| 2026-11-20 | 1.4b | Phase 1.4b was merged with the real-LLM "Done when" items still deferred. | The deferral was approved by the owner on 2026-11-17. The autonomous instruction said to merge once the verifier found no blocker. | Holding the merge until the measurement pass. |
+| 2026-11-20 | 1.4b | **Quote-check threshold rule.** A quote that starts right after `<digit>[.,]` or ends right before `[.,]<digit>` counts as cutting a number. The exception is when the run on the other side of the separator has exactly 4 digits (a year, as in "03.2019"). | It stops "5 years" being verified against "1.5 years" while keeping date quotes. Known gaps are listed under Known risks. | No decimal rule, which gives false passes. A rule with no year exception, which flags every "MM.YYYY" date quote. |
+| 2026-11-20 | 1.5 | **New dependency:** `openapi-typescript` ^7.13 as a web devDependency, plus an `overrides` entry for its `typescript@^5` peer, because the repo is on TypeScript 6. | The phase prompt prefers types generated from the OpenAPI schema. | Hand-written types. `--legacy-peer-deps`, which is not reproducible with `npm ci`. |
+| 2026-11-20 | 1.5 | **New config value** `LLM_PROVIDER=fake`, a demo client that the worker builds through `LLMClient` with canned answers. The default is `gemini`. When set it is logged loudly at worker start, and `compose.yaml` defaults it to `gemini`. | It makes "from a clean database to a ranked list" checkable with no real LLM call. Not in the plan. | No walkthrough before the owner's real run. An eval-only fake. |
+| 2026-11-20 | 1.5 | Web unit tests use Node's built-in `node --test` with no test framework. The generated types replaced the hand-written runtime validators in `web/src/api.ts`, so a response is trusted once its status is OK. | This needs no new dependency. The API schema is generated and checked for staleness in `make check`. | Vitest or Jest. Keeping the runtime validators. |
+| 2026-11-20 | 1.5 | No API change for in-flight CVs. The ranking lists only assessed rows, and the upload screen shows per-document progress. | An additive field would change the public API contract. | A per-position "in progress" count. |
+| 2026-11-20 | tooling | `make smoke-real` is a thin wrapper: `ats.eval run --variant A --split dev --limit 2 --stages judge`. It is a dry run by default and needs `YES=1` for a real run, about 4 to 6 calls. It has no call cap of its own and no refusal for `LLM_PROVIDER=fake`. | The owner's amendment: keep it minimal, `make eval LIMIT=2` already covers it. | A custom end-to-end scenario with a hard cap of 10 calls. |
