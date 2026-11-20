@@ -3,7 +3,7 @@ UNIT_TESTS := not integration and not llm
 
 .PHONY: check test \
 	up down up-all migrate api worker web test-int setup-missing \
-	eval api-types \
+	eval smoke-real api-types \
 	langfuse-up langfuse-down \
 	eval-redteam \
 	reindex \
@@ -43,6 +43,11 @@ VARIANT ?= A
 SPLIT ?= dev
 eval:
 	uv run python -m ats.eval run --variant $(VARIANT) --split $(SPLIT) 		$(if $(LIMIT),--limit $(LIMIT)) $(if $(STAGES),--stages $(STAGES)) 		$(if $(DRY_RUN),--dry-run) $(if $(YES),--yes) $(if $(FALLBACK),--fallback $(FALLBACK))
+
+# Manual real-model smoke test: the variant A judge on 2 dev CVs (4 calls, a few cents). Dry run
+# unless YES=1. Honours LLM_MODEL and LLM_RPM. Needs LLM_API_KEY; never run by make check.
+smoke-real:
+	uv run python -m ats.eval run --variant A --split dev --limit 2 --stages judge $(if $(YES),--yes,--dry-run)
 
 # Regenerate the web types from the API schema (no server or database needed).
 api-types:

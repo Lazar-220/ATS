@@ -73,3 +73,9 @@ Same inputs as above. Do this from a clean database, with no other tool than the
 9. **Real name, masked model input.** The name shown is the real one. With the real model, the
    worker's log and the model never see it; with the demo worker the integration test
    `tests/integration/test_demo_walkthrough.py` asserts it (run `make test-int`).
+
+## Real LLM smoke test (owner, costs real money)
+
+1. `make smoke-real`: dry run, no call. Expect `LLM calls: 4`, about 5400 input and 6600 output tokens, about $0.03.
+2. `make smoke-real YES=1`: 4 real calls (parse and judge for 2 dev CVs), a few cents; more only if a judge answer lacks a requirement.
+3. Pass: the run ends with the metrics table and a result file under `eval/results/`, no error, flagged-verdict share low, cost and latency printed. A daily 429 stops the run with a message; try again after the quota resets. A repeat run is served from the cache.
