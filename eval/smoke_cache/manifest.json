@@ -4,10 +4,10 @@
   "demo": true,
   "baseline": false,
   "note": "DEMO answers from the keyword-match demo provider: they measure the plumbing, not a model. Synthetic golden CVs only. Not a baseline.",
-  "created": "2026-11-21T00:07:20Z",
+  "created": "2026-11-21T13:10:28Z",
   "prompt_versions": {
     "parse": "cv_parse_v1",
-    "judge": "judge_v1"
+    "judge": "judge_v2"
   },
   "cv_ids": [
     "ba_01",

@@ -1,8 +1,8 @@
 """A skill that exists only in a skills list gives at most `partial` (§4.4, hidden skills lists).
 
-The judge prompt says so (`judge_v1`), and this is the same rule in code, because a model can
-slip and "code computes, the LLM judges". A `met` verdict is downgraded to `partial` when its
-quote lies in a skills item and
+The judge prompt says so (`judge_v1`, `judge_v2`), and this is the same rule in code, because a
+model can slip and "code computes, the LLM judges". A `met` verdict is downgraded to `partial`
+when its quote lies in a skills item and
 
 - no experience, project, certificate or education item overlaps the quote, and
 - none of the skill names the quote covers is mentioned in an experience, project or

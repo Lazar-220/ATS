@@ -124,7 +124,7 @@ def test_the_pipeline_judge_scores_a_gold_answering_model_and_flags_an_invented_
     assert len(client.calls) == 2 * LIMIT
     assert result.usage.llm_calls == 2 * LIMIT
     assert result.usage.latency_p95_s == 0.0  # the fake client reports no latency
-    assert result.pipeline_version.prompts["judge"] == "judge_v1"
+    assert result.pipeline_version.prompts["judge"] == "judge_v2"
     assert result.pipeline_version.judge == "llm"
 
 
