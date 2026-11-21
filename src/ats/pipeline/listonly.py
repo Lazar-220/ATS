@@ -33,9 +33,37 @@ def _overlaps(item: dict[str, Any], start: int, end: int) -> bool:
     return bool(item_start < end and start < item_end)
 
 
+# Serbian case endings add up to three letters to a name ("Pythonu", "Excelom", "SQL-u").
+_MAX_ENDING = 3
+# A name of at least this many letters also confirms through a longer word that starts with it
+# ("Python" in "Pythonu") and through a shorter word it starts with ("PostgreSQL" in "Postgres").
+_PREFIX_MIN = 4
+_SHORTER_WORD_MIN = 5
+
+
+def _word_confirms(token: str, word: str) -> bool:
+    if word == token:
+        return True
+    if len(token) >= _PREFIX_MIN:
+        return word.startswith(token) or (len(word) >= _SHORTER_WORD_MIN and token.startswith(word))
+    # Short names ("R", "Go") match whole words only, so they never hide inside "Golang" or
+    # "Gorenje"; from three letters on, a case ending of up to three letters is allowed.
+    return (
+        len(token) == _PREFIX_MIN - 1
+        and word.startswith(token)
+        and (len(word) - len(token) <= _MAX_ENDING)
+    )
+
+
 def _mentioned(name: str, text: str) -> bool:
-    folded = normalize_for_lexical(name).strip()
-    return bool(folded) and re.search(rf"(?<!\w){re.escape(folded)}(?!\w)", text) is not None
+    """Whether a skill's name occurs in `text` (already folded), in any case form.
+
+    Both sides are folded and transliterated (`normalize_for_lexical`), so Latin and Cyrillic
+    agree. Not covered: a Latin name against its Cyrillic respelling ("Python" and "Питхон").
+    """
+    tokens = re.findall(r"\w+", normalize_for_lexical(name))
+    words = set(re.findall(r"\w+", text))
+    return any(_word_confirms(token, word) for token in tokens for word in words)
 
 
 def list_only_detail(verdict: str, check: CheckedQuote, parsed_json: dict[str, Any]) -> str | None:

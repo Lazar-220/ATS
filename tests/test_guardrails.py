@@ -21,7 +21,7 @@ from ats.pipeline.parsing import (
     SkillItem,
 )
 from ats.pipeline.parsing import build_request as parse_request
-from ats.pipeline.quotes import check_quote
+from ats.pipeline.quotes import CheckedQuote, check_quote
 from ats.prompts import load_prompt
 
 GOLDEN_CVS = sorted((Path(__file__).resolve().parents[1] / "eval" / "golden" / "cvs").glob("*.pdf"))
@@ -235,3 +235,57 @@ def test_no_golden_cv_is_flagged() -> None:
         if detect_injection(extract_text(path.read_bytes(), min_chars_per_page=100).text)
     ]
     assert flagged == []
+
+
+# ---- list only: a skill confirmed in an inflected or variant form -----------------------------
+
+
+def _inflection_facts(skill: str, job: str) -> dict[str, object]:
+    return {
+        "skills": [{"name": skill, "snippet": skill, "char_start": 0, "char_end": 40}],
+        "experience": [{"snippet": job, "char_start": 100, "char_end": 200}],
+        "projects": [],
+        "certificates": [],
+        "education": [],
+    }
+
+
+def _downgraded(skill: str, job: str) -> bool:
+    return (
+        list_only_detail("met", CheckedQuote((), 5, 15), _inflection_facts(skill, job)) is not None
+    )
+
+
+@pytest.mark.parametrize(
+    ("skill", "job"),
+    [
+        ("Python", "Razvoj backend servisa u Pythonu"),
+        ("Excel", "Izveštaji u Excelu"),
+        ("PostgreSQL", "Optimizacija upita u Postgres bazi"),
+        ("Питхон", "Развој сервиса у Питхону"),
+        ("SQL", "Upiti u SQL-u"),
+        ("Питхон", "Razvoj u Pithonu"),  # Cyrillic skill, Latin job: same folded word
+    ],
+)
+def test_a_skill_confirmed_in_an_inflected_form_is_not_downgraded(skill: str, job: str) -> None:
+    assert not _downgraded(skill, job)
+
+
+@pytest.mark.parametrize(
+    ("skill", "job"),
+    [
+        ("Python", "Vođenje tima od osam ljudi"),
+        ("R", "Gorenje servis, radio sam kao rukovodilac"),
+        ("Go", "Golang i Gorenje aparati"),
+        ("Kubernetes", "Razvoj backend servisa u Pythonu"),
+    ],
+)
+def test_a_list_only_skill_and_short_names_inside_other_words_are_still_downgraded(
+    skill: str, job: str
+) -> None:
+    assert _downgraded(skill, job)
+
+
+def test_a_short_name_is_confirmed_by_the_whole_word() -> None:
+    assert not _downgraded("R", "Statistička analiza u R i Excelu")
+    assert not _downgraded("Go", "Servisi napisani u Go")
