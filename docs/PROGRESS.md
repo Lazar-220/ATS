@@ -36,10 +36,10 @@ Read this at the start of every session. Update it at the end of every phase.
 
 Hands-free run, 2026-11-21 (orchestrated; budget until 2026-11-22 09:00 Belgrade).
 
-- Current step: step 6 done (dev run 2 kept judge_v2; displayed-quote unit done); no test-split run yet
-- Real calls used: gemini-3.5-flash-lite: 172 / 450 (12 red-team + 104 dev run 1 + 56 dev run 2), gemini-3.1-flash-lite: 4 / 150 (cache files; failed requests not counted)
+- Current step: step 7 done: gate 1.8 PASS on the test split (see Gate 1.8 verdict); nothing merged, pushed or tagged
+- Real calls used: gemini-3.5-flash-lite: 219 / 450 (12 red-team + 104 dev run 1 + 56 dev run 2 + 47 test gate run), gemini-3.1-flash-lite: 4 / 150 (cache files; failed requests not counted)
 - Last commit: see git log
-- Next action: test-split gate on judge_v2 at the commit below (not run in this batch)
+- Next action: owner review; merge decision
 
 ## Measured numbers
 
@@ -77,6 +77,32 @@ One row per measurement. Never overwrite a row; add a new one.
 | 2026-11-21 | 1.8 (run) | **Dev run 2, judge_v2 + list-only fix: gemini-3.5-flash-lite (real model, free tier), variant A, judge stage, 56 dev CVs, 606 verdicts.** Result file `eval/results/20261121T140220_A_dev.json`, code `phase/1.8-v1-gate@8ba2310` (not dirty; this commit includes the output-neutral retry fix). Real calls for this run: 56 (49 before a 503 cut, 7 after the resume; the resume is the same run). Accuracy 95.0% (v1 93.2%, +1.8); macro-F1 0.887 (0.847, +0.040); weighted kappa 0.952 (0.939, +0.013); recall not_met 134/148 = 0.905 (0.912, -0.007); recall partial 37/47 = 0.787 (0.681, +0.106); false positives (gold not_met judged met) 3 (3, 0); gold met judged not_met 1 (1); flagged verdicts 7/606 = 1.2% (17, -10; all quote_not_found); quotes existing in the model's string 459/470 = 97.7% (445/466 = 95.5%); majority-class baseline 67.8%. Without the 24 uncertain verdicts: accuracy 96.0%, macro-F1 0.892. Tokens in the last invocation only: 13,233 in / 5,151 out (7 calls; p95 latency 56.2 s, 503 retries handled, 2 earlier cuts); cost not priced. Real model, free tier, gold labels not manually verified | dev | accuracy 95.0% | gate (on test) accuracy 80% | phase/1.8-v1-gate@8ba2310 |
 | 2026-11-21 | 1.8 (run) | **Keep rule applied: judge_v2 is KEPT.** Pre-registered rule: macro-F1 >= 0.847 and gold-not_met-judged-met <= 3 against the v1 run. Run 2: macro-F1 0.887 >= 0.847 and false positives 3 <= 3, both met. No revert, no run 3 | dev | kept | rule as pre-registered | phase/1.8-v1-gate@8ba2310 |
 | 2026-11-21 | 1.8 (run) | **Dev run 2 recomputed from cache with the displayed-quote change, 0 new calls** (`eval/results/20261121T141328_A_dev.json`, code `phase/1.8-v1-gate@83f13f8`, not dirty; same verdicts, 112 cache hits). Accuracy 95.0%, macro-F1 0.887, kappa 0.952 (unchanged). Displayed quotes (shown as evidence) 463, all byte-verbatim slices of the CV: 463/463 = 100%; the report line "quotes that exist in the CV 463/470 (98.5%)" counts the 7 flagged quotes (model string, not found, not displayed) in the denominator. Gate condition 6 is therefore met on dev for displayed quotes | dev | 463/463 displayed | 100% | phase/1.8-v1-gate@83f13f8 |
+| 2026-11-21 | 1.8 (gate) | **Gate run on the test split, ONCE: gemini-3.5-flash-lite (real model, free tier), judge_v2 (cv_parse_v1, requirements_v1), variant A, 24 CVs, 260 verdicts.** Result file `eval/results/20261121T143544_A_test.json`, code `phase/1.8-v1-gate@cd18602` (not dirty). Test-split gate runs: 1 (the red-team had earlier judged test CV sm_09 with judge_v1; see the verdict section). 47 real calls (35 before a 503 cut, 12 after one resume, same run). Accuracy 94.6% (always-met 68.5%); macro-F1 0.904; weighted kappa 0.940 quadratic as the harness prints it, 0.917 linear as the gate defines it; recall not_met 48/52 = 0.923; recall partial 24/30 = 0.800; gold not_met judged met 1; gold met judged not_met 1; flagged 5/260 = 1.9% (quote_not_found); displayed quotes 205, all byte-verbatim CV slices (205/205). Tokens in the last invocation only: 18,453 in / 9,086 out (12 calls); p95 latency 105.5 s per call (last invocation; 503 retries); cost not priced. Gold labels not manually verified | test | accuracy 94.6% | gate accuracy 80% | phase/1.8-v1-gate@cd18602 |
+
+## Gate 1.8 (v1) verdict
+
+**PASS, gold labels not manually verified; one run, single model, variance unmeasured; test split touched once before by the red-team (sm_09, judge_v1).** Rules from `docs/review/gate_1_8_proposal.md`, thresholds unchanged. Model gemini-3.5-flash-lite, judge_v2, code `phase/1.8-v1-gate@cd18602`, result file `eval/results/20261121T143544_A_test.json`. The owner's manual check of the eight frozen pairs was not done (owner instruction for the hands-free run). The 95% intervals resample the 24 CVs 10,000 times with seed 20261117 (offline one-off script, not committed; 0 resamples skipped). No metric lies within 1 point of its threshold.
+
+| # | Condition | Full set (260) | Reduced set, proposal's 8 pairs removed (252) |
+| --- | --- | --- | --- |
+| 1 | Accuracy >= 80% | 94.6% (95% CI 92.6 to 96.6) PASS | 95.6% PASS |
+| 2 | Lower bound of the accuracy interval > 68.5% | 92.6% PASS | not required (CI 93.3 to 97.7) |
+| 3 | Macro-F1 >= 0.70 | 0.904 (CI 0.857 to 0.942) PASS | 0.919 PASS |
+| 4 | Linear-weighted kappa >= 0.60 | 0.917 (CI 0.881 to 0.948) PASS | 0.929 PASS |
+| 5 | Recall not_met >= 0.80 | 0.923 (CI 0.839 to 1.000) PASS | 0.920 PASS |
+| 6 | Displayed quotes that exist in the CV | 205/205 = 100% (byte-verbatim slices) PASS | n/a |
+
+Full and reduced sets agree on every condition, so the result is not inconclusive.
+
+Not gating:
+- Sensitivity on the uncertain.json reduced set (252; it removes pm_07/2 instead of ba_06/5): accuracy 95.2%, macro-F1 0.908, linear kappa 0.924, recall not_met 0.920, recall partial 0.840.
+- Recall of partial: 24/30 = 0.800 on the full set (CI 0.667 to 0.920), 0.880 on the proposal's reduced set (CI 0.750 to 1.000); above the 0.50 manual-check trigger.
+- Confusion (rows gold, columns predicted not_met, partial, met): not_met 48, 3, 1; partial 1, 24, 5; met 1, 3, 174. Reduced set: 46, 3, 1 / 0, 22, 3 / 1, 3, 173.
+- Gold not_met judged met: 1; gold met judged not_met: 1. Flagged share 5/260 = 1.9% (2.4% of the 210 met/partial verdicts), all quote_not_found, none displayed.
+- Accuracy by script: en 95.4% (n=87), mixed 90.9% (22), sr_ascii 94.4% (54), sr_cyrillic 90.7% (43), sr_latin 98.1% (54). By hard case: basic_knowledge 100% (11), course_in_progress 95.5% (22), implicit_evidence 90.9% (11), list_only 90.0% (10), overlapping_periods 100% (11).
+- Tokens and p95 (last invocation only, 12 of 47 calls): 18,453 in / 9,086 out, p95 105.5 s; cost not priced.
+- Ranking, report only (score from predicted verdicts against the score from gold verdicts): Kendall tau-b per position 1.000 (backend_developer, n=3), 0.667 (business_analyst, n=4), 0.667 (data_analyst, n=4), 1.000 (financial_controller, 4), 1.000 (project_manager, 4), 1.000 (sales_manager, 5); pooled pairwise concordance 0.943 over 35 pairs with distinct gold scores (a predicted tie counts 0.5; warning threshold 0.80 not hit); mean absolute score error 2.62 points over 24 CVs (warning threshold 10 not hit); agreement on the mandatory-failed flag 23/24.
+- Caveats: the model was chosen from the models actually measured (3.1-flash-lite was never measured on dev); judge_v2 was tuned on dev only; the test split was judged once for the gate (the red-team had judged sm_09 with judge_v1 before); quote counts use the displayed-quote change (owner-approved) so the gate-6 result is by construction plus the check; the dev run 1 and test numbers are from one model run each.
 
 ## Decisions
 
