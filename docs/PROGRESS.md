@@ -36,10 +36,10 @@ Read this at the start of every session. Update it at the end of every phase.
 
 Hands-free run, 2026-11-21 (orchestrated; budget until 2026-11-22 09:00 Belgrade).
 
-- Current step: step 5; model A dev run DONE; model B (3.1-flash-lite) dev run CUT TWICE (SSL EOF with 0 calls, then 503 high demand after 4 calls, after a 30-minute-plus wait); stopped per the rule, no model B result file, selection rule not applied
+- Current step: 6 (failure review running); baseline model: gemini-3.5-flash-lite
 - Real calls used: gemini-3.5-flash-lite: 116 / 450 (12 red-team + 104 dev run), gemini-3.1-flash-lite: 4 / 150 (cache files; failed requests not counted)
 - Last commit: see git log
-- Next action: owner/orchestrator decision on model B (resume again later, or select 3.5-flash-lite); budget check against the test-split count still to do
+- Next action: failure review of the model A dev run, then the test-split dry run and gate
 
 ## Measured numbers
 
@@ -281,6 +281,7 @@ These are decisions the orchestrator made alone during the autonomous run of 202
 | 2026-11-21 | 1.8 | [auto] Test-split exposure before the gate: the red-team judged test CV sm_09 (clean twin and attacked copy) on gemini-3.5-flash-lite; its answers were not read for tuning. The gate report counts it as "test split touched once by red-team (sm_09 only)". Splits: sm_09 = test, pm_02 = dev, be_05 = dev. | Honest exposure count. | none |
 | 2026-11-21 | 1.8 | [auto] the Langfuse live check (1.6 steps 2, 3, 5 and 6) stopped on the owner's 1 GB free-memory rule (244 MB free with Langfuse up, about 1.95 GiB of containers). It is deferred to the owner (OWNER_TODO). The limit was not relaxed. | The batch rule said to stop. | Relaxing the limit. |
 | 2026-11-21 | 1.8 | [auto] The model A dev run was cut twice by provider-side errors: a 503 high-demand and an SSL EOF during the 503 retries. Neither is a 429 or a billing signal. Both are external and transient, the cache resumes the run, and a resume is the same run. The orchestrator allowed one resume after a 30-minute wait; a third failure stops the run. The harness crash on an uncaught httpx ConnectError (exit 2 with a traceback) is a robustness defect, recorded and not fixed mid-measurement. | Provider outage, not a method change. | Stopping the run. |
+| 2026-11-21 | 1.8 | [auto] Model B, gemini-3.1-flash-lite, is not measured on dev. Provider errors cut it twice, and under the stop rule there is no further resume in this run. Deviation from the pre-registered selection rule: the baseline is chosen from the models actually measured, so it is gemini-3.5-flash-lite. B's numbers were never seen, so no selection bias. The owner's tie-break also favours 3.5. Consequence: if B is later measured and wins on dev, gating on B would be a second test-split exposure. The command to finish B goes in OWNER_TODO: `LLM_MODEL=gemini-3.1-flash-lite LLM_RPM=14 LANGFUSE_ENABLED=false make eval STAGES=judge SPLIT=dev YES=1` (the cache resumes it; 3.1 used 4 / 150 calls). | Provider outage; no selection bias. | Resuming B again in this run. |
 
 ## Final report: autonomous run, 2026-11-20 to 2026-11-21
 
