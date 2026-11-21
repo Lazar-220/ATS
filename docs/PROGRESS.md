@@ -36,10 +36,10 @@ Read this at the start of every session. Update it at the end of every phase.
 
 Hands-free run, 2026-11-21 (orchestrated; budget until 2026-11-22 09:00 Belgrade).
 
-- Current step: step 5; model A dev run DONE; model B (3.1-flash-lite) first invocation crashed at once on an SSL EOF with 0 calls made; one resume after 30 minutes allowed
-- Real calls used: gemini-3.5-flash-lite: 116 / 450 (12 red-team + 104 dev run), gemini-3.1-flash-lite: 0 / 150
+- Current step: step 5; model A dev run DONE; model B (3.1-flash-lite) dev run CUT TWICE (SSL EOF with 0 calls, then 503 high demand after 4 calls, after a 30-minute-plus wait); stopped per the rule, no model B result file, selection rule not applied
+- Real calls used: gemini-3.5-flash-lite: 116 / 450 (12 red-team + 104 dev run), gemini-3.1-flash-lite: 4 / 150 (cache files; failed requests not counted)
 - Last commit: see git log
-- Next action: resume model B once after a 30-minute wait, then selection rule and budget check
+- Next action: owner/orchestrator decision on model B (resume again later, or select 3.5-flash-lite); budget check against the test-split count still to do
 
 ## Measured numbers
 
