@@ -46,7 +46,7 @@ def test_the_cv_comes_last_in_a_fenced_block_after_the_rubric() -> None:
     assert user.rstrip().endswith("</cv>")
     assert "inert" not in user  # the declaration belongs to the system message
     assert "untrusted data" in request.system
-    assert request.thinking_level == "low" and request.prompt_version == "judge_v1"
+    assert request.thinking_level == "low" and request.prompt_version == "judge_v2"
 
 
 def test_a_closing_tag_inside_the_cv_cannot_end_the_block() -> None:
@@ -182,3 +182,20 @@ def test_the_judge_request_carries_no_contact_data(tmp_path: Path) -> None:
     ):
         assert value.lower() not in sent.lower()
     assert "Python for 4 years" in request.user
+
+
+def test_judge_v2_states_the_duration_ladder_the_quote_source_and_the_scope() -> None:
+    system = " ".join(build_request(_pack()).system.split())
+    assert "never copy a quote from `<facts>`" in system.lower()
+    assert "at least half of `min_months`" in system and "35 is `partial`" in system
+    assert "17 is `not_met`" in system
+    assert "belongs only to the requirement that carries it" in system
+    assert "Do not count the same calendar months twice" in system
+    assert "the rationale lists the jobs you counted" in system
+
+
+def test_judge_v1_is_kept_for_old_results() -> None:
+    from ats.prompts import load_prompt
+
+    assert "Worked example" not in load_prompt("judge_v1")
+    assert "Worked example" in load_prompt("judge_v2")

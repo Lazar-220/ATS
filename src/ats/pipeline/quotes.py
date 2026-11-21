@@ -184,3 +184,16 @@ def check_quote(
         )
     raw_start, raw_end = masked_range_to_raw(spans, match.start, match.end)
     return CheckedQuote((), raw_start, raw_end)
+
+
+def displayed_quote(quote: str | None, check: CheckedQuote, raw_text: str) -> str | None:
+    """The text shown as evidence: the CV's own slice when the quote passed the check.
+
+    A fuzzy pass (a bullet glyph added, a case change) is a different string from the CV, so the
+    model's string is never displayed: the slice at the verified offsets is, and it is verbatim by
+    construction. A flagged quote has no offsets and stays as the model gave it (it is not shown
+    as evidence, only kept for audit).
+    """
+    if check.char_start is None or check.char_end is None:
+        return quote
+    return raw_text[check.char_start : check.char_end]

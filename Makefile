@@ -5,7 +5,7 @@ UNIT_TESTS := not integration and not llm
 	up down up-all migrate api worker web test-int setup-missing \
 	eval smoke-real api-types \
 	langfuse-up langfuse-down \
-	eval-redteam \
+	eval-redteam label-review \
 	reindex \
 	mcp
 
@@ -80,6 +80,9 @@ test:
 # is called: the metric is the share of attacks that change the judge input. JUDGE=1 (or YES=1) also
 # judges the pairs whose input changed with the real model (about 12 calls); DRY_RUN=1 prints the
 # count, YES=1 confirms. Needs LLM_API_KEY; refuses LLM_PROVIDER=fake.
+label-review:
+	uv run python -m ats.eval label-review $(if $(RESULT),--result $(RESULT))
+
 eval-redteam:
 	uv run python -m ats.eval redteam $(if $(or $(JUDGE),$(YES)),--judge) $(if $(DRY_RUN),--dry-run) $(if $(YES),--yes)
 

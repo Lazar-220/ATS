@@ -15,7 +15,7 @@ from ats.pipeline.context import ContextPack, ContextRequirement
 from ats.pipeline.fence import fence
 from ats.prompts import load_prompt
 
-PROMPT_VERSION = "judge_v1"
+PROMPT_VERSION = "judge_v2"
 THINKING_LEVEL: ThinkingLevel = "low"
 
 type VerdictValue = Literal["met", "partial", "not_met"]

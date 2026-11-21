@@ -83,7 +83,7 @@ def test_a_cv_is_judged_quotes_are_checked_and_the_score_is_stored(
     assert assessment is not None
     assert assessment["status"] == "done" and assessment["rubric_version"] == 1
     assert float(assessment["score"]) == 100.0  # the judge's verdicts stand, flagged or not
-    assert assessment["trace"]["prompt_version"] == "judge_v1"
+    assert assessment["trace"]["prompt_version"] == "judge_v2"
     verdicts = conn.execute(
         "SELECT v.*, r.ord FROM verdict v JOIN requirement r ON r.id = v.requirement_id "
         "ORDER BY r.ord"

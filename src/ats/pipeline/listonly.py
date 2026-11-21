@@ -1,8 +1,8 @@
 """A skill that exists only in a skills list gives at most `partial` (§4.4, hidden skills lists).
 
-The judge prompt says so (`judge_v1`), and this is the same rule in code, because a model can
-slip and "code computes, the LLM judges". A `met` verdict is downgraded to `partial` when its
-quote lies in a skills item and
+The judge prompt says so (`judge_v1`, `judge_v2`), and this is the same rule in code, because a
+model can slip and "code computes, the LLM judges". A `met` verdict is downgraded to `partial`
+when its quote lies in a skills item and
 
 - no experience, project, certificate or education item overlaps the quote, and
 - none of the skill names the quote covers is mentioned in an experience, project or
@@ -71,26 +71,40 @@ def _follows(tokens: list[str], words: list[str], start: int) -> bool:
     )
 
 
+# A trailing word that only names the kind of tool ("HubSpot CRM") is not needed to recognise it.
+_GENERIC_TRAILING_WORDS = frozenset({"crm", "erp"})
+
+
+def _name_variants(name: str) -> list[list[str]]:
+    """Token lists to look for: the name without a parenthetical qualifier, then without a
+    trailing generic word ("Excel ( napredni nivo, makroi )" -> Excel, "HubSpot CRM" -> HubSpot)."""
+    bare = re.sub(r"\([^)]*\)", " ", name)
+    tokens = re.findall(r"\w+", normalize_for_lexical(bare))
+    variants = [tokens] if tokens else []
+    if len(tokens) > 1 and tokens[-1] in _GENERIC_TRAILING_WORDS:
+        variants.append(tokens[:-1])
+    return variants
+
+
 def _mentioned(name: str, snippets: list[str]) -> bool:
     """Whether a skill's name occurs in one of the (folded) snippets, in any case form.
 
     Every word of a multi-word name must match, in order and close together, inside one snippet:
     "Project Management" is not confirmed by "project" alone, nor "Power BI" by "power plant".
     Both sides are folded and transliterated (`normalize_for_lexical`), so Latin and Cyrillic
-    agree. Not covered: a Latin name against its Cyrillic respelling ("Python" and "Питхон"), and
-    a translation ("Project Management" and "upravljanje projektima").
+    agree. A parenthetical qualifier and a trailing "CRM" or "ERP" are ignored. Not covered: a
+    Latin name against its Cyrillic respelling ("Python" and "Питхон"), and a translation
+    ("Project Management" and "upravljanje projektima").
     """
-    tokens = re.findall(r"\w+", normalize_for_lexical(name))
-    if not tokens:
-        return False
     for snippet in snippets:
         words = re.findall(r"\w+", snippet)
-        # The first word may start anywhere; the rest follow inside the window.
-        if any(
-            _word_confirms(tokens[0], word) and _follows(tokens[1:], words, i + 1)
-            for i, word in enumerate(words)
-        ):
-            return True
+        for tokens in _name_variants(name):
+            # The first word may start anywhere; the rest follow inside the window.
+            if any(
+                _word_confirms(tokens[0], word) and _follows(tokens[1:], words, i + 1)
+                for i, word in enumerate(words)
+            ):
+                return True
     return False
 
 

@@ -18,7 +18,7 @@ from ats.pipeline.judge import judge
 from ats.pipeline.listonly import list_only_detail
 from ats.pipeline.masking import mask_text
 from ats.pipeline.parsing import parse_cv
-from ats.pipeline.quotes import check_quote
+from ats.pipeline.quotes import check_quote, displayed_quote
 
 
 def _row(usage: LLMUsage) -> UsageRow:
@@ -72,7 +72,11 @@ class PipelineJudge:
             check = check_quote(
                 verdict.verdict, verdict.quote, masked.masked_text, masked.spans, self._threshold
             )
-            quote = verdict.quote if verdict.verdict != "not_met" else None
+            quote = (
+                displayed_quote(verdict.quote, check, cv_text)
+                if verdict.verdict != "not_met"
+                else None
+            )
             # The list-only rule in code, as in production. The downgrade is not added to the
             # quote-check flags: those say the quote failed, and this quote is fine.
             downgraded = list_only_detail(verdict.verdict, check, facts.parsed_json) is not None

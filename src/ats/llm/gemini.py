@@ -5,8 +5,10 @@ Checked against SDK 3.3.0 and the Gemini API docs: structured output is
 reasoning depth is `ThinkingConfig(thinking_level=...)`.
 """
 
+import ssl
 from typing import Any
 
+import httpx2
 from google import genai
 from google.genai import errors, types
 from pydantic import BaseModel
@@ -14,6 +16,9 @@ from pydantic import BaseModel
 from ats.llm.types import LLMRequest, RateLimitError, RawCompletion, TransientServerError
 
 RETRYABLE_SERVER_CODES = frozenset({500, 503, 504})
+
+# Not an HTTP status: marks a failure to connect, so the retry log does not claim a 503.
+CONNECTION_ERROR_CODE = 0
 
 HTTP_TIMEOUT_MS = 120_000
 
@@ -38,6 +43,11 @@ class GeminiTransport:
             response = self._client.models.generate_content(  # pyright: ignore[reportUnknownMemberType]
                 model=model, contents=request.user, config=config
             )
+        except (httpx2.ConnectError, ssl.SSLError) as exc:
+            # The SDK retries a connect failure itself and then re-raises the httpx2 error; a
+            # dropped TLS handshake ("UNEXPECTED_EOF_WHILE_READING") is one. It is the provider
+            # side or the network failing, so it takes the same retries as a 503.
+            raise TransientServerError(f"connection error: {exc}", CONNECTION_ERROR_CODE) from exc
         except errors.APIError as exc:
             if exc.code == 429:
                 body: Any = exc.details  # pyright: ignore[reportUnknownMemberType, reportUnknownVariableType]

@@ -1,9 +1,11 @@
 """LLM client behavior with a fake transport and a simulated clock: no sleeping, no network."""
 
+import ssl
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
 
+import httpx2
 import pytest
 from google.genai import errors
 from pydantic import BaseModel
@@ -23,6 +25,7 @@ from ats.llm.types import (
     RateLimitError,
     RawCompletion,
     TransientServerError,
+    Transport,
 )
 
 REQUEST = LLMRequest(system="rules", user="data", thinking_level="low", prompt_version="test_v1")
@@ -67,7 +70,7 @@ def good(value: int = 1) -> RawCompletion:
 
 
 def make_client(
-    transport: ScriptedTransport, tmp_path: Path, time: SimulatedTime, *, rpm: int = 5
+    transport: Transport, tmp_path: Path, time: SimulatedTime, *, rpm: int = 5
 ) -> ManagedLLMClient:
     return ManagedLLMClient(
         transport,
@@ -307,7 +310,7 @@ def test_the_retry_delay_is_read_from_the_provider_error() -> None:
     assert _retry_after_s(None) is None
 
 
-def test_a_503_is_retried_twice_with_jittered_exponential_backoff(tmp_path: Path) -> None:
+def test_a_503_is_retried_with_jittered_exponential_backoff(tmp_path: Path) -> None:
     time = SimulatedTime()
     transport = ScriptedTransport(
         TransientServerError("overloaded", 503), TransientServerError("overloaded", 503), good(4)
@@ -321,14 +324,69 @@ def test_a_503_is_retried_twice_with_jittered_exponential_backoff(tmp_path: Path
     assert time.slept == [3.0, 6.0]  # 2 * 1 * 1.5, then 2 * 2 * 1.5
 
 
-def test_a_server_error_that_persists_is_raised_after_two_retries(tmp_path: Path) -> None:
+def test_a_server_error_that_persists_is_raised_after_six_retries(tmp_path: Path) -> None:
     time = SimulatedTime()
-    transport = ScriptedTransport(*[TransientServerError("down", 500) for _ in range(4)])
+    transport = ScriptedTransport(*[TransientServerError("down", 503) for _ in range(7)])
     client = make_client(transport, tmp_path, time)
 
     with pytest.raises(TransientServerError):
         client.generate(REQUEST, Answer)
-    assert transport.calls == 3  # the first try and two retries, not more
+    assert transport.calls == 7  # the first try and six retries, not more
+
+
+def test_the_server_error_backoff_doubles_and_is_capped_at_sixty_seconds(tmp_path: Path) -> None:
+    time = SimulatedTime()
+    transport = ScriptedTransport(*[TransientServerError("down", 503) for _ in range(7)])
+    client = make_client(transport, tmp_path, time, rpm=100)
+
+    with pytest.raises(TransientServerError):
+        client.generate(REQUEST, Answer)
+
+    # base 2 * 2**n * 1.5 (fixed jitter): 3, 6, 12, 24, 48, then 96 is cut to 60
+    assert time.slept == [3.0, 6.0, 12.0, 24.0, 48.0, 60.0]
+
+
+@pytest.mark.parametrize(
+    "failure",
+    [
+        httpx2.ConnectError("connect failed"),
+        httpx2.ConnectError("[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation"),
+        ssl.SSLEOFError(8, "EOF occurred in violation of protocol"),
+    ],
+)
+def test_a_connect_or_tls_error_is_one_retry_and_then_a_success(
+    failure: Exception, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    outcomes: list[Exception | object] = [
+        failure,
+        SimpleNamespace(text='{"value": 7}', usage_metadata=None),
+    ]
+
+    def flaky(**_kwargs: object) -> object:
+        step = outcomes.pop(0)
+        if isinstance(step, Exception):
+            raise step
+        return step
+
+    gemini = GeminiTransport("not-a-real-key")
+    monkeypatch.setattr(
+        gemini, "_client", SimpleNamespace(models=SimpleNamespace(generate_content=flaky))
+    )
+    time = SimulatedTime()
+    client = make_client(gemini, tmp_path, time)
+
+    assert client.generate(REQUEST, Answer).output == Answer(value=7)
+    assert time.slept == [3.0]
+
+
+def test_a_daily_429_still_stops_at_once_after_the_server_budget_grew(tmp_path: Path) -> None:
+    time = SimulatedTime()
+    transport = ScriptedTransport(RateLimitError("daily", daily=True), good())
+    client = make_client(transport, tmp_path, time)
+
+    with pytest.raises(RateLimitError):
+        client.generate(REQUEST, Answer)
+    assert transport.calls == 1 and time.slept == []
 
 
 def test_the_jitter_spreads_the_delay_between_one_and_two_times_the_base(tmp_path: Path) -> None:

@@ -1,9 +1,10 @@
 import argparse
+import io
 import logging
 import sys
 from pathlib import Path
 
-from ats.eval import redteam, smoke
+from ats.eval import label_review, redteam, smoke
 from ats.eval.fallback import create_eval_llm_client
 from ats.eval.golden import (
     DEFAULT_ROOT,
@@ -132,6 +133,17 @@ def _run(args: argparse.Namespace) -> int:
     print()
     print(f"Result written to {write_result(result, RESULTS_DIR)}")
     _export_to_langfuse(result, golden)
+    return 0
+
+
+def _label_review(args: argparse.Namespace) -> int:
+    golden = load_golden(Path(args.golden))
+    result = label_review.load_result(Path(args.result))
+    rows = label_review.review_rows(golden, load_uncertain(Path(args.golden), golden), result)
+    if isinstance(sys.stdout, io.TextIOWrapper):
+        # Gold quotes are Serbian, Cyrillic included; a Windows console would reject them.
+        sys.stdout.reconfigure(encoding="utf-8")  # pyright: ignore[reportUnknownMemberType]
+    print(label_review.format_rows(rows))
     return 0
 
 
@@ -283,6 +295,17 @@ def main(argv: list[str] | None = None) -> int:
     render = sub.add_parser("render", help="render posting and CV sources to PDF")
     render.add_argument("--golden", default=str(DEFAULT_ROOT), help="golden set directory")
     render.set_defaults(run=_render)
+
+    review = sub.add_parser(
+        "label-review", help="print the test-split verdicts a human should check (no model)"
+    )
+    review.add_argument("--golden", default=str(DEFAULT_ROOT), help="golden set directory")
+    review.add_argument(
+        "--result",
+        default=str(RESULTS_DIR / "20261121T143544_A_test.json"),
+        help="result file whose wrong and flagged verdicts are listed (default: the gate run)",
+    )
+    review.set_defaults(run=_label_review)
 
     team = sub.add_parser(
         "redteam", help="the 20 red-team pairs: share of attacks that change the judge input"

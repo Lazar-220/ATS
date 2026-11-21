@@ -34,7 +34,7 @@ class ManagedLLMClient:
         limiter: RateLimiter,
         cache: ResponseCache,
         max_429_retries: int = 4,
-        max_server_retries: int = 2,
+        max_server_retries: int = 6,
         backoff_base_s: float = 2.0,
         jitter: Callable[[], float] = random.random,
         clock: Callable[[], float] = time.monotonic,
@@ -110,8 +110,8 @@ class ManagedLLMClient:
                 )
                 server_failed += 1
                 log.warning(
-                    "%s from the provider, retry %s in %.1f s",
-                    exc.status_code,
+                    "server error %s from the provider, retry %s in %.1f s",
+                    exc.status_code or "(no response)",
                     server_failed,
                     delay,
                 )
