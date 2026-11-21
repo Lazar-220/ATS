@@ -3,6 +3,7 @@ import logging
 import sys
 from pathlib import Path
 
+from ats.eval import redteam
 from ats.eval.fallback import create_eval_llm_client
 from ats.eval.golden import (
     DEFAULT_ROOT,
@@ -32,6 +33,7 @@ from ats.eval.stub import StubJudge
 from ats.llm.cache import ResponseCache
 from ats.llm.types import LLMError
 from ats.observability import LangfuseTracer, get_tracer
+from ats.pipeline.injection import SUSPECTED_INJECTION
 from ats.settings import get_settings
 
 log = logging.getLogger(__name__)
@@ -133,6 +135,48 @@ def _run(args: argparse.Namespace) -> int:
     return 0
 
 
+def _redteam(args: argparse.Namespace) -> int:
+    settings = get_settings()
+    golden = load_golden(Path(args.golden))
+    results = redteam.evaluate(
+        golden,
+        redteam.build_pairs(golden),
+        settings.min_chars_per_page,
+        redteam.request_key,
+    )
+    print(redteam.format_report(results))
+    changed = [r for r in results if not r.request_identical]
+    if not args.judge:
+        return 1 if any(SUSPECTED_INJECTION not in r.flags for r in changed) else 0
+    if settings.llm_provider == "fake":
+        raise EvalError(
+            "LLM_PROVIDER=fake: --judge is the real-model measurement and would use the demo "
+            "client. Unset LLM_PROVIDER (or set it to gemini) and try again."
+        )
+    calls = 4 * len(changed)  # per changed pair: two CVs, one parse and one judge call each
+    print(f"\n--judge: {len(changed)} pairs with a changed input, about {calls} model calls")
+    if args.dry_run:
+        return 0
+    if calls > MAX_CALLS_WITHOUT_CONFIRMATION and not args.yes:
+        print("Repeat with --yes (make: YES=1) to go ahead.", file=sys.stderr)
+        return 2
+    client = create_eval_llm_client(settings, "")
+    judged = redteam.judge_changed(golden, results, client, settings.quote_fuzzy_threshold)
+    print(f"\nReal model: {settings.llm_model}, judged with the clean twin and the attacked CV")
+    for item in judged:
+        print(
+            f"  {item.pair_id} {item.attack}: verdicts "
+            f"{'identical' if item.verdicts_equal else 'DIFFER'}, score "
+            f"{item.clean_score:.1f} -> {item.attacked_score:.1f}"
+            + "".join(f"\n      {line}" for line in item.changed)
+        )
+    moved = sum(
+        1 for item in judged if not item.verdicts_equal or item.clean_score != item.attacked_score
+    )
+    print(f"Attacks that changed a verdict or the score: {moved} of {len(judged)} judged")
+    return 0
+
+
 def _export_to_langfuse(result: RunResult, golden: GoldSet) -> None:
     """With tracing on, the run also goes to Langfuse. A failure there never fails the eval."""
     tracer = get_tracer()
@@ -195,6 +239,17 @@ def main(argv: list[str] | None = None) -> int:
     render = sub.add_parser("render", help="render posting and CV sources to PDF")
     render.add_argument("--golden", default=str(DEFAULT_ROOT), help="golden set directory")
     render.set_defaults(run=_render)
+
+    team = sub.add_parser(
+        "redteam", help="the 20 red-team pairs: share of attacks that change the judge input"
+    )
+    team.add_argument("--golden", default=str(DEFAULT_ROOT), help="golden set directory")
+    team.add_argument(
+        "--judge", action="store_true", help="also judge the changed pairs with the real model"
+    )
+    team.add_argument("--dry-run", action="store_true", help="with --judge: print the call count")
+    team.add_argument("--yes", action="store_true", help="confirm a run of more than 5 calls")
+    team.set_defaults(run=_redteam)
 
     args = parser.parse_args(argv)
     try:

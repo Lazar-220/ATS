@@ -85,6 +85,7 @@ def extract_text(
         pages: list[str] = []
         hidden_by_reason: Counter[str] = Counter()
         hidden_pages: set[int] = set()
+        invisible = 0
         for page in doc:
             number = cast(int, page.number) + 1  # pyright: ignore[reportUnknownMemberType]
             hidden, removals = find_hidden(page, number)
@@ -101,6 +102,9 @@ def extract_text(
             # A page with nothing hidden keeps the extractor's own text, byte for byte.
             plain = cast(str, page.get_text("text"))  # pyright: ignore[reportUnknownMemberType]
             text = text_without(page, hidden) if hidden else plain
+            # Before the steps, so a line that held only invisible characters is blank for them.
+            text, removed = remove_invisible(text)
+            invisible += removed
             for step in steps:
                 text = step(page, text)
             pages.append(text)
@@ -112,7 +116,7 @@ def extract_text(
             "The PDF contains little or no selectable text and looks like a scan. "
             "Upload a PDF exported from a text editor, not an image."
         )
-    text, invisible = remove_invisible("\n\n".join(page for page in pages if page))
+    text = "\n\n".join(page for page in pages if page)
     flags: list[dict[str, str]] = []
     if hidden_by_reason:
         reasons = ", ".join(f"{reason} ({n})" for reason, n in sorted(hidden_by_reason.items()))

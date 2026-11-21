@@ -50,3 +50,16 @@ def add_hidden_text(pdf: bytes, kind: HiddenKind, text: str, *, page_number: int
             fill=(1, 1, 1),
         )
     return doc.tobytes(garbage=4, deflate=True, no_new_id=True)  # pyright: ignore[reportUnknownMemberType]
+
+
+def add_visible_text(pdf: bytes, text: str, *, page_number: int = 0) -> bytes:
+    """The same PDF with one visible line of `text` in the bottom margin of one page.
+
+    For attacks that cleaning cannot remove (a plain instruction), and for the benign line that
+    the zero-width attack hides its characters in.
+    """
+    doc = pymupdf.open(stream=pdf, filetype="pdf")
+    page = cast(Any, doc[page_number])
+    page.insert_font(fontname=_FONT, fontbuffer=pymupdf.Font().buffer)  # pyright: ignore[reportUnknownMemberType]
+    page.insert_text((50.0, _BOTTOM), text, fontname=_FONT, fontsize=9, color=(0, 0, 0))
+    return doc.tobytes(garbage=4, deflate=True, no_new_id=True)  # pyright: ignore[reportUnknownMemberType]

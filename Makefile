@@ -76,7 +76,13 @@ check:
 test:
 	uv run pytest -q -m "$(UNIT_TESTS)"
 
+# Red-team set (phase 1.7): 20 pairs of a clean golden CV and the same CV with an attack. No model
+# is called: the metric is the share of attacks that change the judge input. JUDGE=1 (or YES=1) also
+# judges the pairs whose input changed with the real model (about 12 calls); DRY_RUN=1 prints the
+# count, YES=1 confirms. Needs LLM_API_KEY; refuses LLM_PROVIDER=fake.
+eval-redteam:
+	uv run python -m ats.eval redteam $(if $(or $(JUDGE),$(YES)),--judge) $(if $(DRY_RUN),--dry-run) $(if $(YES),--yes)
+
 # Targets that belong to a later phase fail loudly instead of doing nothing.
-eval-redteam: ; @echo "make $@ is added in phase 1.7"; exit 1
 reindex: ; @echo "make $@ is added in phase 2.1"; exit 1
 mcp: ; @echo "make $@ is added in phase 3.7"; exit 1
