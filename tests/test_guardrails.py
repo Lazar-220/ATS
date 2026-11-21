@@ -325,3 +325,35 @@ def test_one_word_of_a_multi_word_skill_does_not_confirm_it(skill: str, job: str
 )
 def test_every_word_of_a_multi_word_skill_confirms_it(skill: str, job: str) -> None:
     assert not _downgraded(skill, job)
+
+
+# ---- list only: a qualifier or a generic trailing word in the skill name ---------------------
+
+
+@pytest.mark.parametrize(
+    ("skill", "job"),
+    [
+        ("Excel ( napredni nivo, makroi )", "Rad u izveštajima u Excelu"),
+        ("HubSpot CRM", "HubSpot: lead-ovi i kampanje"),
+    ],
+)
+def test_a_qualifier_or_a_trailing_crm_does_not_hide_a_confirmed_skill(
+    skill: str, job: str
+) -> None:
+    assert not _downgraded(skill, job)
+
+
+@pytest.mark.parametrize(
+    ("skill", "job"),
+    [
+        ("Power BI", "Worked at a power plant"),
+        ("Docker", "Razvoj backend servisa u Pythonu"),  # list-only Docker stays downgraded
+        ("Docker (osnovni nivo)", "Razvoj backend servisa u Pythonu"),
+        ("HubSpot CRM", "Rad sa CRM sistemima"),  # the generic word alone confirms nothing
+        ("Excel ( napredni nivo, makroi )", "Napredni nivo engleskog, makroi na poslu"),
+    ],
+)
+def test_a_qualifier_or_a_trailing_crm_does_not_confirm_a_list_only_skill(
+    skill: str, job: str
+) -> None:
+    assert _downgraded(skill, job)
