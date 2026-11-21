@@ -36,10 +36,10 @@ Read this at the start of every session. Update it at the end of every phase.
 
 Hands-free run, 2026-11-21 (orchestrated; budget until 2026-11-22 09:00 Belgrade).
 
-- Current step: step 5, dev run per model (A: 3.5-flash-lite, then B: 3.1-flash-lite)
-- Real calls used: gemini-3.5-flash-lite: 12 / 450 (smoke 0: all cache hits; red-team 12), gemini-3.1-flash-lite: 0 / 150
+- Current step: step 5 model A dev run INTERRUPTED twice (SSL EOF crash, then 503 UNAVAILABLE "high demand" after 2 retries); stopped per the two-failure rule. Partial results are in the response cache, no result file written
+- Real calls used: gemini-3.5-flash-lite: 61 / 450 (12 red-team + 49 new cache files from the interrupted dev run; failed requests not counted), gemini-3.1-flash-lite: 0 / 150
 - Last commit: see git log
-- Next action: model A dry run, then YES=1, then model B
+- Next action: rerun the same model A command (cache resumes) once the provider recovers, if the owner agrees; model B not started
 
 ## Measured numbers
 
