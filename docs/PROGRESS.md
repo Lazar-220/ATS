@@ -36,10 +36,10 @@ Read this at the start of every session. Update it at the end of every phase.
 
 Hands-free run, 2026-11-21 (orchestrated; budget until 2026-11-22 09:00 Belgrade).
 
-- Current step: step 7 done: gate 1.8 PASS on the test split (see Gate 1.8 verdict); nothing merged, pushed or tagged
+- Current step: stage 1 complete (steps 1 to 8); nothing merged, pushed or tagged
 - Real calls used: gemini-3.5-flash-lite: 219 / 450 (12 red-team + 104 dev run 1 + 56 dev run 2 + 47 test gate run), gemini-3.1-flash-lite: 4 / 150 (cache files; failed requests not counted)
 - Last commit: see git log
-- Next action: owner review; merge decision
+- Next action: owner to-do list in OWNER_TODO.md (label review, remote and first push, merge decision)
 
 ## Measured numbers
 
@@ -344,3 +344,46 @@ Scope was 1.4b close-out, then phases 1.5, 1.6 and 1.7, then stop (owner amendme
 3. **The first CI run on GitHub.** Choose a remote and push the branch yourself. Check the Linux-only SIGTERM test and the pgvector service.
 4. **Langfuse with real calls** (`MANUAL_CHECKS.md`, 1.6). Open one assessment trace and check the prompt, tokens, cost and latency. Also diff `compose.langfuse.yaml` against the official self-host compose.
 5. **The "Owner review" table.** It lists every dependency, threshold and plan deviation chosen alone. Also confirm where `eval/results/20261120T194301_A_dev.json` came from.
+
+## Final report: hands-free run, stage 1, 2026-11-21
+
+Branch `phase/1.8-v1-gate`, not merged, pushed or tagged. Every real call was on the free tier, synthetic CVs only.
+
+**Steps**
+
+1. Setup and pre-registration: pass. Run state, four pre-registered Owner review rows, Docker and Postgres up.
+2. Manual checks with the fake provider: partial. 1.4b steps 1 to 5 through the API passed (3 ranked rows, quotes verified, repeat upload made no new jobs); 1.5 passed only for `make web` serving the app, and all nine UI steps are NOT CHECKED (no browser).
+3. Real smoke (`make smoke-real`): pass. 0 new calls (4 cache hits from an earlier real run); accuracy 90.9% on 2 CVs, quotes 21/21.
+4. Red-team against the real model: partial. 12 real calls; 1 of 3 judged attacks changed a verdict (rt_20, met to partial, score 81.1 to 75.3, a decrease); recorded as a Known risk, nothing tuned.
+5. Langfuse live check: not done. Stopped on the 1 GB free-memory rule (249,636 KB free with Langfuse up); deferred to the owner.
+6. Dev runs and dev-only fixes: pass. Model A run 1 (judge_v1), failure review, list-only fix, judge_v2, run 2; keep rule met; retry fix after provider errors (503 and SSL EOF). Model B (gemini-3.1-flash-lite) was cut twice by provider errors and is unmeasured (4 of 150 calls); the baseline is gemini-3.5-flash-lite.
+7. Gate on the test split: pass. One run (47 real calls, one resume after a 503); verdict PASS.
+8. Final batch: pass. Verifier notes applied, `make label-review`, `OWNER_TODO.md`, this report.
+
+**Numbers against the majority-class baseline of 68%** (always answering `met`: 67.8% dev, 68.5% test)
+
+| Run | Accuracy | Macro-F1 | Weighted kappa | Recall not_met | Recall partial | Gold not_met judged met | Flagged |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Dev run 1, judge_v1 (606 verdicts) | 93.2% | 0.847 | 0.939 (quadratic) | 0.912 | 0.681 | 3 | 17 (2.8%) |
+| Dev run 2, judge_v2 (606) | 95.0% | 0.887 | 0.952 (quadratic) | 0.905 | 0.787 | 3 | 7 (1.2%) |
+| Test gate run, judge_v2 (260) | 94.6% | 0.904 | 0.917 (linear, as the gate defines it) | 0.923 | 0.800 | 1 | 5 (1.9%) |
+
+**Gate verdict: PASS**, gold labels not manually verified; one run, single model, variance unmeasured; test split touched once before by the red-team (sm_09, judge_v1). All six conditions hold on the full set (accuracy 94.6% with the 95% interval lower bound 92.6% against 68.5%; macro-F1 0.904; linear kappa 0.917; not_met recall 0.923; displayed quotes 205/205) and conditions 1 and 3 to 5 also hold on the 252-verdict reduced set. Chosen model: gemini-3.5-flash-lite, with judge_v2. Test commit `cd18602`, result file `eval/results/20261121T143544_A_test.json`. Ranking, report only: pooled concordance 0.943, mean absolute score error 2.62 points, mandatory-failed agreement 23 of 24.
+
+**Calls used:** gemini-3.5-flash-lite 219 of 450 (12 red-team, 104 dev run 1, 56 dev run 2, 47 test); gemini-3.1-flash-lite 4 of 150.
+
+**Owner review highlights (at most 5)**
+
+1. The model-selection rule was pre-registered over two models, but model B was never measured (provider errors), so the baseline was chosen from the measured model; a later B win on dev would make gating on B a second test exposure.
+2. The frozen exclusion list is the proposal's 8-pair table; `uncertain.json` differs by one pair (pm_07/2 instead of ba_06/5) and is reported as a sensitivity number. The owner's manual check of those eight pairs was not done.
+3. judge_v2 was kept under a pre-registered rule (dev macro-F1 at least 0.847 and false positives at most 3); the dev-only fixes were a list-only matching fix, the duration ladder and the quote-source rule.
+4. Owner-approved changes made during the run: the retry budget for server errors (2 to 6, capped at 60 s, connect and SSL errors included) and the evidence quote shown as the CV slice, which closes the gate-6 caveat.
+5. The Langfuse live check (1.6) and the 1.5 browser walkthrough were not done; both are in `OWNER_TODO.md`.
+
+**Next commands**
+
+```bash
+make label-review                      # the 20-minute label check (OWNER_TODO.md, a)
+git ls-files data/ eval/reference .env # must print nothing, then the private remote (b)
+git checkout main && git merge --no-ff phase/1.8-v1-gate   # only after you decide
+```
