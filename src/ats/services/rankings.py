@@ -16,7 +16,7 @@ import psycopg
 
 from ats.db import task_queue
 from ats.services.assessments import enqueue_judgements
-from ats.services.requirements import retry_failed_setup
+from ats.services.requirements import enqueue_missing_setup, retry_failed_setup
 
 INGEST_JOB = "ingest"
 
@@ -133,6 +133,7 @@ def create_ranking(
     position_id = _find_or_create_position(conn, posting.sha256)
     # Uploading a posting whose requirement extraction failed is HR asking to try again.
     retry_failed_setup(conn, position_id)
+    enqueue_missing_setup(conn, position_id)
 
     # Registering in hash order gives concurrent requests one lock order on the unique
     # `sha256`, so two uploads that share CVs cannot deadlock each other.
