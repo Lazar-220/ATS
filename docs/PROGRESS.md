@@ -32,6 +32,15 @@ Read this at the start of every session. Update it at the end of every phase.
 | 3.7 MCP and notifications | not started | | |
 | 3.8 Red-team | not started | | |
 
+## Run state
+
+Hands-free run, 2026-11-21 (orchestrated; budget until 2026-11-22 09:00 Belgrade).
+
+- Current step: 0 (setup)
+- Real calls used: gemini-3.5-flash-lite: 0 / 450, gemini-3.1-flash-lite: 0 / 150
+- Last commit: see git log
+- Next action: step 1, manual checks 1.4b and 1.5 with the fake provider
+
 ## Measured numbers
 
 One row per measurement. Never overwrite a row; add a new one.
@@ -256,6 +265,10 @@ These are decisions the orchestrator made alone during the autonomous run of 202
 | 2026-11-21 | 1.7 | **Deviation from plan §4.4, "optional Llama Prompt Guard 2 classifier": not built** (the phase prompt puts it out of scope; 3.8 measures it on Serbian). **Deviation from plan §5.4 / "Done when": the CI run on GitHub, the real-model effect of visible injections, and the real smoke recording are pending** (no push, no real call). Each has its command in Carried over. | Rules of this run. | Pushing a branch; making real calls |
 | 2026-11-21 | 1.7 | **The smoke cache is committed demo data.** `eval/smoke_cache/` (41 small JSON files, 108 KB): the fake provider's answers for 20 synthetic golden CVs, manifest `provider: fake`, `demo: true`, `baseline: false`. It is outside `LLM_CACHE_DIR` (default `data/llm_cache`, which `.gitignore` excludes), so a real run is never served a demo answer. The smoke measures plumbing (extraction, masking, parsing, quote check) and must be re-recorded with a real model before it says anything about one. | There is no real answer to cache yet. | Waiting for the real run; committing nothing (the CI smoke would have no cache) |
 | 2026-11-21 | 1.7 | **Throwaway branch `tmp/smoke-threshold`** was created and deleted by me to show that the smoke fails when the threshold is raised (see the phase report). No other branch was touched. | The "CI fails when the smoke eval fails" criterion. | none |
+| 2026-11-21 | 1.8 | **Pre-registered, before any measurement.** Model selection rule for the baseline: by dev macro-F1, then fewest false positives (gold `not_met` judged `met`); tie goes to `gemini-3.5-flash-lite`. | Fixes the choice before numbers exist. | Choosing after seeing test numbers. |
+| 2026-11-21 | 1.8 | **Pre-registered.** Budget rule: if `gemini-3.1-flash-lite` is chosen but its remaining budget cannot cover the test-split dry-run call count, the run stops after step 6 and reports; the model is NOT switched after seeing numbers. | Avoids model switching driven by results. | Switching to the other model. |
+| 2026-11-21 | 1.8 | **Pre-registered.** Gate rule: `docs/review/gate_1_8_proposal.md` as written (owner answers present): one run, single model, variance unmeasured; partial recall and ranking report-only; a pass is labelled "gold labels not manually verified"; the owner's manual check of the eight frozen pairs was NOT done before the run (owner instruction for the hands-free run). Check: `eval/golden/uncertain.json` restricted to the test split has 8 pairs (fc_10/3, pm_07/2, pm_07/4, sm_09/6, sm_08/3, be_07/1, be_07/2, da_05/2) and DIFFERS from the proposal's 8 (it has pm_07/2 and lacks ba_06/5). The harness's "reduced set" uses uncertain.json (pairs not in it). The proposal's table is the frozen list; no file under eval/golden was changed. | Owner's hands-free instruction; the difference is recorded, not resolved. | Editing uncertain.json. |
+| 2026-11-21 | 1.8 | **Pre-registered.** No browser tool is available: the 1.5 UI walkthrough is not checked. Proposal for a later owner decision: Playwright as a dev dependency in web/ (NOT added). | Cannot be done without a browser. | Adding Playwright now. |
 
 ## Final report: autonomous run, 2026-11-20 to 2026-11-21
 
