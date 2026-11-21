@@ -78,7 +78,7 @@ class RateLimitError(LLMError):
 
 
 class TransientServerError(LLMError):
-    """The provider answered 500, 503 or 504: its side failed, and asking again may work."""
+    """The provider answered 500, 503 or 504, or could not be reached: asking again may work."""
 
     def __init__(self, message: str, status_code: int) -> None:
         super().__init__(message)
