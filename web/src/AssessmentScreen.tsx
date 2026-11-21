@@ -15,6 +15,9 @@ const VERDICT_LABEL: Record<Verdict["verdict"], string> = {
 const FLAG_LABEL: Record<string, string> = {
   low_coverage: "Parts of this CV could not be read into structured data, so the facts may be incomplete.",
   suspected_injection: "This CV contains text that looks aimed at an automated screener. Read it with care.",
+  hidden_text: "Hidden text (white, tiny, off-page or covered) was found in the PDF and left out of the assessment.",
+  invisible_characters: "Invisible characters were found in the CV text and removed before the assessment.",
+  mixed_script_words: "Some words mix Cyrillic and Latin letters, which can be an attempt to disguise text.",
 };
 
 function QuoteBadge({ verdict }: { verdict: Verdict }) {
