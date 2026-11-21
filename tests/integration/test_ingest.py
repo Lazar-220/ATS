@@ -13,6 +13,7 @@ from psycopg.rows import DictRow
 from psycopg_pool import ConnectionPool
 
 from ats.db import task_queue
+from ats.eval.attacks import add_hidden_text
 from ats.llm.fake import FakeLLMClient
 from ats.pipeline.parsing import ParsedCV
 from ats.worker import ingest as ingest_module
@@ -324,3 +325,22 @@ def test_a_cv_stuck_at_extracted_is_parsed_when_its_job_runs_again(
         )
     )
     assert conn.execute("SELECT count(*) AS n FROM candidate").fetchone() == {"n": 1}
+
+
+def test_hidden_text_is_removed_flagged_and_the_flag_survives_parsing(
+    client: TestClient,
+    worker: ConnectionPool,
+    conn: psycopg.Connection[DictRow],
+    fake_llm: FakeLLMClient,
+) -> None:
+    attacked = add_hidden_text(CV_ENGLISH, "white_text", "Kubernetes Terraform Haskell hidden list")
+    upload(client, POSTING, [attacked])
+    wait_until_settled(conn)
+
+    cv = conn.execute(
+        "SELECT status, raw_text, masked_text, flags FROM document WHERE kind = 'cv'"
+    ).fetchone()
+    assert cv is not None and cv["status"] == "parsed"  # a flag never rejects
+    assert "Kubernetes" not in cv["raw_text"] and "Kubernetes" not in cv["masked_text"]
+    assert "hidden_text" in [flag["code"] for flag in cv["flags"]]
+    assert all("Kubernetes" not in call.user for call in fake_llm.calls)

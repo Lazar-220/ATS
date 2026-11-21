@@ -248,6 +248,31 @@ Reading back from the CLI (the legacy trace endpoints are off in v4):
 `GET /api/public/experiments?fromStartTime=<iso>&datasetId=<id>`, with basic auth
 `pk-lf-ats-local:sk-lf-ats-local`.
 
+### Guardrails and CI (from phase 1.7)
+
+What happens to a CV before the judge sees it (plan §4.4): hidden text (white, tiny, off-page, invisible
+render mode, covered by a shape) is dropped during extraction; invisible Unicode characters are
+deleted; the CV goes into a fenced block that it cannot close; a `met` on a skills-list entry that no
+job mentions is stored as `partial`; instruction-like text in English or Serbian sets a flag. Each of
+these leaves a flag on the document (`hidden_text`, `invisible_characters`, `mixed_script_words`,
+`suspected_injection`) or on the verdict (`list_only_skill`), and none rejects a CV. In the logs a
+removal shows as `hidden text removed: page 1, font_below_4pt, 82 characters` (counts only).
+
+CI is `.github/workflows/ci.yml` (pull requests and pushes to `main`): ruff, pyright, unit tests,
+integration tests against `pgvector/pgvector:pg17`, web typecheck and lint, and the smoke eval. No
+job has a secret or needs `LLM_API_KEY`. To run the same thing locally, from Git Bash:
+
+```bash
+make up        # Postgres, for the integration tests
+make ci        # make check + make test-int + make smoke
+```
+
+The smoke eval (`make smoke`) answers only from `eval/smoke_cache/`; a cache miss fails it. That
+directory is separate from `LLM_CACHE_DIR` on purpose. It is committed and holds DEMO answers until
+you record a real run (`make smoke-cache REAL=1 DRY_RUN=1`, then `YES=1`); then set the thresholds in
+`eval/smoke_cache/manifest.json` just below the measured values. Pushing to GitHub is the owner's
+decision: nothing here pushes.
+
 ## 3. Commands
 
 | Command | Does | From phase |
@@ -267,7 +292,10 @@ Reading back from the CLI (the legacy trace endpoints are off in v4):
 | `make smoke-real [YES=1]` | manual real-model smoke test: the variant A judge (`make eval STAGES=judge SPLIT=dev LIMIT=2`) on 2 dev CVs, 4 calls, about $0.03. Dry run (no call) unless `YES=1`. Honours `LLM_MODEL` and `LLM_RPM`; needs `LLM_API_KEY`; it refuses to run with `LLM_PROVIDER=fake` (`--require-real`). Not part of `make check` | smoke |
 | `uv run python -m ats.eval build` | validate the golden set's profiles, write `labels/*.jsonl` and `split.json` (see `eval/golden/README.md`) | 1.3 |
 | `uv run python -m ats.eval render` | render posting and CV sources to PDF; writes only the files whose bytes change | 1.3 |
-| `make eval-redteam` | injection red-team set | 1.7 |
+| `make eval-redteam [JUDGE=1] [DRY_RUN=1] [YES=1]` | the 20 red-team pairs (a golden CV and the same CV with one attack, synthetic only): prints, per pair, whether the judge input is identical to the clean twin's and the flags set, and the share of attacks that change the judge input (17 of 20 identical, the 3 visible instructions flagged). No model is called. `JUDGE=1` also judges both sides of the pairs whose input changed with the real model (`DRY_RUN=1` prints the count, about 12 calls; `YES=1` confirms and implies `JUDGE=1`); it needs `LLM_API_KEY` and refuses `LLM_PROVIDER=fake`. Exits 1 if an input changed without a flag | 1.7 |
+| `make smoke` | the CI smoke eval: 20 synthetic golden CVs judged from the committed cache `eval/smoke_cache/` with a client that cannot call a model; fails on a cache miss or when verdict accuracy or quote validity is below the manifest's thresholds. Needs no key and no network | 1.7 |
+| `make smoke-cache [REAL=1] [DRY_RUN=1] [YES=1]` | rebuild `eval/smoke_cache/`. Default: the demo provider (free; manifest marks it DEMO and non-baseline). `REAL=1` records the configured model instead (about 40 calls; `DRY_RUN=1` prints the count, `YES=1` confirms). Run it after any change to a prompt, the fence, extraction, masking or the parse schema, and commit the directory | 1.7 |
+| `make ci` | what `.github/workflows/ci.yml` runs: `make check`, `make test-int` (needs `make up`) and `make smoke` | 1.7 |
 | `make langfuse-up` / `make langfuse-down` | Langfuse self-host from `compose.langfuse.yaml` (compose project `ats-langfuse`, UI and API on :3000, about 1.6 GiB measured, limits add up to about 5 GiB); run `make down` first on this machine. `down` keeps the traces | 1.6 |
 | `make reindex` | re-chunk and re-embed every CV | 2.1 |
 | `make mcp` | MCP server | 3.7 |

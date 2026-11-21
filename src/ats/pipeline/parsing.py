@@ -11,6 +11,7 @@ from typing import Self
 from pydantic import BaseModel, field_validator, model_validator
 
 from ats.llm.types import LLMClient, LLMRequest, LLMResult, ThinkingLevel
+from ats.pipeline.fence import fence
 from ats.prompts import load_prompt
 
 PROMPT_VERSION = "cv_parse_v1"
@@ -92,16 +93,11 @@ class ParsedCV(BaseModel):
 SECTIONS = ("experience", "education", "skills", "certificates", "languages", "projects")
 
 
-def _fence(masked_text: str) -> str:
-    # The CV is data. A literal closing tag inside it must not end the block early (§4.4).
-    return f"<cv>\n{masked_text.replace('</cv>', '</ cv>')}\n</cv>"
-
-
 def build_request(masked_text: str) -> LLMRequest:
     # Instructions first and the CV last, so the stable prefix can be cached (§4.5).
     return LLMRequest(
         system=load_prompt(PROMPT_VERSION),
-        user=_fence(masked_text),
+        user=fence(masked_text, "cv"),
         thinking_level=THINKING_LEVEL,
         prompt_version=PROMPT_VERSION,
     )

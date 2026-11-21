@@ -1,0 +1,108 @@
+# CI for pull requests and pushes to main (plan §5.4, §6.3). `make ci` runs the same commands
+# locally. No job needs LLM_API_KEY: the tests use the fake client, and the smoke eval answers
+# from the committed cache in eval/smoke_cache/ with a client that has no way to call a model.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  UV_LOCKED: "1"
+
+jobs:
+  ruff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: uv sync
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+
+  pyright:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: uv sync
+      - run: uv run pyright
+
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: uv sync
+      - run: uv run pytest -q -m "not integration and not llm"
+
+  integration-tests:
+    runs-on: ubuntu-latest
+    services:
+      # The image the app's compose file uses (compose.yaml, service postgres).
+      postgres:
+        image: pgvector/pgvector:pg17
+        env:
+          POSTGRES_USER: ats
+          POSTGRES_PASSWORD: ats
+          POSTGRES_DB: ats
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U ats -d ats"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://ats:ats@localhost:5432/ats
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: uv sync
+      - run: uv run pytest -q -m integration
+
+  web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+      - run: npm run check:types
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run test
+
+  smoke-eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: uv sync
+      # 20 synthetic golden CVs from eval/smoke_cache/. A cache miss or a score below the
+      # thresholds in its manifest fails the job; there is no key and no network call.
+      - run: uv run python -m ats.eval smoke

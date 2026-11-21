@@ -76,7 +76,29 @@ check:
 test:
 	uv run pytest -q -m "$(UNIT_TESTS)"
 
+# Red-team set (phase 1.7): 20 pairs of a clean golden CV and the same CV with an attack. No model
+# is called: the metric is the share of attacks that change the judge input. JUDGE=1 (or YES=1) also
+# judges the pairs whose input changed with the real model (about 12 calls); DRY_RUN=1 prints the
+# count, YES=1 confirms. Needs LLM_API_KEY; refuses LLM_PROVIDER=fake.
+eval-redteam:
+	uv run python -m ats.eval redteam $(if $(or $(JUDGE),$(YES)),--judge) $(if $(DRY_RUN),--dry-run) $(if $(YES),--yes)
+
+# CI smoke eval (phase 1.7): 20 synthetic golden CVs answered from the committed cache in
+# eval/smoke_cache/, never from a model; exits non-zero on a cache miss or when accuracy or quote
+# validity falls below the thresholds in the cache's manifest. Needs no key and no network.
+smoke:
+	uv run python -m ats.eval smoke
+
+# Rebuild eval/smoke_cache. Default: the demo provider (no key, no cost; the manifest says DEMO,
+# non-baseline). REAL=1 records the configured model instead (about 40 calls): DRY_RUN=1 prints
+# the count, YES=1 confirms. Rebuild after any change to a prompt, the fence, extraction or masking:
+# those change the cache keys and the smoke then fails with "rebuild".
+smoke-cache:
+	uv run python -m ats.eval smoke-cache $(if $(REAL),--real) $(if $(DRY_RUN),--dry-run) $(if $(YES),--yes)
+
+# What .github/workflows/ci.yml runs, in one command. Needs `make up` (Postgres) for test-int.
+ci: check test-int smoke
+
 # Targets that belong to a later phase fail loudly instead of doing nothing.
-eval-redteam: ; @echo "make $@ is added in phase 1.7"; exit 1
 reindex: ; @echo "make $@ is added in phase 2.1"; exit 1
 mcp: ; @echo "make $@ is added in phase 3.7"; exit 1

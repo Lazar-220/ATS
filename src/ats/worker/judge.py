@@ -24,6 +24,7 @@ from ats.llm.types import LLMClient
 from ats.observability import Observation, Tracer, get_tracer
 from ats.pipeline.context import ContextRequirement, build_context
 from ats.pipeline.judge import PROMPT_VERSION, THINKING_LEVEL, judge
+from ats.pipeline.listonly import LIST_ONLY_SKILL, list_only_detail
 from ats.pipeline.masking import Span
 from ats.pipeline.quotes import check_quote
 from ats.pipeline.score import ScoredRequirement, compute_score
@@ -183,12 +184,23 @@ def _judge_and_store(
             )
             for label, verdict in judged.verdicts.items()
         }
+        # The list-only rule in code (§4.4): a `met` on a skills-list entry is at most `partial`.
+        list_only = {
+            label: detail
+            for label, verdict in judged.verdicts.items()
+            if (detail := list_only_detail(verdict.verdict, checks[label], loaded["parsed_json"]))
+        }
+        final = {
+            label: "partial" if label in list_only else verdict.verdict
+            for label, verdict in judged.verdicts.items()
+        }
         quote_check_s = time.perf_counter() - started
         span.update(
             output={
                 "duration_s": round(quote_check_s, 4),
                 "checked": len(checks),
                 "flagged": sum(1 for check in checks.values() if check.flags),
+                "list_only_downgrades": len(list_only),
             }
         )
     with tracer.span("score") as span:
@@ -198,7 +210,7 @@ def _judge_and_store(
                 ScoredRequirement(label_of[row[0]], label_of.get(row[1]), row[3], float(row[4]))
                 for row in rows
             ],
-            {label: verdict.verdict for label, verdict in judged.verdicts.items()},
+            final,
         )
         score_s = time.perf_counter() - started
         span.update(
@@ -272,13 +284,15 @@ def _judge_and_store(
             verdict = judged.verdicts[label]
             check = checks[label]
             flags = [{"code": code, "detail": check.detail or ""} for code in check.flags]
+            if label in list_only:
+                flags.append({"code": LIST_ONLY_SKILL, "detail": list_only[label]})
             conn.execute(
                 "INSERT INTO verdict (assessment_id, requirement_id, verdict, quote, char_start, "
                 "char_end, rationale, flags) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
                 (
                     assessment[0],
                     row[0],
-                    verdict.verdict,
+                    final[label],
                     verdict.quote if verdict.verdict != "not_met" else None,
                     check.char_start,
                     check.char_end,

@@ -22,6 +22,7 @@ from ats.llm.pricing import usage_cost
 from ats.observability import Observation, get_tracer
 from ats.pipeline.extract import PdfRejected, extract_text
 from ats.pipeline.facts import build_facts
+from ats.pipeline.injection import injection_flag
 from ats.pipeline.language import detect_language, detect_script
 from ats.pipeline.masking import mask_text
 from ats.pipeline.parsing import parse_cv
@@ -34,6 +35,15 @@ from ats.worker.registry import register
 log = logging.getLogger(__name__)
 
 FAILED_MESSAGE = "Processing failed unexpectedly. Upload the file again to retry."
+
+
+def merge_flags(*groups: list[dict[str, str]]) -> list[dict[str, str]]:
+    """Flags of all groups, one per code, the first one kept."""
+    merged: dict[str, dict[str, str]] = {}
+    for group in groups:
+        for flag in group:
+            merged.setdefault(flag["code"], flag)
+    return list(merged.values())
 
 
 def _ingest(pool: ConnectionPool, document_id: UUID, root: Observation) -> None:
@@ -92,8 +102,8 @@ def _ingest(pool: ConnectionPool, document_id: UUID, root: Observation) -> None:
     with pool.connection() as conn:
         conn.execute(
             "UPDATE document SET status = 'extracted', status_message = NULL, raw_text = %s, "
-            "lang = %s, script = %s WHERE id = %s",
-            (extracted.text, lang, script, document_id),
+            "lang = %s, script = %s, flags = %s WHERE id = %s",
+            (extracted.text, lang, script, Jsonb(extracted.flags), document_id),
         )
         if kind == "posting":
             position = conn.execute(
@@ -121,8 +131,16 @@ def _parse(
 ) -> None:
     """Mask, parse, locate and measure one extracted CV; store the result in one transaction."""
     with pool.connection() as conn:
-        row = conn.execute("SELECT raw_text FROM document WHERE id = %s", (document_id,)).fetchone()
+        row = conn.execute(
+            "SELECT raw_text, flags FROM document WHERE id = %s", (document_id,)
+        ).fetchone()
     assert row is not None and row[0] is not None
+    # Flags set at extraction (hidden text, invisible characters) stay next to the parse flags.
+    extraction_flags: list[dict[str, str]] = row[1] or []
+    # Pattern detection runs on the CV as extracted, whatever the model says about it (§4.4).
+    pattern_flag = injection_flag(row[0])
+    if pattern_flag is not None:
+        extraction_flags = [*extraction_flags, pattern_flag]
     settings = get_settings()
     tracer = get_tracer()
     with tracer.span("masking") as span:
@@ -209,7 +227,7 @@ def _parse(
                         },
                     }
                 ),
-                Jsonb(facts.flags),
+                Jsonb(merge_flags(extraction_flags, facts.flags)),
                 document_id,
             ),
         )

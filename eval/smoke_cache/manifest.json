@@ -1,0 +1,42 @@
+{
+  "provider": "fake",
+  "model": "demo-fake",
+  "demo": true,
+  "baseline": false,
+  "note": "DEMO answers from the keyword-match demo provider: they measure the plumbing, not a model. Synthetic golden CVs only. Not a baseline.",
+  "created": "2026-11-21T00:07:20Z",
+  "prompt_versions": {
+    "parse": "cv_parse_v1",
+    "judge": "judge_v1"
+  },
+  "cv_ids": [
+    "ba_01",
+    "ba_05",
+    "ba_09",
+    "be_02",
+    "be_06",
+    "be_10",
+    "da_04",
+    "da_08",
+    "fc_01",
+    "fc_05",
+    "fc_09",
+    "fc_13",
+    "fc_17",
+    "pm_04",
+    "pm_08",
+    "pm_12",
+    "sm_02",
+    "sm_06",
+    "sm_10",
+    "sm_14"
+  ],
+  "thresholds": {
+    "verdict_accuracy": 0.44,
+    "quote_validity": 0.95
+  },
+  "measured": {
+    "verdict_accuracy": 0.4931,
+    "quote_validity": 1.0
+  }
+}

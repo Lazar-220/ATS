@@ -5,6 +5,7 @@ from typing import Literal, Self
 from pydantic import BaseModel, Field, field_validator, model_validator
 
 from ats.llm.types import LLMClient, LLMRequest, LLMResult, ThinkingLevel
+from ats.pipeline.fence import fence
 from ats.prompts import load_prompt
 
 PROMPT_VERSION = "requirements_v1"
@@ -61,16 +62,11 @@ class RequirementList(BaseModel):
         return self
 
 
-def _fence(posting_text: str) -> str:
-    # The posting is data. A literal closing tag inside it must not end the block early.
-    return f"<posting>\n{posting_text.replace('</posting>', '</ posting>')}\n</posting>"
-
-
 def build_request(posting_text: str) -> LLMRequest:
     # Instructions first and the posting last, so the stable prefix can be cached (§4.5).
     return LLMRequest(
         system=load_prompt(PROMPT_VERSION),
-        user=_fence(posting_text),
+        user=fence(posting_text, "posting"),
         thinking_level=THINKING_LEVEL,
         prompt_version=PROMPT_VERSION,
     )
