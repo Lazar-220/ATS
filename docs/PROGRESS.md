@@ -36,10 +36,10 @@ Read this at the start of every session. Update it at the end of every phase.
 
 Hands-free run, 2026-11-21 (orchestrated; budget until 2026-11-22 09:00 Belgrade).
 
-- Current step: Langfuse live check (step 4) stopped on the memory limit; Langfuse down, Postgres up
+- Current step: step 5, dev run per model (A: 3.5-flash-lite, then B: 3.1-flash-lite)
 - Real calls used: gemini-3.5-flash-lite: 12 / 450 (smoke 0: all cache hits; red-team 12), gemini-3.1-flash-lite: 0 / 150
 - Last commit: see git log
-- Next action: baseline dev/test runs and gate (later steps of the run)
+- Next action: model A dry run, then YES=1, then model B
 
 ## Measured numbers
 
@@ -277,6 +277,7 @@ These are decisions the orchestrator made alone during the autonomous run of 202
 | 2026-11-21 | 1.8 | **Pre-registered.** No browser tool is available: the 1.5 UI walkthrough is not checked. Proposal for a later owner decision: Playwright as a dev dependency in web/ (NOT added). | Cannot be done without a browser. | Adding Playwright now. |
 | 2026-11-21 | 1.8 | [auto] Frozen exclusion list: the proposal's 8-pair table is the gate's frozen list, because the proposal carries the owner's answers. The gate's reduced set is computed on those 8 pairs (offline from the result file, no new call). The uncertain.json reduced set (pm_07/2 instead of ba_06/5) is reported next to it as a second sensitivity number. | Proposal has the owner's answers. | Using uncertain.json as the frozen list. |
 | 2026-11-21 | 1.8 | [auto] Test-split exposure before the gate: the red-team judged test CV sm_09 (clean twin and attacked copy) on gemini-3.5-flash-lite; its answers were not read for tuning. The gate report counts it as "test split touched once by red-team (sm_09 only)". Splits: sm_09 = test, pm_02 = dev, be_05 = dev. | Honest exposure count. | none |
+| 2026-11-21 | 1.8 | [auto] the Langfuse live check (1.6 steps 2, 3, 5 and 6) stopped on the owner's 1 GB free-memory rule (244 MB free with Langfuse up, about 1.95 GiB of containers). It is deferred to the owner (OWNER_TODO). The limit was not relaxed. | The batch rule said to stop. | Relaxing the limit. |
 
 ## Final report: autonomous run, 2026-11-20 to 2026-11-21
 
