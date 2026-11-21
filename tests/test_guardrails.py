@@ -289,3 +289,39 @@ def test_a_list_only_skill_and_short_names_inside_other_words_are_still_downgrad
 def test_a_short_name_is_confirmed_by_the_whole_word() -> None:
     assert not _downgraded("R", "Statistička analiza u R i Excelu")
     assert not _downgraded("Go", "Servisi napisani u Go")
+
+
+@pytest.mark.parametrize(
+    ("skill", "job"),
+    [
+        ("Project Management", "Vodio sam project za banku"),
+        ("Team Leadership", "Work in a team of five"),
+        ("Machine Learning", "Self learning and a machine shop"),
+        ("Power BI", "Worked at a power plant"),
+        ("MS Office", "Studied at MS"),
+        ("Adobe Photoshop", "Adobe contracts review"),
+        ("Machine Learning", "machine one two three learning"),  # outside the window
+        ("Project Management", "Upravljanje projektima"),  # a translation is not confirmation
+    ],
+)
+def test_one_word_of_a_multi_word_skill_does_not_confirm_it(skill: str, job: str) -> None:
+    assert _downgraded(skill, job)
+
+
+@pytest.mark.parametrize(
+    ("skill", "job"),
+    [
+        ("Project Management", "Project managementa u bankarstvu"),
+        ("Power BI", "Power BI izveštaji"),
+        ("Machine Learning", "Razvoj machine learning modela"),
+        ("Machine Learning", "machine and deep learning"),  # inside the 3-word window
+        (".NET", "Razvoj u .NET okruženju"),
+        ("Node.js", "Node.js backend"),
+        ("Git", "Rad u Gitu"),
+        # Accepted leniency (Known risks N-B): a 3-letter name plus up to three letters.
+        ("SAP", "Prodaja sapuna"),
+        ("Git", "Sviram gitaru"),
+    ],
+)
+def test_every_word_of_a_multi_word_skill_confirms_it(skill: str, job: str) -> None:
+    assert not _downgraded(skill, job)

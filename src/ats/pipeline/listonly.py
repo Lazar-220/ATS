@@ -6,7 +6,8 @@ quote lies in a skills item and
 
 - no experience, project, certificate or education item overlaps the quote, and
 - none of the skill names the quote covers is mentioned in an experience, project or
-  certificate item.
+  certificate item: every word of the name, in order within a 3-word window of one snippet,
+  allowing case endings (see `_word_confirms`).
 
 When it cannot tell (the quote has no position, the items have none, the quote is outside the
 skills section) the verdict stays as the judge gave it. This errs toward trusting the judge: a
@@ -55,15 +56,42 @@ def _word_confirms(token: str, word: str) -> bool:
     )
 
 
-def _mentioned(name: str, text: str) -> bool:
-    """Whether a skill's name occurs in `text` (already folded), in any case form.
+# Words of one snippet in which the next word of a multi-word name must follow the previous one:
+# at most two other words in between ("Machine Learning" in "machine and deep learning").
+_WINDOW = 3
 
+
+def _follows(tokens: list[str], words: list[str], start: int) -> bool:
+    """Whether `tokens` match words from `start` on, in order, each within the window."""
+    if not tokens:
+        return True
+    return any(
+        _word_confirms(tokens[0], words[i]) and _follows(tokens[1:], words, i + 1)
+        for i in range(start, min(start + _WINDOW, len(words)))
+    )
+
+
+def _mentioned(name: str, snippets: list[str]) -> bool:
+    """Whether a skill's name occurs in one of the (folded) snippets, in any case form.
+
+    Every word of a multi-word name must match, in order and close together, inside one snippet:
+    "Project Management" is not confirmed by "project" alone, nor "Power BI" by "power plant".
     Both sides are folded and transliterated (`normalize_for_lexical`), so Latin and Cyrillic
-    agree. Not covered: a Latin name against its Cyrillic respelling ("Python" and "Питхон").
+    agree. Not covered: a Latin name against its Cyrillic respelling ("Python" and "Питхон"), and
+    a translation ("Project Management" and "upravljanje projektima").
     """
     tokens = re.findall(r"\w+", normalize_for_lexical(name))
-    words = set(re.findall(r"\w+", text))
-    return any(_word_confirms(token, word) for token in tokens for word in words)
+    if not tokens:
+        return False
+    for snippet in snippets:
+        words = re.findall(r"\w+", snippet)
+        # The first word may start anywhere; the rest follow inside the window.
+        if any(
+            _word_confirms(tokens[0], word) and _follows(tokens[1:], words, i + 1)
+            for i, word in enumerate(words)
+        ):
+            return True
+    return False
 
 
 def list_only_detail(verdict: str, check: CheckedQuote, parsed_json: dict[str, Any]) -> str | None:
@@ -79,13 +107,11 @@ def list_only_detail(verdict: str, check: CheckedQuote, parsed_json: dict[str, A
     for section in _CONFIRMING_ZONES:
         if any(_overlaps(item, start, end) for item in parsed_json.get(section, [])):
             return None
-    confirming = normalize_for_lexical(
-        " ".join(
-            str(item.get("snippet", ""))
-            for section in _CONFIRMING_TEXT
-            for item in parsed_json.get(section, [])
-        )
-    )
+    confirming = [
+        normalize_for_lexical(str(item.get("snippet", "")))
+        for section in _CONFIRMING_TEXT
+        for item in parsed_json.get(section, [])
+    ]
     if any(_mentioned(str(item.get("name", "")), confirming) for item in skills):
         return None
     return (
