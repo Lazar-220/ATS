@@ -36,10 +36,10 @@ Read this at the start of every session. Update it at the end of every phase.
 
 Hands-free run, 2026-11-21 (orchestrated; budget until 2026-11-22 09:00 Belgrade).
 
-- Current step: step 6, dev-only fixes (units 1 list-only, 2 tenure, 3 judge_v2), then dev run 2
-- Real calls used: gemini-3.5-flash-lite: 116 / 450 (12 red-team + 104 dev run), gemini-3.1-flash-lite: 4 / 150 (cache files; failed requests not counted)
+- Current step: step 6, dev run 2 (judge_v2, 3.5-flash-lite) cut by a 503 after 49 new calls; one resume after a 30-minute wait allowed
+- Real calls used: gemini-3.5-flash-lite: 165 / 450 (12 red-team + 104 dev run 1 + 49 dev run 2 so far), gemini-3.1-flash-lite: 4 / 150 (cache files; failed requests not counted)
 - Last commit: see git log
-- Next action: unit 3, judge_v2
+- Next action: resume dev run 2 once, then keep rule
 
 ## Measured numbers
 
