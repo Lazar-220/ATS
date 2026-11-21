@@ -106,6 +106,102 @@ def test_a_parsed_cv_whose_assessment_is_missing_is_judged_again_on_reupload(
     assert _status(client, again["request_id"])["status"] == "done"
 
 
+def test_reuploading_a_finished_pair_reuses_the_result_with_no_new_call(
+    client: TestClient,
+    worker: ConnectionPool,
+    conn: psycopg.Connection[DictRow],
+    fake_llm: FakeLLMClient,
+) -> None:
+    upload(client, POSTING, [CV_OLD])
+    wait_until_settled(conn)
+    calls = len(fake_llm.calls)
+    jobs = conn.execute("SELECT count(*) AS n FROM task_queue").fetchone()
+
+    again = upload(client, POSTING, [CV_OLD])
+    wait_until_settled(conn)
+
+    assert len(fake_llm.calls) == calls
+    assert len(_assessments(conn)) == 1
+    assert conn.execute("SELECT count(*) AS n FROM task_queue").fetchone() == jobs
+    assert _status(client, again["request_id"])["status"] == "done"
+
+
+def test_reuploading_a_failed_cv_retries_it_to_the_end(
+    client: TestClient,
+    worker: ConnectionPool,
+    conn: psycopg.Connection[DictRow],
+) -> None:
+    upload(client, POSTING, [CV_OLD])
+    wait_until_settled(conn)
+    # What a CV that ran out of attempts looks like: no candidate, no assessment, no live job.
+    conn.execute("DELETE FROM assessment")
+    conn.execute("DELETE FROM task_queue WHERE job_type IN ('judge', 'ingest')")
+    conn.execute("UPDATE request_candidate SET candidate_id = NULL")
+    conn.execute(
+        "UPDATE document SET status = 'failed', status_message = 'Processing failed', "
+        "candidate_id = NULL, masked_text = NULL, parsed_json = NULL, mask_spans = NULL "
+        "WHERE kind = 'cv'"
+    )
+
+    again = upload(client, POSTING, [CV_OLD])
+    wait_until_settled(conn)
+
+    assert [row["status"] for row in _assessments(conn)] == ["done"]
+    assert _status(client, again["request_id"])["status"] == "done"
+
+
+def test_reuploading_a_scan_is_accepted_and_shows_the_stored_message_again(
+    client: TestClient,
+    worker: ConnectionPool,
+    conn: psycopg.Connection[DictRow],
+    fake_llm: FakeLLMClient,
+) -> None:
+    first = upload(client, POSTING, [CV_SCAN])
+    wait_until_settled(conn)
+    message = next(
+        doc["message"]
+        for doc in _status(client, first["request_id"])["documents"]
+        if doc["kind"] == "cv"
+    )
+    assert message
+    calls = len(fake_llm.calls)
+    jobs = conn.execute("SELECT count(*) AS n FROM task_queue").fetchone()
+
+    again = upload(client, POSTING, [CV_SCAN])
+    wait_until_settled(conn)
+
+    documents = _status(client, again["request_id"])["documents"]
+    cv = next(doc for doc in documents if doc["kind"] == "cv")
+    assert (cv["status"], cv["message"]) == ("rejected", message)
+    assert len(fake_llm.calls) == calls
+    assert conn.execute("SELECT count(*) AS n FROM task_queue").fetchone() == jobs
+
+
+def test_a_batch_of_a_known_cv_and_a_new_one_ends_with_both_assessed(
+    client: TestClient,
+    worker: ConnectionPool,
+    conn: psycopg.Connection[DictRow],
+    fake_llm: FakeLLMClient,
+) -> None:
+    upload(client, POSTING, [CV_OLD])
+    wait_until_settled(conn)
+    judged = _judge_calls(fake_llm)
+
+    mixed = upload(client, POSTING, [CV_OLD, CV_NEW, CV_SCAN])
+    wait_until_settled(conn)
+
+    assert [row["status"] for row in _assessments(conn)] == ["done", "done"]
+    assert _judge_calls(fake_llm) == judged + 1  # only the new CV is judged
+    state = _status(client, mixed["request_id"])
+    assert state["status"] == "done"
+    assert sorted(doc["status"] for doc in state["documents"]) == [
+        "extracted",
+        "parsed",
+        "parsed",
+        "rejected",
+    ]
+
+
 def test_a_batch_on_a_stranded_position_with_known_and_new_cvs_is_processed_whole(
     client: TestClient,
     worker: ConnectionPool,
