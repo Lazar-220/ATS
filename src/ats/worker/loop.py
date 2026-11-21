@@ -1,5 +1,6 @@
 import logging
 import signal
+import sys
 import threading
 from types import FrameType
 
@@ -20,7 +21,9 @@ def install_signal_handlers(stop: threading.Event) -> None:
         stop.set()
 
     signals = [signal.SIGINT, signal.SIGTERM]
-    if hasattr(signal, "SIGBREAK"):  # Windows: Ctrl+Break is the only catchable console signal
+    # Windows: Ctrl+Break is the only catchable console signal. The platform check (not hasattr)
+    # lets pyright drop this branch when type-checking for Linux, where SIGBREAK does not exist.
+    if sys.platform == "win32":
         signals.append(signal.SIGBREAK)
     for sig in signals:
         signal.signal(sig, request_stop)
