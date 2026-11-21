@@ -26,7 +26,7 @@ from ats.pipeline.context import ContextRequirement, build_context
 from ats.pipeline.judge import PROMPT_VERSION, THINKING_LEVEL, judge
 from ats.pipeline.listonly import LIST_ONLY_SKILL, list_only_detail
 from ats.pipeline.masking import Span
-from ats.pipeline.quotes import check_quote
+from ats.pipeline.quotes import check_quote, displayed_quote
 from ats.pipeline.score import ScoredRequirement, compute_score
 from ats.services.assessments import JUDGE_JOB
 from ats.services.hr_answers import REJUDGE_JOB
@@ -64,7 +64,7 @@ def _load(pool: ConnectionPool, candidate_id: UUID, position_id: UUID) -> dict[s
         if not requirements:
             raise LookupError(f"position {position_id} has no requirements at version {version}")
         document = conn.execute(
-            "SELECT masked_text, mask_spans, parsed_json FROM document "
+            "SELECT masked_text, mask_spans, parsed_json, raw_text FROM document "
             "WHERE candidate_id = %s AND status = 'parsed'",
             (candidate_id,),
         ).fetchone()
@@ -76,6 +76,7 @@ def _load(pool: ConnectionPool, candidate_id: UUID, position_id: UUID) -> dict[s
         "masked_text": document[0],
         "spans": [Span.model_validate(span) for span in cast(list[Any], document[1] or [])],
         "parsed_json": document[2],
+        "raw_text": document[3],
     }
 
 
@@ -293,7 +294,9 @@ def _judge_and_store(
                     assessment[0],
                     row[0],
                     final[label],
-                    verdict.quote if verdict.verdict != "not_met" else None,
+                    displayed_quote(verdict.quote, check, loaded["raw_text"])
+                    if verdict.verdict != "not_met"
+                    else None,
                     check.char_start,
                     check.char_end,
                     verdict.rationale,

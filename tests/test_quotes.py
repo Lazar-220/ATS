@@ -1,5 +1,11 @@
 from ats.pipeline.masking import mask_text
-from ats.pipeline.quotes import NO_EVIDENCE, QUOTE_NOT_FOUND, check_quote, find_quote
+from ats.pipeline.quotes import (
+    NO_EVIDENCE,
+    QUOTE_NOT_FOUND,
+    check_quote,
+    displayed_quote,
+    find_quote,
+)
 
 CV = (
     "Backend developer\n"
@@ -117,3 +123,26 @@ def test_a_fuzzy_alignment_ending_inside_a_number_is_rejected() -> None:
     # so every digit run of the quote is in the window and only the split check catches it.
     assert find_quote("experience with python 1", "experiance with python 15", 90) is None
     assert find_quote("experience with python 1", "experiance with python 1", 90) is not None
+
+
+def test_a_fuzzy_or_case_changed_quote_is_displayed_as_the_exact_cv_slice() -> None:
+    for model_quote in (
+        "BUILT REST APIS IN PYTHON",  # case change
+        "• Built REST APIs in Python",  # a bullet glyph added
+    ):
+        check = _check("met", model_quote)
+        assert check.flags == ()
+        shown = displayed_quote(model_quote, check, CV)
+        assert shown is not None and shown in CV  # byte-verbatim
+        assert shown != model_quote
+        # The interface highlights cv_text[char_start:char_end]: it is the same string.
+        assert check.char_start is not None and check.char_end is not None
+        assert shown == CV[check.char_start : check.char_end]
+
+
+def test_a_flagged_quote_keeps_the_model_string_and_has_no_offsets() -> None:
+    check = _check("met", "A sentence that is nowhere in this CV at all")
+    assert displayed_quote("A sentence that is nowhere in this CV at all", check, CV) == (
+        "A sentence that is nowhere in this CV at all"
+    )
+    assert displayed_quote(None, _check("not_met", None), CV) is None

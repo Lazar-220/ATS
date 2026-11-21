@@ -51,7 +51,9 @@ def _empty_cv() -> ParsedCV:
     )
 
 
-def _scripted(golden: GoldSet, *, spoil: tuple[str, int] | None = None) -> FakeLLMClient:
+def _scripted(
+    golden: GoldSet, *, spoil: tuple[str, int] | None = None, mangle: bool = False
+) -> FakeLLMClient:
     """Answers the parse call with an empty CV and the judge call with the gold verdicts and quotes.
 
     The golden CV is found from the masked text inside the request's `<cv>` block.
@@ -72,6 +74,8 @@ def _scripted(golden: GoldSet, *, spoil: tuple[str, int] | None = None) -> FakeL
             quote = row.quote
             if spoil == (cv_id, row.requirement_id):
                 quote = "A sentence that is nowhere in this CV, about leading a rocket programme"
+            if mangle and quote is not None:
+                quote = quote.upper()  # passes the check, but is not the CV's own string
             verdicts.append(
                 RequirementVerdict(
                     requirement_id=row.requirement_id,
@@ -126,6 +130,20 @@ def test_the_pipeline_judge_scores_a_gold_answering_model_and_flags_an_invented_
     assert result.usage.latency_p95_s == 0.0  # the fake client reports no latency
     assert result.pipeline_version.prompts["judge"] == "judge_v2"
     assert result.pipeline_version.judge == "llm"
+
+
+def test_a_quote_that_passes_by_normalization_is_displayed_as_the_cv_slice(
+    golden: GoldSet,
+) -> None:
+    result = _run(golden, _scripted(golden, mangle=True))
+
+    assert result.verdicts is not None
+    quoted = [i for i in result.verdicts.items if i.predicted_quote is not None]
+    # The model answered in upper case; the CV has mixed case, so the slice is what shows.
+    assert any(i.predicted_quote != i.predicted_quote.upper() for i in quoted if i.predicted_quote)
+    # Gate 6: every displayed quote is a byte-for-byte slice of the CV text.
+    assert result.verdicts.grounding.quote_exists_share == 1.0
+    assert result.verdicts.flagged.flagged == 0
 
 
 def test_the_report_carries_the_majority_class_the_sensitivity_run_and_the_run_count(
