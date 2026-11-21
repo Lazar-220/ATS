@@ -61,6 +61,31 @@ def test_a_posting_that_was_extracted_but_never_set_up_is_set_up_on_reupload(
     assert _status(client, again["request_id"])["status"] == "done"
 
 
+def test_a_cv_that_stopped_at_extracted_is_parsed_and_judged_on_reupload(
+    client: TestClient,
+    worker: ConnectionPool,
+    conn: psycopg.Connection[DictRow],
+) -> None:
+    """Documents ingested before CV parsing existed stay `extracted` and no job is left."""
+    upload(client, POSTING, [CV_OLD])
+    wait_until_settled(conn)
+    conn.execute("DELETE FROM assessment")
+    conn.execute("DELETE FROM task_queue WHERE job_type IN ('judge', 'ingest')")
+    conn.execute("UPDATE request_candidate SET candidate_id = NULL")
+    conn.execute(
+        "UPDATE document SET status = 'extracted', candidate_id = NULL, masked_text = NULL, "
+        "parsed_json = NULL, mask_spans = NULL WHERE kind = 'cv'"
+    )
+
+    again = upload(client, POSTING, [CV_OLD])
+    wait_until_settled(conn)
+
+    document = conn.execute("SELECT status FROM document WHERE kind = 'cv'").fetchone()
+    assert document is not None and document["status"] == "parsed"
+    assert [row["status"] for row in _assessments(conn)] == ["done"]
+    assert _status(client, again["request_id"])["status"] == "done"
+
+
 def test_a_batch_on_a_stranded_position_with_known_and_new_cvs_is_processed_whole(
     client: TestClient,
     worker: ConnectionPool,
