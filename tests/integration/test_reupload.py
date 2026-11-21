@@ -86,6 +86,26 @@ def test_a_cv_that_stopped_at_extracted_is_parsed_and_judged_on_reupload(
     assert _status(client, again["request_id"])["status"] == "done"
 
 
+def test_a_parsed_cv_whose_assessment_is_missing_is_judged_again_on_reupload(
+    client: TestClient,
+    worker: ConnectionPool,
+    conn: psycopg.Connection[DictRow],
+) -> None:
+    """The judge job's key is unique for all time, so a finished job with no result behind it
+    must be put back in the queue by the upload, not skipped."""
+    upload(client, POSTING, [CV_OLD])
+    wait_until_settled(conn)
+    conn.execute("DELETE FROM assessment")
+
+    again = upload(client, POSTING, [CV_OLD])
+    wait_until_settled(conn)
+
+    assert [row["status"] for row in _assessments(conn)] == ["done"]
+    judge_rows = conn.execute("SELECT status FROM task_queue WHERE job_type = 'judge'").fetchall()
+    assert [row["status"] for row in judge_rows] == ["done"]  # one row, reused
+    assert _status(client, again["request_id"])["status"] == "done"
+
+
 def test_a_batch_on_a_stranded_position_with_known_and_new_cvs_is_processed_whole(
     client: TestClient,
     worker: ConnectionPool,
