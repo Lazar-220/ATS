@@ -3,7 +3,7 @@ import logging
 import sys
 from pathlib import Path
 
-from ats.eval import redteam
+from ats.eval import redteam, smoke
 from ats.eval.fallback import create_eval_llm_client
 from ats.eval.golden import (
     DEFAULT_ROOT,
@@ -177,6 +177,50 @@ def _redteam(args: argparse.Namespace) -> int:
     return 0
 
 
+def _smoke(args: argparse.Namespace) -> int:
+    """Replay-only: no settings, no key, no model. A cache miss is an error, never a call."""
+    golden = load_golden(Path(args.golden))
+    manifest = smoke.load_manifest()
+    thresholds = manifest.thresholds.model_copy(
+        update={
+            k: v
+            for k, v in (
+                ("verdict_accuracy", args.min_accuracy),
+                ("quote_validity", args.min_quote_validity),
+            )
+            if v is not None
+        }
+    )
+    result = smoke.run_smoke(golden, smoke.replay_client(manifest), manifest.cv_ids)
+    shown = manifest.model_copy(update={"thresholds": thresholds})
+    print(smoke.describe(shown, result))
+    failures = smoke.check(result, thresholds)
+    for failure in failures:
+        print(f"SMOKE FAILED: {failure}", file=sys.stderr)
+    return 1 if failures else 0
+
+
+def _smoke_record(args: argparse.Namespace) -> int:
+    golden = load_golden(Path(args.golden))
+    if not args.real:
+        manifest = smoke.record_demo(golden)
+    else:
+        settings = get_settings()
+        if settings.llm_provider == "fake":
+            raise EvalError("LLM_PROVIDER=fake: --real needs the real model; unset it.")
+        calls = 2 * smoke.CASES
+        print(f"--real: about {calls} model calls with {settings.llm_model}")
+        if args.dry_run:
+            return 0
+        if not args.yes:
+            print("Repeat with --yes (make: YES=1) to go ahead.", file=sys.stderr)
+            return 2
+        manifest = smoke.record_real(golden, settings)
+    print(f"Smoke cache written to {smoke.SMOKE_DIR}")
+    print(smoke.dump(manifest))
+    return 0
+
+
 def _export_to_langfuse(result: RunResult, golden: GoldSet) -> None:
     """With tracing on, the run also goes to Langfuse. A failure there never fails the eval."""
     tracer = get_tracer()
@@ -250,6 +294,25 @@ def main(argv: list[str] | None = None) -> int:
     team.add_argument("--dry-run", action="store_true", help="with --judge: print the call count")
     team.add_argument("--yes", action="store_true", help="confirm a run of more than 5 calls")
     team.set_defaults(run=_redteam)
+
+    smoke_run = sub.add_parser(
+        "smoke", help="CI smoke eval: 20 golden CVs answered from eval/smoke_cache, no model"
+    )
+    smoke_run.add_argument("--golden", default=str(DEFAULT_ROOT), help="golden set directory")
+    smoke_run.add_argument("--min-accuracy", type=float, default=None, help="override threshold")
+    smoke_run.add_argument(
+        "--min-quote-validity", type=float, default=None, help="override threshold"
+    )
+    smoke_run.set_defaults(run=_smoke)
+
+    smoke_rec = sub.add_parser(
+        "smoke-cache", help="rebuild eval/smoke_cache (demo provider, or --real)"
+    )
+    smoke_rec.add_argument("--golden", default=str(DEFAULT_ROOT), help="golden set directory")
+    smoke_rec.add_argument("--real", action="store_true", help="record the configured model")
+    smoke_rec.add_argument("--dry-run", action="store_true", help="with --real: print the calls")
+    smoke_rec.add_argument("--yes", action="store_true", help="confirm the real recording")
+    smoke_rec.set_defaults(run=_smoke_record)
 
     args = parser.parse_args(argv)
     try:
