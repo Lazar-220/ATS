@@ -3,6 +3,7 @@
 Fake model and synthetic PDFs only; the real worker loop runs on a thread.
 """
 
+from pathlib import Path
 from typing import Any
 
 import psycopg
@@ -104,13 +105,20 @@ def test_repeating_the_call_makes_no_job_and_no_call_and_matches_post_rankings(
 
 
 def test_an_unknown_position_is_404_and_writes_nothing(
-    client: TestClient, conn: psycopg.Connection[DictRow]
+    client: TestClient, conn: psycopg.Connection[DictRow], tmp_path: Path
 ) -> None:
-    response = add(client, UNKNOWN, [CV_NEW])
+    upload(client, POSTING, [CV_OLD])  # a known position elsewhere, and files already stored
+    before = sorted(path.name for path in tmp_path.iterdir())
+    documents = _count(conn, "document")
 
-    assert response.status_code == 404
-    assert response.json()["detail"] == "No such position"
-    assert _count(conn, "document") == 0 and _count(conn, "ranking_request") == 0
+    response = add(client, UNKNOWN, [CV_NEW])
+    # The id is checked first, so even a file that is not a PDF gets the 404.
+    not_pdf = add(client, UNKNOWN, [b"just some text"])
+
+    assert (response.status_code, not_pdf.status_code) == (404, 404)
+    assert response.json()["detail"] == not_pdf.json()["detail"] == "No such position"
+    assert sorted(path.name for path in tmp_path.iterdir()) == before
+    assert _count(conn, "document") == documents and _count(conn, "ranking_request") == 1
 
 
 def test_a_cv_stored_as_the_posting_is_rejected(

@@ -175,14 +175,20 @@ def add_cvs(
     The stored posting goes through the same steps as an uploaded one, so a stalled or failed
     posting heals here too. A CV with the posting's bytes is refused by `register_document`.
     """
-    posting = conn.execute(
+    posting = find_posting(conn, position_id)
+    if posting is None:
+        return None
+    return _submit(conn, position_id, posting, cvs)
+
+
+def find_posting(conn: psycopg.Connection[Any], position_id: UUID) -> StoredFile | None:
+    """The posting a position was made from; None for an unknown position."""
+    row = conn.execute(
         "SELECT d.filename, d.sha256 FROM job_position p "
         "JOIN document d ON d.sha256 = p.source_sha256 WHERE p.id = %s",
         (position_id,),
     ).fetchone()
-    if posting is None:
-        return None
-    return _submit(conn, position_id, StoredFile(filename=posting[0], sha256=posting[1]), cvs)
+    return None if row is None else StoredFile(filename=row[0], sha256=row[1])
 
 
 def _submit(

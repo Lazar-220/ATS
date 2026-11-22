@@ -99,6 +99,12 @@ def add_cvs(
     cvs: Annotated[list[UploadFile], File(description="One or more CVs as PDFs")],
 ) -> RankingAccepted:
     """The same request as POST /rankings, with the posting this position was made from."""
+    # An unknown id is answered before any file is read or stored: nothing lands in UPLOAD_DIR.
+    # `add_cvs` checks again inside its transaction, so the answer stays 404 either way.
+    with cast(ConnectionPool, request.app.state.pool).connection() as conn:
+        known = rankings.find_posting(conn, position_id) is not None
+    if not known:
+        raise HTTPException(404, "No such position")
     max_bytes = _max_bytes()
     cv_pdfs = [_read_pdf(cv, max_bytes) for cv in cvs]
     return _submit(request, cv_pdfs, lambda conn: rankings.add_cvs(conn, position_id, cv_pdfs))

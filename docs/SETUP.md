@@ -94,7 +94,7 @@ curl -i -F cvs=@cv_ceca.pdf -F cvs=@cv_dejan.pdf \
 It behaves exactly like `POST /rankings` with that position's posting: the same validation and
 errors, the same re-upload and self-heal rules (next section), and the new request lists the
 posting first in `GET /rankings/{id}`. A CV whose bytes are stored as a posting gets 422
-"'<file>' was already uploaded as a posting". An unknown position id gets 404 "No such position".
+"'<file>' was already uploaded as a posting". An unknown position id gets 404 "No such position" before any file is checked or stored.
 
 A CV the model judged not to be a CV ends `parsed` with no candidate and no assessment, so it is
 not in the ranking; the request still ends `done` and its `message` says why: "The system judged
