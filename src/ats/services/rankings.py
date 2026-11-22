@@ -15,10 +15,14 @@ from uuid import UUID, uuid4
 import psycopg
 
 from ats.db import task_queue
+from ats.pipeline.facts import NOT_A_CV
 from ats.services.assessments import enqueue_judgements
 from ats.services.requirements import enqueue_missing_setup, retry_failed_setup
 
 INGEST_JOB = "ingest"
+# Shown on the request for a document triage judged not to be a CV: it has no candidate and no
+# assessment, so without a message HR cannot tell why it is missing from the ranking.
+NOT_A_CV_MESSAGE = "The system judged this document not to be a CV, so it was not ranked."
 
 type DocumentKind = Literal["cv", "posting"]
 
@@ -229,6 +233,13 @@ def _derive_status(
     return "running" if pending or unassessed else "done"
 
 
+def _message(stored: str | None, flags: list[dict[str, str]]) -> str | None:
+    """The stored message wins; a not-a-CV flag gets one at read time, so old rows show it too."""
+    if stored is None and any(flag.get("code") == NOT_A_CV for flag in flags):
+        return NOT_A_CV_MESSAGE
+    return stored
+
+
 def get_ranking_state(conn: psycopg.Connection[Any], request_id: UUID) -> RankingState | None:
     request = conn.execute(
         "SELECT position_id FROM ranking_request WHERE id = %s", (request_id,)
@@ -236,17 +247,19 @@ def get_ranking_state(conn: psycopg.Connection[Any], request_id: UUID) -> Rankin
     if request is None:
         return None
     rows = conn.execute(
-        "SELECT d.id, d.kind, d.filename, d.status, d.status_message "
+        "SELECT d.id, d.kind, d.filename, d.status, d.status_message, d.flags "
         "FROM document d JOIN job_position p ON p.source_sha256 = d.sha256 "
         "WHERE p.id = %(position)s "
         "UNION ALL "
-        "SELECT d.id, d.kind, d.filename, d.status, d.status_message "
+        "SELECT d.id, d.kind, d.filename, d.status, d.status_message, d.flags "
         "FROM request_candidate rc JOIN document d ON d.id = rc.document_id "
         "WHERE rc.request_id = %(request)s "
         "ORDER BY 2 DESC, 3",  # 'posting' sorts after 'cv', so DESC lists the posting first
         {"position": request[0], "request": request_id},
     ).fetchall()
-    documents = [DocumentState(*row) for row in rows]
+    documents = [
+        DocumentState(row[0], row[1], row[2], row[3], _message(row[4], row[5])) for row in rows
+    ]
     setup_failed = conn.execute(
         "SELECT EXISTS (SELECT 1 FROM task_queue WHERE dedup_key = %s AND status = 'failed')",
         (f"position_setup:{request[0]}",),

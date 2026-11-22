@@ -81,6 +81,11 @@ an unreadable or password-protected PDF; re-uploading it gives the same result) 
 (unexpected error; uploading the same file again retries it). Errors: 422 for a file that is not a
 PDF or is already stored as the other kind, 413 above `MAX_UPLOAD_MB`, 404 for an unknown request.
 
+A CV the model judged not to be a CV ends `parsed` with no candidate and no assessment, so it is
+not in the ranking; the request still ends `done` and its `message` says why: "The system judged
+this document not to be a CV, so it was not ranked." The message is derived from the document's
+`not_a_cv` flag at read time (older rows show it too); a stored message takes precedence.
+
 ### Review the requirements (from phase 1.2)
 
 When a new posting has been extracted, the worker makes one LLM call and writes the position's

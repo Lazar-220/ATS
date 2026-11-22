@@ -25,7 +25,8 @@ class DocumentStatus(BaseModel):
     kind: Literal["cv", "posting"]
     filename: str | None
     status: str
-    # Why a document was rejected or failed, written for HR; null otherwise.
+    # Why a document was rejected or failed, or why a parsed one is not ranked (judged not to be
+    # a CV), written for HR; null otherwise.
     message: str | None
 
 
