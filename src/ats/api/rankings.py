@@ -1,12 +1,14 @@
-from typing import Annotated, Literal, cast
+from collections.abc import Callable
+from typing import Annotated, Any, Literal, cast
 from uuid import UUID
 
+import psycopg
 from fastapi import APIRouter, File, HTTPException, Request, UploadFile
 from psycopg_pool import ConnectionPool
 from pydantic import BaseModel
 
 from ats.services import rankings
-from ats.services.rankings import DocumentKindConflict, PdfUpload
+from ats.services.rankings import CreatedRanking, DocumentKindConflict, PdfUpload
 from ats.settings import get_settings
 
 router = APIRouter()
@@ -47,30 +49,59 @@ def _read_pdf(file: UploadFile, max_bytes: int) -> PdfUpload:
     return rankings.make_upload(name, content)
 
 
+def _max_bytes() -> int:
+    return get_settings().max_upload_mb * 1024 * 1024
+
+
+def _submit(
+    request: Request,
+    pdfs: list[PdfUpload],
+    action: Callable[[psycopg.Connection[Any]], CreatedRanking | None],
+) -> RankingAccepted:
+    """Store the validated files, then run `action` in one transaction. None means no position."""
+    # Files first: a row never points at a file that is missing. A file left behind by a
+    # failed transaction is harmless, because it is named by its hash.
+    for pdf in pdfs:
+        rankings.store_file(get_settings().upload_dir, pdf)
+
+    pool = cast(ConnectionPool, request.app.state.pool)
+    try:
+        with pool.connection() as conn:
+            created = action(conn)
+    except DocumentKindConflict as exc:
+        raise HTTPException(422, str(exc)) from exc
+    if created is None:
+        raise HTTPException(404, "No such position")
+    return RankingAccepted(request_id=created.request_id, position_id=created.position_id)
+
+
 @router.post("/rankings", status_code=202)
 def create_ranking(
     request: Request,
     posting: Annotated[UploadFile, File(description="The job posting as a PDF")],
     cvs: Annotated[list[UploadFile], File(description="One or more CVs as PDFs")],
 ) -> RankingAccepted:
-    settings = get_settings()
-    max_bytes = settings.max_upload_mb * 1024 * 1024
+    max_bytes = _max_bytes()
     # Every file is validated before anything is stored or written to the database.
     posting_pdf = _read_pdf(posting, max_bytes)
     cv_pdfs = [_read_pdf(cv, max_bytes) for cv in cvs]
+    return _submit(
+        request,
+        [posting_pdf, *cv_pdfs],
+        lambda conn: rankings.create_ranking(conn, posting_pdf, cv_pdfs),
+    )
 
-    # Files first: a row never points at a file that is missing. A file left behind by a
-    # failed transaction is harmless, because it is named by its hash.
-    for pdf in (posting_pdf, *cv_pdfs):
-        rankings.store_file(settings.upload_dir, pdf)
 
-    pool = cast(ConnectionPool, request.app.state.pool)
-    try:
-        with pool.connection() as conn:
-            created = rankings.create_ranking(conn, posting_pdf, cv_pdfs)
-    except DocumentKindConflict as exc:
-        raise HTTPException(422, str(exc)) from exc
-    return RankingAccepted(request_id=created.request_id, position_id=created.position_id)
+@router.post("/positions/{position_id}/cvs", status_code=202)
+def add_cvs(
+    position_id: UUID,
+    request: Request,
+    cvs: Annotated[list[UploadFile], File(description="One or more CVs as PDFs")],
+) -> RankingAccepted:
+    """The same request as POST /rankings, with the posting this position was made from."""
+    max_bytes = _max_bytes()
+    cv_pdfs = [_read_pdf(cv, max_bytes) for cv in cvs]
+    return _submit(request, cv_pdfs, lambda conn: rankings.add_cvs(conn, position_id, cv_pdfs))
 
 
 @router.get("/rankings/{request_id}")

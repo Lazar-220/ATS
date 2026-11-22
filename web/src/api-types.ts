@@ -86,6 +86,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/positions/{position_id}/cvs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Add Cvs
+         * @description The same request as POST /rankings, with the posting this position was made from.
+         */
+        post: operations["add_cvs_positions__position_id__cvs_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/positions/{position_id}/ranking": {
         parameters: {
             query?: never;
@@ -219,6 +239,14 @@ export interface components {
             updated_at: string;
             /** Verdicts */
             verdicts: components["schemas"]["VerdictOut"][];
+        };
+        /** Body_add_cvs_positions__position_id__cvs_post */
+        Body_add_cvs_positions__position_id__cvs_post: {
+            /**
+             * Cvs
+             * @description One or more CVs as PDFs
+             */
+            cvs: string[];
         };
         /** Body_create_ranking_rankings_post */
         Body_create_ranking_rankings_post: {
@@ -689,6 +717,41 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PositionDetailOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    add_cvs_positions__position_id__cvs_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                position_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_add_cvs_positions__position_id__cvs_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RankingAccepted"];
                 };
             };
             /** @description Validation Error */

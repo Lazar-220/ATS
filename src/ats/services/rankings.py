@@ -28,10 +28,16 @@ type DocumentKind = Literal["cv", "posting"]
 
 
 @dataclass(frozen=True)
-class PdfUpload:
+class StoredFile:
+    """A file as the database knows it: what registering a document needs."""
+
     filename: str
-    content: bytes
     sha256: str
+
+
+@dataclass(frozen=True)
+class PdfUpload(StoredFile):
+    content: bytes
 
 
 @dataclass(frozen=True)
@@ -50,7 +56,7 @@ class DocumentKindConflict(Exception):
 
 
 def make_upload(filename: str, content: bytes) -> PdfUpload:
-    return PdfUpload(filename, content, hashlib.sha256(content).hexdigest())
+    return PdfUpload(filename=filename, sha256=hashlib.sha256(content).hexdigest(), content=content)
 
 
 def storage_name(sha256: str) -> str:
@@ -81,7 +87,9 @@ def _enqueue_ingest(conn: psycopg.Connection[Any], document_id: UUID, *, rerun: 
     task_queue.enqueue(conn, INGEST_JOB, {"document_id": str(document_id)}, dedup_key=key)
 
 
-def register_document(conn: psycopg.Connection[Any], kind: DocumentKind, upload: PdfUpload) -> UUID:
+def register_document(
+    conn: psycopg.Connection[Any], kind: DocumentKind, upload: StoredFile
+) -> UUID:
     """Find or create the document for these bytes; enqueue ingest only when it is needed.
 
     A new document is ingested once. A `failed` one, and one stalled before its last step, is
@@ -156,13 +164,37 @@ def create_ranking(
     if posting.sha256 in {cv.sha256 for cv in cvs}:
         raise DocumentKindConflict(posting.filename, "cv")
     position_id = _find_or_create_position(conn, posting.sha256)
+    return _submit(conn, position_id, posting, cvs)
+
+
+def add_cvs(
+    conn: psycopg.Connection[Any], position_id: UUID, cvs: list[PdfUpload]
+) -> CreatedRanking | None:
+    """The same request as `create_ranking` with this position's posting; None if unknown.
+
+    The stored posting goes through the same steps as an uploaded one, so a stalled or failed
+    posting heals here too. A CV with the posting's bytes is refused by `register_document`.
+    """
+    posting = conn.execute(
+        "SELECT d.filename, d.sha256 FROM job_position p "
+        "JOIN document d ON d.sha256 = p.source_sha256 WHERE p.id = %s",
+        (position_id,),
+    ).fetchone()
+    if posting is None:
+        return None
+    return _submit(conn, position_id, StoredFile(filename=posting[0], sha256=posting[1]), cvs)
+
+
+def _submit(
+    conn: psycopg.Connection[Any], position_id: UUID, posting: StoredFile, cvs: list[PdfUpload]
+) -> CreatedRanking:
     # Uploading a posting whose requirement extraction failed is HR asking to try again.
     retry_failed_setup(conn, position_id)
     enqueue_missing_setup(conn, position_id)
 
     # Registering in hash order gives concurrent requests one lock order on the unique
     # `sha256`, so two uploads that share CVs cannot deadlock each other.
-    uploads: dict[str, tuple[DocumentKind, PdfUpload]] = {posting.sha256: ("posting", posting)}
+    uploads: dict[str, tuple[DocumentKind, StoredFile]] = {posting.sha256: ("posting", posting)}
     uploads |= {cv.sha256: ("cv", cv) for cv in cvs}
     document_ids: dict[str, UUID] = {}
     for sha256 in sorted(uploads):
