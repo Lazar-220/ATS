@@ -16,7 +16,7 @@ import psycopg
 
 from ats.db import task_queue
 from ats.services.assessments import enqueue_judgements
-from ats.services.requirements import retry_failed_setup
+from ats.services.requirements import enqueue_missing_setup, retry_failed_setup
 
 INGEST_JOB = "ingest"
 
@@ -80,8 +80,9 @@ def _enqueue_ingest(conn: psycopg.Connection[Any], document_id: UUID, *, rerun: 
 def register_document(conn: psycopg.Connection[Any], kind: DocumentKind, upload: PdfUpload) -> UUID:
     """Find or create the document for these bytes; enqueue ingest only when it is needed.
 
-    A new document is ingested once. A `failed` one is ingested again on re-upload. A
-    `rejected` one is not: the same bytes would be rejected the same way.
+    A new document is ingested once. A `failed` one, and one stalled before its last step, is
+    ingested again on re-upload. A `rejected` one is not: the same bytes would be rejected the
+    same way.
     """
     created = conn.execute(
         "INSERT INTO document (kind, sha256, filename, storage_path) VALUES (%s, %s, %s, %s) "
@@ -92,8 +93,10 @@ def register_document(conn: psycopg.Connection[Any], kind: DocumentKind, upload:
         _enqueue_ingest(conn, created[0], rerun=False)
         return created[0]
 
+    # The row lock makes two concurrent re-uploads take turns, so the second one sees the job
+    # the first one enqueued.
     existing = conn.execute(
-        "SELECT id, kind FROM document WHERE sha256 = %s", (upload.sha256,)
+        "SELECT id, kind, status FROM document WHERE sha256 = %s FOR UPDATE", (upload.sha256,)
     ).fetchone()
     assert existing is not None  # the conflict above means the row exists
     document_id: UUID = existing[0]
@@ -105,9 +108,27 @@ def register_document(conn: psycopg.Connection[Any], kind: DocumentKind, upload:
         "WHERE id = %s AND status = 'failed' RETURNING id",
         (document_id,),
     ).fetchone()
-    if requeued is not None:
+    if requeued is not None or _is_stalled(conn, document_id, kind, existing[2]):
         _enqueue_ingest(conn, document_id, rerun=True)
     return document_id
+
+
+def _is_stalled(
+    conn: psycopg.Connection[Any], document_id: UUID, kind: DocumentKind, status: str
+) -> bool:
+    """A document that is not finished and has no ingest job on its way.
+
+    A CV extracted before parsing existed stays `extracted` and nothing ever picks it up. A
+    posting is finished once extracted, so only a CV counts in that state.
+    """
+    if status != "uploaded" and not (status == "extracted" and kind == "cv"):
+        return False
+    live = conn.execute(
+        "SELECT 1 FROM task_queue WHERE job_type = %s AND status IN ('queued', 'running') "
+        "AND payload->>'document_id' = %s",
+        (INGEST_JOB, str(document_id)),
+    ).fetchone()
+    return live is None
 
 
 def _find_or_create_position(conn: psycopg.Connection[Any], sha256: str) -> UUID:
@@ -133,6 +154,7 @@ def create_ranking(
     position_id = _find_or_create_position(conn, posting.sha256)
     # Uploading a posting whose requirement extraction failed is HR asking to try again.
     retry_failed_setup(conn, position_id)
+    enqueue_missing_setup(conn, position_id)
 
     # Registering in hash order gives concurrent requests one lock order on the unique
     # `sha256`, so two uploads that share CVs cannot deadlock each other.

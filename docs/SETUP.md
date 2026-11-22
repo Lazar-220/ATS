@@ -143,6 +143,25 @@ make setup-missing POSITION=efc50a1d YES=1      # enqueue one position
 ```
 
 A position whose setup job exists but `failed` is not listed: upload its posting again to retry it.
+Uploading the posting of a stranded position again also enqueues its setup job (one call by the
+worker, and then one judge call for every parsed CV of that position that has no assessment), so
+`make setup-missing` is no longer the only way out.
+
+### Uploading a file the system already has
+
+Every case is accepted (HTTP 202) and ends in a result; nothing is processed twice.
+
+| The file was | A new upload |
+| --- | --- |
+| parsed and assessed for this position | reuses the result, no call, no new job; the request is `done` |
+| parsed, assessment missing | a judge job is enqueued (the response cache keeps it free if the same prompt ran before) |
+| `failed` | retried from the start |
+| stopped at `extracted` (a CV ingested before parsing existed), no job | ingested again, then judged |
+| `rejected` (a scan) | not processed again; the stored message is shown again |
+
+A batch may mix known and new CVs; each is handled by its own state. The one refusal left is a
+file already stored as the other kind (a CV chosen as the posting, or the reverse): HTTP 422,
+"'<file>' was already uploaded as a cv" (or "posting").
 
 ### Is the worker running current code?
 

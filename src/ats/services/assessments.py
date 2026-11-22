@@ -28,7 +28,9 @@ def enqueue_judgements(
     """Enqueue one judge job per candidate of the position that is not yet assessed.
 
     Does nothing while the position has no requirements. `retry_failed` puts a judge job that ran
-    out of attempts back in the queue: uploading the same CV again is HR asking to try again.
+    out of attempts back in the queue: uploading the same CV again is HR asking to try again. It
+    also requeues a finished job whose assessment is gone (the dedup key is unique for all time,
+    so the old row is the only way to run it), and the response cache keeps that call free.
     Returns the number of jobs enqueued or requeued.
     """
     position = conn.execute(
@@ -65,7 +67,7 @@ def enqueue_judgements(
             requeued = conn.execute(
                 "UPDATE task_queue SET status = 'queued', attempts = 0, error = NULL, "
                 "locked_at = NULL, updated_at = now() "
-                "WHERE dedup_key = %s AND status = 'failed' RETURNING id",
+                "WHERE dedup_key = %s AND status IN ('failed', 'done') RETURNING id",
                 (key,),
             ).fetchone()
             enqueued += requeued is not None

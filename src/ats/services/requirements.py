@@ -62,6 +62,22 @@ def retry_failed_setup(conn: psycopg.Connection[Any], position_id: UUID) -> bool
     return requeued is not None
 
 
+def enqueue_missing_setup(conn: psycopg.Connection[Any], position_id: UUID) -> bool:
+    """Enqueue setup for a position that has its posting text but never got a job; True if it did.
+
+    Ingest enqueues setup only when it extracts a posting, so a posting extracted before setup
+    existed (or by a run that crashed between the two steps) would keep its position without
+    requirements, and every CV submitted for it would wait forever. Uploading the posting again
+    is HR asking for it to be fixed. The dedup key keeps this a no-op when any job exists.
+    """
+    stranded = conn.execute(
+        "SELECT 1 FROM job_position p WHERE p.id = %s AND p.posting_text IS NOT NULL "
+        "AND NOT EXISTS (SELECT 1 FROM requirement r WHERE r.position_id = p.id)",
+        (position_id,),
+    ).fetchone()
+    return stranded is not None and enqueue_setup(conn, position_id)
+
+
 @dataclass(frozen=True)
 class StrandedPosition:
     id: UUID
