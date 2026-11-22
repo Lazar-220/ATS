@@ -177,6 +177,16 @@ def test_the_rule_never_raises_a_verdict_or_touches_the_others() -> None:
     assert _detail("met", "a quote that is not in the cv") is None  # no position, no judgement
 
 
+@pytest.mark.parametrize("quote", [None, "", "   ", "a quote that is not in the cv", "Kubernetes"])
+def test_list_only_and_a_quote_flag_never_meet_on_one_verdict(quote: str | None) -> None:
+    """The ranking's `unverified_quote_verdicts` and `list_only_verdicts` add up only if this
+    holds: a quote flag means no offsets, and the list-only rule needs offsets."""
+    check = check_quote("met", quote, CV_TEXT, [], 90)
+    assert bool(check.flags) == (check.char_start is None)  # offsets exactly when unflagged
+    if _detail("met", quote) is not None:
+        assert check.flags == ()
+
+
 # ---- injection detection -------------------------------------------------------------------
 
 ATTACKS = [

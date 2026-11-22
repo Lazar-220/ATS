@@ -11,11 +11,14 @@ from fastapi.testclient import TestClient
 from pdfs import make_pdf, make_scan_pdf
 from psycopg.rows import DictRow
 from psycopg_pool import ConnectionPool
+from pydantic import BaseModel
 
 from ats.db import task_queue
 from ats.eval.attacks import add_hidden_text
 from ats.llm.fake import FakeLLMClient
+from ats.llm.types import LLMRequest
 from ats.pipeline.parsing import ParsedCV
+from ats.services.rankings import NOT_A_CV_MESSAGE
 from ats.worker import ingest as ingest_module
 from integration.test_worker import wait_for
 
@@ -268,6 +271,46 @@ def test_a_document_that_is_not_a_cv_is_flagged_and_gets_no_candidate(
         (accepted["request_id"],),
     ).fetchone()
     assert linked is not None and linked["candidate_id"] is None
+
+
+def test_the_request_explains_a_document_that_is_not_a_cv_and_ends_done(
+    client: TestClient,
+    worker: ConnectionPool,
+    conn: psycopg.Connection[DictRow],
+    fake_llm: FakeLLMClient,
+) -> None:
+    default = fake_llm.responder
+    assert default is not None
+
+    def answer(request: LLMRequest, schema: type[BaseModel]) -> BaseModel:
+        # Only the insurance analyst is judged not to be a CV; everything else answers as usual.
+        if schema is ParsedCV and "Delta Insurance" in request.user:
+            return _parsed_cv(False)
+        return default(request, schema)
+
+    fake_llm.responder = answer
+    accepted = upload(client, POSTING, [CV_PERSONAL, CV_ENGLISH, CV_SCAN])
+    wait_until_settled(conn)
+
+    body = client.get(f"/rankings/{accepted['request_id']}").json()
+    assert body["status"] == "done"
+    by_name = {d["filename"]: d for d in body["documents"]}
+    assert (by_name["cv0.pdf"]["status"], by_name["cv0.pdf"]["message"]) == (
+        "parsed",
+        NOT_A_CV_MESSAGE,
+    )
+    assert (by_name["cv1.pdf"]["status"], by_name["cv1.pdf"]["message"]) == ("parsed", None)
+    assert by_name["cv2.pdf"]["status"] == "rejected"
+    assert "looks like a scan" in by_name["cv2.pdf"]["message"]
+    assert by_name["posting.pdf"]["message"] is None
+
+    # A stored message is never replaced by the derived one.
+    conn.execute(
+        "UPDATE document SET status_message = 'stored' WHERE flags @> %s::jsonb",
+        ('[{"code": "not_a_cv"}]',),
+    )
+    again = client.get(f"/rankings/{accepted['request_id']}").json()
+    assert {d["filename"]: d["message"] for d in again["documents"]}["cv0.pdf"] == "stored"
 
 
 def test_a_redelivered_ingest_makes_no_second_candidate_and_no_second_call(

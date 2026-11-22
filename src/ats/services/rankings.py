@@ -15,19 +15,29 @@ from uuid import UUID, uuid4
 import psycopg
 
 from ats.db import task_queue
+from ats.pipeline.facts import NOT_A_CV
 from ats.services.assessments import enqueue_judgements
 from ats.services.requirements import enqueue_missing_setup, retry_failed_setup
 
 INGEST_JOB = "ingest"
+# Shown on the request for a document triage judged not to be a CV: it has no candidate and no
+# assessment, so without a message HR cannot tell why it is missing from the ranking.
+NOT_A_CV_MESSAGE = "The system judged this document not to be a CV, so it was not ranked."
 
 type DocumentKind = Literal["cv", "posting"]
 
 
 @dataclass(frozen=True)
-class PdfUpload:
+class StoredFile:
+    """A file as the database knows it: what registering a document needs."""
+
     filename: str
-    content: bytes
     sha256: str
+
+
+@dataclass(frozen=True)
+class PdfUpload(StoredFile):
+    content: bytes
 
 
 @dataclass(frozen=True)
@@ -46,7 +56,7 @@ class DocumentKindConflict(Exception):
 
 
 def make_upload(filename: str, content: bytes) -> PdfUpload:
-    return PdfUpload(filename, content, hashlib.sha256(content).hexdigest())
+    return PdfUpload(filename=filename, sha256=hashlib.sha256(content).hexdigest(), content=content)
 
 
 def storage_name(sha256: str) -> str:
@@ -77,7 +87,9 @@ def _enqueue_ingest(conn: psycopg.Connection[Any], document_id: UUID, *, rerun: 
     task_queue.enqueue(conn, INGEST_JOB, {"document_id": str(document_id)}, dedup_key=key)
 
 
-def register_document(conn: psycopg.Connection[Any], kind: DocumentKind, upload: PdfUpload) -> UUID:
+def register_document(
+    conn: psycopg.Connection[Any], kind: DocumentKind, upload: StoredFile
+) -> UUID:
     """Find or create the document for these bytes; enqueue ingest only when it is needed.
 
     A new document is ingested once. A `failed` one, and one stalled before its last step, is
@@ -152,13 +164,43 @@ def create_ranking(
     if posting.sha256 in {cv.sha256 for cv in cvs}:
         raise DocumentKindConflict(posting.filename, "cv")
     position_id = _find_or_create_position(conn, posting.sha256)
+    return _submit(conn, position_id, posting, cvs)
+
+
+def add_cvs(
+    conn: psycopg.Connection[Any], position_id: UUID, cvs: list[PdfUpload]
+) -> CreatedRanking | None:
+    """The same request as `create_ranking` with this position's posting; None if unknown.
+
+    The stored posting goes through the same steps as an uploaded one, so a stalled or failed
+    posting heals here too. A CV with the posting's bytes is refused by `register_document`.
+    """
+    posting = find_posting(conn, position_id)
+    if posting is None:
+        return None
+    return _submit(conn, position_id, posting, cvs)
+
+
+def find_posting(conn: psycopg.Connection[Any], position_id: UUID) -> StoredFile | None:
+    """The posting a position was made from; None for an unknown position."""
+    row = conn.execute(
+        "SELECT d.filename, d.sha256 FROM job_position p "
+        "JOIN document d ON d.sha256 = p.source_sha256 WHERE p.id = %s",
+        (position_id,),
+    ).fetchone()
+    return None if row is None else StoredFile(filename=row[0], sha256=row[1])
+
+
+def _submit(
+    conn: psycopg.Connection[Any], position_id: UUID, posting: StoredFile, cvs: list[PdfUpload]
+) -> CreatedRanking:
     # Uploading a posting whose requirement extraction failed is HR asking to try again.
     retry_failed_setup(conn, position_id)
     enqueue_missing_setup(conn, position_id)
 
     # Registering in hash order gives concurrent requests one lock order on the unique
     # `sha256`, so two uploads that share CVs cannot deadlock each other.
-    uploads: dict[str, tuple[DocumentKind, PdfUpload]] = {posting.sha256: ("posting", posting)}
+    uploads: dict[str, tuple[DocumentKind, StoredFile]] = {posting.sha256: ("posting", posting)}
     uploads |= {cv.sha256: ("cv", cv) for cv in cvs}
     document_ids: dict[str, UUID] = {}
     for sha256 in sorted(uploads):
@@ -229,6 +271,13 @@ def _derive_status(
     return "running" if pending or unassessed else "done"
 
 
+def _message(stored: str | None, flags: list[dict[str, str]]) -> str | None:
+    """The stored message wins; a not-a-CV flag gets one at read time, so old rows show it too."""
+    if stored is None and any(flag.get("code") == NOT_A_CV for flag in flags):
+        return NOT_A_CV_MESSAGE
+    return stored
+
+
 def get_ranking_state(conn: psycopg.Connection[Any], request_id: UUID) -> RankingState | None:
     request = conn.execute(
         "SELECT position_id FROM ranking_request WHERE id = %s", (request_id,)
@@ -236,17 +285,19 @@ def get_ranking_state(conn: psycopg.Connection[Any], request_id: UUID) -> Rankin
     if request is None:
         return None
     rows = conn.execute(
-        "SELECT d.id, d.kind, d.filename, d.status, d.status_message "
+        "SELECT d.id, d.kind, d.filename, d.status, d.status_message, d.flags "
         "FROM document d JOIN job_position p ON p.source_sha256 = d.sha256 "
         "WHERE p.id = %(position)s "
         "UNION ALL "
-        "SELECT d.id, d.kind, d.filename, d.status, d.status_message "
+        "SELECT d.id, d.kind, d.filename, d.status, d.status_message, d.flags "
         "FROM request_candidate rc JOIN document d ON d.id = rc.document_id "
         "WHERE rc.request_id = %(request)s "
         "ORDER BY 2 DESC, 3",  # 'posting' sorts after 'cv', so DESC lists the posting first
         {"position": request[0], "request": request_id},
     ).fetchall()
-    documents = [DocumentState(*row) for row in rows]
+    documents = [
+        DocumentState(row[0], row[1], row[2], row[3], _message(row[4], row[5])) for row in rows
+    ]
     setup_failed = conn.execute(
         "SELECT EXISTS (SELECT 1 FROM task_queue WHERE dedup_key = %s AND status = 'failed')",
         (f"position_setup:{request[0]}",),

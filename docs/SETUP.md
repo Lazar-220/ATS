@@ -81,6 +81,26 @@ an unreadable or password-protected PDF; re-uploading it gives the same result) 
 (unexpected error; uploading the same file again retries it). Errors: 422 for a file that is not a
 PDF or is already stored as the other kind, 413 above `MAX_UPLOAD_MB`, 404 for an unknown request.
 
+To add CVs to a position that already exists, send only the CVs and the position id; the
+response is the same as for `POST /rankings`:
+
+```bash
+curl -i -F cvs=@cv_ceca.pdf -F cvs=@cv_dejan.pdf \
+  http://localhost:8000/positions/7208d077-a80a-4c0e-af0e-1f2fcf06ff62/cvs
+# HTTP/1.1 202 Accepted
+# {"request_id":"5e0c...","position_id":"7208d077-a80a-4c0e-af0e-1f2fcf06ff62"}
+```
+
+It behaves exactly like `POST /rankings` with that position's posting: the same validation and
+errors, the same re-upload and self-heal rules (next section), and the new request lists the
+posting first in `GET /rankings/{id}`. A CV whose bytes are stored as a posting gets 422
+"'<file>' was already uploaded as a posting". An unknown position id gets 404 "No such position" before any file is checked or stored.
+
+A CV the model judged not to be a CV ends `parsed` with no candidate and no assessment, so it is
+not in the ranking; the request still ends `done` and its `message` says why: "The system judged
+this document not to be a CV, so it was not ranked." The message is derived from the document's
+`not_a_cv` flag at read time (older rows show it too); a stored message takes precedence.
+
 ### Review the requirements (from phase 1.2)
 
 When a new posting has been extracted, the worker makes one LLM call and writes the position's
@@ -149,7 +169,9 @@ worker, and then one judge call for every parsed CV of that position that has no
 
 ### Uploading a file the system already has
 
-Every case is accepted (HTTP 202) and ends in a result; nothing is processed twice.
+Every case is accepted (HTTP 202) and ends in a result; nothing is processed twice. The same
+holds for `POST /positions/{position_id}/cvs`, which treats the position's stored posting as
+uploaded again.
 
 | The file was | A new upload |
 | --- | --- |
@@ -209,7 +231,8 @@ Both are read-only and never trigger scoring:
 curl http://localhost:8000/positions/7208d077-a80a-4c0e-af0e-1f2fcf06ff62/ranking
 # {"position_id":"7208...","rubric_version":1,"rubric_status":"unconfirmed","rows":[
 #   {"assessment_id":"...","candidate_name":"...","filename":"cv_ana.pdf","status":"done","score":87.5,
-#    "mandatory_failed":false,"flagged_verdicts":0,"rubric_version":1,"rubric_unconfirmed":true}, ...]}
+#    "mandatory_failed":false,"flagged_verdicts":1,"unverified_quote_verdicts":0,
+#    "list_only_verdicts":1,"rubric_version":1,"rubric_unconfirmed":true}, ...]}
 curl http://localhost:8000/assessments/<assessment_id>
 # score, flags, tenure, "cv_text" (the CV's raw text) and "verdicts":[{"text":...,"verdict":"met",
 #   "rationale":...,"flags":[],"evidence":{"quote":...,"char_start":120,"char_end":158}}, ...]
@@ -220,6 +243,12 @@ then score (high to low), then arrival. A `failed` assessment is last with no sc
 `evidence` is a quote that code found in the CV, and its offsets point into `cv_text`; it is `null`
 for `not_met` and for a verdict flagged `quote_not_found` or `no_evidence`. `rubric_unconfirmed` is
 read from the position at the time of the request. 404 for an unknown position or assessment.
+
+Three counts per row: `flagged_verdicts` is every verdict with any flag (as before, so it includes
+`list_only_skill`, whose quote is verified); `unverified_quote_verdicts` is the verdicts flagged
+`quote_not_found` or `no_evidence` (their quotes are not evidence); `list_only_verdicts` is the
+verdicts flagged `list_only_skill` (the skill appears only in a list). The two new counts are 0
+for a `failed` assessment.
 
 ### The interface (from phase 1.5)
 

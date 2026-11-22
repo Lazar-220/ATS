@@ -233,6 +233,24 @@
         "title": "AssessmentOut",
         "type": "object"
       },
+      "Body_add_cvs_positions__position_id__cvs_post": {
+        "properties": {
+          "cvs": {
+            "description": "One or more CVs as PDFs",
+            "items": {
+              "contentMediaType": "application/octet-stream",
+              "type": "string"
+            },
+            "title": "Cvs",
+            "type": "array"
+          }
+        },
+        "required": [
+          "cvs"
+        ],
+        "title": "Body_add_cvs_positions__position_id__cvs_post",
+        "type": "object"
+      },
       "Body_create_ranking_rankings_post": {
         "properties": {
           "cvs": {
@@ -715,6 +733,10 @@
             "title": "Flagged Verdicts",
             "type": "integer"
           },
+          "list_only_verdicts": {
+            "title": "List Only Verdicts",
+            "type": "integer"
+          },
           "mandatory_failed": {
             "title": "Mandatory Failed",
             "type": "boolean"
@@ -745,6 +767,10 @@
             ],
             "title": "Status",
             "type": "string"
+          },
+          "unverified_quote_verdicts": {
+            "title": "Unverified Quote Verdicts",
+            "type": "integer"
           }
         },
         "required": [
@@ -756,6 +782,8 @@
           "score",
           "mandatory_failed",
           "flagged_verdicts",
+          "unverified_quote_verdicts",
+          "list_only_verdicts",
           "rubric_version",
           "rubric_unconfirmed"
         ],
@@ -1254,6 +1282,57 @@
           }
         },
         "summary": "Get Position"
+      }
+    },
+    "/positions/{position_id}/cvs": {
+      "post": {
+        "description": "The same request as POST /rankings, with the posting this position was made from.",
+        "operationId": "add_cvs_positions__position_id__cvs_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "position_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Position Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_add_cvs_positions__position_id__cvs_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RankingAccepted"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Add Cvs"
       }
     },
     "/positions/{position_id}/ranking": {
