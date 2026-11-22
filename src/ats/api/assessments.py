@@ -24,8 +24,13 @@ class RankingRowOut(BaseModel):
     score: float | None
     # A mandatory requirement is `not_met`; such candidates rank below the rest.
     mandatory_failed: bool
-    # Verdicts whose quote failed the check or is missing; their quotes are not evidence.
+    # Verdicts with any flag, including `list_only_skill`, whose quote is verified.
     flagged_verdicts: int
+    # Verdicts flagged `quote_not_found` or `no_evidence`: their quotes are not evidence.
+    # 0 for a `failed` assessment.
+    unverified_quote_verdicts: int
+    # Verdicts flagged `list_only_skill`: the skill appears only in a list. 0 when `failed`.
+    list_only_verdicts: int
     rubric_version: int
     # Made against requirements HR has not confirmed yet.
     rubric_unconfirmed: bool

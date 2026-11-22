@@ -7,6 +7,7 @@ import psycopg
 import pytest
 from fastapi.testclient import TestClient
 from psycopg.rows import DictRow
+from psycopg.types.json import Jsonb
 from psycopg_pool import ConnectionPool
 
 from ats.llm.fake import FakeLLMClient
@@ -30,6 +31,7 @@ def test_the_assessment_shows_verified_evidence_and_hides_a_flagged_quote(
     assert (ranking["rubric_status"], ranking["rubric_version"]) == ("unconfirmed", 1)
     (row,) = ranking["rows"]
     assert row["status"] == "done" and row["score"] == 75.0 and row["flagged_verdicts"] == 1
+    assert (row["unverified_quote_verdicts"], row["list_only_verdicts"]) == (1, 0)
     assert row["rubric_unconfirmed"] is True and row["filename"] == "cv0.pdf"
 
     body = client.get(f"/assessments/{row['assessment_id']}").json()
@@ -97,6 +99,51 @@ def test_ranking_order_is_done_first_then_unflagged_then_score(
     ]
     assert body["rows"][0]["rubric_unconfirmed"] is False
     assert body["rows"][-1]["score"] is None
+
+
+def _flag(code: str) -> list[dict[str, str]]:
+    return [{"code": code, "detail": "seeded"}]
+
+
+def test_flag_counts_split_unverified_quotes_from_list_only_skills(
+    client: TestClient, conn: psycopg.Connection[DictRow]
+) -> None:
+    position_id, ids = _seed(conn)
+    flag_sets: list[list[dict[str, str]]] = [
+        _flag("quote_not_found"),
+        _flag("no_evidence"),
+        _flag("list_only_skill"),
+        _flag("list_only_skill"),
+        [],
+    ]
+    requirements: list[UUID] = []
+    for index in range(len(flag_sets)):
+        requirement = conn.execute(
+            "INSERT INTO requirement (position_id, rubric_version, ord, text, kind) "
+            "VALUES (%s, 1, %s, %s, 'mandatory') RETURNING id",
+            (position_id, index, f"skill {index}"),
+        ).fetchone()
+        assert requirement is not None
+        requirements.append(requirement["id"])
+    # The same verdicts on a done assessment and on a failed one (a re-judge that gave up
+    # keeps the verdicts of the earlier run).
+    for name in ("high", "broken"):
+        for requirement_id, flags in zip(requirements, flag_sets, strict=True):
+            conn.execute(
+                "INSERT INTO verdict (assessment_id, requirement_id, verdict, flags) "
+                "VALUES (%s, %s, 'partial', %s)",
+                (ids[name], requirement_id, Jsonb(flags)),
+            )
+
+    rows = {
+        row["candidate_name"]: row
+        for row in client.get(f"/positions/{position_id}/ranking").json()["rows"]
+    }
+
+    counts = ("flagged_verdicts", "unverified_quote_verdicts", "list_only_verdicts")
+    assert tuple(rows["high"][key] for key in counts) == (4, 2, 2)
+    assert tuple(rows["broken"][key] for key in counts) == (4, 0, 0)  # flagged_verdicts as before
+    assert tuple(rows["low"][key] for key in counts) == (0, 0, 0)
 
 
 def test_unknown_ids_are_404_and_a_malformed_one_is_422(client: TestClient) -> None:

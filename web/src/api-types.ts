@@ -458,6 +458,8 @@ export interface components {
             filename: string | null;
             /** Flagged Verdicts */
             flagged_verdicts: number;
+            /** List Only Verdicts */
+            list_only_verdicts: number;
             /** Mandatory Failed */
             mandatory_failed: boolean;
             /** Rubric Unconfirmed */
@@ -471,6 +473,8 @@ export interface components {
              * @enum {string}
              */
             status: "done" | "failed";
+            /** Unverified Quote Verdicts */
+            unverified_quote_verdicts: number;
         };
         /** RankingStatus */
         RankingStatus: {

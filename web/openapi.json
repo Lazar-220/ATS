@@ -733,6 +733,10 @@
             "title": "Flagged Verdicts",
             "type": "integer"
           },
+          "list_only_verdicts": {
+            "title": "List Only Verdicts",
+            "type": "integer"
+          },
           "mandatory_failed": {
             "title": "Mandatory Failed",
             "type": "boolean"
@@ -763,6 +767,10 @@
             ],
             "title": "Status",
             "type": "string"
+          },
+          "unverified_quote_verdicts": {
+            "title": "Unverified Quote Verdicts",
+            "type": "integer"
           }
         },
         "required": [
@@ -774,6 +782,8 @@
           "score",
           "mandatory_failed",
           "flagged_verdicts",
+          "unverified_quote_verdicts",
+          "list_only_verdicts",
           "rubric_version",
           "rubric_unconfirmed"
         ],

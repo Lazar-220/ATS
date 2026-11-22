@@ -11,6 +11,7 @@ from uuid import UUID
 
 import psycopg
 
+from ats.pipeline.listonly import LIST_ONLY_SKILL
 from ats.pipeline.quotes import NO_EVIDENCE, QUOTE_NOT_FOUND
 from ats.pipeline.score import ranking_key
 
@@ -27,7 +28,12 @@ class RankingRow:
     # None unless the assessment is `done`.
     score: float | None
     mandatory_failed: bool
+    # Verdicts with any flag, `list_only_skill` included.
     flagged_verdicts: int
+    # Verdicts flagged `quote_not_found` or `no_evidence`; 0 unless the assessment is `done`.
+    unverified_quote_verdicts: int
+    # Verdicts flagged `list_only_skill` (the quote is verified); 0 unless `done`.
+    list_only_verdicts: int
     rubric_version: int
     # The label of §2.4: the assessment was made against requirements HR has not confirmed.
     rubric_unconfirmed: bool
@@ -98,13 +104,18 @@ def get_position_ranking(
     unconfirmed = position[1] != "confirmed"
     rows = conn.execute(
         "SELECT a.id, c.full_name, d.id, d.filename, a.status, a.score, a.mandatory_failed, "
-        "a.rubric_version, a.created_at, "
-        "(SELECT count(*) FROM verdict v WHERE v.assessment_id = a.id "
-        " AND jsonb_array_length(v.flags) > 0) "
+        "a.rubric_version, a.created_at, n.flagged, n.unverified, n.list_only "
         "FROM assessment a JOIN candidate c ON c.id = a.candidate_id "
         "LEFT JOIN document d ON d.candidate_id = a.candidate_id "
-        "WHERE a.position_id = %s",
-        (position_id,),
+        "CROSS JOIN LATERAL ("
+        " SELECT count(*) FILTER (WHERE jsonb_array_length(v.flags) > 0) AS flagged, "
+        " count(*) FILTER (WHERE EXISTS (SELECT 1 FROM jsonb_array_elements(v.flags) f "
+        "  WHERE f->>'code' = ANY(%(unverified)s))) AS unverified, "
+        " count(*) FILTER (WHERE EXISTS (SELECT 1 FROM jsonb_array_elements(v.flags) f "
+        "  WHERE f->>'code' = %(list_only)s)) AS list_only "
+        " FROM verdict v WHERE v.assessment_id = a.id) n "
+        "WHERE a.position_id = %(position)s",
+        {"position": position_id, "unverified": sorted(QUOTE_FLAGS), "list_only": LIST_ONLY_SKILL},
     ).fetchall()
 
     def order(row: tuple[Any, ...]) -> tuple[Any, ...]:
@@ -123,6 +134,9 @@ def get_position_ranking(
             score=float(row[5]) if row[4] == "done" and row[5] is not None else None,
             mandatory_failed=bool(row[6]) and row[4] == "done",
             flagged_verdicts=int(row[9]),
+            # A failed re-judge keeps the verdicts of the earlier run; they describe no result.
+            unverified_quote_verdicts=int(row[10]) if row[4] == "done" else 0,
+            list_only_verdicts=int(row[11]) if row[4] == "done" else 0,
             rubric_version=row[7],
             rubric_unconfirmed=unconfirmed,
         )
