@@ -3,7 +3,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { Assessment, Verdict } from "./api";
 import { quoteState, segment, toRanges } from "./highlight";
 import { useAssessment } from "./hooks";
-import { ErrorNotice } from "./Notice";
+import { ErrorNotice } from "./ui/Notice";
+import { Loading } from "./ui/Loading";
 import { formatScore } from "./ranking";
 
 const VERDICT_LABEL: Record<Verdict["verdict"], string> = {
@@ -178,7 +179,7 @@ export function AssessmentScreen({ assessmentId }: { assessmentId: string }) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   if (assessment.isPending) {
-    return <p>Loading…</p>;
+    return <Loading />;
   }
   if (assessment.isError) {
     return (

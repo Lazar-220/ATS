@@ -20,6 +20,8 @@ test("no source file renders HTML from a string", () => {
   const dir = new URL(".", import.meta.url);
   const files = sourceFiles();
   assert.ok(files.length > 0);
+  // Icons are drawn from JSX paths, so the icon file is the one a nested listing must not miss.
+  assert.ok(files.includes("ui/Icon.tsx"), "files in subfolders are scanned");
   for (const name of files) {
     const source = readFileSync(new URL(name, dir), "utf8");
     for (const word of FORBIDDEN) {

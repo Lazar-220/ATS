@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { fetchPositions } from "./api";
-import { ErrorNotice } from "./Notice";
+import { ErrorNotice } from "./ui/Notice";
+import { Loading } from "./ui/Loading";
 import { href } from "./route";
 
 const SETUP_LABEL = {
@@ -19,7 +20,7 @@ export function PositionsList() {
   });
 
   if (positions.isPending) {
-    return <p>Loading…</p>;
+    return <Loading />;
   }
   if (positions.isError) {
     return <ErrorNotice message={positions.error.message} onRetry={() => void positions.refetch()} />;
