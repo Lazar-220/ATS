@@ -42,7 +42,7 @@ export function App() {
       }}
     >
       <h1>ATS</h1>
-      <p style={{ color: "#555" }}>
+      <p style={{ color: "var(--color-text-secondary)" }}>
         {health.isPending && "Checking the API…"}
         {health.isError && <span data-testid="health">API unreachable: {health.error.message}</span>}
         {health.data && (
