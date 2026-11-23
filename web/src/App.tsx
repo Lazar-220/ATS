@@ -2,24 +2,28 @@ import { useQuery } from "@tanstack/react-query";
 
 import { fetchHealth } from "./api";
 import { AssessmentScreen } from "./AssessmentScreen";
+import { healthState } from "./health";
 import { PositionEditor } from "./PositionEditor";
 import { PositionsList } from "./PositionsList";
 import { RankingScreen } from "./RankingScreen";
-import { href } from "./route";
+import { href, type Route } from "./route";
 import { UploadForm } from "./Upload";
+import { Breadcrumb, type Crumb } from "./ui/Breadcrumb";
+import { TopBar } from "./ui/TopBar";
 import { useRoute } from "./useRoute";
 
-function Breadcrumb({ items }: { items: { label: string; to: string }[] }) {
-  return (
-    <nav aria-label="Breadcrumb" style={{ marginBottom: "1rem" }}>
-      {items.map((item, index) => (
-        <span key={item.to}>
-          {index > 0 && " › "}
-          <a href={item.to}>{item.label}</a>
-        </span>
-      ))}
-    </nav>
-  );
+const POSITIONS = "Positions";
+
+function crumbsFor(route: Route): Crumb[] {
+  const home = { label: POSITIONS, href: href({ name: "positions" }) };
+  switch (route.name) {
+    case "positions":
+      return [{ label: POSITIONS }];
+    case "assessment":
+      return [home, { label: "Ranked list", href: href({ name: "ranking", positionId: route.positionId }) }];
+    default:
+      return [home];
+  }
 }
 
 export function App() {
@@ -30,64 +34,32 @@ export function App() {
     refetchInterval: 5000,
     retry: false,
   });
-  const home = { label: "Positions", to: href({ name: "positions" }) };
 
   return (
-    <main
-      style={{
-        fontFamily: "system-ui, sans-serif",
-        margin: "2rem auto",
-        maxWidth: "72rem",
-        padding: "0 1rem",
-      }}
-    >
-      <h1>ATS</h1>
-      <p style={{ color: "var(--color-text-secondary)" }}>
-        {health.isPending && "Checking the API…"}
-        {health.isError && <span data-testid="health">API unreachable: {health.error.message}</span>}
-        {health.data && (
-          <span data-testid="health">
-            API: <strong>{health.data.status}</strong>, database:{" "}
-            <strong>{health.data.database}</strong>
-          </span>
+    <>
+      <TopBar
+        health={{
+          state: healthState(health),
+          api: health.data?.status,
+          database: health.data?.database,
+          message: health.error?.message,
+        }}
+      />
+      <main className={route.name === "ranking" || route.name === "assessment" ? "page page--wide" : "page"}>
+        <Breadcrumb items={crumbsFor(route)} />
+        {route.name === "positions" && (
+          <>
+            <h1 className="sr-only">Positions</h1>
+            <UploadForm />
+            <h2>Positions</h2>
+            <PositionsList />
+          </>
         )}
-      </p>
-      {route.name === "positions" && (
-        <>
-          <UploadForm />
-          <h2>Positions</h2>
-          <PositionsList />
-        </>
-      )}
-      {route.name === "requirements" && (
-        <>
-          <Breadcrumb items={[home]} />
-          <PositionEditor positionId={route.positionId} />
-        </>
-      )}
-      {route.name === "ranking" && (
-        <>
-          <Breadcrumb items={[home]} />
-          <RankingScreen positionId={route.positionId} />
-        </>
-      )}
-      {route.name === "assessment" && (
-        <>
-          <Breadcrumb
-            items={[
-              home,
-              { label: "Ranked list", to: href({ name: "ranking", positionId: route.positionId }) },
-            ]}
-          />
-          <AssessmentScreen assessmentId={route.assessmentId} />
-        </>
-      )}
-      {route.name === "not-found" && (
-        <>
-          <p role="alert">There is no such page.</p>
-          <Breadcrumb items={[home]} />
-        </>
-      )}
-    </main>
+        {route.name === "requirements" && <PositionEditor positionId={route.positionId} />}
+        {route.name === "ranking" && <RankingScreen positionId={route.positionId} />}
+        {route.name === "assessment" && <AssessmentScreen assessmentId={route.assessmentId} />}
+        {route.name === "not-found" && <p role="alert">There is no such page.</p>}
+      </main>
+    </>
   );
 }
