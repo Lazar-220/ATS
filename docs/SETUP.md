@@ -397,10 +397,21 @@ Planned from §6.3 of the plan. The actual pinned versions are in `pyproject.tom
 | 1.5 | none | npm dev: `openapi-typescript` (types from the API schema). It declares a peer `typescript@^5`, so `web/package.json` has an `overrides` entry that lets it use the installed TypeScript 6; without it `npm install` and `npm ci` stop with ERESOLVE |
 | 1.6 | `langfuse` (5.2.0; `uv add` also locked `opentelemetry-sdk`, `opentelemetry-exporter-otlp-proto-http`, `protobuf`, `backoff`, `wrapt` and a few more) | Langfuse self-host: web, worker, Postgres, ClickHouse, Redis, MinIO (images in section 6) |
 | 1.7 | none | GitHub Actions |
+| UI-1 | none | npm: `@fontsource-variable/inter` (runtime, SIL OFL 1.1; the font of the design tokens, see below) |
 | 2.1 | `sentence-transformers` (with CPU-only `torch`), `pgvector` | model `BAAI/bge-m3`, about 2.3 GB in the Hugging Face cache |
 | 2.2 | none | model `BAAI/bge-reranker-v2-m3`, about 2.3 GB |
 | 3.6 | `langgraph`, `langgraph-checkpoint-postgres`, `langchain`, `langchain-google-genai` | |
 | 3.7 | `mcp` (version 2) | n8n in Docker (optional) |
+
+**Font (UI-1).** The web app uses Inter Variable from `@fontsource-variable/inter`. `main.tsx`
+imports `@fontsource-variable/inter/wght.css`, and Vite copies the woff2 subsets (Latin, Latin
+Extended, Cyrillic, Cyrillic Extended, and the Greek and Vietnamese ones the package carries) into
+`web/dist/assets`. There is no font CDN and no request to another host, because CVs are personal
+data; `rg -n "https?://" web/dist --glob "*.css"` finds nothing. The design tokens and base styles
+are copied into `web/src/styles/` (the design's `@font-face` blocks are left out); nothing imports
+from `web/design/`, which is git-excluded and is also listed in `.dockerignore` so a local image
+build does not carry it. `npm --prefix web run build` is a per-phase check, not part of `make check`
+(owner decision Q2, to be decided again at UI-7).
 
 `typescript-eslint` is pinned to exactly 8.72.0: the registry lists 8.73.0 but serves no tarball for
 `@typescript-eslint/types@8.73.0` (404), so a fresh install of the latest fails. Move to a newer
