@@ -4,8 +4,9 @@ import { Button } from "./Button";
 import "./Popover.css";
 
 // A button that opens a small non-modal dialog under the same title. Esc, a click outside and
-// the × close it, and the focus goes back to the button. The dialog is placed against the nearest
-// positioned ancestor, so the caller decides which edge it lines up with.
+// the × close it, and the focus goes back to the button; it also closes when the focus is tabbed
+// out of it. The dialog is placed against the nearest positioned ancestor, so the caller decides
+// which edge it lines up with.
 export function Popover({ title, children }: { title: string; children: ReactNode }) {
   const dialogId = useId();
   const titleId = useId();
@@ -45,7 +46,17 @@ export function Popover({ title, children }: { title: string; children: ReactNod
   }, [open, close]);
 
   return (
-    <span className="pop-anchor" ref={anchor}>
+    <span
+      className="pop-anchor"
+      ref={anchor}
+      onBlur={(event) => {
+        // Tabbing on would leave the dialog open over the controls that now take the focus.
+        const next = event.relatedTarget;
+        if (next instanceof Node && !event.currentTarget.contains(next)) {
+          setOpen(false);
+        }
+      }}
+    >
       <Button
         ref={trigger}
         variant="ghost"
