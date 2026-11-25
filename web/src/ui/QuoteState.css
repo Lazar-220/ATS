@@ -1,0 +1,6 @@
+/* Copied from the design's components.css. */
+.quote-state { display: inline-flex; align-items: flex-start; gap: 6px; font-size: var(--text-sm); line-height: var(--leading-sm); color: var(--color-text-secondary); }
+/* The accent is the colour family of the highlight in the CV. */
+.quote-state .icon { margin-top: 2px; color: var(--color-accent); }
+.quote-state--unverified { color: var(--color-caution); font-weight: var(--weight-medium); }
+.quote-state--unverified .icon { color: var(--color-caution); }

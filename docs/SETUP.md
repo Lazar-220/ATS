@@ -401,6 +401,7 @@ Planned from §6.3 of the plan. The actual pinned versions are in `pyproject.tom
 | 1.7 | none | GitHub Actions |
 | UI-1 | none | npm: `@fontsource-variable/inter` (runtime, SIL OFL 1.1; the font of the design tokens, see below) |
 | UI-A | none | none |
+| UI-B | none | none |
 | 2.1 | `sentence-transformers` (with CPU-only `torch`), `pgvector` | model `BAAI/bge-m3`, about 2.3 GB in the Hugging Face cache |
 | 2.2 | none | model `BAAI/bge-reranker-v2-m3`, about 2.3 GB |
 | 3.6 | `langgraph`, `langgraph-checkpoint-postgres`, `langchain`, `langchain-google-genai` | |
@@ -414,7 +415,7 @@ data; `rg -n "https?://" web/dist --glob "*.css"` finds nothing. The design toke
 are copied into `web/src/styles/` (the design's `@font-face` blocks are left out); nothing imports
 from `web/design/`, which is git-excluded and is also listed in `.dockerignore` so a local image
 build does not carry it. `npm --prefix web run build` is a per-phase check, not part of `make check`
-(owner decision Q2, to be decided again at UI-7).
+(owner decision Q2, closed in UI-B with no change).
 
 `typescript-eslint` is pinned to exactly 8.72.0: the registry lists 8.73.0 but serves no tarball for
 `@typescript-eslint/types@8.73.0` (404), so a fresh install of the latest fails. Move to a newer

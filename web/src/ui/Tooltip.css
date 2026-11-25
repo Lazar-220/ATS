@@ -1,9 +1,15 @@
 /* Copied from the design's components.css and screens.css, but hoverable: the board's tooltip
    ignores the pointer, which fails WCAG 1.4.13. Hidden means invisible to the pointer too. */
 .tip-wrap { position: relative; display: inline-flex; }
-.tooltip { position: absolute; bottom: calc(100% + 8px); right: 0; width: max-content; max-width: 300px; z-index: 5; padding: 6px 10px; background: var(--overlay-bg); border: var(--border-width) solid var(--overlay-border); border-radius: var(--control-radius); font-size: var(--text-sm); line-height: var(--leading-sm); color: var(--color-text-primary); visibility: hidden; opacity: 0;
+/* The text keeps its own weight, alignment and wrapping inside a table cell or heading. */
+.tooltip { position: absolute; bottom: calc(100% + 8px); right: 0; width: max-content; max-width: 300px; z-index: 5; padding: 6px 10px; background: var(--overlay-bg); border: var(--border-width) solid var(--overlay-border); border-radius: var(--control-radius); font-size: var(--text-sm); line-height: var(--leading-sm); font-weight: var(--weight-regular); text-align: left; white-space: normal; color: var(--color-text-primary); visibility: hidden; opacity: 0;
   transition: opacity var(--motion-base) var(--ease-standard), visibility var(--motion-base); }
 /* Covers the gap down to the trigger, so the pointer can travel onto the tooltip. */
 .tooltip::after { content: ""; position: absolute; top: 100%; left: 0; right: 0; height: 9px; }
+/* Beside the trigger: for a trigger near the top of a scrolling table, where a tooltip above or
+   below it would be cut off. */
+/* Narrower in a narrow window (200 % zoom), so that it still ends inside the table. */
+.tip-wrap--end > .tooltip { bottom: auto; right: auto; top: 50%; left: calc(100% + 8px); transform: translateY(-50%); max-width: clamp(160px, calc(100vw - 340px), 300px); }
+.tip-wrap--end > .tooltip::after { top: 0; bottom: 0; left: auto; right: 100%; width: 9px; height: auto; }
 .tip-wrap:hover > .tooltip, .tip-wrap:focus-within > .tooltip { visibility: visible; opacity: 1; }
 .tip-wrap[data-dismissed] > .tooltip { visibility: hidden; opacity: 0; }

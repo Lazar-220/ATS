@@ -115,6 +115,18 @@ const RANKING = [
   "Mandatory requirement not met",
   "No",
   "–",
+  "To check",
+  " not verified, ",
+  " only in the skills list",
+  "Provisional",
+  "Meets every mandatory requirement",
+  "Misses a mandatory requirement",
+  "Ranked below all candidates who meet every mandatory requirement, whatever their score.",
+  "About this group",
+  "Could not be assessed",
+  "How the score works",
+  "Met counts 1, Partial 0.5, Not met 0. Within each kind, requirements are weighted by their weight (1–5). Mandatory requirements make 70% of the score and nice-to-have 30%; if a posting has only one kind, that kind is the whole score. A requirement and its refinements count once, with the requirement's weight and kind, as the average of their verdicts. Only Not met fails a mandatory requirement.",
+  "Close",
 ];
 
 const ASSESSMENT = [
@@ -141,6 +153,16 @@ const ASSESSMENT = [
   "Hidden text (white, tiny, off-page or covered) was found in the PDF and left out of the assessment.",
   "Invisible characters were found in the CV text and removed before the assessment.",
   "Some words mix Cyrillic and Latin letters, which can be an attempt to disguise text.",
+  "Requirements and verdicts",
+  "CV text",
+  "Partly read",
+  "Text aimed at an AI screener",
+  "Hidden text removed",
+  "Invisible characters removed",
+  "Mixed Cyrillic and Latin letters",
+  "Quote not verified",
+  "No quote given",
+  "Only in the skills list",
 ];
 
 const PINNED_TEXTS = [...SHELL, ...HOME, ...REQUIREMENTS, ...RANKING, ...ASSESSMENT];
@@ -166,7 +188,7 @@ function isPinned(text: string, source: string): boolean {
 }
 
 test("the list is the full set of Appendix A", () => {
-  assert.equal(PINNED_TEXTS.length, 116);
+  assert.equal(PINNED_TEXTS.length, 138);
   assert.equal(new Set(PINNED_TEXTS).size, PINNED_TEXTS.length);
 });
 

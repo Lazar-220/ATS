@@ -1,0 +1,7 @@
+/* Copied from the design's components.css and screens.css. The text is never trimmed or
+   re-flowed beyond wrapping. Reduced motion sets --motion-scroll to auto (tokens.css). */
+.cv { height: 720px; overflow: auto; overscroll-behavior: contain; margin: 0; padding: var(--space-6) 28px; background: var(--cv-bg); border: var(--border-width) solid var(--color-border-subtle); border-radius: var(--radius-container);
+  white-space: pre-wrap; overflow-wrap: anywhere; tab-size: 4; font-family: var(--font-sans); font-size: var(--text-read); line-height: var(--leading-read); color: var(--cv-fg); scroll-behavior: var(--motion-scroll); }
+/* Text inside a highlight stays primary: the tertiary colour does not reach 4.5:1 on it. */
+.hl { background: var(--cv-quote-bg); color: var(--color-text-primary); text-decoration: underline dotted 1px var(--cv-quote-underline); text-underline-offset: 4px; border-radius: 2px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.hl--selected { background: var(--cv-selected-bg); text-decoration: none; outline: 2px solid var(--cv-selected-outline); outline-offset: 0; }

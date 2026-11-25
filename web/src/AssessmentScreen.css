@@ -1,0 +1,19 @@
+/* Copied from the design's screens.css (Assessment). Under 800 px, as in a window zoomed to
+   200 %, the two columns stack so that neither becomes too narrow to read. */
+.assessment { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); min-width: 0; }
+.assessment__head { display: grid; gap: var(--space-2); }
+.summary { margin: 0; color: var(--color-text-secondary); overflow-wrap: anywhere; }
+.summary strong { color: var(--color-text-primary); font-weight: var(--weight-semibold); font-variant-numeric: var(--font-numeric); }
+.flags { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); }
+.assess { display: grid; grid-template-columns: minmax(340px, 40%) minmax(0, 1fr); gap: var(--space-6); align-items: start; }
+@media (max-width: 1100px) { .assess { grid-template-columns: minmax(320px, 38%) minmax(0, 1fr); } .flags { grid-template-columns: minmax(0, 1fr); } }
+.pane { height: 720px; overflow: auto; overscroll-behavior: contain; }
+/* Stacked panes stay shorter than a zoomed window: a selected quote can be seen whole, and there
+   is always some page left to scroll by. */
+@media (max-width: 800px) {
+  .assess { grid-template-columns: minmax(0, 1fr); }
+  .assess .pane, .assess .cv { height: min(720px, 75vh); }
+}
+/* The padding leaves room for a card's focus ring inside the scrolling pane. */
+.cards { display: grid; gap: var(--space-2); align-content: start; margin: 0; padding: 4px 8px 4px 4px; list-style: none; }
+.pane-empty { margin: 0; padding: var(--space-6); border-radius: var(--radius-container); background: var(--color-bg-surface); border: var(--border-width) solid var(--color-border-subtle); color: var(--color-text-secondary); }

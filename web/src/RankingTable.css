@@ -1,0 +1,8 @@
+/* The board sets most of these inline. */
+.ranking td:nth-child(2) { overflow-wrap: anywhere; min-width: 160px; }
+.candidate-name { font-weight: var(--weight-medium); }
+.cell-muted { color: var(--color-text-secondary); }
+.score { font-variant-numeric: var(--font-numeric); font-weight: var(--weight-semibold); }
+.state.state--not-met { color: var(--color-not-met); font-weight: var(--weight-semibold); }
+/* A total with nothing to check, and the dash of a failed row. */
+.count { display: inline-flex; padding: 2px 6px; border-radius: 4px; color: var(--color-text-tertiary); font-variant-numeric: var(--font-numeric); }

@@ -1,5 +1,7 @@
 /* Copied from the design's components.css and screens.css. The Home tables share it. */
-.table-wrap { overflow-x: auto; border: var(--border-width) solid var(--color-border-subtle); border-radius: var(--radius-container); background: var(--color-bg-surface); }
+/* Positioned, so that hidden header text (.sr-only is absolute) scrolls with the table instead of
+   widening the whole page. */
+.table-wrap { position: relative; overflow-x: auto; border: var(--border-width) solid var(--color-border-subtle); border-radius: var(--radius-container); background: var(--color-bg-surface); }
 .table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: var(--text-md); }
 .table th { text-align: left; font-size: var(--text-sm); font-weight: var(--weight-medium); color: var(--table-header-fg); height: 40px; padding: 0 var(--space-3); border-bottom: var(--border-width) solid var(--table-divider); white-space: nowrap; }
 .table td { height: var(--table-row-h); padding: var(--space-2) var(--space-3); border-bottom: var(--border-width) solid var(--table-divider); vertical-align: middle; }
@@ -14,3 +16,7 @@
 .msg--info .icon { color: var(--color-text-secondary); }
 .row--attention .msg { color: var(--color-text-primary); }
 .table .col-num { text-align: right; font-variant-numeric: var(--font-numeric); }
+.row--failed td { color: var(--color-text-secondary); }
+.row-sub { display: block; font-size: var(--text-sm); line-height: var(--leading-sm); color: var(--color-text-tertiary); }
+.table .row--section th { background: var(--table-section-bg); color: var(--color-text-secondary); font-weight: var(--weight-semibold); border-top: var(--border-width) solid var(--table-divider); }
+.section-head { display: inline-flex; align-items: center; gap: var(--space-2); }

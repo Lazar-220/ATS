@@ -5,6 +5,8 @@ import "./Tooltip.css";
 type TooltipProps = {
   // Null: there is nothing to say, so there is no tooltip.
   content: string | null;
+  // Above the trigger unless it should open to its right.
+  placement?: "top" | "end";
   // The focusable trigger. It receives the id for its aria-describedby.
   children: (describedBy: string | undefined) => ReactNode;
 };
@@ -12,7 +14,7 @@ type TooltipProps = {
 // Shows while the trigger or the tooltip is hovered or focused (the CSS does that), and Esc hides
 // it until the next hover or focus (WCAG 1.4.13). The wrapper stays when the content goes, so
 // the trigger is never re-created under the user's focus.
-export function Tooltip({ content, children }: TooltipProps) {
+export function Tooltip({ content, placement = "top", children }: TooltipProps) {
   const id = useId();
   const [dismissed, setDismissed] = useState(false);
   const present = content !== null;
@@ -33,7 +35,7 @@ export function Tooltip({ content, children }: TooltipProps) {
 
   return (
     <span
-      className="tip-wrap"
+      className={placement === "end" ? "tip-wrap tip-wrap--end" : "tip-wrap"}
       data-dismissed={dismissed || undefined}
       onPointerEnter={() => setDismissed(false)}
       onFocus={() => setDismissed(false)}

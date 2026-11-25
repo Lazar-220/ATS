@@ -17,9 +17,27 @@ import "./PositionsList.css";
 const SETUP_LABEL = {
   pending: "waiting for the posting text",
   running: "extracting requirements…",
-  done: "",
   failed: "failed",
 } as const;
+
+const SETUP_ICON = {
+  pending: "clock",
+  running: "spinner",
+  failed: "alert-circle",
+} as const;
+
+function SetupCell({ position }: { position: Position }) {
+  const status = position.setup_status;
+  if (status === "done") {
+    return position.requirement_count;
+  }
+  return (
+    <span className={status === "failed" ? "state state--attention" : "state"}>
+      <Icon name={SETUP_ICON[status]} />
+      {SETUP_LABEL[status]}
+    </span>
+  );
+}
 
 const features = tableFeatures({});
 const helper = createColumnHelper<typeof features, Position>();
@@ -61,8 +79,7 @@ const columns = helper.columns([
   helper.display({
     id: "requirements",
     header: "Requirements",
-    cell: ({ row }) =>
-      row.original.setup_status === "done" ? row.original.requirement_count : SETUP_LABEL[row.original.setup_status],
+    cell: ({ row }) => <SetupCell position={row.original} />,
   }),
   helper.display({
     id: "actions",

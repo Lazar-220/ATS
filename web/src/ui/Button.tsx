@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, KeyboardEvent, MouseEvent } from "react";
+import type { ButtonHTMLAttributes, KeyboardEvent, MouseEvent, Ref } from "react";
 
 import "./Button.css";
 import { Icon, type IconName } from "./Icon";
@@ -14,6 +14,7 @@ type ButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "className"> & 
   ariaDisabled?: boolean;
   // An icon button that takes something away turns red under the pointer.
   danger?: boolean;
+  ref?: Ref<HTMLButtonElement>;
 };
 
 export function Button({

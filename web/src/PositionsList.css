@@ -1,5 +1,5 @@
 /* Copied from the design's screens.css (Home positions section). */
-.section { display: grid; gap: var(--space-3); }
+.section { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-3); }
 .row-actions { display: flex; align-items: center; justify-content: flex-end; gap: var(--space-4); flex-wrap: wrap; }
 /* The board sets these two inline. */
 .posting-name { overflow-wrap: anywhere; }
