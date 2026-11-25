@@ -23,24 +23,33 @@ import "./PositionEditor.css";
 // Omit on each member of the union, so `type` still tells the two answers apart.
 type WithoutKey<T> = T extends unknown ? Omit<T, "dedup_key"> : never;
 
-function RequirementsForm({ position }: { position: PositionDetail }) {
+function useAnswer(positionId: string) {
   const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: postAnswer,
+    // Also after a failure: a 409 means the screen is out of date, so load the current version.
+    onSettled: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["position", positionId] }),
+        queryClient.invalidateQueries({ queryKey: ["positions"] }),
+      ]);
+    },
+  });
+}
+
+type RequirementsFormProps = {
+  position: PositionDetail;
+  // Owned by the parent: this form is re-created for a new version, and the result of the
+  // answer that made the version must still be on screen.
+  answer: ReturnType<typeof useAnswer>;
+};
+
+function RequirementsForm({ position, answer }: RequirementsFormProps) {
   const saved = toDraft(position.requirements);
   const [rows, setRows] = useState<DraftRow[]>(saved);
   // One key per intent: pressing the same button again with the same content repeats the
   // request, and the server recognizes it instead of doing the work twice.
   const attempt = useRef<{ signature: string; key: string } | null>(null);
-
-  const answer = useMutation({
-    mutationFn: postAnswer,
-    // Also after a failure: a 409 means the screen is out of date, so load the current version.
-    onSettled: async () => {
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["position", position.id] }),
-        queryClient.invalidateQueries({ queryKey: ["positions"] }),
-      ]);
-    },
-  });
 
   const problem = validateDetail(rows);
   const dirty = JSON.stringify(rows) !== JSON.stringify(saved);
@@ -149,7 +158,9 @@ function RubricLine({ position }: { position: PositionDetail }) {
   );
 }
 
+// The caller keys this by position, so one position's answer is never shown on another.
 export function PositionEditor({ positionId }: { positionId: string }) {
+  const answer = useAnswer(positionId);
   const position = useQuery({
     queryKey: ["position", positionId],
     queryFn: () => fetchPosition(positionId),
@@ -188,6 +199,7 @@ export function PositionEditor({ positionId }: { positionId: string }) {
             <RequirementsForm
               key={`${position.data.id}:${position.data.rubric_version}`}
               position={position.data}
+              answer={answer}
             />
           )}
         </>

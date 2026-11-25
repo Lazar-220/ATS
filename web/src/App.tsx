@@ -57,7 +57,9 @@ export function App() {
             <PositionsList onAddCvs={(position) => uploadForm.current?.addTo(position)} />
           </>
         )}
-        {route.name === "requirements" && <PositionEditor positionId={route.positionId} />}
+        {route.name === "requirements" && (
+          <PositionEditor key={route.positionId} positionId={route.positionId} />
+        )}
         {route.name === "ranking" && <RankingScreen positionId={route.positionId} />}
         {route.name === "assessment" && <AssessmentScreen assessmentId={route.assessmentId} />}
         {route.name === "not-found" && <p role="alert">There is no such page.</p>}
