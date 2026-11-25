@@ -3,8 +3,8 @@
 **Read first:** §4.4 (the paragraph on CV text as untrusted data) and §6.3 (the "Frontend" row) of `docs/plan.md`;
 `docs/review/frontend-plan.md` §2.2, §4 ("Rules that apply to every phase" and "UI-2"), §5 and Appendix A;
 the `docs/PROGRESS.md` Decisions rows for UI-1 (Q2, Q3, Q9, Q12); `web/design/design/HANDOFF.md` §1, the §2 rows
-for the Home components (upload form, file field, request status, document state, progress table, positions
-table, empty state), §4 and §5; `web/design/design/css/tokens.css`, `css/components.css`, `css/screens.css`;
+`Button`, `Link`, `FileField`, `RequestStatus`, `DocumentState`, `DataTable` row, `ErrorNotice` and
+`Loading`, `EmptyState`, the §3 tables "Positions" and "Upload request", §4 (first bullet), §5 and §8; `web/design/design/css/tokens.css`, `css/components.css`, `css/screens.css`;
 the whole of `web/design/design/Home.dc.html` except the add-mode markup and script; in `web/src`: `Upload.tsx`,
 `PositionsList.tsx`, `status.ts`, `status.test.ts`, `copy.test.ts`, `App.tsx`, `RankingTable.tsx` (the
 TanStack Table pattern), `styles/*` and every file in `ui/`.
@@ -44,8 +44,9 @@ keeps `position.filename ?? position.id`.
    least one CV PDF." on both fields; otherwise the first file that fails `isPdfName` (posting first, then the CVs
    in order) gives `` `${name} is not a PDF file.` `` on the field that holds it. Take only `name` from each file, so
    the test can pass plain objects. `UploadForm` uses it instead of its inline checks.
-   Restyle the form as on the board: labels with `htmlFor` and ids from `useId`, the design's file field
-   (`::file-selector-button`), `aria-invalid` and the error border on the fields `uploadProblem` names, cleared on
+   Restyle the form as on the board: add `ui/FileField.tsx` (+ `FileField.css`) with the HANDOFF §2 props
+   (`label`, `multiple`, `disabled`, `invalid`, `onChange`), a label with `htmlFor` and an id from `useId`, the
+   native input with `accept="application/pdf,.pdf"` styled through `::file-selector-button`, `aria-invalid` and the error border on the fields `uploadProblem` names, cleared on
    the next submit that passes. The submit button becomes `ui/Button` (primary, `busy` while uploading, text
    "Uploading…" / "Upload and rank" unchanged). Today's three `<p role="alert">` elements (the problem, the upload
    error, the status error) become one message area, `<p id="form-msg" aria-live="polite">` (HANDOFF §5), that
@@ -59,10 +60,12 @@ keeps `position.filename ?? position.id`.
    not-a-CV message at `src/ats/services/rankings.py:274-278`); otherwise `default`. State keeps its label
    ("Read" for `parsed`); an unknown state is still shown raw (`documentLabel`), with the info icon as on the
    board. The message text is shown as the API wrote it, as text.
-   The progress view: the status line "Status: {label}" with the board's icon and `aria-live="polite"` on that
-   line only (today the whole section is live, `Upload.tsx:10`); the table becomes
+   The progress view: a `RequestStatus` component, the line "Status: {label}" with the board's icon and
+   `aria-live="polite"` on that line only (today the whole section is live, `Upload.tsx:10`); it takes the API
+   status and keeps `requestLabel` for the text (HANDOFF's `'waiting' | 'processing'` prop names are the labels,
+   not new API values); a `DocumentState` component for the State cell; the table becomes
    `<table aria-label="Uploaded files">` built with TanStack Table as in `RankingTable.tsx` (no sorting), with the
-   row classes for `attention` and `info` from `screens.css` and the info icon in the message cell of an info row.
+   `DataTable` row variants `attention` and `info` from the design CSS (the `failed` variant is for Ranking, UI-5) and the info icon in the message cell of an info row.
    "Open the ranked list" and the failed sentence stay, the latter with `role="alert"` (Q12). Add the `info` icon
    (and any other icon the board's Home uses in this unit) to `ui/Icon.tsx`, paths copied from the board.
    Add "Uploaded files" to the Home list in `copy.test.ts`. Tests for `documentRowVariant` cover: rejected and
@@ -74,7 +77,8 @@ keeps `position.filename ?? position.id`.
    (caution for `unconfirmed`, check for `confirmed`) beside the text `rubric_status` exactly as today; Version and
    Requirements right-aligned with `.num`; the Requirements cell keeps the `SETUP_LABEL` texts; the actions column
    header is `<span className="sr-only">Actions</span>` (today it is `""`); the row links "Requirements" and
-   "Ranked list" keep their texts and targets, styled with the board's classes. Loading stays `ui/Loading`; the error
+   "Ranked list" keep their texts and targets and use a new `ui/Link.tsx` (HANDOFF §2 `Link`: `href`, `strong`,
+   `trailingIcon`; always underlined), only with the props Home uses. Loading stays `ui/Loading`; the error
    stays `ErrorNotice` with "Try again"; the empty state becomes `ui/EmptyState.tsx` (+ `EmptyState.css`, icon plus
    text, text unchanged). Add "Actions" to the Home list in `copy.test.ts`. The query key `["positions"]` and the
    5 s polling stay.
