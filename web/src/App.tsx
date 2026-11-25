@@ -51,7 +51,6 @@ export function App() {
           <>
             <h1 className="sr-only">Positions</h1>
             <UploadForm />
-            <h2>Positions</h2>
             <PositionsList />
           </>
         )}

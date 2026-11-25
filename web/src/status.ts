@@ -36,7 +36,41 @@ export function documentNeedsAttention(status: string): boolean {
   return status === "rejected" || status === "failed";
 }
 
+export type DocumentRowVariant = "attention" | "info" | "default";
+
+// A message on a row that is not an error is information, for example "not a CV": the backend
+// writes it on a parsed document. The rule never looks at the message text.
+export function documentRowVariant(doc: { status: string; message: string | null }): DocumentRowVariant {
+  if (documentNeedsAttention(doc.status)) {
+    return "attention";
+  }
+  return doc.message !== null ? "info" : "default";
+}
+
 // A file input accepts anything, so the form checks the extension before the API does.
 export function isPdfName(name: string): boolean {
   return name.toLowerCase().endsWith(".pdf");
+}
+
+export type UploadField = "posting" | "cvs";
+
+export interface UploadProblem {
+  message: string;
+  // The inputs to mark invalid. Empty for a wrong file type: the message names the file instead.
+  fields: UploadField[];
+}
+
+// Checked in the order HR fixes things: a missing file first, then the posting, then the CVs.
+export function uploadProblem(
+  posting: { name: string } | null,
+  cvs: { name: string }[],
+): UploadProblem | null {
+  if (posting === null || cvs.length === 0) {
+    return { message: "Choose one posting PDF and at least one CV PDF.", fields: ["posting", "cvs"] };
+  }
+  const wrong = [posting, ...cvs].find((file) => !isPdfName(file.name));
+  if (wrong !== undefined) {
+    return { message: `${wrong.name} is not a PDF file.`, fields: [] };
+  }
+  return null;
 }

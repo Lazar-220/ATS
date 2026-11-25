@@ -35,6 +35,30 @@ const PATHS = {
       <path d="M20 12a8 8 0 0 0-8-8" />
     </>
   ),
+  upload: <path d="M12 15V4M7.5 8.5 12 4l4.5 4.5M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" />,
+  clock: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7.5V12l3 2" />
+    </>
+  ),
+  file: (
+    <>
+      <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
+      <path d="M14 3v5h5M9 13h6M9 17h4" />
+    </>
+  ),
+  check: <path d="M5 12.5l4.5 4.5L19 7.5" />,
+  info: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 11v5.5M12 7.75h.01" />
+    </>
+  ),
+  "arrow-right": <path d="M5 12h14M13 6l6 6-6 6" />,
+  inbox: (
+    <path d="M3.5 13.5 6 5.5A1.5 1.5 0 0 1 7.4 4.5h9.2A1.5 1.5 0 0 1 18 5.5l2.5 8M3.5 13.5V18a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2v-4.5H15a3 3 0 0 1-6 0z" />
+  ),
   "chevron-right": <path d="M9.5 6l6 6-6 6" />,
   refresh: (
     <>
@@ -46,9 +70,10 @@ const PATHS = {
 
 export type IconName = keyof typeof PATHS;
 
-export function Icon({ name }: { name: IconName }) {
+export function Icon({ name, size }: { name: IconName; size?: 20 }) {
+  const classes = ["icon", name === "spinner" ? "spin" : "", size === 20 ? "icon--20" : ""].filter(Boolean).join(" ");
   return (
-    <svg className={name === "spinner" ? "icon spin" : "icon"} viewBox="0 0 24 24" aria-hidden="true">
+    <svg className={classes} viewBox="0 0 24 24" aria-hidden="true">
       {PATHS[name]}
     </svg>
   );

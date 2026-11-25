@@ -1,0 +1,2 @@
+/* Copied from the design's components.css; the flex row is the board's inline style. */
+.empty { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-6); border-radius: var(--radius-container); background: var(--color-bg-surface); color: var(--color-text-secondary); }

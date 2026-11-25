@@ -34,6 +34,7 @@ const HOME = [
   "Choose one posting PDF and at least one CV PDF.",
   " is not a PDF file.",
   "Status: ",
+  "Uploaded files",
   "File",
   "Kind",
   "State",
@@ -53,6 +54,7 @@ const HOME = [
   "Rubric",
   "Version",
   "Requirements",
+  "Actions",
   "waiting for the posting text",
   "extracting requirements…",
   "failed",
@@ -153,7 +155,7 @@ function isPinned(text: string, source: string): boolean {
 }
 
 test("the list is the full set of Appendix A", () => {
-  assert.equal(PINNED_TEXTS.length, 103);
+  assert.equal(PINNED_TEXTS.length, 105);
   assert.equal(new Set(PINNED_TEXTS).size, PINNED_TEXTS.length);
 });
 

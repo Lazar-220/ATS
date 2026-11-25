@@ -1,0 +1,8 @@
+/* Copied from the design's components.css. */
+.req-status { display: inline-flex; align-items: center; gap: var(--space-2); }
+.req-status__label { color: var(--color-text-secondary); }
+.req-status__value { display: inline-flex; align-items: center; gap: 6px; font-weight: var(--weight-semibold); color: var(--color-text-primary); }
+.req-status--waiting .icon { color: var(--color-text-tertiary); }
+.req-status--processing .icon { color: var(--color-accent); }
+.req-status--done .icon { color: var(--color-met); }
+.req-status--failed .icon, .req-status--failed .req-status__value { color: var(--color-error); }
