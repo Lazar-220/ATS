@@ -1,9 +1,13 @@
-import { useState, type FormEvent } from "react";
+import { useId, useState, type FormEvent } from "react";
 
 import type { RankingStatus } from "./api";
 import { useRankingStatus, useUpload } from "./hooks";
 import { href } from "./route";
-import { documentLabel, documentNeedsAttention, isPdfName, requestLabel } from "./status";
+import { documentLabel, documentNeedsAttention, requestLabel, uploadProblem, type UploadProblem } from "./status";
+import { Button } from "./ui/Button";
+import { FileField } from "./ui/FileField";
+import { Icon } from "./ui/Icon";
+import "./Upload.css";
 
 function Progress({ status }: { status: RankingStatus }) {
   return (
@@ -43,23 +47,19 @@ function Progress({ status }: { status: RankingStatus }) {
 export function UploadForm() {
   const [posting, setPosting] = useState<File | null>(null);
   const [cvs, setCvs] = useState<File[]>([]);
-  const [problem, setProblem] = useState<string | null>(null);
+  const [problem, setProblem] = useState<UploadProblem | null>(null);
   const [requestId, setRequestId] = useState<string | null>(null);
+  const headingId = useId();
   const upload = useUpload();
   const status = useRankingStatus(requestId);
 
   function submit(event: FormEvent) {
     event.preventDefault();
-    if (posting === null || cvs.length === 0) {
-      setProblem("Choose one posting PDF and at least one CV PDF.");
+    const found = uploadProblem(posting, cvs);
+    setProblem(found);
+    if (found !== null || posting === null) {
       return;
     }
-    const wrong = [posting, ...cvs].find((file) => !isPdfName(file.name));
-    if (wrong !== undefined) {
-      setProblem(`${wrong.name} is not a PDF file.`);
-      return;
-    }
-    setProblem(null);
     upload.mutate(
       { posting, cvs },
       { onSuccess: (accepted) => setRequestId(accepted.request_id) },
@@ -67,40 +67,46 @@ export function UploadForm() {
   }
 
   const busy = upload.isPending;
+  // One message area: the first of these that is set.
+  const formMessage =
+    problem?.message ??
+    (upload.isError ? upload.error.message : null) ??
+    (requestId !== null && status.isError ? status.error.message : null);
   return (
-    <section>
-      <h2>Upload</h2>
+    <section className="panel" aria-labelledby={headingId}>
+      <h2 className="h2" id={headingId}>
+        Upload
+      </h2>
       <form onSubmit={submit}>
-        <p>
-          <label>
-            Job posting (PDF){" "}
-            <input
-              type="file"
-              accept="application/pdf,.pdf"
-              disabled={busy}
-              onChange={(event) => setPosting(event.target.files?.[0] ?? null)}
-            />
-          </label>
-        </p>
-        <p>
-          <label>
-            CVs (PDF, one or more){" "}
-            <input
-              type="file"
-              accept="application/pdf,.pdf"
-              multiple
-              disabled={busy}
-              onChange={(event) => setCvs(Array.from(event.target.files ?? []))}
-            />
-          </label>
-        </p>
-        <button type="submit" disabled={busy}>
-          {busy ? "Uploading…" : "Upload and rank"}
-        </button>
+        <div className="upload-form">
+          <FileField
+            label="Job posting (PDF)"
+            disabled={busy}
+            invalid={problem?.fields.includes("posting") ?? false}
+            onChange={(files) => setPosting(files[0] ?? null)}
+          />
+          <FileField
+            label="CVs (PDF, one or more)"
+            multiple
+            disabled={busy}
+            invalid={problem?.fields.includes("cvs") ?? false}
+            onChange={setCvs}
+          />
+          <div>
+            <Button type="submit" variant="primary" icon="upload" busy={busy} disabled={busy}>
+              {busy ? "Uploading…" : "Upload and rank"}
+            </Button>
+          </div>
+        </div>
       </form>
-      {problem !== null && <p role="alert">{problem}</p>}
-      {upload.isError && <p role="alert">{upload.error.message}</p>}
-      {requestId !== null && status.isError && <p role="alert">{status.error.message}</p>}
+      <div id="form-msg" aria-live="polite">
+        {formMessage !== null && (
+          <div className="field-error">
+            <Icon name="alert-circle" />
+            <span>{formMessage}</span>
+          </div>
+        )}
+      </div>
       {status.data && (
         <>
           <Progress status={status.data} />
