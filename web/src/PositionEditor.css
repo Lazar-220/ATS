@@ -1,0 +1,15 @@
+/* Copied from the design's screens.css (Requirements). The columns are bounded so that the wide
+   editor scrolls inside its own box and does not widen the page. */
+.requirements { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-6); min-width: 0; }
+.requirements__head { display: grid; gap: var(--space-2); }
+.page-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-2) var(--space-6); flex-wrap: wrap; }
+.rubric-line { display: flex; align-items: flex-start; gap: var(--space-2); margin: 0; color: var(--color-text-secondary); }
+.rubric-line strong { color: var(--color-text-primary); font-weight: var(--weight-semibold); }
+.rubric-line .icon { margin-top: 2px; }
+.rubric-line--unconfirmed .icon { color: var(--color-caution); }
+.rubric-line--confirmed .icon { color: var(--color-met); }
+.requirements-form { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
+.action-bar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) var(--space-4); }
+.action-bar__msg { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-2); flex: 1 1 320px; min-width: 0; }
+.action-bar__msg .field-error { font-size: var(--text-md); line-height: var(--leading-md); }
+.action-bar__btns { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-left: auto; }

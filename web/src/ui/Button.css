@@ -15,6 +15,7 @@
 .btn--icon.btn--sm { width: var(--control-h-sm); }
 .btn--icon:hover { background: var(--color-bg-hover); color: var(--color-text-primary); }
 .btn--icon:active { background: var(--color-bg-page); }
+.btn--danger-icon:hover { color: var(--color-error); background: var(--color-error-bg); }
 /* disabled: native :disabled, or aria-disabled when a tooltip must still reach it by keyboard */
 .btn:disabled, .btn[aria-disabled="true"] { background: var(--color-bg-raised); border-color: transparent; color: var(--btn-disabled-fg); cursor: not-allowed; }
 .btn--ghost:disabled, .btn--ghost[aria-disabled="true"], .btn--icon:disabled { background: transparent; }

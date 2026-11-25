@@ -1,4 +1,8 @@
-/* Copied from the design's components.css (error notice). */
+/* Copied from the design's components.css (notices: error by default, info, success). */
 .notice { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-radius: var(--radius-container); background: var(--color-error-bg); color: var(--color-text-primary); }
 .notice > .icon { color: var(--color-error); }
 .notice__msg { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
+.notice--info { background: var(--color-bg-raised); }
+.notice--info > .icon { color: var(--color-text-secondary); }
+.notice--success { background: var(--color-met-bg); }
+.notice--success > .icon { color: var(--color-met); }

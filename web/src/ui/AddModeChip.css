@@ -1,0 +1,10 @@
+/* Copied from the design's components.css (add-mode chip). */
+.chip { display: inline-flex; align-items: center; gap: var(--space-2); min-height: 36px; padding: 0 4px 0 12px; background: var(--color-accent-subtle-bg); border: var(--border-width) solid var(--color-accent); border-radius: var(--control-radius); color: var(--color-text-primary); max-width: 100%; }
+.chip__text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chip__text b { font-weight: var(--weight-semibold); }
+.chip .btn--icon { color: var(--color-text-primary); }
+.chip .btn--icon:hover { background: var(--color-bg-hover); }
+.chip .btn--icon:disabled { color: var(--color-text-disabled); background: transparent; }
+/* Without a bounded column a long filename would widen the field instead of being cut off. */
+.chip-field { grid-template-columns: minmax(0, 1fr); }
+.chip { justify-self: start; }

@@ -54,6 +54,25 @@ test("uploadProblem returns null when every file is a PDF", () => {
   assert.equal(uploadProblem({ name: "P.PDF" }, [{ name: "a.pdf" }, { name: "b.pdf" }]), null);
 });
 
+test("in add mode uploadProblem asks only for a CV and marks only that field", () => {
+  assert.deepEqual(uploadProblem(null, [], true), {
+    message: "Choose at least one CV PDF.",
+    fields: ["cvs"],
+  });
+});
+
+test("in add mode uploadProblem needs no posting and ignores one", () => {
+  assert.equal(uploadProblem(null, [{ name: "a.pdf" }], true), null);
+  assert.equal(uploadProblem({ name: "p.docx" }, [{ name: "a.pdf" }], true), null);
+});
+
+test("in add mode uploadProblem names the first CV that is not a PDF", () => {
+  assert.deepEqual(uploadProblem(null, [{ name: "a.pdf" }, { name: "b.txt" }], true), {
+    message: "b.txt is not a PDF file.",
+    fields: [],
+  });
+});
+
 import { documentRowVariant } from "./status.ts";
 
 test("rejected and failed documents are attention rows, with or without a message", () => {

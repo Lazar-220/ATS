@@ -257,12 +257,14 @@ reachable with the browser's back button (hash routes): the home page (upload fo
 positions), the requirements of a position (from 1.2), the ranked list of a position, and one
 assessment (requirements with verdict, rationale and flags next to the CV text, the verified quote
 highlighted). Every screen needs the API; the ranking fills as the worker finishes each CV.
+"Add CVs" on a positions row (UI-A) switches the upload form to that position: choose CVs only,
+and × returns to a new upload.
 
 The TypeScript types in `web/src/api-types.ts` are generated from the API's OpenAPI schema
 (`web/openapi.json`, written by `python -m ats.api.openapi`, no server needed). After a route or
 schema change run `make api-types` and commit both files; `make check` fails when either is stale.
-Pure logic of the web app (highlight offsets, routes, status labels) is tested with Node's own
-runner: `npm --prefix web test` (part of `make check`; needs Node 22.18 or newer, which strips
+Pure logic of the web app (highlight offsets, routes, status labels, the requirement checks) is
+tested with Node's own runner: `npm --prefix web test` (part of `make check`; needs Node 22.18 or newer, which strips
 types natively).
 
 **Trying it with no key and no quota.** Set `LLM_PROVIDER=fake` in `.env` and restart the worker:
@@ -398,6 +400,7 @@ Planned from §6.3 of the plan. The actual pinned versions are in `pyproject.tom
 | 1.6 | `langfuse` (5.2.0; `uv add` also locked `opentelemetry-sdk`, `opentelemetry-exporter-otlp-proto-http`, `protobuf`, `backoff`, `wrapt` and a few more) | Langfuse self-host: web, worker, Postgres, ClickHouse, Redis, MinIO (images in section 6) |
 | 1.7 | none | GitHub Actions |
 | UI-1 | none | npm: `@fontsource-variable/inter` (runtime, SIL OFL 1.1; the font of the design tokens, see below) |
+| UI-A | none | none |
 | 2.1 | `sentence-transformers` (with CPU-only `torch`), `pgvector` | model `BAAI/bge-m3`, about 2.3 GB in the Hugging Face cache |
 | 2.2 | none | model `BAAI/bge-reranker-v2-m3`, about 2.3 GB |
 | 3.6 | `langgraph`, `langgraph-checkpoint-postgres`, `langchain`, `langchain-google-genai` | |

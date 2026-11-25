@@ -12,6 +12,8 @@ type ButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "className"> & 
   // Looks disabled but stays focusable, so a tooltip can still be reached by keyboard. Native
   // `disabled` would drop the button from the tab order.
   ariaDisabled?: boolean;
+  // An icon button that takes something away turns red under the pointer.
+  danger?: boolean;
 };
 
 export function Button({
@@ -20,13 +22,16 @@ export function Button({
   icon,
   busy = false,
   ariaDisabled = false,
+  danger = false,
   type = "button",
   onClick,
   onKeyDown,
   children,
   ...rest
 }: ButtonProps) {
-  const classes = ["btn", `btn--${variant}`, size === "sm" ? "btn--sm" : ""].filter(Boolean).join(" ");
+  const classes = ["btn", `btn--${variant}`, size === "sm" ? "btn--sm" : "", danger ? "btn--danger-icon" : ""]
+    .filter(Boolean)
+    .join(" ");
 
   function handleClick(event: MouseEvent<HTMLButtonElement>) {
     if (ariaDisabled) {

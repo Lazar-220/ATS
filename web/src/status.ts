@@ -61,14 +61,20 @@ export interface UploadProblem {
 }
 
 // Checked in the order HR fixes things: a missing file first, then the posting, then the CVs.
+// In add mode the posting is the position's own, so only the CVs are checked.
 export function uploadProblem(
   posting: { name: string } | null,
   cvs: { name: string }[],
+  adding = false,
 ): UploadProblem | null {
-  if (posting === null || cvs.length === 0) {
+  if (adding && cvs.length === 0) {
+    return { message: "Choose at least one CV PDF.", fields: ["cvs"] };
+  }
+  if (!adding && (posting === null || cvs.length === 0)) {
     return { message: "Choose one posting PDF and at least one CV PDF.", fields: ["posting", "cvs"] };
   }
-  const wrong = [posting, ...cvs].find((file) => !isPdfName(file.name));
+  const chosen = adding || posting === null ? cvs : [posting, ...cvs];
+  const wrong = chosen.find((file) => !isPdfName(file.name));
   if (wrong !== undefined) {
     return { message: `${wrong.name} is not a PDF file.`, fields: [] };
   }

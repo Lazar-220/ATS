@@ -1,12 +1,14 @@
 import { createColumnHelper, tableFeatures, useTable } from "@tanstack/react-table";
-import { useId, useState, type FormEvent } from "react";
+import { useId, useImperativeHandle, useRef, useState, type FormEvent, type Ref } from "react";
 
-import type { RankingStatus } from "./api";
-import { useRankingStatus, useUpload } from "./hooks";
+import type { Position, RankingAccepted, RankingStatus } from "./api";
+import { useAddCvs, useRankingStatus, useUpload } from "./hooks";
 import { href } from "./route";
 import { documentRowVariant, uploadProblem, type UploadProblem } from "./status";
+import { AddModeChip } from "./ui/AddModeChip";
 import { Button } from "./ui/Button";
 import { DocumentState } from "./ui/DocumentState";
+import { FieldError } from "./ui/FieldError";
 import { FileField } from "./ui/FileField";
 import { Icon } from "./ui/Icon";
 import { Link } from "./ui/Link";
@@ -97,33 +99,72 @@ function Progress({ status }: { status: RankingStatus }) {
   );
 }
 
-export function UploadForm() {
+export interface UploadFormHandle {
+  addTo: (position: Position) => void;
+}
+
+export function UploadForm({ ref }: { ref?: Ref<UploadFormHandle> }) {
   const [posting, setPosting] = useState<File | null>(null);
   const [cvs, setCvs] = useState<File[]>([]);
+  // The position that receives the CVs in add mode; null means a new posting is uploaded.
+  const [target, setTarget] = useState<Position | null>(null);
   const [problem, setProblem] = useState<UploadProblem | null>(null);
   const [requestId, setRequestId] = useState<string | null>(null);
   const headingId = useId();
+  const cvInput = useRef<HTMLInputElement>(null);
   const upload = useUpload();
+  const add = useAddCvs();
   const status = useRankingStatus(requestId);
+  const busy = upload.isPending || add.isPending;
+
+  // Entering or leaving add mode starts a clean form: no message and no earlier progress. The
+  // posting is forgotten because its input is replaced and would come back empty.
+  function switchTarget(next: Position | null) {
+    setTarget(next);
+    setPosting(null);
+    setProblem(null);
+    setRequestId(null);
+    upload.reset();
+    add.reset();
+  }
+
+  useImperativeHandle(ref, () => ({
+    addTo(position) {
+      // A request that is being sent belongs to the form as it is; it cannot be redirected.
+      if (busy) {
+        return;
+      }
+      switchTarget(position);
+      // CVs chosen before were not chosen for this position.
+      setCvs([]);
+      if (cvInput.current !== null) {
+        cvInput.current.value = "";
+        // Focusing also scrolls the form into view from the positions table.
+        cvInput.current.focus();
+      }
+    },
+  }));
 
   function submit(event: FormEvent) {
     event.preventDefault();
-    const found = uploadProblem(posting, cvs);
+    const found = uploadProblem(posting, cvs, target !== null);
     setProblem(found);
-    if (found !== null || posting === null) {
+    if (found !== null) {
       return;
     }
-    upload.mutate(
-      { posting, cvs },
-      { onSuccess: (accepted) => setRequestId(accepted.request_id) },
-    );
+    const callbacks = { onSuccess: (accepted: RankingAccepted) => setRequestId(accepted.request_id) };
+    if (target !== null) {
+      add.mutate({ positionId: target.id, cvs }, callbacks);
+    } else if (posting !== null) {
+      upload.mutate({ posting, cvs }, callbacks);
+    }
   }
 
-  const busy = upload.isPending;
   // One message area: the first of these that is set.
   const formMessage =
     problem?.message ??
     (upload.isError ? upload.error.message : null) ??
+    (add.isError ? add.error.message : null) ??
     (requestId !== null && status.isError ? status.error.message : null);
   return (
     <section className="panel" aria-labelledby={headingId}>
@@ -132,13 +173,18 @@ export function UploadForm() {
       </h2>
       <form onSubmit={submit}>
         <div className="upload-form">
+          {target === null ? (
+            <FileField
+              label="Job posting (PDF)"
+              disabled={busy}
+              invalid={problem?.fields.includes("posting") ?? false}
+              onChange={(files) => setPosting(files[0] ?? null)}
+            />
+          ) : (
+            <AddModeChip filename={target.filename ?? target.id} disabled={busy} onLeave={() => switchTarget(null)} />
+          )}
           <FileField
-            label="Job posting (PDF)"
-            disabled={busy}
-            invalid={problem?.fields.includes("posting") ?? false}
-            onChange={(files) => setPosting(files[0] ?? null)}
-          />
-          <FileField
+            ref={cvInput}
             label="CVs (PDF, one or more)"
             multiple
             disabled={busy}
@@ -153,12 +199,7 @@ export function UploadForm() {
         </div>
       </form>
       <div id="form-msg" aria-live="polite">
-        {formMessage !== null && (
-          <div className="field-error">
-            <Icon name="alert-circle" />
-            <span>{formMessage}</span>
-          </div>
-        )}
+        {formMessage !== null && <FieldError message={formMessage} />}
       </div>
       {status.data && <Progress status={status.data} />}
     </section>

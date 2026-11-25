@@ -59,6 +59,10 @@ const HOME = [
   "extracting requirements…",
   "failed",
   "No positions yet. Upload a posting and CVs above to create one.",
+  "Add CVs",
+  "Adding CVs to ",
+  "Stop adding CVs",
+  "Choose at least one CV PDF.",
 ];
 
 const REQUIREMENTS = [
@@ -89,6 +93,13 @@ const REQUIREMENTS = [
   ": weight must be a whole number from ",
   ": minimum months must be a whole number of at least 1, or empty.",
   "The parent links form a loop.",
+  "Remove",
+  "Remove requirement ",
+  "Requirement ",
+  "Type, requirement ",
+  "Weight, requirement ",
+  "Minimum months, requirement ",
+  "Parent, requirement ",
 ];
 
 const RANKING = [
@@ -155,7 +166,7 @@ function isPinned(text: string, source: string): boolean {
 }
 
 test("the list is the full set of Appendix A", () => {
-  assert.equal(PINNED_TEXTS.length, 105);
+  assert.equal(PINNED_TEXTS.length, 116);
   assert.equal(new Set(PINNED_TEXTS).size, PINNED_TEXTS.length);
 });
 

@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
+  addCvs,
   fetchAssessment,
   fetchPosition,
   fetchPositionRanking,
@@ -50,6 +51,14 @@ export function useUpload() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ posting, cvs }: { posting: File; cvs: File[] }) => uploadRanking(posting, cvs),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["positions"] }),
+  });
+}
+
+export function useAddCvs() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ positionId, cvs }: { positionId: string; cvs: File[] }) => addCvs(positionId, cvs),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["positions"] }),
   });
 }
