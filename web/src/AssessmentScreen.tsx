@@ -3,7 +3,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { Assessment, Verdict } from "./api";
 import { quoteState, segment, toRanges } from "./highlight";
 import { useAssessment } from "./hooks";
-import { ErrorNotice } from "./Notice";
+import { ErrorNotice } from "./ui/Notice";
+import { Loading } from "./ui/Loading";
 import { formatScore } from "./ranking";
 
 const VERDICT_LABEL: Record<Verdict["verdict"], string> = {
@@ -27,7 +28,7 @@ function QuoteBadge({ verdict }: { verdict: Verdict }) {
   }
   if (state === "unverified") {
     return (
-      <strong style={{ color: "#b00020" }} data-testid="unverified">
+      <strong style={{ color: "var(--color-error)" }} data-testid="unverified">
         Unverified: the quote could not be found in the CV, so nothing is highlighted
       </strong>
     );
@@ -60,8 +61,9 @@ function RequirementItem({
           textAlign: "left",
           width: "100%",
           padding: "0.5rem",
-          border: selected ? "2px solid #1a56db" : "1px solid #ccc",
-          background: selected ? "#eef3ff" : "white",
+          border: selected ? "2px solid var(--color-accent)" : "1px solid var(--color-border-control)",
+          background: selected ? "var(--color-accent-subtle-bg)" : "var(--color-bg-surface)",
+          color: "var(--color-text-primary)",
           cursor: "pointer",
         }}
       >
@@ -78,7 +80,7 @@ function RequirementItem({
         {verdict.rationale && <div>{verdict.rationale}</div>}
         <QuoteBadge verdict={verdict} />
         {verdict.flags.map((flag) => (
-          <div key={flag.code} style={{ color: "#8a5300" }}>
+          <div key={flag.code} style={{ color: "var(--color-caution)" }}>
             Flag {flag.code}
             {flag.detail !== "" && `: ${flag.detail}`}
           </div>
@@ -136,7 +138,11 @@ function CvText({
           <mark
             key={index}
             ref={index === firstIndex ? firstSelected : undefined}
-            style={{ background: isSelected ? "#ffd54a" : "#fff1b8", outline: isSelected ? "2px solid #b26a00" : "none" }}
+            style={{
+              background: isSelected ? "var(--color-highlight-selected-bg)" : "var(--color-highlight-quote-bg)",
+              color: "var(--color-text-primary)",
+              outline: isSelected ? "2px solid var(--color-highlight-selected-outline)" : "none",
+            }}
           >
             {part.text}
           </mark>
@@ -160,7 +166,7 @@ function Summary({ assessment }: { assessment: Assessment }) {
         <p role="alert">This CV could not be assessed{assessment.error ? `: ${assessment.error}` : "."}</p>
       )}
       {assessment.cv_flags.map((flag) => (
-        <p key={flag.code} role="note" style={{ color: "#8a5300" }}>
+        <p key={flag.code} role="note" style={{ color: "var(--color-caution)" }}>
           {FLAG_LABEL[flag.code] ?? flag.code}
         </p>
       ))}
@@ -173,7 +179,7 @@ export function AssessmentScreen({ assessmentId }: { assessmentId: string }) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   if (assessment.isPending) {
-    return <p>Loading…</p>;
+    return <Loading />;
   }
   if (assessment.isError) {
     return (

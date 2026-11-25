@@ -1,0 +1,7 @@
+/* Copied from the design's components.css (health line). */
+.health { display: inline-flex; align-items: center; gap: var(--space-2); font-size: var(--text-sm); line-height: var(--leading-sm); color: var(--color-text-secondary); }
+.health strong { color: var(--color-text-primary); font-weight: var(--weight-semibold); }
+.health--checking .icon { color: var(--color-text-tertiary); }
+.health--ok .icon { color: var(--color-met); }
+.health--degraded .icon { color: var(--color-caution); }
+.health--unreachable .icon { color: var(--color-error); }

@@ -1,0 +1,189 @@
+/* ATS design tokens — three layers.
+   1 Primitives: raw values, never used by components directly.
+   2 Semantic: what a value means (text.primary, met, focus ring…).
+   3 Component: what a component uses; always points at a semantic token.
+   Dark is the default theme. Light is a stub (values only, not designed). */
+
+/* The font is Inter Variable from @fontsource-variable/inter, imported in main.tsx and bundled by
+   Vite: no font CDN, because CVs are personal data. Copied from the design without its @font-face blocks. */
+
+/* ── 1 PRIMITIVES ───────────────────────────────────────────── */
+:root {
+  /* ink (dark neutrals) */
+  --p-ink-950: #0B0D10;
+  --p-ink-900: #12161B;
+  --p-ink-850: #1A2027;
+  --p-ink-800: #1F2731;
+  --p-ink-750: #2A323C;
+  --p-ink-600: #5C6773;
+  --p-ink-550: #66727F;
+  --p-ink-450: #8693A0;
+  --p-ink-400: #9AA7B4;
+  --p-ink-100: #E6EDF3;
+  /* sky (accent + highlight) */
+  --p-sky-300: #7AD3FF;
+  --p-sky-400: #4CC2FF;
+  --p-sky-500: #2FA8E8;
+  --p-sky-800: #1E5577;
+  --p-sky-900: #133047;
+  --p-sky-950: #0E2636;
+  /* status */
+  --p-green-400: #4ADE80;  --p-green-950: #0F2A1A;
+  --p-amber-300: #F5C451;  --p-amber-950: #2E2410;
+  --p-red-300: #FF7B72;    --p-red-950: #331716;
+  --p-violet-300: #C4A1FF; --p-violet-950: #261C38;
+  --p-orange-300: #FFA657; --p-orange-950: #2F1F10;
+  /* light stub primitives */
+  --p-paper-0: #FFFFFF;
+  --p-paper-50: #F6F8FA;
+  --p-graphite-900: #1F2328;
+  --p-graphite-600: #59636E;
+  --p-blue-600: #0969DA;
+  --p-green-700: #1A7F37;
+  --p-amber-700: #9A6700;
+  --p-red-600: #CF222E;
+  --p-violet-600: #8250DF;
+
+  /* scales (theme independent) */
+  --p-space-0: 0; --p-space-1: 4px; --p-space-2: 8px; --p-space-3: 12px; --p-space-4: 16px;
+  --p-space-5: 20px; --p-space-6: 24px; --p-space-8: 32px; --p-space-10: 40px; --p-space-12: 48px; --p-space-16: 64px;
+  --p-radius-6: 6px; --p-radius-8: 8px;
+  --p-dur-100: 100ms; --p-dur-160: 160ms; --p-dur-200: 200ms;
+}
+
+/* ── 2 SEMANTIC (dark default) ──────────────────────────────── */
+:root, [data-theme="dark"] {
+  color-scheme: dark;
+  --color-bg-page: var(--p-ink-950);
+  --color-bg-surface: var(--p-ink-900);
+  --color-bg-raised: var(--p-ink-850);
+  --color-bg-hover: var(--p-ink-800);
+
+  --color-text-primary: var(--p-ink-100);    /* 16.5 / 15.4 / 13.9 / 12.8 */
+  --color-text-secondary: var(--p-ink-400);  /*  7.9 /  7.4 /  6.7 /  6.2 */
+  --color-text-tertiary: var(--p-ink-450);   /*  6.2 /  5.8 /  5.2 /  4.8 */
+  --color-text-disabled: var(--p-ink-600);   /*  disabled only */
+
+  --color-border-subtle: var(--p-ink-750);   /* dividers only */
+  --color-border-control: var(--p-ink-550);  /* 4.0 / 3.7 / 3.3 / 3.1 */
+
+  --color-accent: var(--p-sky-400);
+  --color-accent-hover: var(--p-sky-300);
+  --color-accent-pressed: var(--p-sky-500);
+  --color-text-on-accent: var(--p-ink-950);
+  --color-accent-subtle-bg: var(--p-sky-950);
+  --color-focus-ring: var(--p-sky-300);
+
+  --color-met: var(--p-green-400);         --color-met-bg: var(--p-green-950);
+  --color-partial: var(--p-amber-300);     --color-partial-bg: var(--p-amber-950);
+  --color-not-met: var(--p-red-300);       --color-not-met-bg: var(--p-red-950);
+  --color-caution: var(--p-violet-300);    --color-caution-bg: var(--p-violet-950);
+  --color-caution-alt: var(--p-orange-300); --color-caution-alt-bg: var(--p-orange-950); /* comparison only */
+  --color-error: var(--color-not-met);     --color-error-bg: var(--color-not-met-bg);
+
+  --color-highlight-quote-bg: var(--p-sky-900);
+  --color-highlight-quote-underline: var(--p-sky-400);
+  --color-highlight-selected-bg: var(--p-sky-800);
+  --color-highlight-selected-outline: var(--p-sky-300);
+
+  /* type */
+  --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-features: 'cv05' 1, 'cv08' 1;  /* l with tail, I with serifs: tells l / I / 1 apart in names and filenames */
+  --font-numeric: tabular-nums;         /* scores, counts, versions, months */
+  --text-xs: 12px;  --leading-xs: 16px;   /* codes, captions */
+  --text-sm: 13px;  --leading-sm: 20px;   /* badges, table meta */
+  --text-md: 14px;  --leading-md: 20px;   /* UI body (default) */
+  --text-read: 15px; --leading-read: 24px; /* CV text, rationales */
+  --text-lg: 18px;  --leading-lg: 28px;   /* section headings */
+  --text-xl: 22px;  --leading-xl: 28px;   /* page titles */
+  --text-2xl: 28px; --leading-2xl: 36px;  /* candidate name, score */
+  --weight-regular: 400; --weight-medium: 500; --weight-semibold: 600;
+
+  /* space, radius, border, focus */
+  --space-1: var(--p-space-1); --space-2: var(--p-space-2); --space-3: var(--p-space-3); --space-4: var(--p-space-4);
+  --space-5: var(--p-space-5); --space-6: var(--p-space-6); --space-8: var(--p-space-8); --space-10: var(--p-space-10);
+  --space-12: var(--p-space-12); --space-16: var(--p-space-16);
+  --radius-control: var(--p-radius-6);  /* buttons, inputs, badges, chips */
+  --radius-container: var(--p-radius-8); /* cards, panels, popovers, banners */
+  --border-width: 1px;
+  --focus-width: 2px; --focus-offset: 2px;
+
+  /* motion */
+  --motion-fast: var(--p-dur-100);   /* hover, press */
+  --motion-base: var(--p-dur-160);   /* tooltip, popover fade */
+  --motion-scroll: smooth;           /* quote scroll-into-view */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* light stub — values only, NOT designed or checked beyond these pairs */
+[data-theme="light"] {
+  color-scheme: light;
+  --color-bg-page: var(--p-paper-50);
+  --color-bg-surface: var(--p-paper-0);
+  --color-text-primary: var(--p-graphite-900);
+  --color-text-secondary: var(--p-graphite-600);
+  --color-accent: var(--p-blue-600);
+  --color-met: var(--p-green-700);
+  --color-partial: var(--p-amber-700);
+  --color-not-met: var(--p-red-600);
+  --color-caution: var(--p-violet-600);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --motion-fast: 0ms; --motion-base: 0ms; --motion-scroll: auto; }
+}
+
+/* ── 3 COMPONENT ────────────────────────────────────────────── */
+:root, [data-theme="dark"], [data-theme="light"] {
+  --topbar-h: 56px;
+  --topbar-bg: var(--color-bg-surface);
+  --topbar-border: var(--color-border-subtle);
+
+  --control-h: 36px;
+  --control-h-sm: 28px;
+  --control-px: var(--space-3);
+  --control-radius: var(--radius-control);
+  --control-border: var(--color-border-control);
+
+  --btn-primary-bg: var(--color-accent);
+  --btn-primary-bg-hover: var(--color-accent-hover);
+  --btn-primary-bg-pressed: var(--color-accent-pressed);
+  --btn-primary-fg: var(--color-text-on-accent);
+  --btn-secondary-bg: var(--color-bg-raised);
+  --btn-secondary-bg-hover: var(--color-bg-hover);
+  --btn-secondary-fg: var(--color-text-primary);
+  --btn-disabled-fg: var(--color-text-disabled);
+
+  --input-bg: var(--color-bg-page);
+  --input-fg: var(--color-text-primary);
+  --input-border-error: var(--color-error);
+
+  --link-fg: var(--color-accent);
+  --link-fg-hover: var(--color-accent-hover);
+
+  --table-header-fg: var(--color-text-secondary);
+  --table-row-h: 48px;
+  --table-row-hover-bg: var(--color-bg-hover);
+  --table-divider: var(--color-border-subtle);
+  --table-section-bg: var(--color-bg-page);
+
+  --badge-h: 24px;
+  --badge-radius: var(--radius-control);
+
+  --overlay-bg: var(--color-bg-raised);
+  --overlay-border: var(--color-border-control);
+  --overlay-radius: var(--radius-container);
+
+  --card-bg: var(--color-bg-surface);
+  --card-bg-hover: var(--color-bg-raised);
+  --card-border: var(--color-border-subtle);
+  --card-bg-selected: var(--color-accent-subtle-bg);
+  --card-border-selected: var(--color-accent);
+
+  --cv-bg: var(--color-bg-page);
+  --cv-fg: var(--color-text-primary);
+  --cv-quote-bg: var(--color-highlight-quote-bg);
+  --cv-quote-underline: var(--color-highlight-quote-underline);
+  --cv-selected-bg: var(--color-highlight-selected-bg);
+  --cv-selected-outline: var(--color-highlight-selected-outline);
+}

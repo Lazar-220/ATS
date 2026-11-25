@@ -1,0 +1,7 @@
+/* Copied from the design's components.css (breadcrumb). */
+.crumbs { display: flex; align-items: center; gap: var(--space-1); margin: 0; padding: 0; list-style: none; font-size: var(--text-sm); line-height: var(--leading-sm); color: var(--color-text-secondary); }
+.crumbs li { display: inline-flex; align-items: center; gap: var(--space-1); }
+.crumbs a { color: var(--color-text-secondary); text-decoration: none; border-radius: 4px; padding: 2px 4px; transition: color var(--motion-fast) var(--ease-standard); }
+.crumbs a:hover { color: var(--color-text-primary); text-decoration: underline; text-underline-offset: 3px; }
+.crumbs [aria-current="page"] { color: var(--color-text-primary); padding: 2px 4px; }
+.crumbs .icon { width: 14px; height: 14px; color: var(--color-text-tertiary); }

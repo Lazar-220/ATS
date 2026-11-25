@@ -8,7 +8,8 @@ import {
   type PositionDetail,
 } from "./api";
 import { newRow, removeRow, toDraft, toPayload, validate, type DraftRow } from "./draft";
-import { ErrorNotice } from "./Notice";
+import { ErrorNotice } from "./ui/Notice";
+import { Loading } from "./ui/Loading";
 import { href } from "./route";
 import { RequirementsTable } from "./RequirementsTable";
 
@@ -114,7 +115,7 @@ export function PositionEditor({ positionId }: { positionId: string }) {
 
   return (
     <div>
-      {position.isPending && <p>Loading…</p>}
+      {position.isPending && <Loading />}
       {position.isError && (
         <ErrorNotice message={position.error.message} onRetry={() => void position.refetch()} />
       )}

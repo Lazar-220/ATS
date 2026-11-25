@@ -1,0 +1,4 @@
+/* Copied from the design's components.css (top bar). */
+.topbar { height: var(--topbar-h); display: flex; align-items: center; gap: var(--space-6); padding: 0 var(--space-6); background: var(--topbar-bg); border-bottom: var(--border-width) solid var(--topbar-border); }
+.topbar__brand { font-size: 16px; font-weight: var(--weight-semibold); letter-spacing: 0.02em; color: var(--color-text-primary); text-decoration: none; border-radius: 4px; }
+.topbar__spacer { flex: 1 1 auto; }

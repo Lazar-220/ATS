@@ -28,7 +28,7 @@ function Progress({ status }: { status: RankingStatus }) {
               <td style={{ padding: "0.25rem" }}>{doc.kind === "cv" ? "CV" : "Posting"}</td>
               <td style={{ padding: "0.25rem" }}>{documentLabel(doc.status)}</td>
               <td
-                style={{ padding: "0.25rem", color: documentNeedsAttention(doc.status) ? "#b00020" : undefined }}
+                style={{ padding: "0.25rem", color: documentNeedsAttention(doc.status) ? "var(--color-error)" : undefined }}
               >
                 {doc.message}
               </td>

@@ -21,7 +21,7 @@ function buildColumns(positionId: string) {
         <>
           <strong>{row.original.candidate_name ?? "(name not found)"}</strong>
           <br />
-          <small style={{ color: "#555" }}>{row.original.filename}</small>
+          <small style={{ color: "var(--color-text-secondary)" }}>{row.original.filename}</small>
         </>
       ),
     }),

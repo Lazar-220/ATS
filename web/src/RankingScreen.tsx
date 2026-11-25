@@ -1,6 +1,7 @@
 import { href } from "./route";
 import { usePosition, usePositionRanking } from "./hooks";
-import { ErrorNotice } from "./Notice";
+import { ErrorNotice } from "./ui/Notice";
+import { Loading } from "./ui/Loading";
 import { RankingTable } from "./RankingTable";
 
 export function RankingScreen({ positionId }: { positionId: string }) {
@@ -14,7 +15,7 @@ export function RankingScreen({ positionId }: { positionId: string }) {
         <a href={href({ name: "requirements", positionId })}>Requirements</a>
       </p>
       <h2>Ranked list{position.data?.filename ? `: ${position.data.filename}` : ""}</h2>
-      {ranking.isPending && <p>Loading…</p>}
+      {ranking.isPending && <Loading />}
       {ranking.isError && (
         <ErrorNotice message={ranking.error.message} onRetry={() => void ranking.refetch()} />
       )}
