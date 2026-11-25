@@ -13,3 +13,4 @@
 .msg .icon { margin-top: 2px; flex: none; }
 .msg--info .icon { color: var(--color-text-secondary); }
 .row--attention .msg { color: var(--color-text-primary); }
+.table .col-num { text-align: right; font-variant-numeric: var(--font-numeric); }

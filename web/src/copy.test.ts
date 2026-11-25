@@ -54,6 +54,7 @@ const HOME = [
   "Rubric",
   "Version",
   "Requirements",
+  "Actions",
   "waiting for the posting text",
   "extracting requirements…",
   "failed",
@@ -154,7 +155,7 @@ function isPinned(text: string, source: string): boolean {
 }
 
 test("the list is the full set of Appendix A", () => {
-  assert.equal(PINNED_TEXTS.length, 104);
+  assert.equal(PINNED_TEXTS.length, 105);
   assert.equal(new Set(PINNED_TEXTS).size, PINNED_TEXTS.length);
 });
 
