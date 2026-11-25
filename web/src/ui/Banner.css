@@ -1,0 +1,4 @@
+/* Copied from the design's components.css. */
+.banner { display: flex; align-items: flex-start; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-radius: var(--radius-container); background: var(--color-caution-bg); color: var(--color-text-primary); }
+.banner > .icon { margin-top: 2px; color: var(--color-caution); }
+.banner__title { font-weight: var(--weight-semibold); color: var(--color-caution); margin-right: 6px; }

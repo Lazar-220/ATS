@@ -1,0 +1,5 @@
+/* The columns are bounded so that a wide table scrolls inside its own box. */
+.ranking-screen { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-6); min-width: 0; }
+/* The score popover lines up with the right edge of this group, and stays there when the group
+   wraps under a long title, so it never opens past the left edge of the window. */
+.ranking-actions { position: relative; display: flex; align-items: center; gap: var(--space-4); margin-left: auto; }

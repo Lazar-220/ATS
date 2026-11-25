@@ -14,3 +14,7 @@
 .msg--info .icon { color: var(--color-text-secondary); }
 .row--attention .msg { color: var(--color-text-primary); }
 .table .col-num { text-align: right; font-variant-numeric: var(--font-numeric); }
+.row--failed td { color: var(--color-text-secondary); }
+.row-sub { display: block; font-size: var(--text-sm); line-height: var(--leading-sm); color: var(--color-text-tertiary); }
+.table .row--section th { background: var(--table-section-bg); color: var(--color-text-secondary); font-weight: var(--weight-semibold); border-top: var(--border-width) solid var(--table-divider); }
+.section-head { display: inline-flex; align-items: center; gap: var(--space-2); }
