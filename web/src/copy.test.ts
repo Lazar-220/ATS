@@ -153,6 +153,16 @@ const ASSESSMENT = [
   "Hidden text (white, tiny, off-page or covered) was found in the PDF and left out of the assessment.",
   "Invisible characters were found in the CV text and removed before the assessment.",
   "Some words mix Cyrillic and Latin letters, which can be an attempt to disguise text.",
+  "Requirements and verdicts",
+  "CV text",
+  "Partly read",
+  "Text aimed at an AI screener",
+  "Hidden text removed",
+  "Invisible characters removed",
+  "Mixed Cyrillic and Latin letters",
+  "Quote not verified",
+  "No quote given",
+  "Only in the skills list",
 ];
 
 const PINNED_TEXTS = [...SHELL, ...HOME, ...REQUIREMENTS, ...RANKING, ...ASSESSMENT];
@@ -178,7 +188,7 @@ function isPinned(text: string, source: string): boolean {
 }
 
 test("the list is the full set of Appendix A", () => {
-  assert.equal(PINNED_TEXTS.length, 128);
+  assert.equal(PINNED_TEXTS.length, 138);
   assert.equal(new Set(PINNED_TEXTS).size, PINNED_TEXTS.length);
 });
 

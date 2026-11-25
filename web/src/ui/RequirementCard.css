@@ -1,0 +1,18 @@
+/* Copied from the design's components.css. */
+.req { position: relative; display: grid; gap: var(--space-2); padding: var(--space-4); background: var(--card-bg); border: var(--border-width) solid var(--card-border); border-radius: var(--radius-container); color: var(--color-text-primary);
+  transition: background-color var(--motion-fast) var(--ease-standard), border-color var(--motion-fast) var(--ease-standard); }
+.req:hover { background: var(--card-bg-hover); border-color: var(--color-border-control); }
+.req:has(.req__select[aria-pressed="true"]) { background: var(--card-bg-selected); border-color: var(--card-border-selected); }
+/* The focus ring goes round the card, because the whole card is the button. */
+.req:has(.req__select:focus-visible) { outline: var(--focus-width) solid var(--color-focus-ring); outline-offset: var(--focus-offset); }
+.req--child { margin-left: var(--space-6); }
+.req__top { display: flex; align-items: flex-start; gap: var(--space-2); }
+.req__no { flex: none; min-width: 28px; font-variant-numeric: var(--font-numeric); color: var(--color-text-tertiary); font-weight: var(--weight-medium); }
+.req__select { all: unset; flex: 1 1 auto; min-width: 0; font-weight: var(--weight-semibold); cursor: pointer; color: var(--color-text-primary); overflow-wrap: anywhere; }
+.req .req__select:focus-visible { outline: none; }
+.req__select::after { content: ""; position: absolute; inset: 0; border-radius: var(--radius-container); }
+.req__body { display: grid; justify-items: start; gap: var(--space-2); padding-left: 36px; }
+.req__meta { font-size: var(--text-sm); line-height: var(--leading-sm); color: var(--color-text-secondary); }
+.req__verdict { display: flex; align-items: center; gap: var(--space-2); font-size: var(--text-sm); color: var(--color-text-secondary); }
+.req__rationale { margin: 0; font-size: var(--text-md); line-height: 22px; color: var(--color-text-primary); overflow-wrap: anywhere; }
+.req .flag { position: relative; z-index: 1; justify-self: stretch; }

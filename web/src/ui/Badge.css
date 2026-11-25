@@ -1,3 +1,6 @@
 /* Copied from the design's components.css. */
 .badge { display: inline-flex; align-items: center; gap: 6px; height: var(--badge-h); padding: 0 8px; border-radius: var(--badge-radius); font-size: var(--text-sm); line-height: var(--leading-sm); font-weight: var(--weight-semibold); white-space: nowrap; background: var(--color-bg-raised); color: var(--color-text-secondary); }
+.badge--met { background: var(--color-met-bg); color: var(--color-met); }
+.badge--partial { background: var(--color-partial-bg); color: var(--color-partial); }
+.badge--not-met { background: var(--color-not-met-bg); color: var(--color-not-met); }
 .badge--caution { background: var(--color-caution-bg); color: var(--color-caution); }

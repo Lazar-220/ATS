@@ -72,6 +72,13 @@ const PATHS = {
       <path d="M9.6 9.3a2.5 2.5 0 0 1 4.9.7c0 1.7-2.5 2.2-2.5 3.6M12 17h.01" />
     </>
   ),
+  partial: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path className="fill" d="M12 3a9 9 0 0 1 0 18z" />
+    </>
+  ),
+  quote: <path d="M5 11h4v5H5zM5 11c0-2.8 1.3-4.6 4-5.3M15 11h4v5h-4zM15 11c0-2.8 1.3-4.6 4-5.3" />,
   refresh: (
     <>
       <path d="M20 12a8 8 0 1 1-2.34-5.66L20 8.5" />

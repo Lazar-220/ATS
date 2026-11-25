@@ -1,0 +1,8 @@
+/* Copied from the design's components.css. */
+.flag { display: grid; grid-template-columns: 16px minmax(0, 1fr); column-gap: 10px; row-gap: 2px; align-content: start; padding: var(--space-3); border-radius: var(--radius-container); background: var(--color-caution-bg); }
+.flag > .icon { grid-row: 1 / span 2; margin-top: 2px; color: var(--color-caution); }
+.flag__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; overflow-wrap: anywhere; }
+.flag__title { font-weight: var(--weight-semibold); color: var(--color-text-primary); }
+.flag__code { font-size: var(--text-xs); line-height: var(--leading-xs); color: var(--color-text-secondary); }
+.flag__body { grid-column: 2; font-size: var(--text-sm); line-height: var(--leading-sm); color: var(--color-text-secondary); overflow-wrap: anywhere; }
+.flag--compact { padding: var(--space-2) 10px; }
