@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useRef } from "react";
 
 import { fetchHealth } from "./api";
 import { AssessmentScreen } from "./AssessmentScreen";
@@ -7,7 +8,7 @@ import { PositionEditor } from "./PositionEditor";
 import { PositionsList } from "./PositionsList";
 import { RankingScreen } from "./RankingScreen";
 import { href, type Route } from "./route";
-import { UploadForm } from "./Upload";
+import { UploadForm, type UploadFormHandle } from "./Upload";
 import { Breadcrumb, type Crumb } from "./ui/Breadcrumb";
 import { TopBar } from "./ui/TopBar";
 import { useRoute } from "./useRoute";
@@ -28,6 +29,8 @@ function crumbsFor(route: Route): Crumb[] {
 
 export function App() {
   const route = useRoute();
+  // "Add CVs" sits in the positions table and acts on the upload form above it.
+  const uploadForm = useRef<UploadFormHandle>(null);
   const health = useQuery({
     queryKey: ["health"],
     queryFn: fetchHealth,
@@ -50,8 +53,8 @@ export function App() {
         {route.name === "positions" && (
           <>
             <h1 className="sr-only">Positions</h1>
-            <UploadForm />
-            <PositionsList />
+            <UploadForm ref={uploadForm} />
+            <PositionsList onAddCvs={(position) => uploadForm.current?.addTo(position)} />
           </>
         )}
         {route.name === "requirements" && <PositionEditor positionId={route.positionId} />}

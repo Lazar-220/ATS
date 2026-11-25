@@ -59,6 +59,10 @@ const HOME = [
   "extracting requirements…",
   "failed",
   "No positions yet. Upload a posting and CVs above to create one.",
+  "Add CVs",
+  "Adding CVs to ",
+  "Stop adding CVs",
+  "Choose at least one CV PDF.",
 ];
 
 const REQUIREMENTS = [
@@ -155,7 +159,7 @@ function isPinned(text: string, source: string): boolean {
 }
 
 test("the list is the full set of Appendix A", () => {
-  assert.equal(PINNED_TEXTS.length, 105);
+  assert.equal(PINNED_TEXTS.length, 109);
   assert.equal(new Set(PINNED_TEXTS).size, PINNED_TEXTS.length);
 });
 

@@ -81,12 +81,25 @@ export const postAnswer = (answer: AnswerRequest) =>
     body: JSON.stringify(answer),
   });
 
-export function uploadRanking(posting: File, cvs: File[]): Promise<RankingAccepted> {
+function cvForm(cvs: File[]): FormData {
   const form = new FormData();
-  form.append("posting", posting);
   for (const cv of cvs) {
     form.append("cvs", cv);
   }
-  // No Content-Type header: the browser sets the multipart boundary itself.
+  return form;
+}
+
+// No Content-Type header on either upload: the browser sets the multipart boundary itself.
+export function uploadRanking(posting: File, cvs: File[]): Promise<RankingAccepted> {
+  const form = cvForm(cvs);
+  form.append("posting", posting);
   return request<RankingAccepted>("/rankings", { method: "POST", body: form });
+}
+
+// The same request for a position that exists: the server uses its stored posting.
+export function addCvs(positionId: string, cvs: File[]): Promise<RankingAccepted> {
+  return request<RankingAccepted>(`/positions/${positionId}/cvs`, {
+    method: "POST",
+    body: cvForm(cvs),
+  });
 }

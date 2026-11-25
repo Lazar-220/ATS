@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { createColumnHelper, tableFeatures, useTable } from "@tanstack/react-table";
-import { useId } from "react";
+import { createContext, useContext, useId } from "react";
 
 import { fetchPositions, type Position } from "./api";
 import { href } from "./route";
+import { Button } from "./ui/Button";
 import { EmptyState } from "./ui/EmptyState";
 import { Icon } from "./ui/Icon";
 import { Link } from "./ui/Link";
@@ -70,10 +71,24 @@ const columns = helper.columns([
       <div className="row-actions">
         <Link href={href({ name: "requirements", positionId: row.original.id })}>Requirements</Link>
         <Link href={href({ name: "ranking", positionId: row.original.id })}>Ranked list</Link>
+        <AddCvsButton position={row.original} />
       </div>
     ),
   }),
 ]);
+
+// Columns live at module scope (the table needs stable inputs), so the button reaches the
+// handler through context.
+const AddCvsContext = createContext<(position: Position) => void>(() => {});
+
+function AddCvsButton({ position }: { position: Position }) {
+  const addCvsTo = useContext(AddCvsContext);
+  return (
+    <Button variant="ghost" size="sm" icon="plus" onClick={() => addCvsTo(position)}>
+      Add CVs
+    </Button>
+  );
+}
 
 function PositionsTable({ positions }: { positions: Position[] }) {
   const table = useTable({ features, columns, data: positions });
@@ -105,7 +120,7 @@ function PositionsTable({ positions }: { positions: Position[] }) {
   );
 }
 
-export function PositionsList() {
+export function PositionsList({ onAddCvs }: { onAddCvs: (position: Position) => void }) {
   const headingId = useId();
   const positions = useQuery({
     queryKey: ["positions"],
@@ -121,7 +136,11 @@ export function PositionsList() {
   } else if (positions.data.length === 0) {
     body = <EmptyState>No positions yet. Upload a posting and CVs above to create one.</EmptyState>;
   } else {
-    body = <PositionsTable positions={positions.data} />;
+    body = (
+      <AddCvsContext.Provider value={onAddCvs}>
+        <PositionsTable positions={positions.data} />
+      </AddCvsContext.Provider>
+    );
   }
   return (
     <section className="section" aria-labelledby={headingId}>
