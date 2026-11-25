@@ -36,6 +36,17 @@ export function documentNeedsAttention(status: string): boolean {
   return status === "rejected" || status === "failed";
 }
 
+export type DocumentRowVariant = "attention" | "info" | "default";
+
+// A message on a row that is not an error is information, for example "not a CV": the backend
+// writes it on a parsed document. The rule never looks at the message text.
+export function documentRowVariant(doc: { status: string; message: string | null }): DocumentRowVariant {
+  if (documentNeedsAttention(doc.status)) {
+    return "attention";
+  }
+  return doc.message !== null ? "info" : "default";
+}
+
 // A file input accepts anything, so the form checks the extension before the API does.
 export function isPdfName(name: string): boolean {
   return name.toLowerCase().endsWith(".pdf");

@@ -1,0 +1,6 @@
+/* Copied from the design's components.css. */
+.state { display: inline-flex; align-items: center; gap: 6px; font-size: var(--text-sm); line-height: var(--leading-sm); color: var(--color-text-primary); white-space: nowrap; }
+.state .icon { color: var(--color-text-tertiary); }
+.state--ok .icon { color: var(--color-met); }
+.state--attention { color: var(--color-error); font-weight: var(--weight-semibold); }
+.state--attention .icon { color: var(--color-error); }

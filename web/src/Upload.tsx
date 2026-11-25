@@ -1,46 +1,99 @@
+import { createColumnHelper, tableFeatures, useTable } from "@tanstack/react-table";
 import { useId, useState, type FormEvent } from "react";
 
 import type { RankingStatus } from "./api";
 import { useRankingStatus, useUpload } from "./hooks";
 import { href } from "./route";
-import { documentLabel, documentNeedsAttention, requestLabel, uploadProblem, type UploadProblem } from "./status";
+import { documentRowVariant, uploadProblem, type UploadProblem } from "./status";
 import { Button } from "./ui/Button";
+import { DocumentState } from "./ui/DocumentState";
 import { FileField } from "./ui/FileField";
 import { Icon } from "./ui/Icon";
+import { Link } from "./ui/Link";
+import { RequestStatus } from "./ui/RequestStatus";
+import "./ui/Table.css";
 import "./Upload.css";
 
-function Progress({ status }: { status: RankingStatus }) {
+type DocumentRow = RankingStatus["documents"][number];
+
+const features = tableFeatures({});
+const helper = createColumnHelper<typeof features, DocumentRow>();
+
+// Filenames and messages come from the uploaded files and the backend: they are rendered as
+// text nodes only (§4.4).
+const columns = helper.columns([
+  helper.display({ id: "file", header: "File", cell: ({ row }) => row.original.filename ?? row.original.document_id }),
+  helper.display({ id: "kind", header: "Kind", cell: ({ row }) => (row.original.kind === "cv" ? "CV" : "Posting") }),
+  helper.display({ id: "state", header: "State", cell: ({ row }) => <DocumentState status={row.original.status} /> }),
+  helper.display({
+    id: "message",
+    header: "Message",
+    cell: ({ row }) => {
+      const variant = documentRowVariant(row.original);
+      if (row.original.message === null || variant === "default") {
+        return null;
+      }
+      return (
+        <span className={variant === "info" ? "msg msg--info" : "msg"}>
+          <Icon name={variant === "info" ? "info" : "alert-circle"} />
+          <span>{row.original.message}</span>
+        </span>
+      );
+    },
+  }),
+]);
+
+const ROW_CLASS = { attention: "row--attention", info: "row--info", default: undefined } as const;
+
+function DocumentsTable({ documents }: { documents: DocumentRow[] }) {
+  const table = useTable({ features, columns, data: documents });
   return (
-    <section aria-live="polite">
-      <p data-testid="request-status">
-        Status: <strong>{requestLabel(status.status)}</strong>
-      </p>
-      <table style={{ borderCollapse: "collapse", width: "100%" }}>
+    <div className="table-wrap">
+      <table className="table" aria-label="Uploaded files">
         <thead>
-          <tr>
-            {["File", "Kind", "State", "Message"].map((title) => (
-              <th key={title} style={{ textAlign: "left", padding: "0.25rem" }}>
-                {title}
-              </th>
-            ))}
-          </tr>
+          {table.getHeaderGroups().map((group) => (
+            <tr key={group.id}>
+              {group.headers.map((header) => (
+                <th key={header.id}>{header.isPlaceholder ? null : <table.FlexRender header={header} />}</th>
+              ))}
+            </tr>
+          ))}
         </thead>
         <tbody>
-          {status.documents.map((doc) => (
-            <tr key={doc.document_id}>
-              <td style={{ padding: "0.25rem" }}>{doc.filename ?? doc.document_id}</td>
-              <td style={{ padding: "0.25rem" }}>{doc.kind === "cv" ? "CV" : "Posting"}</td>
-              <td style={{ padding: "0.25rem" }}>{documentLabel(doc.status)}</td>
-              <td
-                style={{ padding: "0.25rem", color: documentNeedsAttention(doc.status) ? "var(--color-error)" : undefined }}
-              >
-                {doc.message}
-              </td>
+          {table.getRowModel().rows.map((row) => (
+            <tr key={row.original.document_id} className={ROW_CLASS[documentRowVariant(row.original)]}>
+              {row.getAllCells().map((cell) => (
+                <td key={cell.id}>
+                  <table.FlexRender cell={cell} />
+                </td>
+              ))}
             </tr>
           ))}
         </tbody>
       </table>
-    </section>
+    </div>
+  );
+}
+
+function Progress({ status }: { status: RankingStatus }) {
+  return (
+    <div className="upload-progress">
+      <RequestStatus status={status.status} />
+      <DocumentsTable documents={status.documents} />
+      {status.status === "done" && (
+        <div>
+          <Link href={href({ name: "ranking", positionId: status.position_id })} strong trailingIcon="arrow-right">
+            Open the ranked list
+          </Link>
+        </div>
+      )}
+      {status.status === "failed" && (
+        <div className="msg msg--primary" role="alert">
+          <Icon name="alert-circle" />
+          <span>The posting could not be read, so there is nothing to rank against.</span>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -107,21 +160,7 @@ export function UploadForm() {
           </div>
         )}
       </div>
-      {status.data && (
-        <>
-          <Progress status={status.data} />
-          {status.data.status === "done" && (
-            <p>
-              <a href={href({ name: "ranking", positionId: status.data.position_id })}>
-                Open the ranked list
-              </a>
-            </p>
-          )}
-          {status.data.status === "failed" && (
-            <p role="alert">The posting could not be read, so there is nothing to rank against.</p>
-          )}
-        </>
-      )}
+      {status.data && <Progress status={status.data} />}
     </section>
   );
 }

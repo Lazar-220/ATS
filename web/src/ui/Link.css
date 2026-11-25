@@ -1,0 +1,5 @@
+/* Copied from the design's components.css. */
+.link { color: var(--link-fg); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; border-radius: 2px; cursor: pointer; transition: color var(--motion-fast) var(--ease-standard); }
+.link:hover { color: var(--link-fg-hover); text-decoration-thickness: 2px; }
+.link:active { color: var(--color-accent-pressed); }
+.link--strong { font-weight: var(--weight-medium); display: inline-flex; align-items: center; gap: var(--space-1); }
