@@ -56,8 +56,8 @@ services:
       # The worker is the only process that calls the LLM.
       LLM_PROVIDER: ${LLM_PROVIDER:-gemini}
       LLM_API_KEY: ${LLM_API_KEY:-}
-      LLM_MODEL: ${LLM_MODEL:-gemini-3.6-flash}
-      LLM_RPM: ${LLM_RPM:-5}
+      LLM_MODEL: ${LLM_MODEL:-gemini-3.5-flash-lite}
+      LLM_RPM: ${LLM_RPM:-14}
       LLM_CACHE_DIR: /app/data/llm_cache
     depends_on:
       postgres:

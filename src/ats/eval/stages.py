@@ -226,7 +226,7 @@ def run_parsing(
 
 # --- The seeded subset for the real parsing run --------------------------------------------
 
-# One free-tier day allows about 20 requests (§6.1); 18 leaves two spare.
+# Sized for the 20-a-day free quota of the first default model; kept so runs stay comparable.
 SUBSET_SIZE = 18
 SUBSET_SEED = 20261117
 

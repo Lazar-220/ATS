@@ -18,13 +18,13 @@ class Settings(BaseSettings):
     min_chars_per_page: int = 100
     upload_dir: Path = Path("data/uploads")
     max_upload_mb: int = 10
-    # §6.1 names gemini-3.8-flash, which returned persistent 503s (docs/PROGRESS.md, 2026-11-17).
-    llm_model: str = "gemini-3.6-flash"
+    # The v1 gate baseline model (docs/PROGRESS.md, 2026-11-25).
+    llm_model: str = "gemini-3.5-flash-lite"
     # "fake" answers with canned demo data and calls no model: for trying the interface only.
     llm_provider: Literal["gemini", "fake"] = "gemini"
     llm_api_key: SecretStr | None = None
-    # The free tier allows 5 requests per minute (§6.1); raise it on the paid tier.
-    llm_rpm: int = 5
+    # The gemini-3.5-flash-lite free tier allows 15 requests per minute (§6.1); 14 leaves a margin.
+    llm_rpm: int = 14
     llm_cache_dir: Path = Path("data/llm_cache")
     # A judge quote passes the check at this rapidfuzz score or above (§3.2, §6.3); calibrate on
     # the golden set.
