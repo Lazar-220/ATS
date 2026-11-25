@@ -49,9 +49,10 @@ function parseInteger(value: string): number | null {
   return /^\d+$/.test(trimmed) ? Number(trimmed) : null;
 }
 
-function hasCycle(rows: DraftRow[]): boolean {
+// The index of the first row that is its own ancestor, or -1.
+function firstInCycle(rows: DraftRow[]): number {
   const parentOf = new Map(rows.map((row) => [row.key, row.parentKey]));
-  return rows.some((row) => {
+  return rows.findIndex((row) => {
     let current = row.parentKey;
     for (let steps = 0; current !== null && steps <= rows.length; steps += 1) {
       if (current === row.key) {
@@ -63,28 +64,47 @@ function hasCycle(rows: DraftRow[]): boolean {
   });
 }
 
+export type DraftField = "text" | "weight" | "minMonths" | "parentKey";
+
+export interface DraftProblem {
+  message: string;
+  // The row and field the message is about, so the screen can mark it. Both are null for an
+  // empty list, which has neither.
+  index: number | null;
+  field: DraftField | null;
+}
+
 // The first problem HR has to fix, or null. The server checks the same rules again.
-export function validate(rows: DraftRow[]): string | null {
+export function validateDetail(rows: DraftRow[]): DraftProblem | null {
   if (rows.length === 0) {
-    return "Add at least one requirement.";
+    return { message: "Add at least one requirement.", index: null, field: null };
   }
   for (const [index, row] of rows.entries()) {
     const label = `Requirement ${index + 1}`;
     if (row.text.trim() === "") {
-      return `${label} has no text.`;
+      return { message: `${label} has no text.`, index, field: "text" };
     }
     const weight = parseInteger(row.weight);
     if (weight === null || weight < MIN_WEIGHT || weight > MAX_WEIGHT) {
-      return `${label}: weight must be a whole number from ${MIN_WEIGHT} to ${MAX_WEIGHT}.`;
+      const message = `${label}: weight must be a whole number from ${MIN_WEIGHT} to ${MAX_WEIGHT}.`;
+      return { message, index, field: "weight" };
     }
     if (row.minMonths.trim() !== "") {
       const months = parseInteger(row.minMonths);
       if (months === null || months < 1) {
-        return `${label}: minimum months must be a whole number of at least 1, or empty.`;
+        const message = `${label}: minimum months must be a whole number of at least 1, or empty.`;
+        return { message, index, field: "minMonths" };
       }
     }
   }
-  return hasCycle(rows) ? "The parent links form a loop." : null;
+  const looped = firstInCycle(rows);
+  return looped === -1
+    ? null
+    : { message: "The parent links form a loop.", index: looped, field: "parentKey" };
+}
+
+export function validate(rows: DraftRow[]): string | null {
+  return validateDetail(rows)?.message ?? null;
 }
 
 // Call only after `validate` returned null. Labels are positions in the list, starting at 1.

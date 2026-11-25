@@ -2,13 +2,19 @@ import { createColumnHelper, tableFeatures, useTable } from "@tanstack/react-tab
 import { createContext, useContext } from "react";
 
 import type { Kind } from "./api";
-import { MAX_WEIGHT, MIN_WEIGHT, type DraftRow } from "./draft";
+import { MAX_WEIGHT, MIN_WEIGHT, type DraftField, type DraftProblem, type DraftRow } from "./draft";
+import { Button } from "./ui/Button";
+import { NumberInput, Select, TextInput } from "./ui/Inputs";
+import "./ui/Table.css";
+import "./RequirementsTable.css";
 
 interface Actions {
   rows: DraftRow[];
   update: (key: string, patch: Partial<DraftRow>) => void;
   remove: (key: string) => void;
   disabled: boolean;
+  // The problem on screen, if any: the field it names is marked.
+  problem: DraftProblem | null;
 }
 
 // Columns live at module scope (the table needs stable inputs), so the cells reach the draft
@@ -23,57 +29,82 @@ function useActions(): Actions {
   return actions;
 }
 
-function TextCell({ row }: { row: DraftRow }) {
-  const { update, disabled } = useActions();
+// `n` is the number HR sees: the row's position, from 1. It names each control, so the names do
+// not repeat from row to row.
+type CellProps = { row: DraftRow; n: number };
+
+function isNamed(problem: DraftProblem | null, n: number, field: DraftField): boolean {
+  return problem !== null && problem.index === n - 1 && problem.field === field;
+}
+
+function TextCell({ row, n }: CellProps) {
+  const { update, disabled, problem } = useActions();
   return (
-    <input
-      aria-label="Requirement text"
-      style={{ width: "100%", minWidth: "16rem" }}
+    <TextInput
+      aria-label={`Requirement ${n}`}
       value={row.text}
       disabled={disabled}
+      invalid={isNamed(problem, n, "text")}
       onChange={(event) => update(row.key, { text: event.target.value })}
     />
   );
 }
 
-function KindCell({ row }: { row: DraftRow }) {
+function KindCell({ row, n }: CellProps) {
   const { update, disabled } = useActions();
   return (
-    <select
-      aria-label="Type"
+    <Select
+      aria-label={`Type, requirement ${n}`}
       value={row.kind}
       disabled={disabled}
+      invalid={false}
       onChange={(event) => update(row.key, { kind: event.target.value as Kind })}
     >
       <option value="mandatory">Mandatory</option>
       <option value="nice_to_have">Nice to have</option>
-    </select>
+    </Select>
   );
 }
 
-function NumberCell({ row, field }: { row: DraftRow; field: "weight" | "minMonths" }) {
-  const { update, disabled } = useActions();
+function WeightCell({ row, n }: CellProps) {
+  const { update, disabled, problem } = useActions();
   return (
-    <input
-      aria-label={field === "weight" ? "Weight" : "Minimum months"}
-      type="number"
-      min={field === "weight" ? MIN_WEIGHT : 1}
-      max={field === "weight" ? MAX_WEIGHT : undefined}
-      style={{ width: "5rem" }}
-      value={row[field]}
+    <NumberInput
+      aria-label={`Weight, requirement ${n}`}
+      min={MIN_WEIGHT}
+      max={MAX_WEIGHT}
+      step={1}
+      value={row.weight}
       disabled={disabled}
-      onChange={(event) => update(row.key, { [field]: event.target.value })}
+      invalid={isNamed(problem, n, "weight")}
+      onChange={(event) => update(row.key, { weight: event.target.value })}
     />
   );
 }
 
-function ParentCell({ row }: { row: DraftRow }) {
-  const { rows, update, disabled } = useActions();
+function MonthsCell({ row, n }: CellProps) {
+  const { update, disabled, problem } = useActions();
   return (
-    <select
-      aria-label="Parent requirement"
+    <NumberInput
+      aria-label={`Minimum months, requirement ${n}`}
+      min={1}
+      step={1}
+      value={row.minMonths}
+      disabled={disabled}
+      invalid={isNamed(problem, n, "minMonths")}
+      onChange={(event) => update(row.key, { minMonths: event.target.value })}
+    />
+  );
+}
+
+function ParentCell({ row, n }: CellProps) {
+  const { rows, update, disabled, problem } = useActions();
+  return (
+    <Select
+      aria-label={`Parent, requirement ${n}`}
       value={row.parentKey ?? ""}
       disabled={disabled}
+      invalid={isNamed(problem, n, "parentKey")}
       onChange={(event) => update(row.key, { parentKey: event.target.value || null })}
     >
       <option value="">None</option>
@@ -84,78 +115,108 @@ function ParentCell({ row }: { row: DraftRow }) {
           </option>
         ),
       )}
-    </select>
+    </Select>
   );
 }
 
-function RemoveCell({ row }: { row: DraftRow }) {
+function RemoveCell({ row, n }: CellProps) {
   const { remove, disabled } = useActions();
+  const name = `Remove requirement ${n}`;
   return (
-    <button type="button" disabled={disabled} onClick={() => remove(row.key)}>
-      Remove
-    </button>
+    <Button
+      variant="icon"
+      size="sm"
+      icon="trash"
+      danger
+      aria-label={name}
+      title={name}
+      disabled={disabled}
+      onClick={() => remove(row.key)}
+    />
   );
 }
 
 const features = tableFeatures({});
 const helper = createColumnHelper<typeof features, DraftRow>();
 
+// Rows are never sorted, so `row.index` is the position in the draft.
 const columns = helper.columns([
+  helper.display({ id: "number", header: "#", cell: ({ row }) => row.index + 1 }),
   helper.display({
-    id: "number",
-    header: "#",
-    cell: ({ row }) => <NumberLabel rowKey={row.original.key} />,
+    id: "text",
+    header: "Requirement",
+    cell: ({ row }) => <TextCell row={row.original} n={row.index + 1} />,
   }),
-  helper.display({ id: "text", header: "Requirement", cell: ({ row }) => <TextCell row={row.original} /> }),
-  helper.display({ id: "kind", header: "Type", cell: ({ row }) => <KindCell row={row.original} /> }),
+  helper.display({
+    id: "kind",
+    header: "Type",
+    cell: ({ row }) => <KindCell row={row.original} n={row.index + 1} />,
+  }),
   helper.display({
     id: "weight",
     header: "Weight (1–5)",
-    cell: ({ row }) => <NumberCell row={row.original} field="weight" />,
+    cell: ({ row }) => <WeightCell row={row.original} n={row.index + 1} />,
   }),
   helper.display({
-    id: "minMonths",
+    id: "months",
     header: "Minimum months",
-    cell: ({ row }) => <NumberCell row={row.original} field="minMonths" />,
+    cell: ({ row }) => <MonthsCell row={row.original} n={row.index + 1} />,
   }),
-  helper.display({ id: "parent", header: "Parent", cell: ({ row }) => <ParentCell row={row.original} /> }),
-  helper.display({ id: "remove", header: "", cell: ({ row }) => <RemoveCell row={row.original} /> }),
+  helper.display({
+    id: "parent",
+    header: "Parent",
+    cell: ({ row }) => <ParentCell row={row.original} n={row.index + 1} />,
+  }),
+  helper.display({
+    id: "remove",
+    header: "Remove",
+    cell: ({ row }) => <RemoveCell row={row.original} n={row.index + 1} />,
+  }),
 ]);
 
-function NumberLabel({ rowKey }: { rowKey: string }) {
-  const { rows } = useActions();
-  return <>{rows.findIndex((row) => row.key === rowKey) + 1}</>;
-}
-
-export function RequirementsTable({ rows, update, remove, disabled }: Actions) {
-  const table = useTable({ features, columns, data: rows });
+export function RequirementsTable({ add, ...actions }: Actions & { add: () => void }) {
+  const table = useTable({ features, columns, data: actions.rows });
 
   return (
-    <ActionsContext.Provider value={{ rows, update, remove, disabled }}>
-      <table style={{ borderCollapse: "collapse", width: "100%" }}>
-        <thead>
-          {table.getHeaderGroups().map((group) => (
-            <tr key={group.id}>
-              {group.headers.map((header) => (
-                <th key={header.id} style={{ textAlign: "left", padding: "0.25rem" }}>
-                  {header.isPlaceholder ? null : <table.FlexRender header={header} />}
-                </th>
+    <ActionsContext.Provider value={actions}>
+      <div className="editor">
+        <div className="editor__scroll">
+          <table className="table editor__table" aria-label="Requirements">
+            <colgroup>
+              {table.getAllLeafColumns().map((column) => (
+                <col key={column.id} className={`editor__col-${column.id}`} />
               ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.original.key}>
-              {row.getAllCells().map((cell) => (
-                <td key={cell.id} style={{ padding: "0.25rem" }}>
-                  <table.FlexRender cell={cell} />
-                </td>
+            </colgroup>
+            <thead>
+              {table.getHeaderGroups().map((group) => (
+                <tr key={group.id}>
+                  {group.headers.map((header) => (
+                    <th key={header.id} className={`editor__cell-${header.column.id}`}>
+                      {header.isPlaceholder ? null : <table.FlexRender header={header} />}
+                    </th>
+                  ))}
+                </tr>
               ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+            </thead>
+            <tbody>
+              {table.getRowModel().rows.map((row) => (
+                <tr key={row.original.key}>
+                  {row.getAllCells().map((cell) => (
+                    <td key={cell.id} className={`editor__cell-${cell.column.id}`}>
+                      <table.FlexRender cell={cell} />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="editor__foot">
+          <Button variant="ghost" size="sm" icon="plus" disabled={actions.disabled} onClick={add}>
+            Add requirement
+          </Button>
+        </div>
+      </div>
     </ActionsContext.Provider>
   );
 }

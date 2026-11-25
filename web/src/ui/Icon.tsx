@@ -62,6 +62,10 @@ const PATHS = {
   "chevron-right": <path d="M9.5 6l6 6-6 6" />,
   plus: <path d="M12 5v14M5 12h14" />,
   close: <path d="M6.5 6.5l11 11M17.5 6.5l-11 11" />,
+  "chevron-down": <path d="M6 9.5l6 6 6-6" />,
+  trash: (
+    <path d="M4.5 7h15M9.5 7V4.5h5V7M6.5 7l.8 12.1a2 2 0 0 0 2 1.9h5.4a2 2 0 0 0 2-1.9L17.5 7M10 11v6M14 11v6" />
+  ),
   refresh: (
     <>
       <path d="M20 12a8 8 0 1 1-2.34-5.66L20 8.5" />

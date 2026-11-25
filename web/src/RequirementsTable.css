@@ -1,0 +1,20 @@
+/* The design's requirements editor (screens.css), drawn on a real table. Each column width is the
+   board's track plus the cell's own padding. */
+.editor { background: var(--color-bg-surface); border: var(--border-width) solid var(--color-border-subtle); border-radius: var(--radius-container); }
+.editor__scroll { overflow-x: auto; }
+.table.editor__table { table-layout: fixed; min-width: 940px; }
+.editor__col-number { width: 50px; }
+.editor__col-kind { width: 152px; }
+.editor__col-weight { width: 108px; }
+.editor__col-months { width: 116px; }
+.editor__col-parent { width: 212px; }
+.editor__col-remove { width: 82px; }
+.table.editor__table th, .table.editor__table td { padding-left: 6px; padding-right: 6px; }
+.table.editor__table th:first-child, .table.editor__table td:first-child { padding-left: var(--space-3); }
+.table.editor__table th:last-child, .table.editor__table td:last-child { padding-right: var(--space-3); }
+.table.editor__table .editor__cell-number { text-align: right; padding-right: 10px; font-variant-numeric: var(--font-numeric); }
+.table.editor__table td.editor__cell-number { color: var(--color-text-tertiary); font-weight: var(--weight-medium); }
+.table.editor__table .editor__cell-remove { text-align: center; }
+/* The shared table tints the row under the pointer or the focus; the editor's rows stay still. */
+.table.editor__table tbody tr:hover td, .table.editor__table tbody tr:focus-within td { background: transparent; }
+.editor__foot { display: flex; align-items: center; padding: var(--space-3); border-top: var(--border-width) solid var(--color-border-subtle); }

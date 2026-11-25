@@ -8,6 +8,7 @@ import { documentRowVariant, uploadProblem, type UploadProblem } from "./status"
 import { AddModeChip } from "./ui/AddModeChip";
 import { Button } from "./ui/Button";
 import { DocumentState } from "./ui/DocumentState";
+import { FieldError } from "./ui/FieldError";
 import { FileField } from "./ui/FileField";
 import { Icon } from "./ui/Icon";
 import { Link } from "./ui/Link";
@@ -198,12 +199,7 @@ export function UploadForm({ ref }: { ref?: Ref<UploadFormHandle> }) {
         </div>
       </form>
       <div id="form-msg" aria-live="polite">
-        {formMessage !== null && (
-          <div className="field-error">
-            <Icon name="alert-circle" />
-            <span>{formMessage}</span>
-          </div>
-        )}
+        {formMessage !== null && <FieldError message={formMessage} />}
       </div>
       {status.data && <Progress status={status.data} />}
     </section>

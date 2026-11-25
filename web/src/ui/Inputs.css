@@ -1,0 +1,11 @@
+/* Copied from the design's components.css (form fields). The error look hangs on aria-invalid. */
+.input, .select { height: var(--control-h); width: 100%; padding: 0 var(--control-px); background: var(--input-bg); color: var(--input-fg); border: var(--border-width) solid var(--control-border); border-radius: var(--control-radius); font: inherit;
+  transition: border-color var(--motion-fast) var(--ease-standard); }
+.input:hover, .select:hover { border-color: var(--color-text-tertiary); }
+.input:focus-visible, .select:focus-visible { border-color: var(--color-accent); }
+.input[aria-invalid="true"], .select[aria-invalid="true"] { border-color: var(--input-border-error); }
+.input:disabled, .select:disabled { color: var(--color-text-disabled); background: var(--color-bg-surface); border-color: var(--color-bg-hover); cursor: not-allowed; }
+.input--num { font-variant-numeric: var(--font-numeric); text-align: right; }
+.select-wrap { position: relative; display: block; }
+.select { appearance: none; -webkit-appearance: none; padding-right: 32px; cursor: pointer; }
+.select-wrap .icon { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--color-text-secondary); }

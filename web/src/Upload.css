@@ -2,8 +2,7 @@
 .panel { background: var(--color-bg-surface); border: var(--border-width) solid var(--color-border-subtle); border-radius: var(--radius-container); padding: var(--space-6); }
 .upload-form { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; gap: var(--space-4) var(--space-6); align-items: end; margin-top: var(--space-4); }
 @media (max-width: 900px) { .upload-form { grid-template-columns: minmax(0, 1fr); } }
-.field-error { display: flex; align-items: flex-start; gap: 6px; margin-top: var(--space-3); font-size: var(--text-sm); line-height: var(--leading-sm); color: var(--color-error); overflow-wrap: anywhere; }
-.field-error .icon { margin-top: 2px; }
+#form-msg .field-error { margin-top: var(--space-3); }
 .upload-progress { display: grid; gap: var(--space-4); margin-top: var(--space-6); padding-top: var(--space-6); border-top: var(--border-width) solid var(--color-border-subtle); }
 /* The board sets this inline: the sentence is the main message of a failed request. */
 .msg--primary { color: var(--color-text-primary); font-size: var(--text-md); line-height: var(--leading-md); }
