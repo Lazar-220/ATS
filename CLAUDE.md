@@ -57,7 +57,7 @@ These hold in every phase. A change that breaks one needs the owner's explicit a
 
 ## Testing and the LLM quota
 
-- Tests never call the real LLM. Use the fake `LLMClient`. The free Gemini quota is about 20 requests per day (§6.1).
+- Tests never call the real LLM. Use the fake `LLMClient`. The free quota of the default model, `gemini-3.5-flash-lite`, is 15 requests per minute and 500 per day (§6.1).
 - Pytest markers: `integration` (needs Postgres running), `llm` (calls the real model; never run automatically).
 - Before any run that calls the real LLM more than 5 times, print the number of calls and the estimated cost,
   then wait for confirmation.

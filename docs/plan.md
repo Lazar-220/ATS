@@ -447,26 +447,29 @@ The verifier is the same model as the judge, so it shares its blind spots. That 
 
 ## 6. Concrete local stack
 
-Everything except the LLM calls runs locally in Docker Compose, on a machine with 12 GB of RAM. All LLM calls go to a single model, Gemini 3.8 Flash. Its free quota is about 20 requests per day, which covers manual trials but not eval or batch. On the paid tier, the LLM for the whole project costs, by a rough estimate, $30–80, mostly for eval runs.
+Everything except the LLM calls runs locally in Docker Compose, on a machine with 12 GB of RAM. All LLM calls go to a single model, Gemini 3.5 Flash-Lite (until 2026-11-25 the plan named Gemini 3.8 Flash; see `docs/PROGRESS.md`, Decisions). Its free quota is 500 requests per day, which covers manual trials and small eval runs. On the paid tier, the LLM for the whole project costs, by a rough estimate, $30–80, mostly for eval runs.
 
 ### 6.1 LLM model
 
 | Role | Model | Why |
 | --- | --- | --- |
-| All roles: requirement extraction, triage and parsing, judge, verifier, resolver | Gemini 3.8 Flash (`gemini-3.8-flash`) | $0.75 input and $3.75 output per million tokens, [introductory price until December 31, 2026](https://benchlm.ai/google/api-pricing); structured outputs and function calling; context of about 1 million tokens |
+| All roles: requirement extraction, triage and parsing, judge, verifier, resolver | Gemini 3.5 Flash-Lite (`gemini-3.5-flash-lite`) | $0.30 input and $2.50 output per million tokens (paid tier, read from Google's pricing page on 2026-11-25; cached input $0.03); the v1 gate baseline (judge accuracy 94.6% on the test split); requirement extraction F1 91.9% on the six golden postings |
 
-Free Gemini quota, according to [user measurements from November 11, 2026](https://www.aifreeapi.com/en/posts/google-gemini-api-free-tier); Google does not publish it, so read yours in AI Studio:
+Until 2026-11-25 the default was Gemini 3.8 Flash ($0.75 input and $3.75 output per million tokens, introductory price until December 31, 2026), which returned persistent 503 errors, then Gemini 3.6 Flash.
+
+Free Gemini quota. The Flash-Lite row was read in AI Studio on 2026-11-25; the Flash row comes from [user measurements from November 11, 2026](https://www.aifreeapi.com/en/posts/google-gemini-api-free-tier). Read yours in AI Studio:
 
 | Model | Requests per minute | Requests per day |
 | --- | --- | --- |
+| Gemini 3.5 Flash-Lite, 3.1 Flash-Lite | 15 (250,000 tokens per minute) | 500 |
 | Gemini 3.8 Flash, 3.6 Flash | 5 | 20 |
 
 What follows from this:
 
-- **The free tier is for manual trials.** 20 requests per day is about 6 CVs through endpoint 1 (parsing, judge, verifier). An eval run, importing 100 CVs, and endpoint 2 with N = 20 require the paid tier.
-- **5 requests per minute.** Rate limiting in `LLMClient` is mandatory from v1. Endpoint 2 on the free tier does not reach the top 20 within 120 s; for manual trials, lower `top_n` to 3.
+- **The free tier is for manual trials and small eval runs.** 500 requests per day is about 160 CVs through endpoint 1 (parsing, judge, verifier). Every run of more than 5 real calls still needs the owner's confirmation first. Importing real CVs requires the paid tier (next point but one).
+- **15 requests per minute** (`LLM_RPM=14` leaves a margin). Rate limiting in `LLMClient` is mandatory from v1. Endpoint 2 on the free tier may not reach the top 20 within 120 s; for manual trials, lower `top_n`.
 - **Only synthetic CVs go to the free tier.** Google uses content sent to free services for product development and reviewers may read it. Real CVs go to the paid tier.
-- **Cost on the paid tier.** One judge call is about 4,000 input tokens and 1,500 output tokens, so about $0.0086. A thousand assessments cost about $8.6 for the judge alone, without thinking tokens; with parsing and the verifier about three times more. After December 31, 2026, check the price.
+- **Cost on the paid tier.** One judge call is about 4,000 input tokens and 1,500 output tokens, so about $0.005. A thousand assessments cost about $5 for the judge alone, without thinking tokens; with parsing and the verifier about three times more. Prices change; check them before a large run.
 - **Thinking.** Gemini 3 models choose reasoning depth with the `thinking_level` parameter (minimal, low, medium, high), and [thinking tokens are billed as output](https://ai.google.dev/gemini-api/docs/generate-content/whats-new-gemini-3.5). The default level depends on the version, so set it explicitly: `minimal` for extraction and parsing, `low` for the judge and the verifier. Use the eval to check whether `medium` brings anything.
 - **Function calling.** Goes through `google-genai`. In a multi-step tool call, the response carries a thought signature that must be returned unchanged; the SDK does this itself, while a hand-assembled REST call without the signature returns a 400 error.
 - **Cache and batch.** Cached input costs 10% of the price, and Batch is half price, which suits re-scoring and eval runs.

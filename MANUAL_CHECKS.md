@@ -19,7 +19,7 @@ Two ways to run the worker:
   Use it to check the interface, not the judgement.
 - **Real model:** `LLM_PROVIDER=gemini` (the default) and a valid `LLM_API_KEY`. One posting plus
   three CVs is about 8 calls (1 requirement extraction, 3 parses, 3 judgements, plus retries).
-  Mind the free quota of about 20 requests a day.
+  The free quota of `gemini-3.5-flash-lite` is 15 requests a minute and 500 a day.
 
 For a clean start: `make down`, then `docker compose down -v` (this deletes the database), then
 `make up && make migrate`.
