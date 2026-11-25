@@ -63,6 +63,18 @@ def test_thinking_tokens_count_as_output_in_the_adapter_and_so_in_the_price(
 def test_every_known_price_has_its_source_date_or_says_it_has_none() -> None:
     assert RATES["gemini-3.6-flash"][0].checked == date(2026, 11, 17)
     assert RATES["gemini-3.8-flash"][0].checked is None  # the plan gives no date
+    assert RATES["gemini-3.5-flash-lite"][0].checked == date(2026, 11, 25)
+
+
+def test_flash_lite_price_matches_the_published_rates() -> None:
+    rate = rate_on("gemini-3.5-flash-lite", date(2027, 6, 1))
+    assert rate is not None
+    assert (rate.input_per_m, rate.output_per_m) == (0.30, 2.50)
+    assert rate.cached_input_per_m == pytest.approx(0.03)
+    usage = _usage(1_000_000, 1_000_000, cached=500_000)
+    assert usage_cost("gemini-3.5-flash-lite", usage, date(2026, 11, 25)) == pytest.approx(
+        0.15 + 0.015 + 2.50
+    )
 
 
 def test_the_price_follows_the_date_and_an_unknown_model_has_none() -> None:

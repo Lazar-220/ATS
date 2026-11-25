@@ -26,9 +26,12 @@ class Rate:
         return self.input_per_m * CACHED_INPUT_SHARE
 
 
-# gemini-3.6-flash: the owner gave these rates (2026-11-17). gemini-3.8-flash: §6.1 of the plan,
-# introductory price only; what follows is unknown, so it is not guessed.
+# gemini-3.6-flash and gemini-3.5-flash-lite: the owner gave these rates (2026-11-17, 2026-11-25).
+# gemini-3.8-flash: §6.1 of the plan, introductory price only; what follows is unknown, so it is
+# not guessed.
 RATES: dict[str, tuple[Rate, ...]] = {
+    # Paid tier; context caching is listed at $0.03, which is CACHED_INPUT_SHARE of the input rate.
+    "gemini-3.5-flash-lite": (Rate("paid tier", 0.30, 2.50, checked=date(2026, 11, 25)),),
     "gemini-3.6-flash": (
         Rate(
             "introductory, through 2026-12-31",

@@ -363,10 +363,10 @@ decision: nothing here pushes.
 | `MIN_CHARS_PER_PAGE` | `100` | a PDF with fewer non-space characters per page on average is rejected as a scan | 1.1b |
 | `UPLOAD_DIR` | `data/uploads` | stored PDFs, one file per `sha256`; in Docker the `uploads` volume at `/app/data/uploads` | 1.1b |
 | `MAX_UPLOAD_MB` | `10` | largest accepted PDF; a bigger one gets HTTP 413 | 1.1b |
-| `LLM_MODEL` | `gemini-3.6-flash` | model for every LLM role. The plan (§6.1) names `gemini-3.8-flash`, which returned 503 persistently; set it back when it is reachable. Eval results must name the model | 1.2 |
+| `LLM_MODEL` | `gemini-3.5-flash-lite` | model for every LLM role (§6.1), the v1 gate baseline; default since 2026-11-25, before that `gemini-3.6-flash`. Eval results must name the model | 1.2 |
 | `LLM_PROVIDER` | `gemini` | `gemini` (the real model) or `fake`: canned keyword-match answers, no model call and no key, only for trying the interface. Never the default; the worker logs `llm_provider=FAKE` and a warning at startup. Everything still goes through `LLMClient` and sees masked text only | 1.5 |
 | `LLM_API_KEY` | none | Gemini API key; never committed | 1.2 |
-| `LLM_RPM` | `5` | requests per minute (free tier). The limiter is in-process: valid for one worker only | 1.2 |
+| `LLM_RPM` | `14` | requests per minute; the `gemini-3.5-flash-lite` free tier allows 15. The limiter is in-process: valid for one worker only | 1.2 |
 | `LLM_CACHE_DIR` | `data/llm_cache` | LLM response cache, one JSON file per hash of model, prompts, thinking level and schema; in Docker the `llm_cache` volume | 1.2 |
 | `LLM_FALLBACK` | empty (off) | eval runs only: `openrouter` continues a run on an OpenRouter free model after a Gemini daily quota. The API and the worker never read it. Also `make eval FALLBACK=openrouter` | 1.4a |
 | `OPENROUTER_API_KEY` | none | key for the fallback; never committed; needed only with `LLM_FALLBACK` | 1.4a |
@@ -424,7 +424,7 @@ the production dependencies are clean.
 `google-genai` (phase 1.2) is imported only in `src/ats/llm/gemini.py`, behind the `LLMClient`
 interface. `gemini-3.8-flash` does not accept `thinking_level` `minimal` (it takes `low`, `medium`
 and `high`; default `medium`), so every call uses `low` or higher, which also works on the
-current default `gemini-3.6-flash`.
+current default `gemini-3.5-flash-lite`.
 
 The `eval` group is a default group (`[tool.uv] default-groups` in `pyproject.toml`), so `uv run`
 and `make check` see scikit-learn. The API and worker Dockerfiles sync with `--no-dev --no-group eval`:
