@@ -8,7 +8,8 @@
 .tooltip::after { content: ""; position: absolute; top: 100%; left: 0; right: 0; height: 9px; }
 /* Beside the trigger: for a trigger near the top of a scrolling table, where a tooltip above or
    below it would be cut off. */
-.tip-wrap--end > .tooltip { bottom: auto; right: auto; top: 50%; left: calc(100% + 8px); transform: translateY(-50%); }
+/* Narrower in a narrow window (200 % zoom), so that it still ends inside the table. */
+.tip-wrap--end > .tooltip { bottom: auto; right: auto; top: 50%; left: calc(100% + 8px); transform: translateY(-50%); max-width: clamp(160px, calc(100vw - 340px), 300px); }
 .tip-wrap--end > .tooltip::after { top: 0; bottom: 0; left: auto; right: 100%; width: 9px; height: auto; }
 .tip-wrap:hover > .tooltip, .tip-wrap:focus-within > .tooltip { visibility: visible; opacity: 1; }
 .tip-wrap[data-dismissed] > .tooltip { visibility: hidden; opacity: 0; }
